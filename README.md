@@ -3,7 +3,7 @@
 차시별 인터랙티브 활동지(HTML)를 만들고 배포하는 저장소입니다.
 **소스는 작게(`lessons/`), 배포본은 자동으로(`npm run build` → GitHub Pages)** 가 기본 원칙이에요.
 
-- 학생용 사이트: <https://sage810.github.io/middle_school_info_class/> (main 에 push 하면 자동 배포)
+- 학생용 사이트: <https://sage810.github.io/info-lesson/> (main 에 push 하면 자동 배포)
 - 구글 사이트에서는 **삽입 → URL** 로 위 주소의 차시 페이지를 한 번만 연결해 두면, 이후 수정은 push 만 하면 반영돼요.
   (예전처럼 3~4MB 코드를 붙여넣고 싶을 땐 `dist/embed/` 의 파일을 쓰면 됩니다.)
 

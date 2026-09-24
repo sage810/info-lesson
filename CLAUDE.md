@@ -31,4 +31,4 @@
    스킬로 만들지 사용자에게 한 줄로 제안한다.
 4. 한국어 커밋 메시지로 커밋 → `git push`.
 5. push 하면 GitHub Actions 가 GitHub Pages 에 자동 배포한다 → 주소를 알려 준다:
-   `https://sage810.github.io/middle_school_info_class/<단원>/<차시>/`
+   `https://sage810.github.io/info-lesson/<단원>/<차시>/`
