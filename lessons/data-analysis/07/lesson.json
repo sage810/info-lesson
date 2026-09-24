@@ -1,0 +1,9 @@
+{
+  "unit": "data-analysis",
+  "unitTitle": "데이터분석",
+  "no": "07",
+  "title": "신입 유튜버의 국내 TOP 100 채널 분석",
+  "shell": "standalone",
+  "status": "live",
+  "importedFrom": "output/데이터분석/7차시/data7.html"
+}

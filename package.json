@@ -1,0 +1,19 @@
+{
+  "name": "middle-school-info-class",
+  "private": true,
+  "description": "신현중학교 정보 수업 활동지 — 소스(lessons/)를 구글 사이트·GitHub Pages 배포본으로 빌드",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "teacher": "node scripts/teacher.mjs",
+    "new": "node scripts/new-lesson.mjs",
+    "import": "node scripts/import.mjs",
+    "neis": "node scripts/neis-snapshot.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.56.1"
+  }
+}

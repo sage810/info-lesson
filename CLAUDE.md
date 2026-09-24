@@ -1,32 +1,33 @@
 # 작업 규칙
 
-## GitHub 동기화
+## 시작할 때
 
-작업을 시작하기 전에 항상 현재 Git 상태를 확인하고 GitHub의 최신 변경사항을 가져온다.
+1. `git status` 로 변경사항 확인 — 커밋 안 된 게 있으면 먼저 알린다.
+2. 충돌 위험이 없으면 `git pull`.
+3. `node_modules` 가 없으면 `npm install` (처음 한 번. 브라우저 검사용 playwright-core 만 설치됨).
 
-1. `git status`로 현재 변경사항을 확인한다.
-2. 로컬에 커밋되지 않은 변경사항이 있으면 사용자에게 먼저 알린다.
-3. 충돌 위험이 없다면 `git pull`을 실행한다.
-4. GitHub의 최신 코드가 반영된 것을 확인한 후 작업을 시작한다.
+## 구조 한눈에
 
-## 프로젝트 처음 보는 사람을 위한 안내
+- **고치는 곳**: `lessons/<단원>/<차시>/lesson.html` (작은 소스) · `assets/` · `answers.json` · `spec.md` · `lesson.json`
+- **공용**: `shared/` (폰트·라이브러리·여러 차시가 같이 쓰는 그림·동작 스크립트) — 바꾸면 모든 차시에 영향
+- **배포본**: `dist/` — `npm run build` 결과. **손으로 고치지 않는다**(git 에도 안 올라감)
+- **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드) · 이력: `docs/log/`
+- **스킬 목록·사용법**: `.claude/README.md` · 사람용 안내: `README.md`
 
-폴더 구조가 헷갈리면 `PROJECT_MAP.md`를, 어떤 서브에이전트·스킬이 있고 무엇을 하는지 헷갈리면
-`.claude/AGENTS_MAP.md`를 먼저 본다. 새 파일이 생기거나 큰 변경이 있으면 이 두 문서를
-최신 상태로 유지한다(아래 "작업 완료" 참고).
+## 꼭 지킬 것
 
-## 작업 완료
+- 활동지 수정은 `lesson-edit` 스킬 규칙대로: 최소 diff, 표식(`<script data-msi-src>`·`msi-asset:`·NEIS 스냅샷) 보존,
+  그림은 base64 로 붙이지 말고 `assets/` + `msi-asset:./assets/…`.
+- 수정할 때마다 `npm run check -- <차시>` 를 돌리고 캡처로 확인한 뒤 결과를 알린다.
+- API 키·비밀번호·`.env` 는 커밋하지 않는다. NEIS 키는 Apps Script 의 스크립트 속성(NEIS_KEY)에만 둔다.
+  (`site.config.json` 의 apiUrl·submitToken 은 페이지에 공개되는 값이라 커밋해도 된다.)
 
-사용자가 작업 완료를 요청하면:
+## 작업 완료 (사용자가 "완료/올려줘" 할 때)
 
-1. 변경된 파일을 확인한다.
-2. **새로 생겼거나 크게 바뀐 파일이 있으면 `file-cataloger` 서브에이전트로
-   `PROJECT_MAP.md`(그 외 파일)와 `.claude/AGENTS_MAP.md`(새 스킬/서브에이전트인 경우)를
-   갱신한다.**
-3. **이번 세션에서 반복 재사용할 만한 새로운 패턴(새 활동 유형, 새 워크플로 등)이 있었으면
-   `skill-recorder` 서브에이전트로 스킬/서브에이전트화할지 사용자에게 제안한다.**
-4. 적절한 커밋 메시지를 만든다.
-5. 변경사항을 커밋한다.
-6. GitHub에 push한다.
-
-API 키, 비밀번호, `.env` 파일 등 보안 정보는 절대로 GitHub에 커밋하거나 push하지 않는다.
+1. `npm run check` (바뀐 차시만 또는 전체) — ✖ 가 없어야 한다.
+2. 새 차시·새 폴더가 생겼으면 `README.md` 의 "차시 목록" 표를 갱신한다.
+3. 이번에 반복될 만한 새 방식(새 활동 유형 등)이 생겼으면 `docs/log/activity.md` 에 한 절 덧붙이고,
+   스킬로 만들지 사용자에게 한 줄로 제안한다.
+4. 한국어 커밋 메시지로 커밋 → `git push`.
+5. push 하면 GitHub Actions 가 GitHub Pages 에 자동 배포한다 → 주소를 알려 준다:
+   `https://sage810.github.io/middle_school_info_class/<단원>/<차시>/`

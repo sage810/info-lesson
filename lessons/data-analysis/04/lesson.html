@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- [자체완결화 / Google Sites 코드삽입용] 아래 3블록은 외부 리소스 인라인본. 원본 재생성 시 scripts 참조. -->
+<style>
+/* [자체완결화] 디자인 실서체 5종 woff2 base64 인라인 (출처: jsdelivr fonts-archive, data4.html 과 동일 서체). 외부 @import 제거. */
+@font-face{font-family:'GangwonEdu';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/GangwonEdu-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-700.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:300;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-300.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-700.woff2) format('woff2');}
+/* Silkscreen (라틴 전용) woff2 인라인 — 외부 폰트가 CSP로 막혀도 픽셀 라벨 유지 */
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-700.woff2) format('woff2');}
+</style>
+<!-- react@18.3.1 UMD production (unpkg 인라인) — loadReactUmd() 가 window.React 존재 시 fetch 스킵 -->
+<script data-msi-src="shared/vendor/react.production.min.js"></script>
+<!-- react-dom@18.3.1 UMD production (unpkg 인라인) -->
+<script data-msi-src="shared/vendor/react-dom.production.min.js"></script>
+<!-- html2canvas 1.4.1 (cdnjs 인라인) — savePdf() 화면 캡처용. 구글 사이트 임베드 CSP 회피 위해 외부 src 대신 인라인. -->
+<script data-msi-src="shared/vendor/html2canvas.min.js"></script>
+<!-- jsPDF 2.5.1 UMD (cdnjs 인라인) — savePdf() PDF 생성·다운로드용. window.jspdf.jsPDF 로 노출. -->
+<script data-msi-src="shared/vendor/jspdf.umd.min.js"></script>
+<script data-msi-src="shared/vendor/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; color: #4b3b6b; }
+  a { color: #c96a97; }
+  a:hover { color: #8f6fd6; }
+  input, textarea, select, button { font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; color: #4b3b6b; }
+  input::placeholder, textarea::placeholder { color: #b3a8cc; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  /* [design.md §10] 플로팅 위젯 — 활동 진행률 (수업 활동지 탭 전용, §10.9 스니펫)
+     zoom:1.1 래퍼 밖(<x-dc> 직속)에 마운트해 fixed 좌표계가 실제 뷰포트 기준으로 계산되게 함.
+     본문(max-width:1080px)이 zoom:1.1 로 시각적으로 1188px(=1080×1.1) 폭이다.
+     right = max(8px, 오른쪽 여백 - 위젯폭 - 간격): 넓은 화면은 본문 바깥 여백에,
+     여백이 부족한 일반 노트북(≈1300~1600px)에서는 8px 로 clamp 되어 본문 오른쪽
+     끝에 살짝 겹쳐서라도 보이게 한다(§10.2). 진짜 좁은 화면(<820px, 모바일/태블릿)
+     에서만 숨긴다 — 그땐 활동지 본문 폼에서 상태 확인. 탭 게이팅은 renderVals 의
+     sheetWidgetDisplay(inline display) 로 제어. */
+  /* [design.md §10] 활동 진행률 위젯 — 왼쪽 여백 배치 + 컴팩트(120px).
+     left = 왼쪽 여백 - 위젯폭 - 12px 이라, 여백이 위젯을 담을 만큼 넓으면
+     본문(시각 1188px)과 전혀 안 겹친다. 여백이 부족하면 8px 로 clamp 되어
+     창 왼쪽 테두리 쪽과만 약간 겹친다(120px 라 겹침 폭이 작다). */
+  .sheet-progress {
+    position: fixed;
+    top: 116px;
+    left: max(8px, calc((100vw - 1188px) / 2 - 120px - 12px));
+    width: 120px;
+    z-index: 5;                         /* 타이틀바(z-index:2)보다 낮게 */
+    display: flex; flex-direction: column;
+    background: #fffdf7;
+    border: 3px solid #4b3b6b;
+    border-radius: 12px;
+    box-shadow: 5px 5px 0 rgba(75,59,107,.18);   /* 오프셋만·blur 0 */
+    overflow: hidden;
+  }
+  .sheet-progress .sp-head {
+    padding: 6px 10px; border-bottom: 3px solid #4b3b6b;
+    background: #d6c4f5;
+    font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px;
+    text-align: center;
+  }
+  .sheet-progress .sp-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .sheet-progress .sp-title {          /* 한글 제목 — Silkscreen 금지 */
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; color: #4b3b6b; line-height: 1.3;
+  }
+  .sheet-progress .sp-count { display: flex; align-items: baseline; gap: 4px; }
+  .sheet-progress .sp-count .big {
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 20px;
+    font-variant-numeric: tabular-nums; color: #4b3b6b;
+  }
+  .sheet-progress .sp-count .sub {
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; font-size: 11px; color: #8b7cb8;
+  }
+  .sheet-progress .track {
+    height: 10px; border: 2px solid #4b3b6b; border-radius: 999px; overflow: hidden;
+    background: #ece9f3;
+  }
+  .sheet-progress .fill {
+    height: 100%; width: 0%;           /* 인라인 style="width:<pct>%" 로 바인딩 */
+    background: #9db2f2;               /* 단색 — 그라디언트 금지 */
+    transition: width .3s ease;
+  }
+  .sheet-progress .sp-done {          /* 제출 완료 보조 표기 (§2.1 완료 상태색) */
+    align-self: flex-start; padding: 2px 8px; border-radius: 999px;
+    background: #ece9f3; color: #8a82a6;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 11px;
+  }
+  @media (max-width: 820px) { .sheet-progress { display: none !important; } }
+  @media print { .sheet-progress { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .sheet-progress .fill { transition: none !important; } }
+
+  /* ACTIVITY_5 만화 판매량 표 — 드래그 텍스트 선택/복사 방지 (가로 스크롤은 유지) */
+  .no-copy { user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+
+  /* [design.md §11] 순서 배열 / 드래그 슬롯 컴포넌트 — PREVIOUSLY 카드 "4단계 순서 배열" 활동.
+     §2.1 팔레트 · §2.2 서체 · §2.4 스케일만 사용. 테두리색은 모든 상태에서 #4b3b6b. */
+  .seq-activity { display: flex; flex-direction: column; gap: 10px; }
+  .seq-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .seq-tag { font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px; color: #6b559b; }
+  .seq-title { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px; color: #4b3b6b; }
+  .seq-hint { margin: 0; font-size: 14px; color: #8b7cb8; line-height: 1.6; }
+
+  .seq-tray {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center; min-height: 56px;
+    border: 3px dashed #b3a8cc; border-radius: 10px; padding: 10px;
+    background: repeating-linear-gradient(45deg,#fffdf7,#fffdf7 10px,#f8f1e2 10px,#f8f1e2 20px);
+  }
+  .seq-tray.is-over { border-color: #ee9dbf; background: #fdf6fa; }
+  .seq-tray.is-empty::before {
+    content: 'EMPTY'; font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 11px; color: #9c8dc4;
+  }
+
+  .seq-chip {
+    cursor: pointer; user-select: none; -webkit-user-select: none;
+    padding: 8px 15px; border: 3px solid #4b3b6b; border-radius: 9px;
+    background: #fffdf7; box-shadow: 3px 3px 0 rgba(75,59,107,.15);
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .seq-chip.is-on {
+    background: #d6c4f5;
+    box-shadow: 2px 2px 0 rgba(75,59,107,.35); transform: translate(1px,1px);
+  }
+  .seq-chip.is-dragging { box-shadow: 1px 1px 0 rgba(75,59,107,.35); transform: translate(3px,3px); }
+
+  .seq-rows { display: flex; flex-direction: column; gap: 8px; }
+  .seq-row { display: flex; align-items: center; gap: 10px; }
+  .seq-num {
+    width: 30px; height: 30px; flex: none;
+    border: 3px solid #4b3b6b; border-radius: 8px; background: #d6c4f5;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; color: #4b3b6b;
+  }
+
+  .seq-slot {
+    flex: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 6px 12px; border: 3px dashed #b3a8cc; border-radius: 10px; background: #fdf6fa;
+  }
+  .seq-slot:not(.is-filled)::before {
+    content: 'DROP HERE'; font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px; color: #9c8dc4;
+  }
+  .seq-slot.is-over { box-shadow: inset 0 0 0 4px #ee9dbf; }
+  .seq-slot.is-filled { border: 3px solid #4b3b6b; background: #fffdf7; justify-content: flex-start; }
+  .seq-slot.is-correct { background: #d8f0c4; }
+  .seq-slot.is-wrong { background: #f7bfb2; }
+  .seq-mark {
+    width: 24px; height: 24px; flex: none; border: 3px solid #4b3b6b; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; background: #fffdf7;
+  }
+  .seq-slot.is-correct .seq-mark { background: #bfe9dd; }
+
+  .seq-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .seq-check-btn, .seq-reset-btn {
+    cursor: pointer; padding: 11px 20px; border: 3px solid #4b3b6b; border-radius: 10px;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px;
+  }
+  .seq-check-btn { background: #9db2f2; color: #26224a; box-shadow: 4px 4px 0 rgba(75,59,107,.3); }
+  .seq-reset-btn { background: #fffdf7; color: #4b3b6b; box-shadow: 4px 4px 0 rgba(75,59,107,.2); }
+  .seq-check-btn:active { background: #8296e0; box-shadow: 1px 1px 0 rgba(75,59,107,.3); transform: translate(3px,3px); }
+
+  .seq-result { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; color: #4b3b6b; }
+
+  .seq-chip:focus-visible, .seq-slot:focus-visible,
+  .seq-check-btn:focus-visible, .seq-reset-btn:focus-visible {
+    outline: 3px solid #ee9dbf; outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) { .seq-chip { transition: none !important; } }
+
+  /* 모든 답 빈칸 — 가로가 넘치면 줄바꿈되고 세로로 자라남(입력 텍스트 전부 표시). JS(autoGrowBlank)가 높이를 맞춘다. */
+  textarea.blank {
+    box-sizing: border-box; display: block; width: 100%;
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-size: 15px; line-height: 1.6; color: #4b3b6b;
+    border: 3px solid #4b3b6b; border-radius: 9px; background: #fdf6fa;
+    padding: 9px 11px; min-height: 42px;
+    resize: none; overflow: hidden;
+    white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word;
+  }
+  textarea.blank:focus { border-color: #ee9dbf; background: #fff; outline: none; }
+  textarea.blank::placeholder { color: #b3a8cc; }
+  textarea.blank.blank--strong { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; }
+  textarea.blank.blank--inline {
+    display: inline-block; width: 120px; vertical-align: middle;
+    border-width: 2px; border-radius: 6px; padding: 4px 8px; min-height: 30px; line-height: 1.5;
+  }
+  @media print {
+    textarea.blank { background: #fff !important; border: 2px solid #4b3b6b !important;
+      height: auto !important; overflow: visible !important; }
+  }
+
+
+  /* 스샷 붙여넣기 칸 — contenteditable, 캡처한 이미지를 Ctrl+V 로 붙여넣는다. */
+  .shot-paste {
+    box-sizing: border-box; width: 100%; min-height: 180px;
+    border: 3px dashed #b3a8cc; border-radius: 9px; background: #fdf6fa;
+    padding: 12px; color: #4b3b6b;
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-size: 14px; line-height: 1.6;
+    overflow: auto;
+  }
+  .shot-paste:focus { border-color: #ee9dbf; background: #fff; outline: none; }
+  .shot-paste:empty::before { content: attr(data-ph); color: #b3a8cc; }
+  .shot-paste img { max-width: 100%; height: auto; }
+  @media print {
+    .shot-paste { background: #fff !important; border: 2px solid #4b3b6b !important;
+      min-height: 240px; overflow: visible !important; }
+    .shot-paste:empty::before { content: ''; }
+  }
+  /* 셀 주소 정리 문장 — 짝짓기 드래그(열/행) */
+  .ca-tray { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ca-chip {
+    cursor: grab; user-select: none; -webkit-user-select: none;
+    border: 3px solid #4b3b6b; border-radius: 9px; padding: 6px 18px;
+    background: #fffdf7; box-shadow: 3px 3px 0 rgba(75,59,107,.15);
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .ca-chip.is-on { background: #d6c4f5; box-shadow: 2px 2px 0 rgba(75,59,107,.35); transform: translate(1px,1px); }
+  .ca-chip.is-dragging { opacity: .5; }
+  .ca-slot {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 62px; height: 34px; padding: 0 10px; vertical-align: middle;
+    border: 3px dashed #b3a8cc; border-radius: 8px; background: #fdf6fa;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .ca-slot.is-over { box-shadow: inset 0 0 0 4px #ee9dbf; }
+  .ca-slot.is-filled { border: 3px solid #4b3b6b; background: #fffdf7; }
+  .ca-slot.is-correct { border: 3px solid #4b3b6b; background: #d8f0c4; }
+  .ca-slot.is-wrong { border: 3px solid #4b3b6b; background: #f7bfb2; }
+  .ca-result { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; }
+  .ca-chip:focus-visible, .ca-slot:focus-visible { outline: 3px solid #ee9dbf; outline-offset: 2px; }
+
+  /* [design.md §6] 전역 인쇄 규칙 — 이 파일에 없던 블록이라 신설 (§11.5 포함) */
+  @media print {
+    @page { margin: .5cm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        animation: none !important; transition-duration: 0s !important; }
+    * { box-shadow: none !important; }              /* 잉크 절약 */
+    figure, table, .card, .seq-activity { break-inside: avoid; }
+    .seq-tray { display: none; }                     /* 미배치 칩 풀은 인쇄 불필요 */
+    .seq-slot { border: 2px solid #4b3b6b; background: #fff; }
+    .seq-slot.is-correct, .seq-slot.is-wrong { background: #fff; }  /* 색 → 아이콘/텍스트 */
+    .seq-slot.is-correct .seq-mark::after { content: ' ✓ 정답'; }
+    .seq-slot.is-wrong .seq-mark::after { content: ' ✗ 다시'; }
+    .seq-num { background: #d6c4f5; }                /* 색 배지 정보위계는 유지 */
+    .ca-tray { display: none; }
+    .ca-slot { border: 2px solid #4b3b6b; background: #fff; }
+    .ca-slot.is-correct::after { content: ' ✓'; }
+    .ca-slot.is-wrong::after { content: ' ✗'; }
+
+    /* "PDF로 저장하기" — 수업 활동지 탭 내용만 인쇄 (savePdf 가 body.print-sheet-only 토글) */
+    body.print-sheet-only #appTitlebar,
+    body.print-sheet-only #appFooter,
+    body.print-sheet-only #pdfBtn { display: none !important; }
+    body.print-sheet-only #appPage {
+      zoom: 1 !important; min-height: 0 !important; padding: 0 !important;
+      background: #fff !important; background-image: none !important;
+    }
+  }
+</style>
+</helmet>
+<div id="appPage" style="zoom:1.1; minHeight:calc(100vh / 1.1); padding:28px 20px 60px; background:#e7e3f7; backgroundImage:linear-gradient(#d8d2ee 1px, transparent 1px), linear-gradient(90deg, #d8d2ee 1px, transparent 1px); backgroundSize:28px 28px">
+  <div style="maxWidth:1080px; margin:0 auto; display:flex; flexDirection:column; gap:18px">
+
+    <div style="display:flex; alignItems:flex-end; gap:14px; flexWrap:wrap">
+      
+      
+    </div>
+
+    <div style="background:#fffdf7; border:4px solid #4b3b6b; borderRadius:16px; boxShadow:8px 8px 0 rgba(75,59,107,.22); overflow:hidden">
+
+      <div id="appTitlebar" style="display:flex; alignItems:flex-end; gap:14px; padding:14px 16px 0; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)">
+        <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:25px; letterSpacing:.5px; flex:none; whiteSpace:nowrap; paddingBottom:12px">🏫 신현중학교 정보</div>
+        <div style="flex:1"></div>
+        <div style="display:flex; gap:4px; alignItems:flex-end">
+          <div onClick="{{ goRules }}" style="{{ tabRules }}"><span>📜</span><span>이용 규칙</span></div>
+          <div onClick="{{ goTime }}" style="{{ tabTime }}"><span>🕒</span><span>시간표</span></div>
+          <div onClick="{{ goMeal }}" style="{{ tabMeal }}"><span>🍚</span><span>오늘의 급식</span></div>
+          <div onClick="{{ goSheet }}" style="{{ tabSheet }}"><span>✏️</span><span>수업 활동지</span></div>
+        </div>
+        <div style="display:flex; gap:6px; paddingBottom:12px">
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">_</div>
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">□</div>
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#f7a8c4; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">X</div>
+        </div>
+      </div>
+
+      
+
+      <div style="padding:24px 22px 30px">
+
+        <sc-if value="{{ isRules }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; gap:12px">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">컴퓨터실 이용 규칙</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#fbe6a2; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">READ ME</div>
+            </div>
+
+            <div style="border:4px solid #4b3b6b; borderRadius:14px; background:#fdf6fa; boxShadow:6px 6px 0 rgba(75,59,107,.2); overflow:hidden">
+              <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:linear-gradient(90deg,#f9cade,#d6c4f5); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">HOW_TO_USE.txt</div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:14px">
+                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:26px">컴퓨터실, 이렇게 사용해요!</div>
+                <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px">
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#bfe9dd; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🧴</span>
+                    <span>손소독제 or 손씻기</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#c4d8f7; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🪑</span>
+                    <span>자기 자리 앉기</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#fbe6a2; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🚫</span>
+                    <span>물 &amp; 음료 &amp; 간식 X</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#f7bfb2; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🚫</span>
+                    <span>의자 이동 X</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#fdf3f8; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#f9cade; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_01.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">들어올 때</div>
+                  <div>• 손을 씻고 들어와요.</div>
+                  <div>• 내 자리 번호를 확인하고 앉아요.</div>
+                  <div>• 수업을 위해 로그인을 먼저 하고, 타자 연습을 해요.</div>
+                </div>
+              </div>
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#f2f6fe; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_02.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">사용할 때</div>
+                  <div>• 수업 할 때는 수업과 관련되지 않은 걸 하지 않아요.</div>
+                  <div>• 친구 노트북을 함부로 만지지 않아요.</div>
+                  <div>• 궁금한 건 손을 들고 물어봐요.</div>
+                </div>
+              </div>
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#f2fbf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_03.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">나갈 때</div>
+                  <div>• 노트북 모니터를 닫지 않아요.</div>
+                  <div>• 의자를 제자리에 넣어요.</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; gap:14px; flexWrap:wrap; alignItems:stretch">
+              <div style="flex:1; minWidth:280px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">MESSAGE</div>
+                <div style="padding:16px; display:flex; gap:14px; alignItems:center">
+                  <div style="width:54px; height:54px; borderRadius:50%; border:3px solid #4b3b6b; background:#f9cade; display:flex; alignItems:center; justifyContent:center; fontSize:26px; animation:floaty 3s ease-in-out infinite">♥</div>
+                  <div style="fontSize:15px; lineHeight:1.7">약속을 지키면 모두가 즐거운 수업이 돼요.<br>세 가지만 기억해요 — <b>조용히, 함께, 깨끗하게!</b></div>
+                </div>
+              </div>
+              <div style="width:210px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#fbe6a2; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">LOADING</div>
+                <div style="padding:16px; display:flex; flexDirection:column; gap:10px">
+                  <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">&gt; GOOD MANNERS 100%</div>
+                  <div style="height:16px; border:3px solid #4b3b6b; borderRadius:4px; display:flex; gap:2px; padding:2px; background:#fff">
+                    <div style="flex:1; background:#f7a8c4"></div>
+                    <div style="flex:1; background:#f7a8c4"></div>
+                    <div style="flex:1; background:#d6c4f5"></div>
+                    <div style="flex:1; background:#d6c4f5"></div>
+                    <div style="flex:1; background:#c4d8f7"></div>
+                    <div style="flex:1; background:#c4d8f7"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isTime }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">시간표</div>
+              <div style="border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; padding:5px 14px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; boxShadow:3px 3px 0 rgba(75,59,107,.18)">{{ todayLabel }}</div>
+<div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#c4d8f7; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">TIMETABLE</div>
+              
+            </div>
+
+            
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; background:#f7f4fd; padding:12px 22px; display:flex; gap:18px; justifyContent:center; alignItems:center; flexWrap:wrap; boxShadow:5px 5px 0 rgba(75,59,107,.18); alignSelf:center">
+              <div style="display:flex; alignItems:center; gap:10px">
+                <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">GRADE</div>
+                <select value="{{ gradeVal }}" onChange="{{ setGrade }}" style="appearance:none; cursor:pointer; padding:9px 32px 9px 15px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; backgroundImage:linear-gradient(45deg, transparent 50%, #4b3b6b 50%), linear-gradient(135deg, #4b3b6b 50%, transparent 50%); backgroundPosition:calc(100% - 18px) 19px, calc(100% - 13px) 19px; backgroundSize:5px 5px, 5px 5px; backgroundRepeat:no-repeat; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; outline:none; boxShadow:3px 3px 0 rgba(75,59,107,.18)">
+                  <sc-for list="{{ gradeOpts }}" as="g" hint-placeholder-count="3">
+                    <option value="{{ g.value }}">{{ g.label }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div style="display:flex; alignItems:center; gap:10px">
+                <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">CLASS</div>
+                <select value="{{ classVal }}" onChange="{{ setCls }}" style="appearance:none; cursor:pointer; padding:9px 32px 9px 15px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; backgroundImage:linear-gradient(45deg, transparent 50%, #4b3b6b 50%), linear-gradient(135deg, #4b3b6b 50%, transparent 50%); backgroundPosition:calc(100% - 18px) 19px, calc(100% - 13px) 19px; backgroundSize:5px 5px, 5px 5px; backgroundRepeat:no-repeat; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; outline:none; boxShadow:3px 3px 0 rgba(75,59,107,.18)">
+                  <sc-for list="{{ classOpts }}" as="c" hint-placeholder-count="12">
+                    <option value="{{ c.value }}">{{ c.label }}</option>
+                  </sc-for>
+                </select>
+              </div>
+            </div><div style="display:flex; flexDirection:column; alignItems:center; gap:8px">
+              <div style="display:flex; gap:10px; justifyContent:center; flexWrap:wrap">
+                <sc-for list="{{ timeViews }}" as="v" hint-placeholder-count="3">
+                  <div onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</div>
+                </sc-for>
+              </div>
+              
+            </div>
+
+            <sc-if value="{{ timeIsDay }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flexDirection:column; gap:12px; alignItems:center">
+                <div style="width: 100%; maxWidth: 560px; border: 3px solid #4b3b6b; overflow: hidden; background: #fffdf7; boxShadow: 5px 5px 0 rgba(75,59,107,.18); borderRadius: 12px">
+                  <sc-for list="{{ dayRows }}" as="r" hint-placeholder-count="7">
+                    <div style="{{ r.rowStyle }}">
+                      <div style="padding:12px 8px; textAlign:center; borderRight:3px solid #4b3b6b; background:#f7f4fd">
+                        <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">{{ r.period }}</div>
+                        <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#8b7cb8">{{ r.time }}</div>
+                        <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#a89cc4">{{ r.endTime }}</div>
+                      </div>
+                      <div style="padding:12px 16px; display:flex; alignItems:center; gap:11px">
+                        <div style="{{ r.tagStyle }}">{{ r.subject }}</div>
+                        <div style="flex:1"></div>
+                        <div style="{{ r.statusStyle }}">{{ r.statusLabel }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ timeIsWeek }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+                <div style="display:grid; gridTemplateColumns:78px repeat(5, 1fr); background:#d6c4f5; borderBottom:3px solid #4b3b6b">
+                  <div style="padding:10px 8px; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; textAlign:center; borderRight:3px solid #4b3b6b">TIME</div>
+                  <sc-for list="{{ weekHeads }}" as="h" hint-placeholder-count="5">
+                    <div style="{{ h.style }}">
+                      <div>{{ h.label }}</div>
+                      <div style="{{ h.dateStyle }}">{{ h.date }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ weekRows }}" as="row" hint-placeholder-count="6">
+                  <div style="display:grid; gridTemplateColumns:78px repeat(5, 1fr); borderBottom:2px dashed rgba(75,59,107,.3); background:#fffdf7">
+                    <div style="padding:12px 6px; textAlign:center; borderRight:3px solid #4b3b6b; background:#f7f4fd">
+                      <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">{{ row.period }}</div>
+                      <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#8b7cb8">{{ row.time }}</div>
+                      <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#a89cc4">~{{ row.endTime }}</div>
+                    </div>
+                    <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="5">
+                      <div style="{{ cell.cellStyle }}">
+                        <div style="{{ cell.style }}">{{ cell.subject }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ timeIsMonth }}" hint-placeholder-val="{{ false }}">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18); background:#fffdf7">
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr); background:#c4d8f7; borderBottom:3px solid #4b3b6b">
+                  <sc-for list="{{ dowHeads }}" as="d" hint-placeholder-count="7">
+                    <div style="padding:8px 4px; textAlign:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ d }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr)">
+                  <sc-for list="{{ monthCells }}" as="c" hint-placeholder-count="35">
+                    <div style="{{ c.boxStyle }}">
+                      <div style="display:flex; justifyContent:space-between; alignItems:center">
+                        <span style="{{ c.dayStyle }}">{{ c.day }}</span>
+                        <span style="fontSize:11px; color:#a596cc">{{ c.badge }}</span>
+                      </div>
+                      <sc-for list="{{ c.chips }}" as="ch" hint-placeholder-count="7">
+                        <div style="{{ ch.style }}">
+                          <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px">{{ ch.label }}</span>
+                          <span style="{{ ch.subStyle }}">{{ ch.sub }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="display:flex; alignItems:flex-start; gap:10px; border:3px solid #4b3b6b; borderRadius:12px; background:#fbe6a2; padding:12px 16px; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+              <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#8a7132; paddingTop:3px">NOTE</span>
+              <span style="fontSize:15px; lineHeight:2; display:flex; alignItems:center; gap:6px; flexWrap:wrap">
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#c9c2ea; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">동아리 활동</span>
+                <span>은</span>
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#a9dce4; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">동아리 시간</span>
+                <span>일 수도 있고,</span>
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#f7bfb2; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">학스 시간</span>
+                <span>일 수도 있어요.</span>
+              </span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMeal }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">오늘의 급식</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#bfe9dd; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">LUNCH.EXE</div>
+            </div>
+
+            <div style="display:flex; flexDirection:column; alignItems:center; gap:8px">
+              <div style="display:flex; gap:10px; justifyContent:center; flexWrap:wrap">
+                <sc-for list="{{ mealViews }}" as="v" hint-placeholder-count="3">
+                  <div onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</div>
+                </sc-for>
+              </div>
+              
+            </div>
+
+            <sc-if value="{{ mealIsDay }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; gap:16px; flexWrap:wrap; alignItems:stretch; justifyContent:center">
+                <div style="width:100%; maxWidth:560px; border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:6px 6px 0 rgba(75,59,107,.2)">
+                  <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between; alignItems:center">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_LUNCH</span>
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ todayMeal.date }}</span>
+                  </div>
+                  <div style="padding:18px; display:flex; flexDirection:column; gap:12px">
+                    <sc-for list="{{ todayMeal.items }}" as="m" hint-placeholder-count="5">
+                      <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa">
+                        <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">{{ m.name }}</span>
+                        <span style="display:flex; gap:5px; flexWrap:wrap">
+                          <sc-for list="{{ m.allergens }}" as="a" hint-placeholder-count="2">
+                            <span style="{{ a.style }}">{{ a.label }}</span>
+                          </sc-for>
+                        </span>
+                      </div>
+                    </sc-for>
+                    <div style="display:flex; alignItems:center; justifyContent:center; gap:10px; padding:11px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#bfe9dd">
+                      <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#3d7f6c">TOTAL</span>
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">오늘 전체 칼로리</span>
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">{{ todayMeal.kcal }} kcal</span>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ mealIsWeek }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(190px,1fr)); gap:14px">
+                <sc-for list="{{ weekMeals }}" as="w" hint-placeholder-count="5">
+                  <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                    <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:{{ w.color }}; display:flex; justifyContent:space-between; alignItems:center">
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">{{ w.day }}</span>
+                      <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">{{ w.date }}</span>
+                    </div>
+                    <div style="padding:12px 14px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6">
+                      <sc-for list="{{ w.items }}" as="i" hint-placeholder-count="5">
+                        <div>· {{ i }}</div>
+                      </sc-for>
+                      <div style="marginTop:6px; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px; color:#9c8dc4">{{ w.kcal }} KCAL</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ mealIsMonth }}" hint-placeholder-val="{{ false }}">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18); background:#fffdf7">
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr); background:#bfe9dd; borderBottom:3px solid #4b3b6b">
+                  <sc-for list="{{ dowHeads }}" as="d" hint-placeholder-count="7">
+                    <div style="padding:8px 4px; textAlign:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ d }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr)">
+                  <sc-for list="{{ mealMonthCells }}" as="c" hint-placeholder-count="35">
+                    <div style="{{ c.boxStyle }}">
+                      <div style="display:flex; justifyContent:space-between; alignItems:center">
+                        <span style="{{ c.dayStyle }}">{{ c.day }}</span>
+                        
+                      </div>
+                      <div style="display:flex; flexDirection:column; alignItems:center; gap:2px; fontSize:11px; lineHeight:1.4; color:#6b5b93; textAlign:center">
+                        <sc-for list="{{ c.menu }}" as="mi" hint-placeholder-count="5">
+                          <div>{{ mi }}</div>
+                        </sc-for>
+                        <div>{{ c.main }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSheet }}" hint-placeholder-val="{{ false }}">
+          <div id="sheetPrintArea" style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">수업 활동지</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#d6c4f5; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">WORKSHEET_01</div>
+            </div>
+
+            <div style="border:4px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fdf6fa; boxShadow:6px 6px 0 rgba(75,59,107,.2)">
+              <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:linear-gradient(90deg,#f9cade,#d6c4f5); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_TOPIC</div>
+              <div style="padding:20px 22px; display:flex; flexDirection:column; gap:8px">
+                
+                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:32px; lineHeight:1.3; textWrap:pretty">데이터 분석</div>
+                <div style="fontSize:15px; color:#8b7cb8">데이터로 문제를 해결하는 4단계를 배우고, 표에서 행·열·셀과 '속성'이 무엇인지 익혀요.</div>
+                
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">MY_INFO</div>
+              <div style="padding:18px; display:grid; gridTemplateColumns:repeat(auto-fit, minmax(150px,1fr)); gap:14px">
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">학년</label>
+                  <textarea class="blank" rows="1" placeholder="2" value="{{ fGrade }}" onChange="{{ setFGrade }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">반</label>
+                  <textarea class="blank" rows="1" value="{{ fClass }}" onChange="{{ setFClass }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">번호</label>
+                  <textarea class="blank" rows="1" value="{{ fNum }}" onChange="{{ setFNum }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">이름</label>
+                  <textarea class="blank" rows="1" placeholder="이름을 적어요" value="{{ fName }}" onChange="{{ setFName }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fff6fb; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_GOALS</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#a65a86">GOAL</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:12px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#f9cade; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🎯</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">오늘의 목표</div>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">1</span>
+                    <span>'풀 수 있는 문제'가 되기 위한 3가지 조건을 설명할 수 있어요.</span>
+                  </div>
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">2</span>
+                    <span>데이터 분석에 적합한 질문과 그렇지 않은 질문을 구분할 수 있어요.</span>
+                  </div>
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">3</span>
+                    <span>표에서 행, 열, 셀이 무엇을 뜻하는지, '속성'이 무엇인지 설명할 수 있어요.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#f8f4fe; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PREVIOUSLY</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#6b559b">RECALL</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:12px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#d6c4f5; display:flex; alignItems:center; justifyContent:center; fontSize:15px">⏪</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">지난 시간 복습</div>
+                </div>
+                <div class="seq-activity">
+                  <div class="seq-head">
+                    <span class="seq-tag">ORDER</span>
+                    <span class="seq-title">데이터 분석 4단계, 순서부터 맞춰 보기</span>
+                  </div>
+                  <p class="seq-hint">데이터로 문제를 해결할 때는 정해진 차례가 있어요. 아래 4장의 카드를 올바른 순서(① → ④)로 끌어다 놓아 보세요. 오늘 수업은 이 순서대로 진행돼요.</p>
+                  <div class="seq-tray" id="seqTrayPrev" data-target-tray="seqTrayPrev" aria-label="순서 카드 모음 (뒤섞인 4장)">
+                    <button type="button" class="seq-chip" data-value="seq-prev-step3" data-answer-key="step3" draggable="true" aria-pressed="false" aria-label="순서 카드: 데이터 분석하기">데이터 분석하기</button>
+                    <button type="button" class="seq-chip" data-value="seq-prev-step1" data-answer-key="step1" draggable="true" aria-pressed="false" aria-label="순서 카드: 문제 정하기">문제 정하기</button>
+                    <button type="button" class="seq-chip" data-value="seq-prev-step4" data-answer-key="step4" draggable="true" aria-pressed="false" aria-label="순서 카드: 결과 해석·공유">결과 해석·공유</button>
+                    <button type="button" class="seq-chip" data-value="seq-prev-step2" data-answer-key="step2" draggable="true" aria-pressed="false" aria-label="순서 카드: 데이터 수집·특성 파악">데이터 수집·특성 파악</button>
+                  </div>
+                  <div class="seq-rows">
+                    <div class="seq-row">
+                      <div class="seq-num">①</div>
+                      <div class="seq-slot" id="seqSlotPrev1" data-slot="seqSlotPrev1" data-check-group="seqTrayPrev" data-answer="step1" role="button" tabindex="0" aria-label="순서 1번 자리 (가장 먼저 하는 단계)"></div>
+                    </div>
+                    <div class="seq-row">
+                      <div class="seq-num">②</div>
+                      <div class="seq-slot" id="seqSlotPrev2" data-slot="seqSlotPrev2" data-check-group="seqTrayPrev" data-answer="step2" role="button" tabindex="0" aria-label="순서 2번 자리"></div>
+                    </div>
+                    <div class="seq-row">
+                      <div class="seq-num">③</div>
+                      <div class="seq-slot" id="seqSlotPrev3" data-slot="seqSlotPrev3" data-check-group="seqTrayPrev" data-answer="step3" role="button" tabindex="0" aria-label="순서 3번 자리"></div>
+                    </div>
+                    <div class="seq-row">
+                      <div class="seq-num">④</div>
+                      <div class="seq-slot" id="seqSlotPrev4" data-slot="seqSlotPrev4" data-check-group="seqTrayPrev" data-answer="step4" role="button" tabindex="0" aria-label="순서 4번 자리 (가장 마지막 단계)"></div>
+                    </div>
+                  </div>
+                  <div class="seq-controls">
+                    <button type="button" class="seq-check-btn" data-target-tray="seqTrayPrev" data-result-id="seqResultPrev">✅ 순서 확인</button>
+                    <button type="button" class="seq-reset-btn" data-target-tray="seqTrayPrev" data-result-id="seqResultPrev">🔄 다시 섞기</button>
+                    <span class="seq-result" id="seqResultPrev" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div data-act="1" style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#eef9f8; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#a9dce4; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_1</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#2f6b78">WRITE</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:10px">
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f8f4fe; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">WHY</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">왜 '문제 정하기'부터 할까?</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.8">
+                    <div><span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#6b559b">Q.</span> 데이터부터 잔뜩 모으면 안 되는 걸까?</div>
+                    <div><span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#2f7d6a">A.</span> 데이터로 해결할 수 있는 문제를 골라내고, <textarea class="blank blank--inline" rows="1" placeholder="빈칸" aria-label="문제 정의 빈칸"></textarea>을 해결할 것인지 또렷하게 정하는 단계입니다. 문제를 명확하게 정하면 수집한 데이터를 분석하고 문제를 해결하는 데에 유용한 지침이 됩니다.</div>
+                  </div>
+                </div>
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#a9dce4; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">1</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">해결할 수 있는 문제 정하기</div>
+                </div>
+                <div style="fontSize:14px; color:#8b7cb8">문제가 흐릿하면 데이터를 많이 모아도 무엇을 볼지 알 수 없어요. 아래 3가지를 모두 만족하는지 확인해요.</div>
+                <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(190px,1fr)); gap:12px">
+                  <div style="border:3px solid #4b3b6b; borderRadius:11px; background:#ffe0cc; padding:12px 14px; display:flex; flexDirection:column; gap:5px">
+                    <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#8a5a35">CHECK_01</div>
+                    <textarea class="blank blank--strong" rows="1" placeholder="여기에 적어요" aria-label="확인 항목 1"></textarea>
+                    <div style="fontSize:14px; lineHeight:1.6">'더 좋게'가 아니라 무엇을 얼마나 바꿀지 드러나야 해요.</div>
+                  </div>
+                  <div style="border:3px solid #4b3b6b; borderRadius:11px; background:#d8f0c4; padding:12px 14px; display:flex; flexDirection:column; gap:5px">
+                    <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#4f7a33">CHECK_02</div>
+                    <textarea class="blank blank--strong" rows="1" placeholder="여기에 적어요" aria-label="확인 항목 2"></textarea>
+                    <div style="fontSize:14px; lineHeight:1.6">숫자나 기록으로 답할 수 있는 질문이어야 해요.</div>
+                  </div>
+                  <div style="border:3px solid #4b3b6b; borderRadius:11px; background:#cfeaf5; padding:12px 14px; display:flex; flexDirection:column; gap:5px">
+                    <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#356b80">CHECK_03</div>
+                    <textarea class="blank blank--strong" rows="1" placeholder="여기에 적어요" aria-label="확인 항목 3"></textarea>
+                    <div style="fontSize:14px; lineHeight:1.6">'전 세계'가 아니라 '우리 학교, 지난 1년'처럼 좁혀요.</div>
+                  </div>
+                </div>
+                <div style="marginTop:4px; border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fdf3f0; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#f7bfb2; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">IF NOT</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">데이터 분석으로 풀 수 있는 문제를 명확히 정하지 않는다면?</span>
+                  </div>
+                  <div style="padding:14px 16px; fontSize:15px; lineHeight:1.8">데이터를 아무리 많이 모아도, 무엇을 어떻게 분석해야 할지 알 수 없어요. 여행지를 정하지 않고 짐부터 싸는 것과 같습니다. 무엇을 챙겨야 할지 정할 수가 없어요.</div>
+                </div>
+                <div style="padding:14px 16px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; display:flex; flexDirection:column; gap:10px; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">🖊 데이터 분석을 할 질문으로 가장 적절하지 않은 것은?</div>
+                  <div style="fontSize:13px; color:#8b7cb8">선택지를 눌러 답을 골라요.</div>
+                  <div style="display:flex; flexDirection:column; gap:8px">
+                    <sc-for list="{{ q1 }}" as="o" hint-placeholder-count="4">
+                      <div onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.label }}</div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ q1Feedback }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ q1FeedbackStyle }}">{{ q1Feedback }}</div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#f4f8fe; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_2</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#4f6a96">TOOL</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:10px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#c4d8f7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">2</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">표 만드는 프로그램 알아보기</div>
+                </div>
+                <div style="fontSize:14px; color:#8b7cb8">데이터를 표로 정리하기 위해 쓰이는 대표적인 프로그램들</div>
+                <div style="padding:14px 16px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; display:flex; flexDirection:column; gap:10px; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="display:flex; alignItems:center; gap:10px; flexWrap:wrap">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; flex:none">프로그램 이름</span>
+                    <textarea class="blank" rows="1" placeholder="여기에 적어요" value="{{ prog2 }}" onChange="{{ setProg2 }}" style="flex:1; min-width:160px"></textarea>
+                  </div>
+                  <div style="display:flex; alignItems:flex-start; gap:10px">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; flex:none">공통점</span>
+                    <span style="fontSize:15px; lineHeight:1.7">가로와 세로로 이루어진 표에 데이터를 입력하고, 다양한 기능들이 있어요.</span>
+                  </div>
+                </div>
+                <div style="borderTop:2px dashed rgba(75,59,107,.28)"></div>
+                <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">프로그램 들어가는 방법</div>
+                <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(220px,1fr)); gap:12px">
+                  <div style="border:3px solid #4b3b6b; borderRadius:11px; overflow:hidden; background:#fffdf7">
+                    <div style="padding:6px 10px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">STEP &#9312;</div>
+                    <div style="padding:10px; display:flex; flexDirection:column; gap:6px">
+                      <img src="msi-asset:./assets/cell1.png" alt="바탕화면의 한셀 2022 아이콘" style="display:block; margin:0 auto; max-width:100%; height:auto; border:3px solid #4b3b6b; borderRadius:8px">
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">바탕화면에서 한셀 2022 아이콘을 두 번 눌러요.</div>
+                    </div>
+                  </div>
+                  <div style="border:3px solid #4b3b6b; borderRadius:11px; overflow:hidden; background:#fffdf7">
+                    <div style="padding:6px 10px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">STEP &#9313;</div>
+                    <div style="padding:10px; display:flex; flexDirection:column; gap:6px">
+                      <img src="msi-asset:./assets/cell2.png" alt="한셀 시작 화면에서 새 문서" style="display:block; margin:0 auto; width:150px; max-width:100%; height:auto; border:3px solid #4b3b6b; borderRadius:8px">
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">새 문서를 눌러 빈 표를 열어요.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fffaee; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#fbe6a2; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_3</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#8a7132">TABLE</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:10px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#fbe6a2; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">3</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">표의 구조 — 행 · 열 · 셀</div>
+                </div>
+                <div style="overflowX:auto">
+                  <div style="minWidth:320px; border:3px solid #4b3b6b; borderRadius:8px; overflow:hidden">
+                    <div style="display:grid; gridTemplateColumns:40px repeat(4,1fr); background:#eef2fb; borderBottom:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; textAlign:center">
+                      <div style="padding:8px 0; borderRight:2px solid #4b3b6b"></div>
+                      <div style="padding:8px 0; borderRight:1px solid #cdd6e8">A</div>
+                      <div style="padding:8px 0; borderRight:1px solid #cdd6e8">B</div>
+                      <div style="padding:8px 0; borderRight:1px solid #cdd6e8">C</div>
+                      <div style="padding:8px 0">D</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:40px repeat(4,1fr); borderBottom:1px solid #cdd6e8; textAlign:center">
+                      <div style="padding:14px 0; background:#eef2fb; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">1</div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0; background:#cfe0fb"></div>
+                      <div style="padding:14px 0"></div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:40px repeat(4,1fr); borderBottom:1px solid #cdd6e8; textAlign:center; background:#ffe8d6">
+                      <div style="padding:14px 0; background:#fbdcc0; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">2</div>
+                      <div style="padding:14px 0; borderRight:1px solid #f0d6bf"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #f0d6bf"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #f0d6bf; background:#d9c2ec"></div>
+                      <div style="padding:14px 0"></div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:40px repeat(4,1fr); textAlign:center">
+                      <div style="padding:14px 0; background:#eef2fb; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">3</div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0"></div>
+                      <div style="padding:14px 0; borderRight:1px solid #e5e0f0; background:#cfe0fb"></div>
+                      <div style="padding:14px 0"></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="fontSize:13px; color:#8b7cb8">행 · 열 · 셀 중 하나를 누르면 바로 채점돼요.</div>
+                <div style="display:flex; flexDirection:column; gap:8px">
+                  <sc-for list="{{ a3Items }}" as="q" hint-placeholder-count="3">
+                    <div style="padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; display:flex; flexDirection:column; gap:8px">
+                      <div style="display:flex; gap:10px; flexWrap:wrap; alignItems:center">
+                        <span style="fontSize:15px; flex:1; minWidth:200px">{{ q.text }}</span>
+                        <span style="display:flex; gap:6px">
+                          <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="3">
+                            <span onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.v }}</span>
+                          </sc-for>
+                        </span>
+                      </div>
+                      <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
+                        <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffaee; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#fbe6a2; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">CELL ADDRESS</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">셀 주소 알아보기</span>
+                  </div>
+                  <div style="padding:14px 16px; fontSize:15px; lineHeight:1.9">표의 각 셀에는 자기만의 '주소'가 있어요. 주소는 '알파벳 + 숫자' 순서로 정해요. 예를 들어 A열과 1행이 만나는 셀은 A1이라고 불러요.</div>
+                </div>
+              </div>
+            </div>
+
+            <div data-act="4" style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#f8f4fe; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_4</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#6b559b">READ</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:10px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#d6c4f5; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">4</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">포켓몬 표 읽고 셀 주소 찾기</div>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f8f4fe; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TERM</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">속성 (feature) 이란?</span>
+                  </div>
+                  <div style="padding:14px 16px; fontSize:15px; lineHeight:2.2">속성은 데이터 하나하나를 설명하고 서로 구별해 주는 <textarea class="blank blank--inline" rows="1" placeholder="빈칸" aria-label="속성 정의 빈칸"></textarea>이에요. 표에서는 한 열이 곧 한 속성이에요.</div>
+                </div>
+                <div style="overflowX:auto">
+                  <div style="minWidth:420px; border:3px solid #4b3b6b; borderRadius:8px; overflow:hidden; fontSize:14px">
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; background:#e7f6ec; borderBottom:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; textAlign:center">
+                      <div style="padding:7px 0; borderRight:2px solid #4b3b6b"></div>
+                      <div style="padding:7px 0; borderRight:1px solid #cfe4d6">A</div>
+                      <div style="padding:7px 0; borderRight:1px solid #cfe4d6">B</div>
+                      <div style="padding:7px 0; borderRight:1px solid #cfe4d6">C</div>
+                      <div style="padding:7px 0; borderRight:1px solid #cfe4d6">D</div>
+                      <div style="padding:7px 0">E</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; borderBottom:1px solid #d8e8dd; textAlign:center; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700">
+                      <div style="padding:9px 0; background:#e7f6ec; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">1</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">포켓몬 이름</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">타입</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">체력</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">공격력</div>
+                      <div style="padding:9px 4px">방어력</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; borderBottom:1px solid #d8e8dd; textAlign:center">
+                      <div style="padding:9px 0; background:#e7f6ec; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">2</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">피카츄</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">전기</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">35</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">55</div>
+                      <div style="padding:9px 4px">40</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; borderBottom:1px solid #d8e8dd; textAlign:center">
+                      <div style="padding:9px 0; background:#e7f6ec; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">3</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">파이리</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">불꽃</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">39</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">52</div>
+                      <div style="padding:9px 4px">43</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; borderBottom:1px solid #d8e8dd; textAlign:center">
+                      <div style="padding:9px 0; background:#e7f6ec; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">4</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">꼬부기</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">물</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">44</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">48</div>
+                      <div style="padding:9px 4px">65</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:36px 1.3fr 1fr .8fr .9fr .9fr; textAlign:center">
+                      <div style="padding:9px 0; background:#e7f6ec; borderRight:2px solid #4b3b6b; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">5</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">이상해씨</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">풀, 독</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">45</div>
+                      <div style="padding:9px 4px; borderRight:1px solid #eee">49</div>
+                      <div style="padding:9px 4px">49</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:10px">
+                  <div style="display:flex; flexDirection:column; gap:4px">
+                    <span style="fontSize:15px">(1) A2 셀에는 어떤 데이터가 들어있나요?</span>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  </div>
+                  <div style="display:flex; flexDirection:column; gap:4px">
+                    <span style="fontSize:15px">(2) 꼬부기의 타입이 들어있는 셀의 주소는 무엇인가요?</span>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  </div>
+                  <div style="display:flex; flexDirection:column; gap:4px">
+                    <span style="fontSize:15px">(3) 방어력이 가장 센 포켓몬의 이름은 무엇인가요?</span>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  </div>
+                  <div style="display:flex; flexDirection:column; gap:4px">
+                    <span style="fontSize:15px">(4) 이상해씨의 방어력을 알 수 있는 셀의 주소는 어디인가요?</span>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  </div>
+                  <div style="display:flex; flexDirection:column; gap:10px">
+                    <div style="fontSize:13px; color:#8b7cb8">아래 카드를 빈칸으로 끌어다 놓아요. (누른 뒤 빈칸을 눌러도 돼요.)</div>
+                    <div class="ca-tray" id="caTray" aria-label="정답 카드 모음">
+                      <span class="ca-chip" draggable="true" data-v="열" role="button" tabindex="0" aria-pressed="false">열</span>
+                      <span class="ca-chip" draggable="true" data-v="행" role="button" tabindex="0" aria-pressed="false">행</span>
+                    </div>
+                    <div style="padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; fontSize:15px; lineHeight:2.4">정리해보면, 셀 주소는 <span class="ca-slot" id="caSlot1" data-answer="열" role="button" tabindex="0" aria-label="첫 번째 빈칸"></span> 을 먼저 쓰고, 그 다음 <span class="ca-slot" id="caSlot2" data-answer="행" role="button" tabindex="0" aria-label="두 번째 빈칸"></span> 을 붙여서 만듭니다.</div>
+                    <span class="ca-result" id="caResult" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div data-act="5" style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#f1fbf7; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_5</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#3d7f6c">FEATURE</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:10px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#bfe9dd; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">5</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">속성(feature) 이해하기</div>
+                </div>
+                <div style="fontSize:14px; color:#8b7cb8">속성은 데이터 하나하나를 설명하고 서로 구별해 주는 항목이에요. 표에서는 한 열이 곧 한 속성이에요.</div>
+                <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">2026년 상반기 일본 만화 판매량 TOP 10</div>
+                <div style="overflowX:auto">
+                  <div id="mangaTable" class="no-copy" style="minWidth:460px; border:3px solid #4b3b6b; borderRadius:8px; overflow:hidden; fontSize:13px">
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; background:#e7f0fb; borderBottom:2px solid #4b3b6b; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #d2dff0">순위</div>
+                      <div style="padding:8px 2px; borderRight:1px solid #d2dff0">만화 제목</div>
+                      <div style="padding:8px 2px; borderRight:1px solid #d2dff0">연재 시작 시기</div>
+                      <div style="padding:8px 2px; borderRight:1px solid #d2dff0">판매 부수</div>
+                      <div style="padding:8px 2px">완결 여부</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">1</div><div style="padding:8px 2px; borderRight:1px solid #eee">장송의 프리렌</div><div style="padding:8px 2px; borderRight:1px solid #eee">2020년 4월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 161만</div><div style="padding:8px 2px">연재 중</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">2</div><div style="padding:8px 2px; borderRight:1px solid #eee">원피스</div><div style="padding:8px 2px; borderRight:1px solid #eee">1997년 7월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 159만</div><div style="padding:8px 2px">연재 중</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">3</div><div style="padding:8px 2px; borderRight:1px solid #eee">주술회전</div><div style="padding:8px 2px; borderRight:1px solid #eee">2018년 3월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 143만</div><div style="padding:8px 2px">완결</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">4</div><div style="padding:8px 2px; borderRight:1px solid #eee">블루 록</div><div style="padding:8px 2px; borderRight:1px solid #eee">2018년 8월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 126만</div><div style="padding:8px 2px">연재 중</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">5</div><div style="padding:8px 2px; borderRight:1px solid #eee">체인소 맨</div><div style="padding:8px 2px; borderRight:1px solid #eee">2018년 12월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 114만</div><div style="padding:8px 2px">연재 중</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; borderBottom:1px solid #dde6f2; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">6</div><div style="padding:8px 2px; borderRight:1px solid #eee">주술회전 모듈로</div><div style="padding:8px 2px; borderRight:1px solid #eee">2025년 9월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 113만</div><div style="padding:8px 2px">완결</div>
+                    </div>
+                    <div style="display:grid; gridTemplateColumns:44px 1.3fr 1.1fr 1fr .9fr; textAlign:center">
+                      <div style="padding:8px 2px; borderRight:1px solid #eee">7</div><div style="padding:8px 2px; borderRight:1px solid #eee">스파이패밀리</div><div style="padding:8px 2px; borderRight:1px solid #eee">2019년 3월</div><div style="padding:8px 2px; borderRight:1px solid #eee">약 91만</div><div style="padding:8px 2px">연재 중</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:4px">
+                  <span style="fontSize:15px">이 표에서 '속성'은 모두 몇 개인가요?</span>
+                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:4px">
+                  <span style="fontSize:15px">'완결 여부'라는 속성의 열에는 어떤 데이터들이 있나요?</span>
+                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">MERGE</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">셀 병합하는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; alignItems:center">
+                    <img src="msi-asset:./assets/merge.png" alt="병합할 칸을 선택하고 병합하고 가운데 맞춤 선택" style="display:block; width:230px; max-width:100%; height:auto; border:3px solid #4b3b6b; borderRadius:8px">
+                    <div style="fontSize:13px; color:#8b7cb8; textAlign:center">&#9312; 병합할 칸을 드래그로 선택하고 &nbsp;&#9313; '병합하고 가운데 맞춤'을 눌러요.</div>
+                  </div>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">BORDER</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">파일 테두리 만드는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; alignItems:center">
+                    <img src="msi-asset:./assets/grid.png" alt="테두리 단추를 눌러 모든 테두리 선택" style="display:block; width:230px; max-width:100%; height:auto; border:3px solid #4b3b6b; borderRadius:8px">
+                    <div style="fontSize:13px; color:#8b7cb8; textAlign:center">&#9312; 테두리 단추를 누르고 &nbsp;&#9313; '모든 테두리(A)'를 선택해요.</div>
+                  </div>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
+                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
+                      <img src="msi-asset:./assets/screenshot.png" alt="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진" style="display:block; width:240px; max-width:100%; height:auto; border:3px solid #4b3b6b; borderRadius:8px">
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 예요. 세 개를 함께 눌러요.</div>
+                    </div>
+                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
+                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
+                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
+                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
+                    </ol>
+                    <div class="shot-paste" contenteditable="true" role="textbox" aria-multiline="true" aria-label="캡처한 스크린샷을 붙여넣는 칸" data-ph="여기를 누르고 Ctrl + V 로 캡처한 스샷을 붙여넣어요."></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fdf2fc; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#eec6ea; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">ACTIVITY_6</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#7b3f74">QUIZ</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:12px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#eec6ea; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:12px">6</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">형성평가 — 오늘의 실력 점검 (O / X)</div>
+                </div>
+                <div style="fontSize:13px; color:#8b7cb8">O 또는 X를 누르면 바로 채점돼요.</div>
+                <div style="display:flex; flexDirection:column; gap:8px">
+                  <sc-for list="{{ oxItems }}" as="q" hint-placeholder-count="5">
+                    <div style="padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; display:flex; flexDirection:column; gap:8px">
+                      <div style="display:flex; gap:10px; alignItems:center; flexWrap:wrap">
+                        <span style="fontSize:15px; flex:1; minWidth:220px">{{ q.text }}</span>
+                        <span style="display:flex; gap:6px">
+                          <span onClick="{{ q.pickO }}" style="{{ q.oStyle }}">O</span>
+                          <span onClick="{{ q.pickX }}" style="{{ q.xStyle }}">X</span>
+                        </span>
+                      </div>
+                      <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
+                        <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flexDirection:column; alignItems:center; gap:12px">
+              <div id="pdfBtn" onClick="{{ savePdf }}" style="cursor:pointer; padding:12px 24px; border:3px solid #4b3b6b; borderRadius:10px; background:#9db2f2; color:#26224a; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:18px; boxShadow:4px 4px 0 rgba(75,59,107,.3)" style-active="cursor:pointer; padding:12px 24px; border:3px solid #4b3b6b; borderRadius:10px; background:#8296e0; color:#26224a; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:18px; boxShadow:1px 1px 0 rgba(75,59,107,.3); transform:translate(3px,3px)">📄 PDF로 저장하기</div>
+              <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; alignItems:center; gap:8px; padding:9px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px">SAVED! 활동지 저장 완료</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+    <div id="appFooter" style="display:flex; alignItems:center; justifyContent:center; gap:8px; paddingTop:4px">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="#6b7fa8" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.07-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
+      <span style="fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:300; fontSize:14px; color:#6b7fa8">@sage810</span>
+    </div>
+  </div>
+</div>
+<!-- [design.md §10] 활동 진행률 플로팅 위젯 — zoom:1.1 래퍼 밖에 두고 sheetWidgetDisplay 로 탭 게이팅 -->
+<div class="sheet-progress" aria-label="활동 진행률" style="display:{{ sheetWidgetDisplay }}">
+  <div class="sp-head">PROGRESS</div>
+  <div class="sp-body">
+    <div class="sp-title">활동 진행률</div>
+    <div class="sp-count">
+      <span class="big">{{ sheetPct }}%</span>
+      <span class="sub">{{ sheetDone }}/{{ sheetTotal }}</span>
+    </div>
+    <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="{{ sheetTotal }}" aria-valuenow="{{ sheetDone }}" aria-valuetext="{{ sheetAria }}">
+      <div class="fill" style="{{ sheetFillStyle }}"></div>
+    </div>
+    <sc-if value="{{ sheetSaved }}" hint-placeholder-val="{{ false }}">
+      <span class="sp-done">✓ 제출</span>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<!-- 선택: 실시간 조회를 인증키로 하려면 output/neis.config.js (window.NEIS_KEY='...') 를 두면 됨. 없어도 무인증으로 동작. -->
+<!-- NEIS 스냅샷: scripts/fetch-neis.ps1 실행 후 scripts/build-webapp-data.ps1 이 아래 내용을 갱신 -->
+<script type="application/json" id="neis-snapshot">
+/*NEIS_SNAPSHOT_START*/@msi:neis-snapshot/*NEIS_SNAPSHOT_END*/
+</script>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#f7a8c4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#f7a8c4&quot;,&quot;#c4d8f7&quot;,&quot;#d6c4f5&quot;,&quot;#bfe9dd&quot;]}}">
+const SUBJECTS = ['국어','수학','영어','과학','사회','역사','도덕','기술가정','정보','체육','음악','미술','한문','진로','보건','자율','창체'];
+const SUB_COLOR = {
+  국어:'#f9cade', 수학:'#c4d8f7', 영어:'#fbe6a2', 과학:'#bfe9dd', 사회:'#e8d9b8',
+  역사:'#f7bfb2', 도덕:'#eec6ea', 기술가정:'#d8f0c4', 정보:'#a9dce4', 체육:'#c9e8b8',
+  음악:'#d6c4f5', 미술:'#ffe0cc', 한문:'#cfeaf5', 진로:'#9db2f2', 보건:'#f5b7c8',
+  자율:'#e3e0b0', 창체:'#c9c2ea'
+};
+const ROOMS = { 음악:'음악실', 미술:'미술실', 체육:'체육관', 과학:'과학실', 기술가정:'실습실', 정보:'컴퓨터실', 보건:'보건실' };
+const TEACHERS = ['김하늘','박지우','이서연','최민준','정다온','한별','오유진'];
+const PERIODS = [['1교시','09:00','1ST','09:45'],['2교시','09:55','2ND','10:40'],['3교시','10:50','3RD','11:35'],['4교시','11:45','4TH','12:35'],['5교시','13:35','5TH','14:20'],['6교시','14:30','6TH','15:15'],['7교시','15:25','7TH','16:10']];
+const DAYS = ['월','화','수','목','금'];
+const MEAL_SETS = [
+  { items:['기장밥','미역국','돈육간장구이','콩나물무침','깍두기'], kcal:682, icon:'🍚' },
+  { items:['카레라이스','유부장국','치킨텐더','오이생채','배추김치'], kcal:735, icon:'🍛' },
+  { items:['찹쌀밥','순두부찌개','고등어구이','시금치나물','포기김치'], kcal:648, icon:'🐟' },
+  { items:['볶음밥','계란국','만두튀김','단무지','요구르트'], kcal:711, icon:'🥟' },
+  { items:['잡곡밥','된장찌개','제육볶음','도토리묵','깍두기'], kcal:756, icon:'🥘' },
+  { items:['비빔밥','콩나물국','메추리알조림','과일샐러드','김치'], kcal:669, icon:'🥗' },
+  { items:['백미밥','떡국','생선까스','브로콜리무침','배추김치'], kcal:698, icon:'🍜' },
+  { items:['크림스파게티','옥수수스프','마늘빵','토마토샐러드','피클'], kcal:724, icon:'🍝' }
+];
+const TAGS = ['주식','국물','주찬','부찬','김치'];
+const ALLERGENS = [
+  null,
+  { n: 1, name: '난류', color: '#ff4d6d' }, { n: 2, name: '우유', color: '#ff7a1a' },
+  { n: 3, name: '메밀', color: '#ffb800' }, { n: 4, name: '땅콩', color: '#e8d000' },
+  { n: 5, name: '대두', color: '#9ed900' }, { n: 6, name: '밀', color: '#2fc744' },
+  { n: 7, name: '고등어', color: '#00c9a7' }, { n: 8, name: '게', color: '#00bcd4' },
+  { n: 9, name: '새우', color: '#0091ff' }, { n: 10, name: '돼지고기', color: '#3d5afe' },
+  { n: 11, name: '복숭아', color: '#7c4dff' }, { n: 12, name: '토마토', color: '#b429ff' },
+  { n: 13, name: '아황산류', color: '#e040fb' }, { n: 14, name: '호두', color: '#ff2d95' },
+  { n: 15, name: '닭고기', color: '#ff5252' }, { n: 16, name: '소고기', color: '#c1440e' },
+  { n: 17, name: '오징어', color: '#00867d' }, { n: 18, name: '조개류', color: '#5d6dff' },
+  { n: 19, name: '잣', color: '#8d6e00' }
+];
+const DISH_ALLERGY = [
+  ['미역국', [5, 6]], ['돈육', [5, 6, 10]], ['제육', [5, 6, 10]], ['콩나물', [5]],
+  ['김치', [13]], ['깍두기', [13]], ['카레', [2, 5, 6, 10]], ['유부', [5, 6]],
+  ['치킨', [1, 5, 6, 15]], ['생채', [13]], ['순두부', [5]], ['고등어', [7, 13]],
+  ['볶음밥', [1, 5, 6]], ['계란', [1]], ['만두', [1, 5, 6, 10]], ['단무지', [13]],
+  ['요구르트', [2]], ['된장', [5, 6]], ['도토리묵', [6]], ['비빔밥', [1, 5, 6]],
+  ['메추리알', [1, 5, 6]], ['과일샐러드', [2, 11, 12]], ['떡국', [1, 5, 6, 16]],
+  ['까스', [1, 5, 6, 17]], ['스파게티', [2, 5, 6]], ['스프', [2, 5, 6]],
+  ['마늘빵', [2, 5, 6]], ['토마토', [1, 12]], ['피클', [13]]
+];
+function allergyOf(name) {
+  const hit = DISH_ALLERGY.find(([k]) => name.indexOf(k) >= 0);
+  return (hit ? hit[1] : []).map(n => ALLERGENS[n]);
+}
+const ALLERGY = ['5.우유 6.대두','1.난류 5.우유','4.고등어 13.땅콩','1.난류 6.대두','10.돼지고기'];
+
+/* ===== NEIS(나이스) 교육정보 개방 포털 — 신현중학교 실데이터 =====
+   - 기본 데이터: 아래 <script id="neis-snapshot">에 미리 받아 둔 스냅샷
+     (scripts/fetch-neis.ps1 이 인증키로 받아 scripts/build-webapp-data.ps1 이 주입).
+   - 실시간 갱신: open.neis.go.kr/hub 를 인증키 없이 직접 호출(CORS 허용).
+     인증키 없이 호출하면 1페이지당 5행만 오므로 pIndex 를 늘려가며 이어 받는다.
+     window.NEIS_KEY 가 있으면(gitignore된 output/neis.config.js) 키를 붙여 한 번에 받는다. */
+const NEIS_HUB = 'https://open.neis.go.kr/hub';
+const NEIS_OFFICE = 'J10';        // 경기도교육청
+const NEIS_SCHOOL = '7692151';    // 신현중학교 행정표준코드
+
+function neisPage(endpoint, params, pIndex) {
+  var base = {
+    Type: 'json', pIndex: String(pIndex), pSize: '100',
+    ATPT_OFCDC_SC_CODE: NEIS_OFFICE, SD_SCHUL_CODE: NEIS_SCHOOL
+  };
+  if (typeof window !== 'undefined' && window.NEIS_KEY) base.KEY = window.NEIS_KEY;
+  var q = new URLSearchParams(Object.assign(base, params));
+  return fetch(NEIS_HUB + '/' + endpoint + '?' + q.toString())
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      var root = j[endpoint];
+      if (!root) return { rows: [], total: 0 };            // INFO-200 등
+      var head = root[0] && root[0].head;
+      var res = head && head[1] && head[1].RESULT;
+      if (res && res.CODE !== 'INFO-000' && res.CODE !== 'INFO-200') return { rows: [], total: 0 };
+      var total = (head && head[0] && head[0].list_total_count) || 0;
+      return { rows: (root[1] && root[1].row) || [], total: total };
+    })
+    .catch(function () { return { rows: [], total: 0 }; });
+}
+/* 여러 페이지를 이어 받아 전체 행 배열로 돌려준다(무인증 5행/페이지 대응). */
+function neisFetchAll(endpoint, params, maxPages) {
+  maxPages = maxPages || 40;
+  var acc = [];
+  function step(p) {
+    return neisPage(endpoint, params, p).then(function (res) {
+      acc = acc.concat(res.rows);
+      var more = res.rows.length > 0 && acc.length < res.total && p < maxPages;
+      return more ? step(p + 1) : acc;
+    });
+  }
+  return step(1);
+}
+function ymd(d) {
+  return d.getFullYear() + '-' +
+    ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+}
+function ymdN(d) { return ymd(d).replace(/-/g, ''); }
+function mondayOf(d) { var m = new Date(d); m.setDate(d.getDate() - ((d.getDay() + 6) % 7)); m.setHours(0,0,0,0); return m; }
+
+/* 과목명 -> 파스텔 색 (미등록 과목은 이름 해시로 팔레트에서 배정) */
+var SUB_COLOR_EXT = Object.assign({}, SUB_COLOR, {
+  '기술·가정': '#d8f0c4', '기술가정': '#d8f0c4', '가정': '#d8f0c4',
+  '자율·자치활동': '#e3e0b0', '자율': '#e3e0b0', '자치활동': '#e3e0b0',
+  '동아리활동': '#c9c2ea', '진로활동': '#9db2f2', '진로와 직업': '#9db2f2',
+  '창의적체험활동': '#c9c2ea', '학교스포츠클럽': '#c9e8b8', '스포츠클럽': '#c9e8b8',
+  '한문': '#cfeaf5', '역사': '#f7bfb2', '한국사': '#f7bfb2', '기술': '#d8f0c4'
+});
+var SUB_PALETTE = ['#f9cade','#c4d8f7','#fbe6a2','#bfe9dd','#e8d9b8','#f7bfb2','#eec6ea','#d8f0c4','#a9dce4','#d6c4f5','#ffe0cc','#cfeaf5'];
+/* 수업 활동지 탭 activity 카드 헤더 accent 순환 — design.md §4.1 (8색, 이후 루프)
+   mint → blue → yellow → purple → mint → lilac → salmon → olive
+   ACTIVITY_N 헤더 색 = SHEET_ACT_ACCENT[(N-1) % 8]. 현재 카드(1~7)는 헤더 색이 하드코딩돼 있고
+   이 상수는 다음 활동 카드(ACTIVITY_8~) 추가 시 색 선택 근거로 쓴다. */
+var SHEET_ACT_ACCENT = ['#a9dce4','#c4d8f7','#fbe6a2','#d6c4f5','#bfe9dd','#eec6ea','#f7bfb2','#e3e0b0'];
+function subColor(s) {
+  if (!s) return '#f1edf9';
+  if (SUB_COLOR_EXT[s]) return SUB_COLOR_EXT[s];
+  var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return SUB_PALETTE[h % SUB_PALETTE.length];
+}
+/* 급식 메뉴 이름 정리: (1) '(...)' 괄호 묶음 제거 → (2) 첫 '.' 또는 첫 '-' 이후 버림 → (3) trim.
+   예) "베리무스케익.27g"→"베리무스케익", "매운돼지갈비찜(21-중-식).중 (5.6.10.13)"→"매운돼지갈비찜",
+       "연두부찜(벌크,원통형)/양념장"→"연두부찜/양념장" */
+function dishName(s) { return String(s == null ? '' : s).replace(/\([^)]*\)/g, '').split(/[.\-]/)[0].trim(); }
+/* 급식 메뉴 한 줄 -> { name, al:[번호] } */
+function parseDish(line) {
+  var al = [];
+  var m = line.match(/\(([\d.\s]+)\)\s*$/);
+  if (m) al = m[1].split(/[.\s]+/).filter(Boolean).map(Number);
+  return { name: dishName(line), al: al };
+}
+
+class Component extends DCLogic {
+  state = {
+    tab: 'rules', timeView: 'day', mealView: 'day',
+    grade: 3, cls: 2, dayIdx: 2,
+    fGrade: '', fClass: '', fNum: '', fName: '',
+    q1Pick: '', prog2: '', a3: [null, null, null], ox: [null, null, null, null, null], reflect: '', checks: [false, false, false, false],
+    saved: false, savedName: '', sheetTick: 0,
+    tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', neisErr: ''
+  };
+
+  componentDidMount() {
+    this._tick = setInterval(() => this.setState({ now: new Date() }), 60000);
+    this._snap = this.readSnapshot();
+    // 첫 로드 시 기본 선택: 지금 정보 수업 중이거나 다음 정보 교시인 2학년 반 (1회만)
+    const pick = this.pickInfoClass();
+    // 스냅샷으로 즉시 채우고, 이어서 NEIS 실시간 조회로 갱신
+    const seedTT = this.snapTimetable(pick.grade, pick.cls);
+    this.setState({ grade: pick.grade, cls: pick.cls, tt: seedTT, meal: this._snap.meal || {} });
+    this.loadTimetable(pick.grade, pick.cls);
+    this.loadMeal(new Date());
+    // ACTIVITY_5 만화 판매량 표(#mangaTable): 복사/잘라내기/우클릭/드래그 차단.
+    // 활동지 탭은 sc-if 로 늦게 마운트되므로 document 위임으로 그 표 안에서만 막는다.
+    // (드래그 텍스트 선택 자체는 .no-copy user-select:none 으로 방지)
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach((ev) =>
+      document.addEventListener(ev, (e) => {
+        const n = e.target;
+        if (n && n.closest && n.closest('#mangaTable')) e.preventDefault();
+      })
+    );
+    // 수업 활동지 탭의 DOM 기반 활동(빈칸 입력·순서/짝짓기 드래그·스샷 붙여넣기) 변화를
+    // 감지해 진행률 위젯을 갱신한다. React state 로 관리되지 않으므로 sheetTick 을 올려 리렌더.
+    this._watchSheetActivities();
+  }
+  componentWillUnmount() {
+    clearInterval(this._tick);
+    if (this._sheetMo) this._sheetMo.disconnect();
+    clearTimeout(this._sheetT);
+  }
+
+  /* 활동지 DOM 활동 감시 — sheetProgress() 결과가 실제로 바뀔 때만 setState 해 렌더 루프를 막는다. */
+  _watchSheetActivities() {
+    const bump = () => {
+      let sig = '';
+      try { sig = this.sheetProgress().map((x) => (x.done ? '1' : '0')).join(''); } catch (e) { return; }
+      if (sig === this._sheetSig) return;
+      this._sheetSig = sig;
+      this.setState((st) => ({ sheetTick: (st.sheetTick || 0) + 1 }));
+    };
+    const schedule = () => { clearTimeout(this._sheetT); this._sheetT = setTimeout(bump, 80); };
+    document.addEventListener('input', (e) => {
+      const n = e.target;
+      if (n && n.classList && n.classList.contains('blank')) schedule();
+    }, true);
+    document.addEventListener('paste', (e) => {
+      const n = e.target;
+      if (n && n.closest && n.closest('.shot-paste')) setTimeout(schedule, 40);
+    }, true);
+    if (typeof MutationObserver === 'function') {
+      this._sheetMo = new MutationObserver(schedule);
+      this._sheetMo.observe(document.body, {
+        subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'data-filled']
+      });
+    }
+    setTimeout(bump, 400);
+  }
+
+  /* 수업 활동지 탭 — 활동별(빈칸 채우기·드래그·붙여넣기·객관식…) 진행 상태. React state + DOM 혼합, 총 13개. */
+  sheetProgress() {
+    const s = this.state;
+    const all = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
+    const typed = (el) => {
+      if (!el) return false;
+      if (el.tagName === 'TEXTAREA') return (el.value || '').trim().length > 0;
+      return (el.textContent || '').trim().length > 0;
+    };
+    const blanks = (act) => all('[data-act="' + act + '"] textarea.blank');
+    const rangeFilled = (list, from, to) => {
+      const a = list.slice(from, to);
+      return a.length > 0 && a.every(typed);
+    };
+    const seqSlots = all('.seq-slot[data-check-group="seqTrayPrev"]');
+    const caSlots = all('.ca-slot');
+    const shot = document.querySelector('.shot-paste');
+    const a1 = blanks(1), a4 = blanks(4), a5 = blanks(5);
+    return [
+      { label: '내 정보 · 이름 적기', done: !!(s.fName && s.fName.trim()) },
+      { label: '복습 · 4단계 순서 배열', done: seqSlots.length === 4 && seqSlots.every((n) => n.classList.contains('is-filled')) },
+      { label: '활동1 · 문제 정하기 빈칸', done: typed(a1[0]) },
+      { label: '활동1 · 좋은 문제 3가지 조건', done: rangeFilled(a1, 1, 4) },
+      { label: '활동1 · 데이터 분석 질문 고르기', done: !!s.q1Pick },
+      { label: '활동2 · 표 만드는 프로그램 이름', done: !!(s.prog2 && s.prog2.trim()) },
+      { label: '활동3 · 행·열·셀 짝짓기', done: Array.isArray(s.a3) && s.a3.every((v) => v != null) },
+      { label: '활동4 · 속성 빈칸 채우기', done: typed(a4[0]) },
+      { label: '활동4 · 셀 주소 4문항', done: rangeFilled(a4, 1, 5) },
+      { label: '활동4 · 셀 주소 순서(드래그)', done: caSlots.length === 2 && caSlots.every((n) => n.classList.contains('is-filled')) },
+      { label: '활동5 · 표 읽기 2문항', done: rangeFilled(a5, 0, 2) },
+      { label: '활동5 · 스크린샷 붙여넣기', done: !!(shot && (shot.querySelector('img') || (shot.textContent || '').trim().length > 0)) },
+      { label: '활동6 · 형성평가 O/X', done: Array.isArray(s.ox) && s.ox.every((v) => v != null) }
+    ];
+  }
+
+  /* 스냅샷 2학년 시간표에서 '지금 정보 수업 중이거나 가장 가까운 다음 정보 교시'인 반을 고른다 */
+  pickInfoClass() {
+    const base = { grade: 2, cls: 1 };
+    const byCls = (this._snap && this._snap.tt && this._snap.tt['2']) || null;
+    if (!byCls) return base;
+    const toMin = (str) => { const a = str.split(':'); return (+a[0]) * 60 + (+a[1]); };
+    const nowM = this.nowMin();
+    const dateSet = {};
+    for (let c = 1; c <= 11; c++) {
+      const bc = byCls[String(c)];
+      if (bc) Object.keys(bc).forEach((d) => { dateSet[d] = 1; });
+    }
+    const todayStr = ymd(new Date());
+    const dates = Object.keys(dateSet).sort().filter((d) => d >= todayStr);
+    for (let di = 0; di < dates.length; di++) {
+      const dstr = dates[di];
+      const hits = [];
+      for (let c = 1; c <= 11; c++) {
+        const day = byCls[String(c)] && byCls[String(c)][dstr];
+        if (day && day.periods) {
+          for (let i = 0; i < day.periods.length; i++) {
+            if (day.periods[i] === '정보' && PERIODS[i]) {
+              hits.push({ cls: c, start: toMin(PERIODS[i][1]), end: toMin(PERIODS[i][3]) });
+            }
+          }
+        }
+      }
+      if (!hits.length) continue;
+      if (dstr === todayStr) {
+        const live = hits.filter((h) => nowM >= h.start && nowM <= h.end).sort((a, b) => a.start - b.start)[0];
+        if (live) return { grade: 2, cls: live.cls };
+        const next = hits.filter((h) => nowM < h.start).sort((a, b) => a.start - b.start)[0];
+        if (next) return { grade: 2, cls: next.cls };
+        return { grade: 2, cls: hits.slice().sort((a, b) => b.start - a.start)[0].cls };
+      }
+      return { grade: 2, cls: hits.slice().sort((a, b) => a.start - b.start)[0].cls };
+    }
+    return base;
+  }
+
+  /* <script id="neis-snapshot"> 파싱 */
+  readSnapshot() {
+    try {
+      const el = document.getElementById('neis-snapshot');
+      const raw = (((el && el.textContent) || '{}').replace(/\/\*[\s\S]*?\*\//g, '')).trim() || '{}';
+      const j = JSON.parse(raw);
+      return { tt: j.timetable || {}, meal: j.meal || {} };
+    } catch (e) { return { tt: {}, meal: {} }; }
+  }
+  /* 스냅샷의 학년/반 시간표 -> { 'YYYY-MM-DD': { 교시: 과목 } } */
+  snapTimetable(grade, cls) {
+    const snap = (this._snap || (this._snap = this.readSnapshot())).tt;
+    const byClass = snap[grade] && snap[grade][cls];
+    const out = {};
+    if (byClass) {
+      Object.keys(byClass).forEach((d) => {
+        const day = byClass[d];
+        if (day && day.periods) {
+          out[d] = {};
+          day.periods.forEach((sub, i) => { if (sub) out[d][i + 1] = sub; });
+        } else if (day && day.holiday) {
+          out[d] = { holiday: day.holiday };
+        }
+      });
+    }
+    return out;
+  }
+
+  /* 선택된 학년/반의 시간표: 이번 주 ~ 2주 후를 NEIS 에서 실시간 조회해 스냅샷 위에 덮어씀 */
+  loadTimetable(grade, cls) {
+    const key = grade + '-' + cls;
+    if (this._ttPending === key) return;
+    this._ttPending = key;
+    const from = mondayOf(new Date());
+    const to = new Date(from); to.setDate(from.getDate() + 27);
+    neisFetchAll('misTimetable', {
+      GRADE: String(grade), CLASS_NM: String(cls),
+      TI_FROM_YMD: ymdN(from), TI_TO_YMD: ymdN(to)
+    }).then((rows) => {
+      this._ttPending = '';
+      if (grade !== this.state.grade || cls !== this.state.cls) return;
+      const tt = this.snapTimetable(grade, cls);   // 스냅샷을 바탕으로
+      rows.forEach((r) => {
+        const d = String(r.ALL_TI_YMD).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+        const p = Number(r.PERIO);
+        const sub = (r.ITRT_CNTNT || '').trim();
+        if (!tt[d] || tt[d].holiday) tt[d] = {};
+        if (!tt[d][p]) tt[d][p] = sub;              // NEIS 중복(빈값+실값) 시 실값 우선
+      });
+      this.setState({ tt: tt, ttLoadedKey: key });
+    });
+  }
+
+  /* 이번 달 급식: NEIS 실시간 조회해 스냅샷 위에 병합 */
+  loadMeal(dateInMonth) {
+    const first = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth(), 1);
+    const last = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth() + 1, 0);
+    const mk = ymd(first).slice(0, 7);
+    if (this._mealPending === mk) return;
+    this._mealPending = mk;
+    neisFetchAll('mealServiceDietInfo', {
+      MLSV_FROM_YMD: ymdN(first), MLSV_TO_YMD: ymdN(last)
+    }).then((rows) => {
+      this._mealPending = '';
+      const meal = Object.assign({}, (this._snap && this._snap.meal) || {});
+      rows.forEach((r) => {
+        const d = String(r.MLSV_YMD).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+        const lines = String(r.DDISH_NM || '').split(/<br\s*\/?>/i)
+          .map((x) => x.trim()).filter(Boolean);
+        const items = lines.map(parseDish);
+        const kcal = Math.round(parseFloat(String(r.CAL_INFO || '').replace(/[^\d.]/g, '')) || 0);
+        meal[d] = { items: items, kcal: kcal, type: r.MMEAL_SC_NM || '중식' };
+      });
+      if (Object.keys(meal).length) this.setState({ meal: meal, mealLoadedMonth: mk });
+    });
+  }
+
+  nowMin() {
+    const n = this.state.now || new Date();
+    return n.getHours() * 60 + n.getMinutes();
+  }
+
+  isPast(endStr) {
+    const [h, m] = endStr.split(':').map(Number);
+    return this.nowMin() > h * 60 + m;
+  }
+
+  chip(active, pal) {
+    const bg = active ? (pal || '#f7a8c4') : '#fffdf7';
+    return 'cursor:pointer; padding:8px 15px; border:3px solid #4b3b6b; borderRadius:9px; background:' + bg +
+      '; fontFamily:\'CookieRun\', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; boxShadow:' + (active ? '2px 2px 0 rgba(75,59,107,.35)' : '3px 3px 0 rgba(75,59,107,.15)') +
+      '; transform:' + (active ? 'translate(1px,1px)' : 'none');
+  }
+
+  tabStyle(active, color, cap) {
+    return "cursor:pointer; padding:" + (active ? '9px 16px 8px' : '6px 15px 5px') +
+      "; marginTop:" + (active ? '0' : '3px') +
+      "; borderTop:3px solid #4b3b6b; borderLeft:3px solid #4b3b6b; borderRight:3px solid #4b3b6b; borderBottom:" + (active ? 'none' : '3px solid #4b3b6b') + "; borderRadius:12px 12px 0 0; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; whiteSpace:nowrap; display:flex; alignItems:center; gap:6px; marginBottom:-4px; background:" +
+      (active ? '#fffdf7' : color) +
+      '; color:' + (active ? '#4b3b6b' : '#6b5b93') +
+      '; boxShadow:' + (active ? 'inset 0 5px 0 ' + cap + ', 0 -3px 8px rgba(75,59,107,.14)' : 'inset 0 -7px 10px rgba(75,59,107,.09)') +
+      '; zIndex:' + (active ? 2 : 1);
+  }
+
+  /* 이번 주 월요일 기준 d(0=월..4=금) 요일, p(0-based) 교시의 실제 과목 */
+  subjectAt(d, p) {
+    const monday = mondayOf(this.state.now || new Date());
+    const dt = new Date(monday); dt.setDate(monday.getDate() + d);
+    const day = (this.state.tt || {})[ymd(dt)];
+    return day ? (day[p + 1] || '') : '';
+  }
+  /* 특정 날짜(Date)의 p(0-based) 교시 과목 */
+  subjectOn(dateObj, p) {
+    const day = (this.state.tt || {})[ymd(dateObj)];
+    return day ? (day[p + 1] || '') : '';
+  }
+
+  mealFor(n) { return MEAL_SETS[Math.abs(n) % MEAL_SETS.length]; }
+
+  monthGrid(fn) {
+    const first = new Date(2026, 8, 1);
+    const pad = first.getDay();
+    const total = 30;
+    const nowD = this.state.now || new Date();
+    const nowInMonth = nowD.getFullYear() === 2026 && nowD.getMonth() === 8;
+    const out = [];
+    for (let i = 0; i < 35; i++) {
+      const day = i - pad + 1;
+      const inMonth = day >= 1 && day <= total;
+      const dow = i % 7;
+      const weekend = dow === 0 || dow === 6;
+      const today = nowInMonth && day === nowD.getDate();
+      const boxStyle = 'minHeight:120px; padding:7px 8px; display:flex; flexDirection:column; gap:5px; borderRight:2px dashed rgba(75,59,107,.22); borderBottom:2px dashed rgba(75,59,107,.22); position:relative; background:' +
+        (!inMonth ? '#f1edf9' : today ? '#fdeaf3' : weekend ? '#f7f4fd' : '#fffdf7') +
+        (today ? '; boxShadow:inset 0 0 0 4px #ee9dbf' : '');
+      const dayStyle = today
+        ? "fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#ee9dbf; color:#fffdf7; border:2px solid #4b3b6b; borderRadius:20px; padding:2px 8px"
+        : "fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px";
+      out.push(Object.assign({ day: inMonth ? String(day) : '', boxStyle, dayStyle, todayMark: today ? '오늘' : '' }, inMonth && !weekend ? fn(day, dow) : { chips: [], badge: '', main: weekend && inMonth ? '휴무' : '', icon: '' }));
+    }
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    const accent = this.props.accent ?? '#f7a8c4';
+
+    const CLASS_MAX = { 1: 9, 2: 11, 3: 12 };
+    const gradeOpts = [1, 2, 3].map(g => ({ value: String(g), label: g + '학년' }));
+    const classCount = CLASS_MAX[s.grade] || 12;
+    const classOpts = Array.from({ length: classCount }, (_, i) => ({ value: String(i + 1), label: (i + 1) + '반' }));
+
+    const nowDate = s.now || new Date();
+    const monday = new Date(nowDate);
+    monday.setDate(nowDate.getDate() - ((nowDate.getDay() + 6) % 7));
+    const weekDates = DAYS.map((_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+    });
+    const todayDow = (nowDate.getDay() + 6) % 7;
+    const mkViews = (cur, key, pal) => [['day', '일간'], ['week', '주간'], ['month', '월간']].map(([v, l]) => ({
+      label: l, style: this.chip(cur === v, pal), pick: () => this.setState({ [key]: v })
+    }));
+
+    const todayObj = new Date(nowDate);
+    let lastP = 0;
+    for (let i = 0; i < PERIODS.length; i++) { if (this.subjectOn(todayObj, i)) lastP = i + 1; }
+    const dayPeriods = lastP ? PERIODS.slice(0, lastP) : PERIODS;
+    const dayRows = dayPeriods.map((p, i) => {
+      const sub = this.subjectOn(todayObj, i);
+      const past = this.isPast(p[3]);
+      const [ph, pm] = p[1].split(':').map(Number);
+      const [eh, em] = p[3].split(':').map(Number);
+      const start = ph * 60 + pm;
+      const end = eh * 60 + em;
+      const nowM = this.nowMin();
+      const live = nowM >= start && nowM <= end;
+      const tagBase = "borderRadius:999px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; letterSpacing:.5px; whiteSpace:nowrap; ";
+      return {
+        statusLabel: past ? '완료' : live ? '진행 중' : '예정',
+        statusStyle: tagBase + (past
+          ? 'background:#ece9f3; color:#8a82a6'
+          : live
+            ? 'background:#7b5cd6; color:#fffdf7; boxShadow:0 2px 6px rgba(123,92,214,.35)'
+            : 'background:#fffdf7; color:#7b6ba8; border:2px dashed #cfc6e6; padding:2px 10px'),
+        tagStyle: "border:2px solid #4b3b6b; borderRadius:8px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px; whiteSpace:nowrap; background:" + subColor(sub),
+        rowStyle: 'display:grid; gridTemplateColumns:88px 1fr; borderBottom:2px dashed rgba(75,59,107,.22); background:' + (live ? '#f6f2ff' : '#fffdf7') + (past ? '; opacity:.45; filter:saturate(.4)' : ''),
+        period: p[0], periodEn: p[2] + ' · ' + p[0], time: p[1], endTime: '~' + p[3], subject: sub || '—',
+        room: ROOMS[sub] || (s.grade + '-' + s.cls + ' 교실'),
+        teacher: TEACHERS[(s.grade + s.cls + i) % TEACHERS.length] + ' 선생님',
+        color: subColor(sub)
+      };
+    });
+
+    // 같은 과목이 4교시 이상 연속되면 한 줄로 합침 (일간 표 전용)
+    const dayRowsMerged = [];
+    const toMinS = (str) => { const a = String(str).replace('~', '').split(':'); return (+a[0]) * 60 + (+a[1]); };
+    for (let k = 0; k < dayRows.length;) {
+      const rsub = dayRows[k].subject;
+      let j = k;
+      while (j < dayRows.length && dayRows[j].subject === rsub) j++;
+      if (rsub && rsub !== '—' && j - k >= 4) {
+        const first = dayRows[k], last = dayRows[j - 1];
+        const rStart = toMinS(first.time), rEnd = toMinS(last.endTime), nowM = this.nowMin();
+        const rPast = nowM > rEnd;
+        const rLive = !rPast && nowM >= rStart && nowM <= rEnd;
+        const tagBase = "borderRadius:999px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; letterSpacing:.5px; whiteSpace:nowrap; ";
+        dayRowsMerged.push({
+          statusLabel: rPast ? '완료' : rLive ? '진행 중' : '예정',
+          statusStyle: tagBase + (rPast
+            ? 'background:#ece9f3; color:#8a82a6'
+            : rLive
+              ? 'background:#7b5cd6; color:#fffdf7; boxShadow:0 2px 6px rgba(123,92,214,.35)'
+              : 'background:#fffdf7; color:#7b6ba8; border:2px dashed #cfc6e6; padding:2px 10px'),
+          tagStyle: first.tagStyle,
+          rowStyle: 'display:grid; gridTemplateColumns:88px 1fr; borderBottom:2px dashed rgba(75,59,107,.22); background:' + (rLive ? '#f6f2ff' : '#fffdf7') + '; paddingTop:18px; paddingBottom:18px' + (rPast ? '; opacity:.45; filter:saturate(.4)' : ''),
+          period: '', periodEn: '', time: '', endTime: '', subject: rsub,
+          room: first.room, teacher: first.teacher, color: first.color
+        });
+      } else {
+        for (let m = k; m < j; m++) dayRowsMerged.push(dayRows[m]);
+      }
+      k = j;
+    }
+
+    const TODAY_D = todayDow <= 4 ? todayDow : -1;
+    const todayMid = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
+    const dayMid = (d) => { const cd = new Date(monday); cd.setDate(monday.getDate() + d); return new Date(cd.getFullYear(), cd.getMonth(), cd.getDate()).getTime(); };
+    const weekRows = PERIODS.map((p, i) => ({
+      period: p[0], time: p[1], endTime: p[3],
+      cells: DAYS.map((_, d) => {
+        const sub = this.subjectAt(d, i);
+        const t = d === TODAY_D;
+        const isPastDay = dayMid(d) < todayMid;
+        const past = isPastDay || (t && this.isPast(p[3]));
+        return {
+          subject: sub || '·',
+          cellStyle: 'padding:8px 6px; borderRight:2px dashed rgba(75,59,107,.25); display:flex; alignItems:center; justifyContent:center' + (t ? '; background:rgba(123,92,214,.06)' : '') + (past ? '; opacity:.4; filter:saturate(.35)' : ''),
+          style: 'width:100%; textAlign:center; padding:9px 4px; border:3px solid #4b3b6b; borderRadius:9px; background:' + subColor(sub) + '; color:' + (sub ? '#4b3b6b' : '#b9aedb') + "; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px"
+        };
+      })
+    }));
+    // 하루에 같은 과목이 4교시 이상 연속이면 그 요일 열에서 과목명 1번만, 나머지 칸은 태그 박스 숨김
+    for (let d = 0; d < DAYS.length; d++) {
+      for (let i = 0; i < weekRows.length;) {
+        const wsub = this.subjectAt(d, i);
+        let j = i;
+        while (j < weekRows.length && this.subjectAt(d, j) === wsub) j++;
+        if (wsub && wsub !== '·' && wsub !== '—' && j - i >= 4) {
+          for (let r = i + 1; r < j; r++) {
+            weekRows[r].cells[d].subject = '';
+            weekRows[r].cells[d].style = 'display:none';
+          }
+        }
+        i = j;
+      }
+    }
+    const weekHeads = DAYS.map((d, i) => ({
+      label: d + '요일',
+      date: weekDates[i],
+      style: "padding:8px 8px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; textAlign:center; borderRight:2px dashed rgba(75,59,107,.35)" + (i === TODAY_D ? "; background:rgba(123,92,214,.12)" : "") + (dayMid(i) < todayMid ? "; opacity:.55" : ""),
+      dateStyle: "fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; color:#5a4a86; marginTop:3px"
+    }));
+
+    const monthCells = this.monthGrid((day) => {
+      const dObj = new Date(2026, 8, day);
+      const rawChips = PERIODS.map((p, k) => {
+        const sub = this.subjectOn(dObj, k);
+        if (!sub) return null;
+        return {
+          label: (k + 1) + '교시',
+          sub,
+          style: 'display:flex; alignItems:center; gap:4px; fontSize:10px; color:#7b6ba8',
+          subStyle: 'border:1px solid #4b3b6b; borderRadius:4px; padding:0 4px; fontSize:10px; color:#4b3b6b; background:' + subColor(sub)
+        };
+      }).filter(Boolean);
+      // 화면상 같은 과목 chip 이 4개 이상 연속이면 chip 하나로 합침("N교시" 라벨 제거)
+      const chips = [];
+      for (let k = 0; k < rawChips.length;) {
+        let j = k;
+        while (j < rawChips.length && rawChips[j].sub === rawChips[k].sub) j++;
+        if (j - k >= 4) {
+          chips.push({ label: '', sub: rawChips[k].sub, style: rawChips[k].style, subStyle: rawChips[k].subStyle });
+        } else {
+          for (let m = k; m < j; m++) chips.push(rawChips[m]);
+        }
+        k = j;
+      }
+      return { badge: '', chips: chips };
+    });
+
+    const dowEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const tMeal = (s.meal || {})[ymd(todayObj)];
+    const todayMeal = {
+      date: todayObj.getFullYear() + '.' + ('0' + (todayObj.getMonth() + 1)).slice(-2) + '.' +
+        ('0' + todayObj.getDate()).slice(-2) + ' ' + dowEn[todayObj.getDay()],
+      kcal: tMeal ? tMeal.kcal : 0,
+      allergy: '',
+      items: (tMeal && tMeal.items.length ? tMeal.items : [{ name: '오늘은 급식 정보가 없어요', al: [] }]).map((it) => ({
+        name: dishName(it.name),
+        allergens: it.al.map((n) => {
+          const a = ALLERGENS[n];
+          return {
+            label: a ? a.name : String(n),
+            style: 'borderRadius:6px; padding:2px 7px; fontFamily:\'CookieRun\', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:11px; whiteSpace:nowrap; color:#fff; background:' + (a ? a.color : '#9c8dc4')
+          };
+        })
+      }))
+    };
+    const weekColors = ['#f9cade', '#c4d8f7', '#bfe9dd', '#fbe6a2', '#d6c4f5'];
+    const weekMeals = DAYS.map((d, i) => {
+      const dt = new Date(monday); dt.setDate(monday.getDate() + i);
+      const mm = (s.meal || {})[ymd(dt)];
+      return {
+        day: d + '요일',
+        date: ('0' + (dt.getMonth() + 1)).slice(-2) + '.' + ('0' + dt.getDate()).slice(-2),
+        items: mm && mm.items.length ? mm.items.map((it) => dishName(it.name)) : ['급식 없음'],
+        kcal: mm ? mm.kcal : 0,
+        color: weekColors[i]
+      };
+    });
+    const mealMonthCells = this.monthGrid((day) => {
+      const mm = (s.meal || {})[ymd(new Date(2026, 8, day))];
+      return { icon: '', main: '', menu: mm ? mm.items.map((it) => dishName(it.name)).slice(0, 6) : [], chips: [] };
+    });
+
+    const stepLabels = ['1단계 · 문제 정하기', '2단계 · 데이터 수집 · 특성 파악', '3단계 · 데이터 분석하기', '4단계 · 결과 해석 · 공유'];
+    const steps = stepLabels.map((l, i) => ({
+      label: l, mark: s.checks[i] ? '✓' : '',
+      style: 'cursor:pointer; display:flex; alignItems:center; gap:11px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:' + (s.checks[i] ? '#eaf8f2' : '#fdf6fa'),
+      boxStyle: 'width:24px; height:24px; flex:none; border:3px solid #4b3b6b; borderRadius:6px; display:flex; alignItems:center; justifyContent:center; fontSize:14px; background:' + (s.checks[i] ? '#bfe9dd' : '#fff'),
+      toggle: () => this.setState(st => { const c = st.checks.slice(); c[i] = !c[i]; return { checks: c }; })
+    }));
+
+    const Q1_OPTS = ['최근 한 달간 미세먼지 농도는 어떻게 변했을까?', '어떤 색깔이 가장 예쁜가?', '지난 한 달간 우리 반에서 지각은 몇 번 발생했는가?', '편의점에서 비 오는 날 우산이 평소보다 몇 개나 더 팔릴까?'];
+    const Q1_NUM = ['①', '②', '③', '④'];
+    const Q1_ANSWER = 1;   // ② — 사람마다 답이 다른 주관적 질문이라 데이터로 확인 불가
+    const q1 = Q1_OPTS.map((text, i) => {
+      const picked = s.q1Pick === Q1_NUM[i];
+      const right = i === Q1_ANSWER;
+      const bg = picked ? (right ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return {
+        label: Q1_NUM[i] + ' ' + text,
+        pick: () => this.setState({ q1Pick: Q1_NUM[i] }),
+        style: 'cursor:pointer; textAlign:left; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; fontSize:15px; lineHeight:1.6; background:' + bg +
+          (picked ? '; boxShadow:2px 2px 0 rgba(75,59,107,.28); transform:translate(1px,1px)' : '; boxShadow:3px 3px 0 rgba(75,59,107,.12)')
+      };
+    });
+    const q1Right = s.q1Pick === Q1_NUM[Q1_ANSWER];
+    const q1Feedback = !s.q1Pick ? ''
+      : q1Right ? '정답이에요. ②는 사람마다 답이 다른 주관적인 질문이라, 숫자나 기록으로는 확인할 수 없어요.'
+        : '아직이에요. 숫자나 기록으로 답할 수 없는 질문을 찾아 봐요.';
+    const q1FeedbackStyle = 'padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; fontSize:14px; lineHeight:1.7; background:' + (q1Right ? '#eaf8f2' : '#fdf3f0');
+
+    const A3_Q = [
+      { t: '주황색으로 칠해진 줄은 무엇이라고 부를까요?', a: '행' },
+      { t: '파란색으로 칠해진 줄은 무엇이라고 부를까요?', a: '열' },
+      { t: '두 색이 겹쳐 보라색이 된 한 칸은 무엇이라고 부를까요?', a: '셀' }
+    ];
+    const a3ChipStyle = (i, v) => {
+      const pick = s.a3[i];
+      const bg = pick === v ? (v === A3_Q[i].a ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return "cursor:pointer; border:2px solid #4b3b6b; borderRadius:7px; padding:3px 11px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    };
+    const a3Pick = (i, v) => () => this.setState(st => { const a = st.a3.slice(); a[i] = v; return { a3: a }; });
+    const a3Items = A3_Q.map((q, i) => {
+      const pick = s.a3[i];
+      const right = pick === q.a;
+      return {
+        text: q.t,
+        opts: ['행', '열', '셀'].map(v => ({ v: v, style: a3ChipStyle(i, v), pick: a3Pick(i, v) })),
+        fb: !pick ? '' : (right ? '⭕ 정답이에요.' : '❌ 정답은 ' + q.a + ' 이에요.'),
+        fbStyle: "fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px; color:" + (right ? '#3d7f6c' : '#a65a86')
+      };
+    });
+
+    const OX_Q = [
+      { t: "'어떤 음악이 가장 아름다운가?'는 데이터로 답할 수 있는 질문이다.", a: 'X' },
+      { t: '데이터로 해결할 문제를 정할 때, 문제의 범위는 넓을수록 데이터 분석이 쉬워진다.', a: 'X' },
+      { t: "표에서 가로줄은 '행'이라고 부른다.", a: 'O' },
+      { t: '표에서 세로줄은 숫자(1, 2, 3…)로 표시된다.', a: 'X' },
+      { t: "행과 열이 만나는 하나의 칸을 '셀'이라고 부른다.", a: 'O' }
+    ];
+    const oxCircle = (i, v) => {
+      const pick = s.ox[i];
+      const bg = pick === v ? (v === OX_Q[i].a ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return "cursor:pointer; width:34px; height:34px; border:3px solid #4b3b6b; borderRadius:50%; display:flex; alignItems:center; justifyContent:center; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    };
+    const oxPick = (i, v) => () => this.setState(st => { const a = st.ox.slice(); a[i] = v; return { ox: a }; });
+    const oxItems = OX_Q.map((q, i) => {
+      const pick = s.ox[i];
+      const right = pick === q.a;
+      return {
+        text: (i + 1) + '. ' + q.t,
+        oStyle: oxCircle(i, 'O'), xStyle: oxCircle(i, 'X'),
+        pickO: oxPick(i, 'O'), pickX: oxPick(i, 'X'),
+        fb: !pick ? '' : (right ? '⭕ 정답이에요.' : '❌ 다시 생각해 봐요. 정답은 ' + q.a + ' 예요.'),
+        fbStyle: "fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px; color:" + (right ? '#3d7f6c' : '#a65a86')
+      };
+    });
+
+    void s.sheetTick;   // DOM 기반 활동(빈칸·드래그·붙여넣기) 변화 시 _watchSheetActivities 가 올려 리렌더 유발
+    const sheetItems = this.sheetProgress();
+    const sheetDone = sheetItems.filter((x) => x.done).length;
+    const sheetTotal = sheetItems.length;
+    const sheetPct = Math.round(sheetDone / sheetTotal * 100);
+    const sheetFillStyle = 'width:' + sheetPct + '%';   // 나머지(색·높이·transition)는 .sheet-progress .fill 클래스
+    const sheetSaved = !!s.saved;                        // 진행률 집계엔 미포함, 완료 알약 표시용
+    const sheetAria = sheetTotal + '개 중 ' + sheetDone + '개 완료';
+    const sheetWidgetDisplay = s.tab === 'sheet' ? 'flex' : 'none';   // 위젯은 zoom 래퍼 밖이라 sc-if 대신 display 로 탭 게이팅
+
+    return {
+      sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria, sheetWidgetDisplay,
+      isRules: s.tab === 'rules', isTime: s.tab === 'time', isMeal: s.tab === 'meal', isSheet: s.tab === 'sheet',
+      goRules: () => this.setState({ tab: 'rules' }), goTime: () => this.setState({ tab: 'time' }),
+      goMeal: () => this.setState({ tab: 'meal' }), goSheet: () => this.setState({ tab: 'sheet' }),
+      tabRules: this.tabStyle(s.tab === 'rules', '#fbe6a2', '#f0c95c'),
+      tabTime: this.tabStyle(s.tab === 'time', '#c4d8f7', '#7fa9e8'),
+      tabMeal: this.tabStyle(s.tab === 'meal', '#bfe9dd', '#6fc9b0'),
+      tabSheet: this.tabStyle(s.tab === 'sheet', '#f9cade', '#ee9dbf'),
+      gradeOpts, classOpts, gradeVal: String(s.grade), classVal: String(s.cls),
+      setGrade: (e) => {
+        const g = Number(e.target.value);
+        const max = ({ 1: 9, 2: 11, 3: 12 })[g] || 12;
+        const c = Math.min(this.state.cls, max);
+        this.setState({ grade: g, cls: c });
+        this.loadTimetable(g, c);
+      },
+      setCls: (e) => {
+        const c = Number(e.target.value);
+        this.setState({ cls: c });
+        this.loadTimetable(this.state.grade, c);
+      },
+      timeViews: mkViews(s.timeView, 'timeView', accent), mealViews: mkViews(s.mealView, 'mealView', '#bfe9dd'),
+      timeIsDay: s.timeView === 'day', timeIsWeek: s.timeView === 'week', timeIsMonth: s.timeView === 'month',
+      mealIsDay: s.mealView === 'day', mealIsWeek: s.mealView === 'week', mealIsMonth: s.mealView === 'month',
+      timeCaption: s.grade + '학년 ' + s.cls + '반 · 2026학년도 2학기',
+      mealCaption: '신현중학교 급식실 · 2026년 9월',
+      todayLabel: (() => {
+        const n = s.now || new Date();
+        return n.getFullYear() + '년 ' + (n.getMonth() + 1) + '월 ' + n.getDate() + '일 (' + ['일', '월', '화', '수', '목', '금', '토'][n.getDay()] + ')';
+      })(),
+      dayRows: dayRowsMerged, weekRows, weekHeads, monthCells,
+      dowHeads: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      todayMeal, weekMeals, mealMonthCells,
+      fGrade: s.fGrade, fClass: s.fClass, fNum: s.fNum, fName: s.fName, reflect: s.reflect,
+      setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
+      setReflect: set('reflect'),
+      q1, q1Feedback, q1FeedbackStyle,
+      a3Items, oxItems,
+      prog2: s.prog2, setProg2: set('prog2'),
+      steps, saved: s.saved, savedName: s.savedName || '이름 없는 친구',
+      savePdf: () => {
+        const dig = (v) => String(v == null ? '' : v).replace(/[^0-9]/g, '');
+        const pad2 = (v) => { const d = dig(v); return d ? (d.length < 2 ? ('0' + d).slice(-2) : d) : ''; };
+        const name = String(s.fName == null ? '' : s.fName).trim();
+        const code = dig(s.fGrade) + pad2(s.fClass) + pad2(s.fNum);
+        const fname = ((code ? code + ' ' : '') + (name ? name + ' ' : '') + '활동지').trim();
+        const pdfName = /\.pdf$/i.test(fname) ? fname : fname + '.pdf';
+
+        const H2C = window.html2canvas;
+        const JSPDF = window.jspdf && window.jspdf.jsPDF;
+
+        // 폴백: 라이브러리를 못 불러온 환경(오프라인·CSP 차단 등)에서는 예전처럼 브라우저 인쇄창을 연다.
+        const printFallback = () => {
+          const prevTitle = document.title;
+          const cleanup = () => {
+            document.body.classList.remove('print-sheet-only');
+            document.title = prevTitle;
+            window.removeEventListener('afterprint', cleanup);
+          };
+          window.addEventListener('afterprint', cleanup);
+          document.title = fname;
+          document.body.classList.add('print-sheet-only');
+          this.setState({ saved: true, savedName: name });
+          setTimeout(() => { window.print(); setTimeout(cleanup, 1000); }, 60);
+        };
+
+        const src = document.getElementById('sheetPrintArea');
+        if (typeof H2C !== 'function' || typeof JSPDF !== 'function' || !src) { printFallback(); return; }
+
+        // 버튼 중복 클릭 방지 + 진행 표시
+        const btn = document.getElementById('pdfBtn');
+        const btnLabel = btn ? btn.textContent : '';
+        if (btn) { btn.textContent = '⏳ PDF 만드는 중...'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6'; }
+
+        // 화면 밖(zoom:1.1 래퍼 밖) 흰 배경 복제본만 캡처한다 — 학생이 보는 원본 화면은 건드리지 않는다.
+        const holder = document.createElement('div');
+        holder.setAttribute('style', 'position:fixed; left:-10000px; top:0; width:820px; padding:24px; background:#ffffff; z-index:-1;');
+        const clone = src.cloneNode(true);
+        clone.style.gap = '18px';
+
+        // "PDF로 저장하기" 버튼/저장 완료 배지 묶음은 결과물에 나오면 안 되므로 숨긴다.
+        const cloneBtn = clone.querySelector('#pdfBtn');
+        if (cloneBtn && cloneBtn.parentNode) cloneBtn.parentNode.style.display = 'none';
+
+        // 미배치 칩 트레이는 인쇄 불필요.
+        const trays = clone.querySelectorAll('.seq-tray, .ca-tray');
+        for (let i = 0; i < trays.length; i++) trays[i].style.display = 'none';
+
+        // textarea.blank → div: html2canvas 가 textarea 내부에 입력된 글자를 그리지 못하므로,
+        // 원본 DOM에서 실제 입력값(liveEl.value)을 읽어 같은 모양의 일반 상자로 바꿔치기.
+        const liveTAs = src.querySelectorAll('textarea.blank');
+        const cloneTAs = clone.querySelectorAll('textarea.blank');
+        for (let i = 0; i < cloneTAs.length; i++) {
+          const ta = cloneTAs[i];
+          const live = liveTAs[i];
+          const box = document.createElement('div');
+          box.textContent = live ? (live.value || '') : (ta.value || '');
+          const inline = ta.classList.contains('blank--inline');
+          box.setAttribute('style',
+            (inline
+              ? 'display:inline-block; min-width:120px; vertical-align:middle; border:2px solid #4b3b6b; border-radius:6px; padding:4px 8px; min-height:30px;'
+              : 'display:block; width:100%; border:2px solid #4b3b6b; border-radius:9px; padding:9px 11px; min-height:42px;')
+            + ' box-sizing:border-box; background:#ffffff; color:#26224a;'
+            + " font-family:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif;"
+            + ' font-size:15px; line-height:1.6; white-space:pre-wrap; overflow-wrap:break-word; word-break:break-word;');
+          if (ta.parentNode) ta.parentNode.replaceChild(box, ta);
+        }
+
+        // 복제본의 중복 id 제거(원본 드래그 엔진이 잘못된 노드를 잡지 않도록).
+        clone.removeAttribute('id');
+        const dupIds = clone.querySelectorAll('[id]');
+        for (let i = 0; i < dupIds.length; i++) dupIds[i].removeAttribute('id');
+
+        holder.appendChild(clone);
+        document.body.appendChild(holder);
+
+        const done = () => {
+          if (holder.parentNode) holder.parentNode.removeChild(holder);
+          if (btn) { btn.textContent = btnLabel; btn.style.pointerEvents = ''; btn.style.opacity = ''; }
+        };
+
+        const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+        Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))])   // 폰트는 이미 인라인 로드됨 — 만일의 지연에도 안 멈추게 상한
+          .then(() => new Promise((r) => setTimeout(r, 80)))   // 복제본 레이아웃 계산 시간 확보
+          .then(() => H2C(clone, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }))
+          .then((canvas) => {
+            const pdf = new JSPDF('p', 'pt', 'a4');
+            const pw = pdf.internal.pageSize.getWidth();
+            const ph = pdf.internal.pageSize.getHeight();
+            const pageCanvasH = Math.floor(canvas.width * ph / pw);   // 한 페이지에 담기는 캔버스 픽셀 높이
+            let rendered = 0;
+            let page = 0;
+            while (rendered < canvas.height - 1) {
+              const sliceH = Math.min(pageCanvasH, canvas.height - rendered);
+              const part = document.createElement('canvas');
+              part.width = canvas.width;
+              part.height = sliceH;
+              const ctx = part.getContext('2d');
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, part.width, part.height);
+              ctx.drawImage(canvas, 0, rendered, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+              if (page > 0) pdf.addPage();
+              // JPEG(흰 배경·검정 글씨라 열화 거의 안 보임) — PNG 로 하면 페이지당 십수 MB 가 된다.
+              pdf.addImage(part.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, pw, sliceH * pw / canvas.width);
+              rendered += sliceH;
+              page++;
+            }
+            pdf.save(pdfName);   // ← 이 한 줄이 브라우저 표준 다운로드를 일으킴(대개 "다운로드" 폴더에 저장)
+            this.setState({ saved: true, savedName: name });
+          })
+          .catch((err) => {
+            console.error('[savePdf]', err);
+            alert('PDF를 만드는 중 문제가 생겼어요. 잠시 후 다시 눌러 주세요.');
+          })
+          .then(done, done);
+      }
+    };
+  }
+}
+</script>
+<!-- [spec/data4-4steps-sequencing] PREVIOUSLY 카드 순서 배열 드래그 엔진.
+     data4 에는 dnd 엔진이 없어 신규. sc-if 늦은 마운트/재마운트에 견디도록 document 위임(활동 guide §1-8 패턴).
+     상태는 DOM-only + 매 마운트 재초기화(spec §7 대안 B) — 탭 전환 시 초기 뒤섞임으로 리셋됨. -->
+<script data-msi-src="shared/partials/seq-order.js"></script>
+<!-- 셀 주소 정리 문장 — 열/행 짝짓기 드래그. data4 엔 범용 dnd 엔진이 없어 이 문장 전용으로 신규(#caTray/#caSlot1·2/#caResult).
+     seq 엔진(#seqTrayPrev 하드코딩)과 클래스 네임스페이스가 겹치지 않음. document 위임이라 sc-if 재마운트에 견딤(단, 탭 전환 시 배치는 초기화). -->
+<script data-msi-src="shared/partials/chip-slot.js"></script>
+<!-- 모든 답 빈칸(textarea.blank) 자동 세로 확장 — 입력 텍스트가 잘리지 않고 전부 보이도록.
+     sc-if 로 늦게/다시 마운트되므로 input·focusin·click·resize·초기 인터벌 여러 시점에 재적용. -->
+<script data-msi-src="shared/partials/autogrow.js"></script>
+</body>
+</html>

@@ -17,23 +17,17 @@ scratchpad/
 .idea/
 *.code-workspace
 
-# Claude Code 서브에이전트 작업용 임시 워크트리
+# Claude Code 작업용 임시 워크트리
 .claude/worktrees/
 
-# output/ 안의 뷰어용 복사본 (원본은 input/design/project/ 에 있음)
-output/fonts/
-output/support.js
+# Node — 설치물과 빌드 결과 (빌드 결과는 GitHub Actions 가 매번 새로 만든다)
+node_modules/
+dist/
 
-# 보안: API 인증키 / 비밀정보
+# 보안: API 인증키 / 비밀정보 (NEIS 키는 Apps Script 의 스크립트 속성에 둔다)
 .env
 .env.*
 scripts/neis.local.ps1
 **/*.local.ps1
-output/neis.config.js
+**/neis.config.js
 secrets/
-
-# 미리보기 임시 산출물
-output/__preview-*.html
-
-# 구글사이트 임베드본 (NEIS 인증키가 인라인으로 들어있어 커밋 제외)
-output/data3.html

@@ -1,0 +1,39 @@
+# main 에 push 하면 활동지를 빌드해서 GitHub Pages 에 자동으로 올린다.
+# 처음 한 번만: 저장소 Settings → Pages → Build and deployment → Source 를 "GitHub Actions" 로 바꾸기.
+# 주소: https://sage810.github.io/middle_school_info_class/
+name: 활동지 배포 (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths: ['lessons/**', 'shared/**', 'scripts/**', 'data/neis-snapshot.json', 'site.config.json', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # 빌드는 외부 패키지가 필요 없어서 npm install 없이 바로 돈다
+      - run: node scripts/build.mjs --pages
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/pages
+      - id: deployment
+        uses: actions/deploy-pages@v4

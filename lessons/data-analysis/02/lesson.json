@@ -1,0 +1,9 @@
+{
+  "unit": "data-analysis",
+  "unitTitle": "데이터분석",
+  "no": "02",
+  "title": "파일과 확장자",
+  "shell": "standalone",
+  "status": "live",
+  "importedFrom": "output/데이터분석/2차시/data2.html"
+}

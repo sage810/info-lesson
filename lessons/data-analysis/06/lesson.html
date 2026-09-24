@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- [자체완결화 / Google Sites 코드삽입용] 아래 3블록은 외부 리소스 인라인본. 원본 재생성 시 scripts 참조. -->
+<style>
+/* [자체완결화] 디자인 실서체 5종 woff2 base64 인라인 (출처: jsdelivr fonts-archive, data4.html 과 동일 서체). 외부 @import 제거. */
+@font-face{font-family:'GangwonEdu';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/GangwonEdu-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-700.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:300;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-300.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-700.woff2) format('woff2');}
+/* Silkscreen (라틴 전용) woff2 인라인 — 외부 폰트가 CSP로 막혀도 픽셀 라벨 유지 */
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-700.woff2) format('woff2');}
+  /* [data5] 스샷으로 캡처하고 붙여넣는 방법 — Win+Shift+S 키 위치 사진 (input/keyboard.png 인라인, 5곳 공용) */
+  .kb-shot { display: block; width: 240px; max-width: 100%; aspect-ratio: 309 / 343;
+    border: 3px solid #4b3b6b; border-radius: 8px; background: #fff url(msi-asset:./assets/keyboard.png) center / contain no-repeat; }
+  @media print { .kb-shot { aspect-ratio: 309 / 300; } }
+</style>
+<!-- react@18.3.1 UMD production (unpkg 인라인) — loadReactUmd() 가 window.React 존재 시 fetch 스킵 -->
+<script data-msi-src="shared/vendor/react.production.min.js"></script>
+<!-- react-dom@18.3.1 UMD production (unpkg 인라인) -->
+<script data-msi-src="shared/vendor/react-dom.production.min.js"></script>
+<!-- html2canvas 1.4.1 (cdnjs 인라인) — savePdf() 화면 캡처용. 구글 사이트 임베드 CSP 회피 위해 외부 src 대신 인라인. -->
+<script data-msi-src="shared/vendor/html2canvas.min.js"></script>
+<!-- jsPDF 2.5.1 UMD (cdnjs 인라인) — savePdf() PDF 생성·다운로드용. window.jspdf.jsPDF 로 노출. -->
+<script data-msi-src="shared/vendor/jspdf.umd.min.js"></script>
+<script data-msi-src="shared/vendor/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; color: #4b3b6b; }
+  a { color: #c96a97; }
+  a:hover { color: #8f6fd6; }
+  input, textarea, select, button { font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; color: #4b3b6b; }
+  input::placeholder, textarea::placeholder { color: #b3a8cc; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  /* [design.md §10] 플로팅 위젯 — 활동 진행률 (수업 활동지 탭 전용, §10.9 스니펫)
+     zoom:1.1 래퍼 밖(<x-dc> 직속)에 마운트해 fixed 좌표계가 실제 뷰포트 기준으로 계산되게 함.
+     본문(max-width:1080px)이 zoom:1.1 로 시각적으로 1188px(=1080×1.1) 폭이다.
+     right = max(8px, 오른쪽 여백 - 위젯폭 - 간격): 넓은 화면은 본문 바깥 여백에,
+     여백이 부족한 일반 노트북(≈1300~1600px)에서는 8px 로 clamp 되어 본문 오른쪽
+     끝에 살짝 겹쳐서라도 보이게 한다(§10.2). 진짜 좁은 화면(<820px, 모바일/태블릿)
+     에서만 숨긴다 — 그땐 활동지 본문 폼에서 상태 확인. 탭 게이팅은 renderVals 의
+     sheetWidgetDisplay(inline display) 로 제어. */
+  /* [design.md §10] 활동 진행률 위젯 — 왼쪽 여백 배치 + 컴팩트(120px).
+     left = 왼쪽 여백 - 위젯폭 - 12px 이라, 여백이 위젯을 담을 만큼 넓으면
+     본문(시각 1188px)과 전혀 안 겹친다. 여백이 부족하면 8px 로 clamp 되어
+     창 왼쪽 테두리 쪽과만 약간 겹친다(120px 라 겹침 폭이 작다). */
+  .sheet-progress {
+    position: fixed;
+    top: 116px;
+    left: max(8px, calc((100vw - 1188px) / 2 - 120px - 12px));
+    width: 120px;
+    z-index: 5;                         /* 타이틀바(z-index:2)보다 낮게 */
+    display: flex; flex-direction: column;
+    background: #fffdf7;
+    border: 3px solid #4b3b6b;
+    border-radius: 12px;
+    box-shadow: 5px 5px 0 rgba(75,59,107,.18);   /* 오프셋만·blur 0 */
+    overflow: hidden;
+  }
+  .sheet-progress .sp-head {
+    padding: 6px 10px; border-bottom: 3px solid #4b3b6b;
+    background: #d6c4f5;
+    font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px;
+    text-align: center;
+  }
+  .sheet-progress .sp-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .sheet-progress .sp-title {          /* 한글 제목 — Silkscreen 금지 */
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; color: #4b3b6b; line-height: 1.3;
+  }
+  .sheet-progress .sp-count { display: flex; align-items: baseline; gap: 4px; }
+  .sheet-progress .sp-count .big {
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 20px;
+    font-variant-numeric: tabular-nums; color: #4b3b6b;
+  }
+  .sheet-progress .sp-count .sub {
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; font-size: 11px; color: #8b7cb8;
+  }
+  .sheet-progress .track {
+    height: 10px; border: 2px solid #4b3b6b; border-radius: 999px; overflow: hidden;
+    background: #ece9f3;
+  }
+  .sheet-progress .fill {
+    height: 100%; width: 0%;           /* 인라인 style="width:<pct>%" 로 바인딩 */
+    background: #9db2f2;               /* 단색 — 그라디언트 금지 */
+    transition: width .3s ease;
+  }
+  .sheet-progress .sp-done {          /* 제출 완료 보조 표기 (§2.1 완료 상태색) */
+    align-self: flex-start; padding: 2px 8px; border-radius: 999px;
+    background: #ece9f3; color: #8a82a6;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 11px;
+  }
+  @media (max-width: 820px) { .sheet-progress { display: none !important; } }
+  @media print { .sheet-progress { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .sheet-progress .fill { transition: none !important; } }
+
+  /* ACTIVITY_5 만화 판매량 표 — 드래그 텍스트 선택/복사 방지 (가로 스크롤은 유지) */
+  .no-copy { user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+
+  /* [design.md §11] 순서 배열 / 드래그 슬롯 컴포넌트 — PREVIOUSLY 카드 "4단계 순서 배열" 활동.
+     §2.1 팔레트 · §2.2 서체 · §2.4 스케일만 사용. 테두리색은 모든 상태에서 #4b3b6b. */
+  .seq-activity { display: flex; flex-direction: column; gap: 10px; }
+  .seq-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .seq-tag { font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px; color: #6b559b; }
+  .seq-title { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px; color: #4b3b6b; }
+  .seq-hint { margin: 0; font-size: 14px; color: #8b7cb8; line-height: 1.6; }
+
+  .seq-tray {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center; min-height: 56px;
+    border: 3px dashed #b3a8cc; border-radius: 10px; padding: 10px;
+    background: repeating-linear-gradient(45deg,#fffdf7,#fffdf7 10px,#f8f1e2 10px,#f8f1e2 20px);
+  }
+  .seq-tray.is-over { border-color: #ee9dbf; background: #fdf6fa; }
+  .seq-tray.is-empty::before {
+    content: 'EMPTY'; font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 11px; color: #9c8dc4;
+  }
+
+  .seq-chip {
+    cursor: pointer; user-select: none; -webkit-user-select: none;
+    padding: 8px 15px; border: 3px solid #4b3b6b; border-radius: 9px;
+    background: #fffdf7; box-shadow: 3px 3px 0 rgba(75,59,107,.15);
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .seq-chip.is-on {
+    background: #d6c4f5;
+    box-shadow: 2px 2px 0 rgba(75,59,107,.35); transform: translate(1px,1px);
+  }
+  .seq-chip.is-dragging { box-shadow: 1px 1px 0 rgba(75,59,107,.35); transform: translate(3px,3px); }
+
+  .seq-rows { display: flex; flex-direction: column; gap: 8px; }
+  .seq-row { display: flex; align-items: center; gap: 10px; }
+  .seq-num {
+    width: 30px; height: 30px; flex: none;
+    border: 3px solid #4b3b6b; border-radius: 8px; background: #d6c4f5;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; color: #4b3b6b;
+  }
+
+  .seq-slot {
+    flex: 1; min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 6px 12px; border: 3px dashed #b3a8cc; border-radius: 10px; background: #fdf6fa;
+  }
+  .seq-slot:not(.is-filled)::before {
+    content: 'DROP HERE'; font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 10px; color: #9c8dc4;
+  }
+  .seq-slot.is-over { box-shadow: inset 0 0 0 4px #ee9dbf; }
+  .seq-slot.is-filled { border: 3px solid #4b3b6b; background: #fffdf7; justify-content: flex-start; }
+  .seq-slot.is-correct { background: #d8f0c4; }
+  .seq-slot.is-wrong { background: #f7bfb2; }
+  .seq-mark {
+    width: 24px; height: 24px; flex: none; border: 3px solid #4b3b6b; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; background: #fffdf7;
+  }
+  .seq-slot.is-correct .seq-mark { background: #bfe9dd; }
+
+  .seq-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .seq-check-btn, .seq-reset-btn {
+    cursor: pointer; padding: 11px 20px; border: 3px solid #4b3b6b; border-radius: 10px;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px;
+  }
+  .seq-check-btn { background: #9db2f2; color: #26224a; box-shadow: 4px 4px 0 rgba(75,59,107,.3); }
+  .seq-reset-btn { background: #fffdf7; color: #4b3b6b; box-shadow: 4px 4px 0 rgba(75,59,107,.2); }
+  .seq-check-btn:active { background: #8296e0; box-shadow: 1px 1px 0 rgba(75,59,107,.3); transform: translate(3px,3px); }
+
+  .seq-result { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; color: #4b3b6b; }
+
+  .seq-chip:focus-visible, .seq-slot:focus-visible,
+  .seq-check-btn:focus-visible, .seq-reset-btn:focus-visible {
+    outline: 3px solid #ee9dbf; outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) { .seq-chip { transition: none !important; } }
+
+  /* 모든 답 빈칸 — 가로가 넘치면 줄바꿈되고 세로로 자라남(입력 텍스트 전부 표시). JS(autoGrowBlank)가 높이를 맞춘다. */
+  textarea.blank {
+    box-sizing: border-box; display: block; width: 100%;
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-size: 15px; line-height: 1.6; color: #4b3b6b;
+    border: 3px solid #4b3b6b; border-radius: 9px; background: #fdf6fa;
+    padding: 9px 11px; min-height: 42px;
+    resize: none; overflow: hidden;
+    white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word;
+  }
+  textarea.blank:focus { border-color: #ee9dbf; background: #fff; outline: none; }
+  textarea.blank::placeholder { color: #b3a8cc; }
+  textarea.blank.blank--strong { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; }
+  textarea.blank.blank--inline {
+    display: inline-block; width: 120px; vertical-align: middle;
+    border-width: 2px; border-radius: 6px; padding: 4px 8px; min-height: 30px; line-height: 1.5;
+  }
+  @media print {
+    textarea.blank { background: #fff !important; border: 2px solid #4b3b6b !important;
+      height: auto !important; overflow: visible !important; }
+  }
+
+  /* 셀 주소 정리 문장 — 짝짓기 드래그(열/행) */
+  .ca-tray { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ca-chip {
+    cursor: grab; user-select: none; -webkit-user-select: none;
+    border: 3px solid #4b3b6b; border-radius: 9px; padding: 6px 18px;
+    background: #fffdf7; box-shadow: 3px 3px 0 rgba(75,59,107,.15);
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .ca-chip.is-on { background: #d6c4f5; box-shadow: 2px 2px 0 rgba(75,59,107,.35); transform: translate(1px,1px); }
+  .ca-chip.is-dragging { opacity: .5; }
+  .ca-slot {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 62px; height: 34px; padding: 0 10px; vertical-align: middle;
+    border: 3px dashed #b3a8cc; border-radius: 8px; background: #fdf6fa;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; color: #4b3b6b;
+  }
+  .ca-slot.is-over { box-shadow: inset 0 0 0 4px #ee9dbf; }
+  .ca-slot.is-filled { border: 3px solid #4b3b6b; background: #fffdf7; }
+  .ca-slot.is-correct { border: 3px solid #4b3b6b; background: #d8f0c4; }
+  .ca-slot.is-wrong { border: 3px solid #4b3b6b; background: #f7bfb2; }
+  .ca-result { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; }
+  .ca-chip:focus-visible, .ca-slot:focus-visible { outline: 3px solid #ee9dbf; outline-offset: 2px; }
+
+  /* [design.md §6] 전역 인쇄 규칙 — 이 파일에 없던 블록이라 신설 (§11.5 포함) */
+  @media print {
+    @page { margin: .5cm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        animation: none !important; transition-duration: 0s !important; }
+    * { box-shadow: none !important; }              /* 잉크 절약 */
+    figure, table, .card, .seq-activity { break-inside: avoid; }
+    .seq-tray { display: none; }                     /* 미배치 칩 풀은 인쇄 불필요 */
+    .seq-slot { border: 2px solid #4b3b6b; background: #fff; }
+    .seq-slot.is-correct, .seq-slot.is-wrong { background: #fff; }  /* 색 → 아이콘/텍스트 */
+    .seq-slot.is-correct .seq-mark::after { content: ' ✓ 정답'; }
+    .seq-slot.is-wrong .seq-mark::after { content: ' ✗ 다시'; }
+    .seq-num { background: #d6c4f5; }                /* 색 배지 정보위계는 유지 */
+    .ca-tray { display: none; }
+    .ca-slot { border: 2px solid #4b3b6b; background: #fff; }
+    .ca-slot.is-correct::after { content: ' ✓'; }
+    .ca-slot.is-wrong::after { content: ' ✗'; }
+
+    /* "PDF로 저장하기" — 수업 활동지 탭 내용만 인쇄 (savePdf 가 body.print-sheet-only 토글) */
+    body.print-sheet-only #appTitlebar,
+    body.print-sheet-only #appFooter,
+    body.print-sheet-only #pdfBtn { display: none !important; }
+    body.print-sheet-only #appPage {
+      zoom: 1 !important; min-height: 0 !important; padding: 0 !important;
+      background: #fff !important; background-image: none !important;
+    }
+  }
+
+  /* ================================================================
+     [data5] 데이터 시각화 수업 — 미션 카드 / 콜아웃 / 표 / 절차 / 스크린샷 자리 / 그래프 붙여넣기 칸
+     기존 팔레트(#4b3b6b 테두리, offset box-shadow)·서체(GangwonEdu/CookieRun/Maplestory/Silkscreen) 유지.
+     ================================================================ */
+  .m-card { border: 3px solid #4b3b6b; border-radius: 14px; overflow: hidden; box-shadow: 5px 5px 0 rgba(75,59,107,.18); }
+  .m-head { padding: 8px 14px; border-bottom: 3px solid #4b3b6b; display: flex; justify-content: space-between; align-items: center; }
+  .m-head .mono { font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 11px; }
+  .m-head .mono.r { font-size: 10px; opacity: .7; }
+  .m-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .m-title-row { display: flex; align-items: center; gap: 10px; }
+  .m-badge { width: 30px; height: 30px; flex: none; border: 3px solid #4b3b6b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .m-title { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 20px; }
+  .m-lead { font-size: 15px; line-height: 1.8; margin: 0; }
+  .m-sub { font-size: 14px; color: #8b7cb8; line-height: 1.7; margin: 0; }
+  .m-hd2 { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 7px; }
+  .m-divider { border: 0; height: auto; margin: 28px 0 18px; text-align: center; line-height: 1; user-select: none; }
+  .m-divider::before { content: "✨ ✨ ✨"; font-size: 15px; letter-spacing: 10px; opacity: .85; }
+
+  .callout { border: 3px solid #4b3b6b; border-radius: 12px; padding: 12px 15px; font-size: 14px; line-height: 1.85; box-shadow: 4px 4px 0 rgba(75,59,107,.14); }
+  .callout .c-lbl { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; display: block; margin-bottom: 4px; }
+  .callout--reason { background: #eef9f3; }
+  .callout--ask { background: #fff6e6; }
+  .callout--warn { background: #fdf0ee; }
+  .callout--tip { background: #f3eefe; }
+  .callout .em { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #6b559b; }
+
+  .type-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .type-table th, .type-table td { border: 2px solid #4b3b6b; padding: 8px 10px; vertical-align: top; text-align: left; line-height: 1.6; }
+  .type-table th { background: #d6c4f5; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; text-align: center; }
+  .type-table td.k { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; white-space: nowrap; background: #faf7ff; text-align: center; }
+  .type-scroll { overflow-x: auto; }
+  .type-scroll .type-table { min-width: 460px; }
+
+  ol.step-list { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; line-height: 1.75; }
+  ol.step-list li::marker { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #6b559b; }
+  ul.proc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; line-height: 1.7; }
+  ul.proc-list li { padding: 8px 12px; border: 2px solid #4b3b6b; border-radius: 9px; background: #fffdf7; }
+  ul.proc-list li .tag { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #c96a97; }
+
+  .shot-ph { min-height: 118px; border: 3px dashed #b3a8cc; border-radius: 10px;
+    background: repeating-linear-gradient(45deg,#fbf8ff,#fbf8ff 10px,#f1ecfb 10px,#f1ecfb 20px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center; padding: 14px; color: #7d6ea8; font-size: 13px; line-height: 1.6; }
+  .shot-ph .k { font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; font-size: 9px; color: #9c8dc4; letter-spacing: .5px; }
+  .shot-ph .cap { font-size: 12px; color: #7d6ea8; line-height: 1.5; }
+  .shot-ph img { max-width: 100%; border-radius: 6px; border: 1px solid #e3dcf2; }
+  .shot-ph:has(img) { border-style: solid; border-color: #4b3b6b; background: #fff; }
+  .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 10px; }
+
+  .paste-zone { min-height: 210px; border: 3px dashed #b3a8cc; border-radius: 12px; background: #fdf6fa;
+    display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; cursor: text; }
+  .paste-zone:focus-visible { outline: 3px solid #ee9dbf; outline-offset: 2px; }
+  /* 클릭·포커스 시 텍스트 입력칸처럼 보이게 — 강한 테두리 + 깜빡이는 커서(캐럿)로 "여기에 Ctrl+V" 신호 */
+  .paste-zone:focus { outline: none; border-style: solid; border-color: #4b3b6b; background: #fff; box-shadow: inset 0 0 0 3px #ee9dbf; }
+  .pz-caret { display: none; }
+  .paste-zone:focus:not(.is-filled) .pz-caret {
+    display: inline-block; width: 2px; height: 1.15em; margin-right: 5px; vertical-align: -0.2em;
+    background: #4b3b6b; animation: pzblink 1s step-end infinite;
+  }
+  @keyframes pzblink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .pz-caret { animation: none !important; } }
+  .paste-zone.is-over { box-shadow: inset 0 0 0 4px #ee9dbf; border-color: #ee9dbf; }
+  .paste-zone.is-filled { border-style: solid; border-color: #4b3b6b; background: #fff; cursor: default; }
+  .paste-zone img { max-width: 100%; max-height: 640px; border-radius: 6px; display: block; }
+  .paste-empty { font-size: 14px; color: #8b7cb8; line-height: 1.9; }
+  .paste-empty .kbd { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #4b3b6b; }
+  .paste-empty .sm { font-size: 12px; color: #b3a8cc; }
+  .pz-controls { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .pz-controls button { cursor: pointer; padding: 6px 12px; border: 2px solid #4b3b6b; border-radius: 8px; background: #fffdf7;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 12px; color: #4b3b6b; }
+  .pz-controls button:active { transform: translate(1px,1px); }
+  .pz-controls button:disabled { opacity: .6; cursor: default; transform: none; }
+
+  .ans-row { display: flex; flex-direction: column; gap: 5px; }
+  .ans-row .q { font-size: 15px; line-height: 1.7; }
+  .ans-lbl { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 7px; }
+
+  .rel-shapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; }
+  .rel-shape { border: 2px solid #4b3b6b; border-radius: 10px; background: #fffdf7; padding: 10px 10px 8px; text-align: center; }
+  .rel-shape svg { width: 100%; height: 88px; display: block; }
+  .rel-shape .rl { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; margin-top: 5px; }
+  .rel-shape .rd { font-size: 12px; color: #8b7cb8; line-height: 1.55; margin-top: 2px; }
+
+  .key-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .key-list li { display: flex; gap: 10px; padding: 10px 13px; border: 3px solid #4b3b6b; border-radius: 10px; background: #fffdf7; font-size: 14.5px; line-height: 1.7; }
+  .key-list li .kk { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #c96a97; flex: none; }
+
+  .miniflow { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+  .miniflow .mf { flex: 1; min-width: 110px; border: 3px solid #4b3b6b; border-radius: 10px; background: #fffdf7; padding: 9px 8px; text-align: center; display: flex; flex-direction: column; gap: 3px; }
+  .miniflow .mf .n { width: 22px; height: 22px; margin: 0 auto; border: 2px solid #4b3b6b; border-radius: 50%; background: #c4d8f7; display: flex; align-items: center; justify-content: center; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 12px; }
+  .miniflow .mf .t { font-size: 12.5px; line-height: 1.4; }
+  .miniflow .ar { align-self: center; font-weight: 700; color: #6b559b; }
+
+  @media print {
+    .paste-zone { border: 2px solid #4b3b6b; background: #fff; min-height: 150px; }
+    .pz-controls { display: none !important; }
+    .shot-ph { background: #fff; border: 2px solid #b3a8cc; }
+    .shot-ph .k { display: none; }
+    .m-card, .callout, .type-scroll, .shot-ph, .paste-zone, .rel-shape, .miniflow { break-inside: avoid; }
+  }
+</style>
+</helmet>
+<div id="appPage" style="zoom:1.1; minHeight:calc(100vh / 1.1); padding:28px 20px 60px; background:#e7e3f7; backgroundImage:linear-gradient(#d8d2ee 1px, transparent 1px), linear-gradient(90deg, #d8d2ee 1px, transparent 1px); backgroundSize:28px 28px">
+  <div style="maxWidth:1080px; margin:0 auto; display:flex; flexDirection:column; gap:18px">
+
+    <div style="display:flex; alignItems:flex-end; gap:14px; flexWrap:wrap">
+      
+      
+    </div>
+
+    <div style="background:#fffdf7; border:4px solid #4b3b6b; borderRadius:16px; boxShadow:8px 8px 0 rgba(75,59,107,.22); overflow:hidden">
+
+      <div id="appTitlebar" style="display:flex; alignItems:flex-end; gap:14px; padding:14px 16px 0; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)">
+        <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:25px; letterSpacing:.5px; flex:none; whiteSpace:nowrap; paddingBottom:12px">🏫 신현중학교 정보</div>
+        <div style="flex:1"></div>
+        <div style="display:flex; gap:6px; paddingBottom:12px">
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">_</div>
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">□</div>
+          <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#f7a8c4; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">X</div>
+        </div>
+      </div>
+
+      
+
+      <div style="padding:24px 22px 30px">
+
+
+          <div id="sheetPrintArea" style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">수업 활동지</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#d6c4f5; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">WORKSHEET_01</div>
+            </div>
+
+            <div style="border:4px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fdf6fa; boxShadow:6px 6px 0 rgba(75,59,107,.2)">
+              <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:linear-gradient(90deg,#f9cade,#d6c4f5); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_TOPIC</div>
+              <div style="padding:20px 22px; display:flex; flexDirection:column; gap:8px">
+
+                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:32px; lineHeight:1.3; textWrap:pretty">데이터 시각화</div>
+                <div style="fontSize:15px; color:#8b7cb8">복잡한 데이터를 그래프로 바꾸어 한눈에 보고, 목적에 맞는 4가지 유형(구성·비교·분포·관계)으로 나누어 CODAP으로 그리고 해석해요.</div>
+
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">MY_INFO</div>
+              <div style="padding:18px; display:grid; gridTemplateColumns:repeat(auto-fit, minmax(150px,1fr)); gap:14px">
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">학년</label>
+                  <textarea class="blank" rows="1" placeholder="2" value="{{ fGrade }}" onChange="{{ setFGrade }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">반</label>
+                  <textarea class="blank" rows="1" value="{{ fClass }}" onChange="{{ setFClass }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">번호</label>
+                  <textarea class="blank" rows="1" value="{{ fNum }}" onChange="{{ setFNum }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:6px">
+                  <label style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">이름</label>
+                  <textarea class="blank" rows="1" placeholder="이름을 적어요" value="{{ fName }}" onChange="{{ setFName }}" style="min-height:44px; font-size:16px"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; overflow:hidden; background:#fff6fb; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+              <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between; alignItems:center">
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_GOALS</span>
+                <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#a65a86">GOAL</span>
+              </div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:12px">
+                <div style="display:flex; alignItems:center; gap:10px">
+                  <div style="width:30px; height:30px; border:3px solid #4b3b6b; borderRadius:8px; background:#f9cade; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🎯</div>
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">오늘의 목표</div>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">1</span>
+                    <span>데이터 시각화가 무엇인지, 왜 필요한지 설명할 수 있어요.</span>
+                  </div>
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">2</span>
+                    <span>데이터 시각화의 4가지 유형(구성·비교·분포·관계 분석)을 구분할 수 있어요.</span>
+                  </div>
+                  <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7">
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; color:#c96a97; flex:none">3</span>
+                    <span>CODAP을 이용해 목적에 맞는 그래프를 그리고 해석할 수 있어요.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ MISSION 1 · 데이터 시각화란? ============ -->
+            <div class="m-card" style="background:#eef9f8">
+              <div class="m-head" style="background:#a9dce4">
+                <span class="mono">MISSION_1</span>
+                <span class="mono r">CONCEPT</span>
+              </div>
+              <div class="m-body">
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:#a9dce4">🎬</div>
+                  <div class="m-title">데이터 분석하기 — 데이터 시각화란 무엇일까?</div>
+                </div>
+
+                <div class="m-hd2">🧭 데이터 과학이 문제를 해결하는 과정 4단계</div>
+                <div class="miniflow">
+                  <div class="mf"><span class="n">1</span><span class="t">문제 정하기</span></div>
+                  <span class="ar">→</span>
+                  <div class="mf"><span class="n">2</span><span class="t">데이터 수집 · 특성 파악</span></div>
+                  <span class="ar">→</span>
+                  <div class="mf"><span class="n">3</span><span class="t">데이터 분석하기</span></div>
+                  <span class="ar">→</span>
+                  <div class="mf"><span class="n">4</span><span class="t">결과 해석 · 공유</span></div>
+                </div>
+
+                <div class="m-hd2">📌 데이터 시각화의 4가지 유형</div>
+                <p class="m-sub">무엇을 알고 싶은가에 따라 4가지 유형으로 나누어서 그래프를 그려요.</p>
+                <div class="type-scroll">
+                  <table class="type-table">
+                    <thead>
+                      <tr><th style="width:88px">유형</th><th>의미</th><th style="width:34%">질문 예시</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td class="k" style="color:#c96a97">구성 분석</td><td style="background:#fdeef4">전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td style="background:#fdeef4">"~는 몇 %일까?"</td></tr>
+                      <tr><td class="k" style="color:#4f6a96">비교 분석</td><td style="background:#eef4fc">서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td style="background:#eef4fc">"~과 ~ 중 어느 쪽이 더 클까?"</td></tr>
+                      <tr><td class="k" style="color:#6b559b">분포 분석</td><td style="background:#f3eefc">데이터들이 주로 어디에 몰려있고 퍼져있는지 모양을 보는 것</td><td style="background:#f3eefc">"~는 주로 어디에 몰려 있을까?" <br>"유난히 다른 값이 있을까?"</br></td></tr>
+                      <tr><td class="k" style="color:#3d7f6c">관계 분석</td><td style="background:#ecf7f1">두 속성 간에 어떤 관계가 있는지 파악하는 것</td><td style="background:#ecf7f1">"~랑 ~는 서로 관련이 있을까?"</td></tr>                    </tbody>
+                  </table>
+                </div>
+
+                <div class="m-divider"></div>
+                <div class="m-hd2">🖥 CODAP에 데이터 올리기</div>
+                <ol class="step-list">
+                  <li>구글에 <b>'코답'</b> 이라고 검색해요.</li>
+                  <li>검색 결과에서 <b>CODAP</b>(codap.concord.org) 사이트를 클릭해요.</li>
+                  <li>오른쪽 맨 위에 있는 주황색 <b>Launch CODAP</b> 버튼을 눌러요.</li>
+                  <li><b>새 문서</b>를 눌러요.</li>
+                  <li>수업자료 폴더에 있는 <b>포켓몬</b> 파일을 CODAP의 흰 바탕 위로 끌어다 놓아요.</li>
+                  <li>화면에 표가 생겼다면 완성! <br>표의 모서리를 끌어 크기를 키워 데이터가 다 보이게 하고, 친구를 도와주세요.</br></li>
+                </ol>
+                <div class="shot-grid">
+                  <div class="shot-ph" data-shot="codap-1"><img src="msi-asset:./assets/코답1.png" alt=""><span class="cap">① 구글에 '코답' 이라고 검색</span></div>
+                  <div class="shot-ph" data-shot="codap-2"><img src="msi-asset:./assets/코답2.png" alt=""><span class="cap">② 검색 결과에서 CODAP(codap.concord.org) 클릭</span></div>
+                  <div class="shot-ph" data-shot="codap-3"><img src="msi-asset:./assets/코답3.png" alt=""><span class="cap">③ 오른쪽 위 주황색 Launch CODAP 클릭</span></div>
+                  <div class="shot-ph" data-shot="codap-4"><img src="msi-asset:./assets/코답4.png" alt=""><span class="cap">④ '어떤 작업을 할까요?'에서 '새 문서' 클릭</span></div>
+                  <div class="shot-ph" data-shot="m1-drop"><img src="msi-asset:shared/images/스크린샷_2026-09-08_213939.png" alt=""><span class="cap">⑤ 포켓몬 파일을 CODAP 흰 바탕으로 끌어다 놓기</span></div>
+                  <div class="shot-ph" data-shot="m1-resize"><img src="msi-asset:shared/images/스크린샷_2026-09-08_234642.png" alt=""><span class="cap">⑥ 표 모서리를 끌어 데이터가 다 보이게 늘리기</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ MISSION 2 · 분포 분석 ============ -->
+            <div class="m-card" style="background:#f8f4fe">
+              <div class="m-head" style="background:#d6c4f5">
+                <span class="mono">MISSION_2</span>
+                <span class="mono r">DISTRIBUTE</span>
+              </div>
+              <div class="m-body">
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:#d6c4f5">🎬</div>
+                  <div class="m-title">분포 분석</div>
+                </div>
+
+                <div class="callout callout--reason">
+                  <span class="c-lbl">📋 분포 분석이 뭘까요?</span>
+                  반 친구들의 시험 점수를 쭉 늘어놓았을 때 점수가 어느 구간에 많이 몰려있는지 살펴보는 것
+                </div>
+                <div class="callout callout--tip">
+                  <span class="c-lbl">💬 이렇게 질문해요</span>
+                  <span class="em">"우리 반 중간고사 수학 점수는 보통 어느 구간에 몰려 있을까?"</span> 처럼 '어느 구간에 몰려 있는지', '유난히 다른 값(이상치)이 있는지' 묻는 질문이에요.
+                </div>
+
+                <div class="m-hd2">🧩 데이터 분석 과정</div>
+                <ul class="proc-list">
+                  <li><span class="tag">1. [문제 정하기]</span> 포켓몬들의 체력은 보통 어느 구간에 모여있을까?</li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 살펴볼 값은 '체력' 속성이에요.</li>
+                  <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
+                </ul>
+
+                <div class="m-hd2">🖥 CODAP 그래프 그리기</div>
+                <ol class="step-list">
+                  <li><b>그래프</b> 버튼을 눌러 새 그래프 창을 열어요.</li>
+                  <li>x축에 <b>'체력'</b> 속성을 클릭해요.</li>
+                  <li><b>Measure(측정)</b> 클릭 → <b>그림 상자와 정규 곡선</b> 클릭 → <b>Box Plot</b> 클릭.</li>
+                  <li>box plot 선이 뜬다면 완성이에요.</li>
+                  <li>가운데 선에 마우스를 가져다 대면 <b>중앙값</b>, 양 끝 선에 대면 <b>최솟값 · 최댓값</b>을 확인할 수 있어요.</li>
+                </ol>
+                <div class="shot-grid">
+                  <div class="shot-ph" data-shot="graph-btn-4"><img src="msi-asset:shared/images/그래프1.png" alt=""><span class="cap">① 그래프 버튼을 눌러 새 그래프 창 열기</span></div>
+                  <div class="shot-ph" data-shot="m4-a"><img src="msi-asset:./assets/분포_분석1.png" alt=""><span class="cap">② x축을 클릭해 ③ '체력' 선택</span></div>
+                  <div class="shot-ph" data-shot="m4-b"><img src="msi-asset:./assets/분포분석2.png" alt=""><span class="cap">④ Measure → ⑤ 그림 상자와 정규 곡선 → ⑥ Box Plot</span></div>
+                  <div class="shot-ph" data-shot="m4-c"><img src="msi-asset:./assets/분포_분석3.png" alt=""><span class="cap">가운데 선에 마우스 → 중앙값 확인 (예: 80)</span></div>
+                  <div class="shot-ph" data-shot="m4-d"><img src="msi-asset:./assets/분포_분석_4.png" alt=""><span class="cap">끝 선에 마우스 → 최솟값 · 최댓값 확인 (예: 250)</span></div>
+                </div>
+
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
+                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
+                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                    </div>
+                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
+                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
+                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
+                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="ans-lbl">📷 여기에 CODAP 그래프를 붙여넣으세요</div>
+                <div class="paste-zone" data-zone="m4-graph" role="button" tabindex="0" aria-label="MISSION 2 분포 분석 그래프 붙여넣기 칸">
+                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
+                </div>
+                <div class="pz-controls">
+                  <button type="button" class="pz-copy">📋 복사</button>
+                  <button type="button" class="pz-clear">🗑 지우기</button>
+                </div>
+
+                <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
+                <div class="callout callout--tip" style="margin-top:8px">
+                  <span class="c-lbl">🔎 이상치(outlier)가 무엇일까?</span>
+                  대부분의 값이 모여 있는 곳에서 <b>혼자 멀리 동떨어져 있는 값</b>이에요. 예를 들어 반 친구들의 키가 대부분 150~165cm인데 한 명만 195cm라면, 그 값이 이상치예요. 분포를 볼 때는 <b>"유난히 튀는 값이 있는지"</b>도 함께 살펴봐요.
+                </div>
+                <div class="ans-row">
+                  <span class="ans-lbl">📝 그래프 해석 — 그래프를 보고 알게 된 사실을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="예: 체력은 주로 ○○~○○ 구간에 몰려 있고, 중앙값은 약 ○○ 예요." aria-label="M2 그래프 해석"></textarea>
+                </div>
+                <div class="ans-row">
+                  <span class="ans-lbl">✅ 나의 결정 — 이 결과를 보고 내가 내릴 수 있는 결론이나 판단을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M2 나의 결정"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ MISSION 3 · 관계 분석 ============ -->
+            <div class="m-card" style="background:#f1fbf7">
+              <div class="m-head" style="background:#bfe9dd">
+                <span class="mono">MISSION_3</span>
+                <span class="mono r">RELATE</span>
+              </div>
+              <div class="m-body">
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:#bfe9dd">🎬</div>
+                  <div class="m-title">관계 분석</div>
+                </div>
+
+                <div class="callout callout--reason">
+                  <span class="c-lbl">📋 관계 분석이 뭘까요?</span>
+                  서로 다른 두 가지 특징(속성) 사이에 어떤 관련이 있는지 살펴보는 것<br>
+                  한쪽 값이 커질 때 다른 값도 함께 커지면 <b>양(+)의 관계</b>, 반대로 작아지면 <b>음(-)의 관계</b> 예요.
+                </div>
+                <div class="callout callout--tip">
+                  <span class="c-lbl">💬 이렇게 질문해요</span>
+                  <span class="em">"공부 시간이 길수록 시험 점수도 높아질까?"</span> 처럼 두 속성을 '~할수록'으로 이어서 묻는 질문이에요.
+                </div>
+
+                <div class="m-hd2">📌 관계의 3가지 모습</div>
+                <div class="rel-shapes">
+                  <div class="rel-shape">
+                    <svg viewBox="0 0 120 80" aria-hidden="true">
+                      <line x1="12" y1="68" x2="112" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <line x1="12" y1="10" x2="12" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <circle cx="24" cy="60" r="3" fill="#2f7d6a"></circle><circle cx="38" cy="54" r="3" fill="#2f7d6a"></circle><circle cx="50" cy="46" r="3" fill="#2f7d6a"></circle><circle cx="63" cy="40" r="3" fill="#2f7d6a"></circle><circle cx="76" cy="30" r="3" fill="#2f7d6a"></circle><circle cx="90" cy="24" r="3" fill="#2f7d6a"></circle><circle cx="102" cy="16" r="3" fill="#2f7d6a"></circle>
+                      <line x1="20" y1="62" x2="106" y2="14" stroke="#e08a3c" stroke-width="3"></line>
+                    </svg>
+                    <div class="rl">양(+)의 관계</div>
+                    <div class="rd">한쪽이 커질 때 다른 값도 함께 커짐 (오른쪽 위로 올라감)</div>
+                  </div>
+                  <div class="rel-shape">
+                    <svg viewBox="0 0 120 80" aria-hidden="true">
+                      <line x1="12" y1="68" x2="112" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <line x1="12" y1="10" x2="12" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <circle cx="24" cy="16" r="3" fill="#8f6fd6"></circle><circle cx="38" cy="24" r="3" fill="#8f6fd6"></circle><circle cx="50" cy="30" r="3" fill="#8f6fd6"></circle><circle cx="63" cy="40" r="3" fill="#8f6fd6"></circle><circle cx="76" cy="48" r="3" fill="#8f6fd6"></circle><circle cx="90" cy="56" r="3" fill="#8f6fd6"></circle><circle cx="102" cy="62" r="3" fill="#8f6fd6"></circle>
+                      <line x1="20" y1="14" x2="106" y2="62" stroke="#e08a3c" stroke-width="3"></line>
+                    </svg>
+                    <div class="rl">음(-)의 관계</div>
+                    <div class="rd">한쪽이 커질 때 다른 값은 작아짐 (오른쪽 아래로 내려감)</div>
+                  </div>
+                  <div class="rel-shape">
+                    <svg viewBox="0 0 120 80" aria-hidden="true">
+                      <line x1="12" y1="68" x2="112" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <line x1="12" y1="10" x2="12" y2="68" stroke="#4b3b6b" stroke-width="2"></line>
+                      <circle cx="24" cy="30" r="3" fill="#9aa3b2"></circle><circle cx="34" cy="52" r="3" fill="#9aa3b2"></circle><circle cx="46" cy="22" r="3" fill="#9aa3b2"></circle><circle cx="58" cy="44" r="3" fill="#9aa3b2"></circle><circle cx="70" cy="28" r="3" fill="#9aa3b2"></circle><circle cx="82" cy="50" r="3" fill="#9aa3b2"></circle><circle cx="96" cy="34" r="3" fill="#9aa3b2"></circle>
+                      <line x1="16" y1="40" x2="110" y2="40" stroke="#e08a3c" stroke-width="3" stroke-dasharray="5 4"></line>
+                    </svg>
+                    <div class="rl">관계 없음</div>
+                    <div class="rd">한쪽 값이 변해도 다른 값은 규칙 없이 흩어져 있음</div>
+                  </div>
+                </div>
+
+                <div class="m-hd2">🧩 데이터 분석 과정 ①</div>
+                <ul class="proc-list">
+                  <li><span class="tag">1. [문제 정하기]</span> 공격력이 높은 포켓몬일수록 방어력도 함께 높을까?</li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 관계를 살펴볼 두 속성은 '공격력'과 '방어력'이에요.</li>
+                  <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
+                </ul>
+
+                <div class="m-hd2">🖥 CODAP 그래프 그리기</div>
+                <ol class="step-list">
+                  <li><b>그래프</b> 버튼을 눌러 새 그래프 창을 열어요.</li>
+                  <li>x축에 <b>'공격력'</b> 속성을 클릭해요.</li>
+                  <li>y축에 <b>'방어력'</b> 속성을 클릭해요.</li>
+                  <li><b>Measure(측정)</b> 클릭 → <b>최소제곱선</b> 클릭 → <b>Show r</b> 클릭.</li>
+                  <li>선이 뜬다면 완성이에요.</li>
+                </ol>
+                <div class="shot-grid">
+                  <div class="shot-ph" data-shot="graph-btn-5a"><img src="msi-asset:shared/images/그래프1.png" alt=""><span class="cap">① 그래프 버튼을 눌러 새 그래프 창 열기</span></div>
+                  <div class="shot-ph" data-shot="m5-a"><img src="msi-asset:./assets/비교분석11.png" alt=""><span class="cap">② x축을 클릭해 ③ '공격력' 선택</span></div>
+                  <div class="shot-ph" data-shot="m5-b"><img src="msi-asset:./assets/비교분석22.png" alt=""><span class="cap">④ y축을 클릭해 ⑤ '방어력' 선택</span></div>
+                  <div class="shot-ph" data-shot="m5-c"><img src="msi-asset:./assets/비교분석33.png" alt=""><span class="cap">⑥ Measure → ⑦ 최소제곱선 → ⑧ Show r (예: r = 0.4996)</span></div>
+                </div>
+
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
+                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
+                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                    </div>
+                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
+                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
+                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
+                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="ans-lbl">📷 여기에 CODAP 그래프를 붙여넣으세요</div>
+                <div class="paste-zone" data-zone="m5-graph" role="button" tabindex="0" aria-label="MISSION 3 공격력·방어력 그래프 붙여넣기 칸">
+                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
+                </div>
+                <div class="pz-controls">
+                  <button type="button" class="pz-copy">📋 복사</button>
+                  <button type="button" class="pz-clear">🗑 지우기</button>
+                </div>
+                <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
+                <div class="callout callout--tip" style="margin-top:8px">
+                  <span class="c-lbl">📐 용어</span>
+                  <b>최소제곱선</b> : 흩어져 있는 점들을 대표해서 흐름을 잘 설명해 주는 선.<br>
+                  <b>r (상관계수)</b> : x축과 y축 속성이 서로 얼마나 관련되어 있는지 알려 주는 -1 ~ 1 사이의 수치.
+                </div>
+                <div class="type-scroll">
+                  <table class="type-table">
+                    <thead><tr><th style="width:44%">r 값</th><th>의미</th></tr></thead>
+                    <tbody>
+                      <tr><td class="k">+1 에 가까울수록</td><td>양의 상관관계 (한쪽이 커질수록 다른 쪽도 커짐)</td></tr>
+                      <tr><td class="k">-1 에 가까울수록</td><td>음의 상관관계 (한쪽이 커질수록 다른 쪽은 작아짐)</td></tr>
+                      <tr><td class="k">0 에 가까울수록</td><td>아무 관계가 없음</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="ans-row">
+                  <span class="ans-lbl">📝 그래프 해석 — r 값과 점들의 모양을 보고 알게 된 사실을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="예: r = 약 ○○ 이고 점들이 오른쪽 위로 올라가는 모양이라 양의 관계예요." aria-label="M3 그래프 해석"></textarea>
+                </div>
+                <div class="ans-row">
+                  <span class="ans-lbl">✅ 나의 결정 — 결론이나 판단을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M3 나의 결정"></textarea>
+                </div>
+
+                <div class="m-divider"></div>
+                <div class="m-hd2">🧩 데이터 분석 과정 ②</div>
+                <ul class="proc-list">
+                  <li><span class="tag">1. [문제 정하기]</span> 포획률이 낮아 잡기 어려운 포켓몬일수록 공격력이 더 높을까?</li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 두 속성은 '포획률'과 '공격력'이에요.</li>
+                  <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
+                </ul>
+                <div class="m-hd2">🖥 CODAP 그래프 그리기</div>
+                <ol class="step-list">
+                  <li><b>그래프</b> 버튼을 눌러 새 그래프 창을 열어요.</li>
+                  <li>x축에 <b>'포획률'</b> 속성을 클릭해요.</li>
+                  <li>y축에 <b>'공격력'</b> 속성을 클릭해요.</li>
+                  <li><b>Measure(측정)</b> 클릭 → <b>최소제곱선</b> 클릭 → <b>Show r</b> 클릭.</li>
+                  <li>선이 뜬다면 완성이에요.</li>
+                </ol>
+                <div class="shot-grid">
+                  <div class="shot-ph" data-shot="graph-btn-5b"><img src="msi-asset:shared/images/그래프1.png" alt=""><span class="cap">① 그래프 버튼을 눌러 새 그래프 창 열기</span></div>
+                  <div class="shot-ph" data-shot="m5b-a"><img src="msi-asset:./assets/관계분석1.png" alt=""><span class="cap">② x축을 클릭해 ③ '포획률' 선택</span></div>
+                  <div class="shot-ph" data-shot="m5b-b"><img src="msi-asset:./assets/관계분석2.png" alt=""><span class="cap">④ y축을 클릭해 ⑤ '공격력' 선택</span></div>
+                  <div class="shot-ph" data-shot="m5b-c"><img src="msi-asset:./assets/관계분석3.png" alt=""><span class="cap">⑥ Measure → ⑦ 최소제곱선 → ⑧ Show r (예: r = -0.5132)</span></div>
+                </div>
+                <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                  <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
+                    <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
+                  </div>
+                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
+                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
+                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
+                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                    </div>
+                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
+                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
+                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
+                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <div class="ans-lbl">📷 여기에 CODAP 그래프를 붙여넣으세요</div>
+                <div class="paste-zone" data-zone="m5b-graph" role="button" tabindex="0" aria-label="MISSION 3 포획률·공격력 그래프 붙여넣기 칸">
+                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
+                </div>
+                <div class="pz-controls">
+                  <button type="button" class="pz-copy">📋 복사</button>
+                  <button type="button" class="pz-clear">🗑 지우기</button>
+                </div>
+                <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
+                <div class="ans-row">
+                  <span class="ans-lbl">📝 그래프 해석 — 알게 된 사실을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="예: r = 약 ○○ 이고 점들이 오른쪽 아래로 내려가는 모양이라 음의 관계예요." aria-label="M3 과정2 그래프 해석"></textarea>
+                </div>
+                <div class="ans-row">
+                  <span class="ans-lbl">✅ 나의 결정 — 결론이나 판단을 적어 보자.</span>
+                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M3 과정2 나의 결정"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ 형성평가 ============ -->
+            <div class="m-card" style="background:#fdf2fc">
+              <div class="m-head" style="background:#eec6ea">
+                <span class="mono">CHECKUP</span>
+                <span class="mono r">QUIZ</span>
+              </div>
+              <div class="m-body">
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:#eec6ea">📝</div>
+                  <div class="m-title">형성평가 — 이 질문은 어떤 분석일까?</div>
+                </div>
+                <p class="m-sub">아래 질문을 읽고, 어떤 분석 유형에 해당하는지 골라 보자. 선택지를 누르면 바로 채점돼요.</p>
+                <div class="callout callout--tip">
+                  <span class="c-lbl">💡 Tip</span>
+                  질문 속 표현(<b>몇 %</b>, <b>어느 쪽이 더</b>, <b>몰려있다 / 이상치</b>, <b>~할수록</b>)을 보면 힌트를 얻을 수 있어요. 분석마다 질문을 만드는 방식이 달라요!
+                </div>
+                <div class="m-hd2">📌 데이터 시각화의 4가지 유형</div>
+                <p class="m-sub">무엇을 알고 싶은가에 따라 4가지 유형으로 나누어서 그래프를 그려요.</p>
+                <div class="type-scroll">
+                  <table class="type-table">
+                    <thead>
+                      <tr><th style="width:88px">유형</th><th>의미</th><th style="width:34%">질문 예시</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td class="k" style="color:#c96a97">구성 분석</td><td>전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td>"~는 몇 %일까?"</td></tr>
+                      <tr><td class="k" style="color:#4f6a96">비교 분석</td><td>서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td>"~과 ~ 중 어느 쪽이 더 클까?"</td></tr>
+                      <tr><td class="k" style="color:#6b559b">분포 분석</td><td>데이터들이 주로 어디에 몰려있고 퍼져있는지 모양을 보는 것</td><td>"~는 주로 어디에 몰려 있을까?" <br>"유난히 다른 값이 있을까?"</br></td></tr>
+                      <tr><td class="k" style="color:#3d7f6c">관계 분석</td><td>두 속성 간에 어떤 관계가 있는지 파악하는 것</td><td>"~랑 ~는 서로 관련이 있을까?"</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="display:flex; flexDirection:column; gap:8px">
+                  <sc-for list="{{ fqItems }}" as="q" hint-placeholder-count="5">
+                    <div style="padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; display:flex; flexDirection:column; gap:8px">
+                      <div style="display:flex; gap:10px; flexWrap:wrap; alignItems:center">
+                        <span style="fontSize:15px; flex:1; minWidth:200px">{{ q.text }}</span>
+                        <span style="display:flex; gap:6px; flexWrap:wrap">
+                          <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
+                            <span onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.v }}</span>
+                          </sc-for>
+                        </span>
+                      </div>
+                      <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
+                        <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============ 핵심 개념 확인 ============ -->
+            <div class="m-card" style="background:#fdf3f0">
+              <div class="m-head" style="background:#f7bfb2">
+                <span class="mono">RECAP</span>
+                <span class="mono r">KEY</span>
+              </div>
+              <div class="m-body">
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:#f7bfb2">✅</div>
+                  <div class="m-title">핵심 개념 확인</div>
+                </div>
+                <div class="type-scroll">
+                  <table class="type-table">
+                    <thead>
+                      <tr><th style="width:120px">개념</th><th>뜻</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td class="k">데이터 시각화</td><td style="background:#e9f6f4">복잡한 데이터를 그래프로 바꾸어 한눈에 패턴과 흐름을 파악할 수 있게 하는 것</td></tr>
+                      <tr><td class="k">구성 분석</td><td style="background:#fdeef4">전체에서 각 그룹이 차지하는 비율</td></tr>
+                      <tr><td class="k">비교 분석</td><td style="background:#eef4fc">서로 다른 그룹의 크기 비교</td></tr>
+                      <tr><td class="k">분포 분석</td><td style="background:#f3eefc">데이터가 몰려있는 구간 파악</td></tr>
+                      <tr><td class="k">관계 분석</td><td style="background:#ecf7f1">두 속성 사이의 관련성 파악</td></tr>
+                      <tr><td class="k">이상치(outlier)</td><td style="background:#ece9f3">대부분의 값에서 혼자 멀리 동떨어져 있는 값</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flexDirection:column; alignItems:center; gap:12px">
+              <div id="pdfBtn" onClick="{{ savePdf }}" style="cursor:pointer; padding:12px 24px; border:3px solid #4b3b6b; borderRadius:10px; background:#9db2f2; color:#26224a; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:18px; boxShadow:4px 4px 0 rgba(75,59,107,.3)" style-active="cursor:pointer; padding:12px 24px; border:3px solid #4b3b6b; borderRadius:10px; background:#8296e0; color:#26224a; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:18px; boxShadow:1px 1px 0 rgba(75,59,107,.3); transform:translate(3px,3px)">📄 PDF로 저장하기</div>
+              <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; alignItems:center; gap:8px; padding:9px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px">SAVED! 활동지 저장 완료</div>
+              </sc-if>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <div id="appFooter" style="display:flex; alignItems:center; justifyContent:center; gap:8px; paddingTop:4px">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="#6b7fa8" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.07-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
+      <span style="fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:300; fontSize:14px; color:#6b7fa8">@sage810</span>
+    </div>
+  </div>
+</div>
+<!-- [design.md §10] 활동 진행률 플로팅 위젯 — zoom:1.1 래퍼 밖에 둠(탭이 하나뿐이라 항상 표시) -->
+<div class="sheet-progress" aria-label="활동 진행률" style="display:flex">
+  <div class="sp-head">PROGRESS</div>
+  <div class="sp-body">
+    <div class="sp-title">활동 진행률</div>
+    <div class="sp-count">
+      <span class="big">{{ sheetPct }}%</span>
+      <span class="sub">{{ sheetDone }}/{{ sheetTotal }}</span>
+    </div>
+    <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="{{ sheetTotal }}" aria-valuenow="{{ sheetDone }}" aria-valuetext="{{ sheetAria }}">
+      <div class="fill" style="{{ sheetFillStyle }}"></div>
+    </div>
+    <sc-if value="{{ sheetSaved }}" hint-placeholder-val="{{ false }}">
+      <span class="sp-done">✓ 제출</span>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+
+class Component extends DCLogic {
+  state = {
+    fGrade: '', fClass: '', fNum: '', fName: '',
+    fq: [null, null, null, null, null],
+    saved: false, savedName: ''
+  };
+
+  componentDidMount() {}
+
+  renderVals() {
+    const s = this.state;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+
+    // ── 형성평가: 질문 → 분석 유형 고르기 (4지선다, 클릭 즉시 채점) ──
+    const FQ = [
+      { t: '우리 반 친구들이 좋아하는 계절을 조사하면 봄·여름·가을·겨울은 각각 몇 %일까?', a: '구성', why: "'몇 %'를 묻고 있으니 전체에서 각 그룹의 비율을 보는 구성 분석이에요.", w: {
+          '비교': "비교 분석은 '어느 쪽이 더 큰가'처럼 두 그룹의 크기를 견줘요. 이 질문은 어느 계절이 더 많은지가 아니라 전체 중 각 계절이 몇 %인지를 물어요.",
+          '분포': "분포 분석은 값들이 어느 구간에 몰려 있는지 퍼진 모양을 봐요. 이 질문은 계절마다 차지하는 비율을 물으니 분포가 아니에요.",
+          '관계': "관계 분석은 '~가 클수록 ~도 큰가'처럼 두 속성의 관련성을 봐요. 이 질문에는 서로 이어지는 두 속성이 없어요." } },
+      { t: '우리 반과 옆 반 중, 지각한 학생 수는 어느 반이 더 많을까?', a: '비교', why: "'어느 쪽이 더 많은지' 두 그룹의 크기를 겨루고 있으니 비교 분석이에요.", w: {
+          '구성': "구성 분석은 전체에서 각 그룹이 차지하는 비율(몇 %)을 봐요. 이 질문은 비율이 아니라 두 반 중 어느 쪽이 더 많은지를 물어요.",
+          '분포': "분포 분석은 값들이 어느 구간에 몰려 있는지를 봐요. 이 질문에는 몰려 있는 정도가 아니라 두 반을 겨루는 비교가 담겨 있어요.",
+          '관계': "관계 분석은 '~가 클수록 ~도 커지는지'처럼 두 속성이 함께 변하는지를 봐요. 이 질문에는 서로 이어지는 두 속성이 없어요." } },
+      { t: '우리 반 중간고사 수학 점수는 어느 구간에 몰려 있을까?', a: '분포', why: "'어느 구간에 몰려 있는지'를 묻고 있으니 데이터가 퍼진 모양을 보는 분포 분석이에요.", w: {
+          '구성': "구성 분석은 전체에서 각 그룹이 몇 %인지 봐요. 이 질문은 비율이 아니라 점수가 어느 구간에 몰려 있는지를 물어요.",
+          '비교': "비교 분석은 서로 다른 그룹의 크기를 견줘요. 이 질문에는 견줄 두 그룹이 없고, 점수들이 몰린 구간을 물어요.",
+          '관계': "관계 분석은 두 속성이 함께 커지는지 봐요. 이 질문에 나온 속성은 '수학 점수' 하나뿐이에요." } },
+      { t: '공부 시간이 길수록 시험 점수도 높아질까?', a: '관계', why: "'~할수록'으로 두 속성을 잇고 있으니 관계 분석이에요.", w: {
+          '구성': "구성 분석은 전체에서 각 그룹의 비율(몇 %)을 봐요. 이 질문은 '~할수록'으로 공부 시간과 점수의 관련성을 물어요.",
+          '비교': "비교 분석은 두 그룹 중 어느 쪽이 더 큰지 봐요. 이 질문은 크기 비교가 아니라 두 속성이 함께 변하는지를 물어요.",
+          '분포': "분포 분석은 값들이 어느 구간에 몰려 있는지 봐요. 이 질문은 '공부 시간'과 '시험 점수' 두 속성의 관계를 물어요." } },
+      { t: '포켓몬의 몸무게가 무거울수록 공격력도 높아질까?', a: '관계', why: "'~할수록'으로 몸무게와 공격력, 두 속성을 잇고 있으니 관계 분석이에요.", w: {
+          '구성': "구성 분석은 전체에서 각 그룹의 비율(몇 %)을 봐요. 이 질문은 비율이 아니라 몸무게와 공격력이 함께 변하는지를 물어요.",
+          '비교': "비교 분석은 두 그룹 중 어느 쪽이 더 큰지를 봐요. 이 질문은 크기 비교가 아니라 두 속성이 함께 움직이는지를 물어요.",
+          '분포': "분포 분석은 값들이 어느 구간에 몰려 있는지를 봐요. 이 질문은 몸무게와 공격력, 두 속성의 관계를 물어요." } }
+    ];
+    const FQ_OPTS = ['구성', '비교', '분포', '관계'];
+    const fqChipStyle = (i, v) => {
+      const pick = s.fq[i];
+      const bg = pick === v ? (v === FQ[i].a ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return "cursor:pointer; border:2px solid #4b3b6b; borderRadius:7px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    };
+    const fqPick = (i, v) => () => this.setState(st => { const a = st.fq.slice(); a[i] = v; return { fq: a }; });
+    const fqItems = FQ.map((q, i) => {
+      const pick = s.fq[i];
+      const right = pick === q.a;
+      return {
+        text: (i + 1) + '. ' + q.t,
+        opts: FQ_OPTS.map(v => ({ v: v + ' 분석', style: fqChipStyle(i, v), pick: fqPick(i, v) })),
+        fb: !pick ? '' : (right ? '⭕ 정답이에요. ' + q.why : '❌ ' + ((q.w && q.w[pick]) ? q.w[pick] + ' ' : '') + '정답은 ' + q.a + ' 분석이에요.'),
+        fbStyle: "padding:9px 12px; border:3px solid #4b3b6b; borderRadius:10px; fontSize:13.5px; lineHeight:1.7; background:" + (right ? '#eaf8f2' : '#fdf3f0')
+      };
+    });
+
+    // ── 활동 진행률 (이름 + 형성평가 5문항) ──
+    const sheetChecklist = [
+      !!(s.fName && s.fName.trim()),
+      !!s.fq[0], !!s.fq[1], !!s.fq[2], !!s.fq[3], !!s.fq[4]
+    ];
+    const sheetDone = sheetChecklist.filter(Boolean).length;
+    const sheetTotal = sheetChecklist.length;
+    const sheetPct = Math.round(sheetDone / sheetTotal * 100);
+    const sheetFillStyle = 'width:' + sheetPct + '%';
+    const sheetSaved = !!s.saved;
+    const sheetAria = sheetTotal + '개 중 ' + sheetDone + '개 완료';
+
+    return {
+      sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria,
+      fGrade: s.fGrade, fClass: s.fClass, fNum: s.fNum, fName: s.fName,
+      setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
+      fqItems,
+      saved: s.saved, savedName: s.savedName || '이름 없는 친구',
+      savePdf: () => {
+        const dig = (v) => String(v == null ? '' : v).replace(/[^0-9]/g, '');
+        const pad2 = (v) => { const d = dig(v); return d ? (d.length < 2 ? ('0' + d).slice(-2) : d) : ''; };
+        const name = String(s.fName == null ? '' : s.fName).trim();
+        const code = dig(s.fGrade) + pad2(s.fClass) + pad2(s.fNum);
+        const fname = ((code ? code + ' ' : '') + (name ? name + ' ' : '') + '활동지').trim();
+        const pdfName = /\.pdf$/i.test(fname) ? fname : fname + '.pdf';
+
+        const H2C = window.html2canvas;
+        const JSPDF = window.jspdf && window.jspdf.jsPDF;
+
+        const printFallback = () => {
+          const prevTitle = document.title;
+          const cleanup = () => {
+            document.body.classList.remove('print-sheet-only');
+            document.title = prevTitle;
+            window.removeEventListener('afterprint', cleanup);
+          };
+          window.addEventListener('afterprint', cleanup);
+          document.title = fname;
+          document.body.classList.add('print-sheet-only');
+          this.setState({ saved: true, savedName: name });
+          setTimeout(() => { window.print(); setTimeout(cleanup, 1000); }, 60);
+        };
+
+        const src = document.getElementById('sheetPrintArea');
+        if (typeof H2C !== 'function' || typeof JSPDF !== 'function' || !src) { printFallback(); return; }
+
+        const btn = document.getElementById('pdfBtn');
+        const btnLabel = btn ? btn.textContent : '';
+        if (btn) { btn.textContent = '⏳ PDF 만드는 중...'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6'; }
+
+        const holder = document.createElement('div');
+        holder.setAttribute('style', 'position:fixed; left:-10000px; top:0; width:820px; padding:24px; background:#ffffff; z-index:-1;');
+        const clone = src.cloneNode(true);
+        clone.style.gap = '18px';
+
+        const cloneBtn = clone.querySelector('#pdfBtn');
+        if (cloneBtn && cloneBtn.parentNode) cloneBtn.parentNode.style.display = 'none';
+
+        // 미배치 칩 트레이·"지우기" 버튼은 결과물에 불필요.
+        const hideEls = clone.querySelectorAll('.seq-tray, .ca-tray, .pz-controls');
+        for (let i = 0; i < hideEls.length; i++) hideEls[i].style.display = 'none';
+
+        // textarea.blank → div (html2canvas 가 textarea 내부 글자를 못 그림).
+        const liveTAs = src.querySelectorAll('textarea.blank');
+        const cloneTAs = clone.querySelectorAll('textarea.blank');
+        for (let i = 0; i < cloneTAs.length; i++) {
+          const ta = cloneTAs[i];
+          const live = liveTAs[i];
+          const box = document.createElement('div');
+          box.textContent = live ? (live.value || '') : (ta.value || '');
+          const inline = ta.classList.contains('blank--inline');
+          box.setAttribute('style',
+            (inline
+              ? 'display:inline-block; min-width:120px; vertical-align:middle; border:2px solid #4b3b6b; border-radius:6px; padding:4px 8px; min-height:30px;'
+              : 'display:block; width:100%; border:2px solid #4b3b6b; border-radius:9px; padding:9px 11px; min-height:42px;')
+            + ' box-sizing:border-box; background:#ffffff; color:#26224a;'
+            + " font-family:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif;"
+            + ' font-size:15px; line-height:1.6; white-space:pre-wrap; overflow-wrap:break-word; word-break:break-word;');
+          if (ta.parentNode) ta.parentNode.replaceChild(box, ta);
+        }
+
+        clone.removeAttribute('id');
+        const dupIds = clone.querySelectorAll('[id]');
+        for (let i = 0; i < dupIds.length; i++) dupIds[i].removeAttribute('id');
+
+        holder.appendChild(clone);
+        document.body.appendChild(holder);
+
+        const done = () => {
+          if (holder.parentNode) holder.parentNode.removeChild(holder);
+          if (btn) { btn.textContent = btnLabel; btn.style.pointerEvents = ''; btn.style.opacity = ''; }
+        };
+
+        const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+        Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))])
+          .then(() => new Promise((r) => setTimeout(r, 80)))
+          .then(() => H2C(clone, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }))
+          .then((canvas) => {
+            const pdf = new JSPDF('p', 'pt', 'a4');
+            const pw = pdf.internal.pageSize.getWidth();
+            const ph = pdf.internal.pageSize.getHeight();
+            const pageCanvasH = Math.floor(canvas.width * ph / pw);
+            let rendered = 0;
+            let page = 0;
+            while (rendered < canvas.height - 1) {
+              const sliceH = Math.min(pageCanvasH, canvas.height - rendered);
+              const part = document.createElement('canvas');
+              part.width = canvas.width;
+              part.height = sliceH;
+              const ctx = part.getContext('2d');
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, part.width, part.height);
+              ctx.drawImage(canvas, 0, rendered, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+              if (page > 0) pdf.addPage();
+              pdf.addImage(part.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, pw, sliceH * pw / canvas.width);
+              rendered += sliceH;
+              page++;
+            }
+            pdf.save(pdfName);
+            this.setState({ saved: true, savedName: name });
+          })
+          .catch((err) => {
+            console.error('[savePdf]', err);
+            alert('PDF를 만드는 중 문제가 생겼어요. 잠시 후 다시 눌러 주세요.');
+          })
+          .then(done, done);
+      }
+    };
+  }
+}
+</script>
+<!-- [spec/data4-4steps-sequencing] PREVIOUSLY 카드 순서 배열 드래그 엔진.
+     data4 에는 dnd 엔진이 없어 신규. sc-if 늦은 마운트/재마운트에 견디도록 document 위임(활동 guide §1-8 패턴).
+     상태는 DOM-only + 매 마운트 재초기화(spec §7 대안 B) — 탭 전환 시 초기 뒤섞임으로 리셋됨. -->
+<script data-msi-src="shared/partials/seq-order.js"></script>
+<!-- 셀 주소 정리 문장 — 열/행 짝짓기 드래그. data4 엔 범용 dnd 엔진이 없어 이 문장 전용으로 신규(#caTray/#caSlot1·2/#caResult).
+     seq 엔진(#seqTrayPrev 하드코딩)과 클래스 네임스페이스가 겹치지 않음. document 위임이라 sc-if 재마운트에 견딤(단, 탭 전환 시 배치는 초기화). -->
+<script data-msi-src="shared/partials/chip-slot.js"></script>
+<!-- 모든 답 빈칸(textarea.blank) 자동 세로 확장 — 입력 텍스트가 잘리지 않고 전부 보이도록.
+     sc-if 로 늦게/다시 마운트되므로 input·focusin·click·resize·초기 인터벌 여러 시점에 재적용. -->
+<script data-msi-src="shared/partials/autogrow.js"></script>
+<!-- [data5] CODAP 그래프 붙여넣기 칸(.paste-zone) — 클릭 후 Ctrl+V 로 이미지 붙여넣기 / 그림 파일 드래그&드롭.
+     상태는 DOM-only(칸 안 <img>). savePdf 는 #sheetPrintArea 복제본을 캡처하므로 붙여넣은 그림이 PDF 에도 그대로 담긴다. -->
+<script data-msi-src="shared/partials/paste-zone.js"></script>
+</body>
+</html>
