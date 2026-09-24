@@ -9,7 +9,10 @@
 대상: `lessons/*/<차시>/` 의 `lesson.html`(소스)과 빌드 결과. 특히 볼 것: <특히 볼 것>
 
 1. `npm run check -- <차시>` 를 실행하고 결과를 기록한다. `dist/check/<단원>-<차시>-pages-01.png` 부터 끝 조각까지 모두 Read 로 열어 본다.
-2. 아래 기준과 대조한다. 근거 문서는 필요한 절만 열어 본다.
+2. **better-interface 스킬을 불러**(Skill 도구, 안 되면 `.claude/skills/better-interface/SKILL.md` 를 읽고 따름) 그 방식대로 검수한다 —
+   분야별 better-* 기준, 증거(`파일:줄`) 필수, HIGH/MEDIUM/LOW, 최대 15개.
+   단, 이 저장소의 `docs/rules/design.md` 는 **의도된 디자인 시스템**이다. 토큰 자체를 바꾸라는 제안은 "설계 제안"으로 따로 한 줄에만 적고,
+   수정 제안은 토큰 **안에서** 한다. 아래 프로젝트 기준도 함께 대조한다(근거 문서는 필요한 절만).
    - **디자인** (`docs/rules/design.md`): §2.1 색 토큰 밖의 색, 미션 accent 8색 순환(§4.1) 어긋남, 한 미션 안 냉/난색 섞임,
      글자 대비 4.5:1 미만, 새로 만든 모서리·그림자·서체.
    - **구조·동작** (`.claude/skills/lesson-edit/references/rules.md`): aria-label 중복·누락, 학생 화면에 정답 노출,

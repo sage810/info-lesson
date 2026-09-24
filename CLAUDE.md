@@ -5,6 +5,7 @@
 1. `git status` 로 변경사항 확인 — 커밋 안 된 게 있으면 먼저 알린다.
 2. 충돌 위험이 없으면 `git pull`.
 3. `node_modules` 가 없으면 `npm install` (처음 한 번. 브라우저 검사용 playwright-core 만 설치됨).
+4. `.claude/napkin.md`(이 저장소에서 반복된 실수·요령)를 읽고 따른다 — napkin 스킬. 새로 배운 요령은 거기에 정리한다.
 
 ## 구조 한눈에
 
@@ -12,7 +13,7 @@
 - **공용**: `shared/` (폰트·라이브러리·여러 차시가 같이 쓰는 그림·동작 스크립트) — 바꾸면 모든 차시에 영향
 - **배포본**: `dist/` — `npm run build` 결과. **손으로 고치지 않는다**(git 에도 안 올라감)
 - **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드) · 이력: `docs/log/`
-- **스킬 목록·사용법**: `.claude/README.md` · 사람용 안내: `README.md`
+- **스킬 목록·사용법**: `.claude/README.md`(우리 스킬) · `.claude/external-skills.md`(가져온 외부 스킬) · 사람용 안내: `README.md`
 
 ## 꼭 지킬 것
 
