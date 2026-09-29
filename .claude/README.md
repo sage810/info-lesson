@@ -1,6 +1,6 @@
 # 스킬 모음 — 무엇이 있고 어떻게 부르나
 
-이 저장소에는 **우리가 만든 스킬 4개(`lesson-*`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
+이 저장소에는 **우리가 만든 스킬 5개(`lesson-*` · `skill-guide`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
 모든 일은 메인 대화에서 선생님과 주고받으며 하고, "새 눈으로 검수"처럼 따로 떼는 게 나은 일만 `lesson-check` 가 필요할 때
 기본(범용) 서브에이전트를 잠깐 씁니다. (같은 서브에이전트 호출을 자꾸 반복하게 되면 그때 `.claude/agents/` 에 하나씩 추가.)
 
@@ -16,6 +16,7 @@
 | **lesson-new** | 새 차시를 처음 만들 때 | `/lesson-new 08 유튜브 데이터로 관계 분석` · "이 PDF 로 8차시 만들어줘" | 아이디어 2~3개 → 선택 → spec.md → 차시 폴더 → 본문 조립 (단계마다 멈춰서 확인) |
 | **lesson-teacher** | 교사용 화면·정답지 PDF | `/lesson-teacher 06` · "6차시 정답지 PDF" | answers.json 채우기 → `npm run teacher` → PDF 확인 |
 | **lesson-check** | 배포 전 점검·검수 | `/lesson-check 06` · "05, 06 새 눈으로 검수해줘" | 자동 검사 + (요청 시) 서브에이전트가 better-interface 방식으로 검수 → 고를 항목만 수정 |
+| **skill-guide** | 어떤 스킬을 어떻게 쓸지 보고 고르고 싶을 때 | `? 06 빈칸 안내 문구 다듬어줘` · `스킬: 06 색 대비 확인` · `/skill-guide …` | 맞는 스킬로 계획 2~3개 비교(무엇·이번엔·조정·결과물) → 고른 것만 실행 → "앞으로도"면 조정을 저장(우리 스킬은 SKILL.md, 외부 스킬은 napkin.md) |
 
 ## 가져온 외부 스킬 (요약 — 자세히는 external-skills.md)
 
@@ -33,12 +34,14 @@
 ├─ README.md                ← 지금 이 문서 (목록·사용법)
 ├─ external-skills.md       ← 가져온 외부 스킬 안내 (호출법·활용·출처·안 넣은 것)
 ├─ napkin.md                ← napkin 스킬이 관리하는 저장소 요령 모음
-├─ settings.json            ← 허용된 명령(npm run …, git status 등)
+├─ settings.json            ← 허용된 명령(npm run …, git status 등) + hook 등록
+├─ hooks/skill-guide.js     ← 요청 앞의 `?`·`스킬:` 을 보고 skill-guide 를 켜는 hook
 └─ skills/
    ├─ lesson-edit/   SKILL.md + references/rules.md        ┐
-   ├─ lesson-new/    SKILL.md                              │ 우리 스킬
-   ├─ lesson-teacher/SKILL.md                              │
-   ├─ lesson-check/  SKILL.md + references/review-prompt.md┘
+   ├─ lesson-new/    SKILL.md                              │
+   ├─ lesson-teacher/SKILL.md                              │ 우리 스킬
+   ├─ lesson-check/  SKILL.md + references/review-prompt.md│
+   ├─ skill-guide/   SKILL.md                              ┘
    ├─ napkin/                                              ┐
    ├─ better-interface/  interface-review/                 │ 가져온 외부 스킬 (원본 그대로 + LICENSE)
    ├─ better-accessibility/ better-layout/ better-writing/ │

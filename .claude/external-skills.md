@@ -1,7 +1,7 @@
 # 가져온 외부 스킬 안내
 
 `agent-skills-정리.md`(2026-09-24)에 있는 60개 중에서 **이 저장소(정보 수업 활동지)에 실제로 쓸 만한 것**만 골라
-`.claude/skills/` 에 넣었습니다. 우리가 만든 스킬 4개(`lesson-*`)는 `.claude/README.md` 를 보세요.
+`.claude/skills/` 에 넣었습니다. 우리가 만든 스킬(`lesson-*` · `skill-guide`)은 `.claude/README.md` 를 보세요.
 
 ## 한눈에
 

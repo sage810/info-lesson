@@ -20,7 +20,7 @@
 | `data/` | NEIS 시간표·급식 원자료와 `neis-snapshot.json` | `npm run neis` 가 갱신 |
 | `apps-script/` | Google Apps Script 작은 API (제출 PDF 모으기 · NEIS 프록시) + 배포 방법 | 배포할 때 한 번 |
 | `input/` | 원자료: 캡처 이미지·CSV·Claude Design 원본 | 자료를 넣을 때 |
-| `.claude/` | Claude Code 스킬 — 우리 스킬 4개(`.claude/README.md`) + 가져온 외부 스킬 10개(`.claude/external-skills.md`) · 저장소 요령 모음 `napkin.md` | — |
+| `.claude/` | Claude Code 스킬 — 우리 스킬 5개(`.claude/README.md`) + 가져온 외부 스킬 10개(`.claude/external-skills.md`) · 저장소 요령 모음 `napkin.md` | — |
 | `dist/` | 빌드 결과 (git 에 안 올라감) | ❌ |
 
 ## 차시 목록
