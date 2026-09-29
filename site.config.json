@@ -1,6 +1,6 @@
 {
-  "apiUrl": "",
+  "apiUrl": "https://script.google.com/macros/s/AKfycbyjJLkzWyPK6u-Jpg5ZZdEgltVJ5UO3wYMACYVAzR_bsETa6xO940byksvwMqTG3JCR/exec",
   "submit": false,
-  "neisProxy": false,
+  "neisProxy": true,
   "submitToken": ""
 }
