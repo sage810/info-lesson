@@ -20,6 +20,9 @@
 - 활동지 수정은 `lesson-edit` 스킬 규칙대로: 최소 diff, 표식(`<script data-msi-src>`·`msi-asset:`·NEIS 스냅샷) 보존,
   그림은 base64 로 붙이지 말고 `assets/` + `msi-asset:./assets/…`.
 - 수정할 때마다 `npm run check -- <차시>` 를 돌리고 캡처로 확인한 뒤 결과를 알린다.
+- 4탭(이용 규칙·시간표·오늘의 급식·수업 활동지) 차시를 새로 만들거나 가져오면(`npm run new`·`npm run import`)
+  급식 일간 모양을 `docs/rules/portal/lunch.md` §5.3 대로 — 메뉴 이름 가운데, 알레르기 태그는 다음 줄 가운데(태그 없으면 줄 생략).
+  `lesson.html` 에 `m.hasAl` 이 없으면 예전 모양이니 고친다.
 - API 키·비밀번호·`.env` 는 커밋하지 않는다. NEIS 키는 Apps Script 의 스크립트 속성(NEIS_KEY)에만 둔다.
   (`site.config.json` 의 apiUrl·submitToken 은 페이지에 공개되는 값이라 커밋해도 된다.)
 
