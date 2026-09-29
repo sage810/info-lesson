@@ -32,7 +32,7 @@
 | `data-analysis/02` | 파일과 확장자 | standalone | — |
 | `data-analysis/04` | 데이터로 문제 해결하기 — 4단계와 표 읽기 | portal (4탭) | `answers.md` (순서 배열) |
 | `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | — |
-| `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | sheet | `answers.json` (정답지 PDF 가능) |
+| `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | portal (4탭) | `answers.json` (정답지 PDF 가능) |
 | `data-analysis/07` | 신입 유튜버의 국내 TOP 100 채널 분석 | standalone | `answers.md` (채점 기준) |
 
 ## 처음 한 번 (Windows)

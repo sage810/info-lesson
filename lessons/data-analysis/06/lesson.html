@@ -14,10 +14,6 @@
 /* Silkscreen (라틴 전용) woff2 인라인 — 외부 폰트가 CSP로 막혀도 픽셀 라벨 유지 */
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-700.woff2) format('woff2');}
-  /* [data5] 스샷으로 캡처하고 붙여넣는 방법 — Win+Shift+S 키 위치 사진 (input/keyboard.png 인라인, 5곳 공용) */
-  .kb-shot { display: block; width: 240px; max-width: 100%; aspect-ratio: 309 / 343;
-    border: 3px solid #4b3b6b; border-radius: 8px; background: #fff url(msi-asset:./assets/keyboard.png) center / contain no-repeat; }
-  @media print { .kb-shot { aspect-ratio: 309 / 300; } }
 </style>
 <!-- react@18.3.1 UMD production (unpkg 인라인) — loadReactUmd() 가 window.React 존재 시 fetch 스킵 -->
 <script data-msi-src="shared/vendor/react.production.min.js"></script>
@@ -200,6 +196,23 @@
       height: auto !important; overflow: visible !important; }
   }
 
+
+  /* 스샷 붙여넣기 칸 — contenteditable, 캡처한 이미지를 Ctrl+V 로 붙여넣는다. */
+  .shot-paste {
+    box-sizing: border-box; width: 100%; min-height: 180px;
+    border: 3px dashed #b3a8cc; border-radius: 9px; background: #fdf6fa;
+    padding: 12px; color: #4b3b6b;
+    font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-size: 14px; line-height: 1.6;
+    overflow: auto;
+  }
+  .shot-paste:focus { border-color: #ee9dbf; background: #fff; outline: none; }
+  .shot-paste:empty::before { content: attr(data-ph); color: #b3a8cc; }
+  .shot-paste img { max-width: 100%; height: auto; }
+  @media print {
+    .shot-paste { background: #fff !important; border: 2px solid #4b3b6b !important;
+      min-height: 240px; overflow: visible !important; }
+    .shot-paste:empty::before { content: ''; }
+  }
   /* 셀 주소 정리 문장 — 짝짓기 드래그(열/행) */
   .ca-tray { display: flex; gap: 8px; flex-wrap: wrap; }
   .ca-chip {
@@ -266,8 +279,8 @@
   .m-lead { font-size: 15px; line-height: 1.8; margin: 0; }
   .m-sub { font-size: 14px; color: #8b7cb8; line-height: 1.7; margin: 0; }
   .m-hd2 { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 7px; }
-  .m-divider { border: 0; height: auto; margin: 28px 0 18px; text-align: center; line-height: 1; user-select: none; }
-  .m-divider::before { content: "✨ ✨ ✨"; font-size: 15px; letter-spacing: 10px; opacity: .85; }
+  .m-divider { text-align: center; font-size: 13px; letter-spacing: 10px; color: rgba(75,59,107,.4); margin: 60px 0; }
+  .m-divider::before { content: "🌸 🌸 🌸"; }
 
   .callout { border: 3px solid #4b3b6b; border-radius: 12px; padding: 12px 15px; font-size: 14px; line-height: 1.85; box-shadow: 4px 4px 0 rgba(75,59,107,.14); }
   .callout .c-lbl { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px; display: block; margin-bottom: 4px; }
@@ -275,6 +288,38 @@
   .callout--ask { background: #fff6e6; }
   .callout--warn { background: #fdf0ee; }
   .callout--tip { background: #f3eefe; }
+  /* ── 그래프 캡처 방법 안내 카드 (MISSION 2~5 공통) ── */
+  .cap-guide { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+  .cap-guide__shot {
+    flex: 0 0 auto; width: 176px; box-sizing: border-box;
+    border: 3px solid #4b3b6b; border-radius: 12px; background: #fff;
+    padding: 7px; box-shadow: 3px 3px 0 rgba(75,59,107,.18);
+  }
+  .cap-guide__shot img { display: block; width: 100%; border-radius: 7px; }
+  .cap-guide__shot .cg-cap {
+    margin-top: 5px; text-align: center; font-size: 9px; letter-spacing: .4px;
+    font-family: 'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; color: #9c8dc4;
+  }
+  .cap-guide__steps { flex: 1 1 230px; display: flex; flex-direction: column; gap: 9px; }
+  .cap-guide__step {
+    display: flex; align-items: center; gap: 10px;
+    border: 2px solid #4b3b6b; border-radius: 10px; background: #fffdf7;
+    padding: 8px 12px; font-size: 13.5px; line-height: 1.5; color: #4b3b6b;
+  }
+  .cap-guide__n {
+    flex: 0 0 auto; width: 22px; height: 22px; border-radius: 999px;
+    background: #d6c4f5; border: 2px solid #4b3b6b;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif;
+    font-weight: 700; font-size: 12px; color: #4b3b6b;
+  }
+  .cap-guide__step b { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; }
+  @media (max-width: 560px) {
+    .cap-guide { flex-direction: column; align-items: stretch; }
+    .cap-guide__shot { align-self: center; width: 200px; }
+  }
+  @media print { .cap-guide__shot { box-shadow: none; } .cap-guide__step { background: #fff; } }
+
   .callout .em { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #6b559b; }
 
   .type-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
@@ -298,6 +343,8 @@
   .shot-ph img { max-width: 100%; border-radius: 6px; border: 1px solid #e3dcf2; }
   .shot-ph:has(img) { border-style: solid; border-color: #4b3b6b; background: #fff; }
   .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 10px; }
+  .shot-grid--2x2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 420px) { .shot-grid--2x2 { grid-template-columns: 1fr; } }
 
   .paste-zone { min-height: 210px; border: 3px dashed #b3a8cc; border-radius: 12px; background: #fdf6fa;
     display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; cursor: text; }
@@ -317,7 +364,7 @@
   .paste-empty { font-size: 14px; color: #8b7cb8; line-height: 1.9; }
   .paste-empty .kbd { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; color: #4b3b6b; }
   .paste-empty .sm { font-size: 12px; color: #b3a8cc; }
-  .pz-controls { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .pz-controls { display: flex; justify-content: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
   .pz-controls button { cursor: pointer; padding: 6px 12px; border: 2px solid #4b3b6b; border-radius: 8px; background: #fffdf7;
     font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 12px; color: #4b3b6b; }
   .pz-controls button:active { transform: translate(1px,1px); }
@@ -365,6 +412,12 @@
       <div id="appTitlebar" style="display:flex; alignItems:flex-end; gap:14px; padding:14px 16px 0; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)">
         <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:25px; letterSpacing:.5px; flex:none; whiteSpace:nowrap; paddingBottom:12px">🏫 신현중학교 정보</div>
         <div style="flex:1"></div>
+        <div style="display:flex; gap:4px; alignItems:flex-end">
+          <div onClick="{{ goRules }}" style="{{ tabRules }}"><span>📜</span><span>이용 규칙</span></div>
+          <div onClick="{{ goTime }}" style="{{ tabTime }}"><span>🕒</span><span>시간표</span></div>
+          <div onClick="{{ goMeal }}" style="{{ tabMeal }}"><span>🍚</span><span>오늘의 급식</span></div>
+          <div onClick="{{ goSheet }}" style="{{ tabSheet }}"><span>✏️</span><span>수업 활동지</span></div>
+        </div>
         <div style="display:flex; gap:6px; paddingBottom:12px">
           <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">_</div>
           <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">□</div>
@@ -376,7 +429,313 @@
 
       <div style="padding:24px 22px 30px">
 
+        <sc-if value="{{ isRules }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; gap:12px">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">컴퓨터실 이용 규칙</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#fbe6a2; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">READ ME</div>
+            </div>
 
+            <div style="border:4px solid #4b3b6b; borderRadius:14px; background:#fdf6fa; boxShadow:6px 6px 0 rgba(75,59,107,.2); overflow:hidden">
+              <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:linear-gradient(90deg,#f9cade,#d6c4f5); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">HOW_TO_USE.txt</div>
+              <div style="padding:18px 20px 20px; display:flex; flexDirection:column; gap:14px">
+                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:26px">컴퓨터실, 이렇게 사용해요!</div>
+                <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px">
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#bfe9dd; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🧴</span>
+                    <span>손소독제 or 손씻기</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#c4d8f7; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🪑</span>
+                    <span>자기 자리 앉기</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#fbe6a2; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🚫</span>
+                    <span>물 &amp; 음료 &amp; 간식 X</span>
+                  </div>
+                  <div style="display:flex; alignItems:center; gap:10px; padding:12px 14px; border:3px solid #4b3b6b; borderRadius:11px; background:#f7bfb2; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px">
+                    <span style="width:30px; height:30px; flex:none; border:3px solid #4b3b6b; borderRadius:8px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontSize:15px">🚫</span>
+                    <span>의자 이동 X</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#fdf3f8; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#f9cade; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_01.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">들어올 때</div>
+                  <div>• 손을 씻고 들어와요.</div>
+                  <div>• 내 자리 번호를 확인하고 앉아요.</div>
+                  <div>• 수업을 위해 로그인을 먼저 하고, 타자 연습을 해요.</div>
+                </div>
+              </div>
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#f2f6fe; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#c4d8f7; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_02.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">사용할 때</div>
+                  <div>• 수업 할 때는 수업과 관련되지 않은 걸 하지 않아요.</div>
+                  <div>• 친구 노트북을 함부로 만지지 않아요.</div>
+                  <div>• 궁금한 건 손을 들고 물어봐요.</div>
+                </div>
+              </div>
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; background:#f2fbf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_03.txt</div>
+                <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
+                  <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">나갈 때</div>
+                  <div>• 노트북 모니터를 닫지 않아요.</div>
+                  <div>• 의자를 제자리에 넣어요.</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; gap:14px; flexWrap:wrap; alignItems:stretch">
+              <div style="flex:1; minWidth:280px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#d6c4f5; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">MESSAGE</div>
+                <div style="padding:16px; display:flex; gap:14px; alignItems:center">
+                  <div style="width:54px; height:54px; borderRadius:50%; border:3px solid #4b3b6b; background:#f9cade; display:flex; alignItems:center; justifyContent:center; fontSize:26px; animation:floaty 3s ease-in-out infinite">♥</div>
+                  <div style="fontSize:15px; lineHeight:1.7">약속을 지키면 모두가 즐거운 수업이 돼요.<br>세 가지만 기억해요 — <b>조용히, 함께, 깨끗하게!</b></div>
+                </div>
+              </div>
+              <div style="width:210px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
+                <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:#fbe6a2; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">LOADING</div>
+                <div style="padding:16px; display:flex; flexDirection:column; gap:10px">
+                  <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">&gt; GOOD MANNERS 100%</div>
+                  <div style="height:16px; border:3px solid #4b3b6b; borderRadius:4px; display:flex; gap:2px; padding:2px; background:#fff">
+                    <div style="flex:1; background:#f7a8c4"></div>
+                    <div style="flex:1; background:#f7a8c4"></div>
+                    <div style="flex:1; background:#d6c4f5"></div>
+                    <div style="flex:1; background:#d6c4f5"></div>
+                    <div style="flex:1; background:#c4d8f7"></div>
+                    <div style="flex:1; background:#c4d8f7"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isTime }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">시간표</div>
+              <div style="border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; padding:5px 14px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; boxShadow:3px 3px 0 rgba(75,59,107,.18)">{{ todayLabel }}</div>
+<div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#c4d8f7; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">TIMETABLE</div>
+              
+            </div>
+
+            
+
+            <div style="border:3px solid #4b3b6b; borderRadius:14px; background:#f7f4fd; padding:12px 22px; display:flex; gap:18px; justifyContent:center; alignItems:center; flexWrap:wrap; boxShadow:5px 5px 0 rgba(75,59,107,.18); alignSelf:center">
+              <div style="display:flex; alignItems:center; gap:10px">
+                <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">GRADE</div>
+                <select value="{{ gradeVal }}" onChange="{{ setGrade }}" style="appearance:none; cursor:pointer; padding:9px 32px 9px 15px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; backgroundImage:linear-gradient(45deg, transparent 50%, #4b3b6b 50%), linear-gradient(135deg, #4b3b6b 50%, transparent 50%); backgroundPosition:calc(100% - 18px) 19px, calc(100% - 13px) 19px; backgroundSize:5px 5px, 5px 5px; backgroundRepeat:no-repeat; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; outline:none; boxShadow:3px 3px 0 rgba(75,59,107,.18)">
+                  <sc-for list="{{ gradeOpts }}" as="g" hint-placeholder-count="3">
+                    <option value="{{ g.value }}">{{ g.label }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div style="display:flex; alignItems:center; gap:10px">
+                <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">CLASS</div>
+                <select value="{{ classVal }}" onChange="{{ setCls }}" style="appearance:none; cursor:pointer; padding:9px 32px 9px 15px; border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; backgroundImage:linear-gradient(45deg, transparent 50%, #4b3b6b 50%), linear-gradient(135deg, #4b3b6b 50%, transparent 50%); backgroundPosition:calc(100% - 18px) 19px, calc(100% - 13px) 19px; backgroundSize:5px 5px, 5px 5px; backgroundRepeat:no-repeat; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; outline:none; boxShadow:3px 3px 0 rgba(75,59,107,.18)">
+                  <sc-for list="{{ classOpts }}" as="c" hint-placeholder-count="12">
+                    <option value="{{ c.value }}">{{ c.label }}</option>
+                  </sc-for>
+                </select>
+              </div>
+            </div><div style="display:flex; flexDirection:column; alignItems:center; gap:8px">
+              <div style="display:flex; gap:10px; justifyContent:center; flexWrap:wrap">
+                <sc-for list="{{ timeViews }}" as="v" hint-placeholder-count="3">
+                  <div onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</div>
+                </sc-for>
+              </div>
+              
+            </div>
+
+            <sc-if value="{{ timeIsDay }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flexDirection:column; gap:12px; alignItems:center">
+                <div style="width: 100%; maxWidth: 560px; border: 3px solid #4b3b6b; overflow: hidden; background: #fffdf7; boxShadow: 5px 5px 0 rgba(75,59,107,.18); borderRadius: 12px">
+                  <sc-for list="{{ dayRows }}" as="r" hint-placeholder-count="7">
+                    <div style="{{ r.rowStyle }}">
+                      <div style="padding:12px 8px; textAlign:center; borderRight:3px solid #4b3b6b; background:#f7f4fd">
+                        <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">{{ r.period }}</div>
+                        <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#8b7cb8">{{ r.time }}</div>
+                        <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#a89cc4">{{ r.endTime }}</div>
+                      </div>
+                      <div style="padding:12px 16px; display:flex; alignItems:center; gap:11px">
+                        <div style="{{ r.tagStyle }}">{{ r.subject }}</div>
+                        <div style="flex:1"></div>
+                        <div style="{{ r.statusStyle }}">{{ r.statusLabel }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ timeIsWeek }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18)">
+                <div style="display:grid; gridTemplateColumns:78px repeat(5, 1fr); background:#d6c4f5; borderBottom:3px solid #4b3b6b">
+                  <div style="padding:10px 8px; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; textAlign:center; borderRight:3px solid #4b3b6b">TIME</div>
+                  <sc-for list="{{ weekHeads }}" as="h" hint-placeholder-count="5">
+                    <div style="{{ h.style }}">
+                      <div>{{ h.label }}</div>
+                      <div style="{{ h.dateStyle }}">{{ h.date }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ weekRows }}" as="row" hint-placeholder-count="6">
+                  <div style="display:grid; gridTemplateColumns:78px repeat(5, 1fr); borderBottom:2px dashed rgba(75,59,107,.3); background:#fffdf7">
+                    <div style="padding:12px 6px; textAlign:center; borderRight:3px solid #4b3b6b; background:#f7f4fd">
+                      <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">{{ row.period }}</div>
+                      <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#8b7cb8">{{ row.time }}</div>
+                      <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px; color:#a89cc4">~{{ row.endTime }}</div>
+                    </div>
+                    <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="5">
+                      <div style="{{ cell.cellStyle }}">
+                        <div style="{{ cell.style }}">{{ cell.subject }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ timeIsMonth }}" hint-placeholder-val="{{ false }}">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18); background:#fffdf7">
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr); background:#c4d8f7; borderBottom:3px solid #4b3b6b">
+                  <sc-for list="{{ dowHeads }}" as="d" hint-placeholder-count="7">
+                    <div style="padding:8px 4px; textAlign:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ d }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr)">
+                  <sc-for list="{{ monthCells }}" as="c" hint-placeholder-count="35">
+                    <div style="{{ c.boxStyle }}">
+                      <div style="display:flex; justifyContent:space-between; alignItems:center">
+                        <span style="{{ c.dayStyle }}">{{ c.day }}</span>
+                        <span style="fontSize:11px; color:#a596cc">{{ c.badge }}</span>
+                      </div>
+                      <sc-for list="{{ c.chips }}" as="ch" hint-placeholder-count="7">
+                        <div style="{{ ch.style }}">
+                          <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:8px">{{ ch.label }}</span>
+                          <span style="{{ ch.subStyle }}">{{ ch.sub }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="display:flex; alignItems:flex-start; gap:10px; border:3px solid #4b3b6b; borderRadius:12px; background:#fbe6a2; padding:12px 16px; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+              <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#8a7132; paddingTop:3px">NOTE</span>
+              <span style="fontSize:15px; lineHeight:2; display:flex; alignItems:center; gap:6px; flexWrap:wrap">
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#c9c2ea; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">동아리 활동</span>
+                <span>은</span>
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#a9dce4; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">동아리 시간</span>
+                <span>일 수도 있고,</span>
+                <span style="border:2px solid #4b3b6b; borderRadius:7px; background:#f7bfb2; padding:2px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px">학스 시간</span>
+                <span>일 수도 있어요.</span>
+              </span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMeal }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flexDirection:column; gap:18px">
+            <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
+              <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">오늘의 급식</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#bfe9dd; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">LUNCH.EXE</div>
+            </div>
+
+            <div style="display:flex; flexDirection:column; alignItems:center; gap:8px">
+              <div style="display:flex; gap:10px; justifyContent:center; flexWrap:wrap">
+                <sc-for list="{{ mealViews }}" as="v" hint-placeholder-count="3">
+                  <div onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</div>
+                </sc-for>
+              </div>
+              
+            </div>
+
+            <sc-if value="{{ mealIsDay }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; gap:16px; flexWrap:wrap; alignItems:stretch; justifyContent:center">
+                <div style="width:100%; maxWidth:560px; border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:6px 6px 0 rgba(75,59,107,.2)">
+                  <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between; alignItems:center">
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_LUNCH</span>
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ todayMeal.date }}</span>
+                  </div>
+                  <div style="padding:18px; display:flex; flexDirection:column; gap:12px">
+                    <sc-for list="{{ todayMeal.items }}" as="m" hint-placeholder-count="5">
+                      <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa">
+                        <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">{{ m.name }}</span>
+                        <span style="display:flex; gap:5px; flexWrap:wrap">
+                          <sc-for list="{{ m.allergens }}" as="a" hint-placeholder-count="2">
+                            <span style="{{ a.style }}">{{ a.label }}</span>
+                          </sc-for>
+                        </span>
+                      </div>
+                    </sc-for>
+                    <div style="display:flex; alignItems:center; justifyContent:center; gap:10px; padding:11px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#bfe9dd">
+                      <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#3d7f6c">TOTAL</span>
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">오늘 전체 칼로리</span>
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">{{ todayMeal.kcal }} kcal</span>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ mealIsWeek }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; gridTemplateColumns:repeat(auto-fit, minmax(190px,1fr)); gap:14px">
+                <sc-for list="{{ weekMeals }}" as="w" hint-placeholder-count="5">
+                  <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
+                    <div style="padding:8px 12px; borderBottom:3px solid #4b3b6b; background:{{ w.color }}; display:flex; justifyContent:space-between; alignItems:center">
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">{{ w.day }}</span>
+                      <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">{{ w.date }}</span>
+                    </div>
+                    <div style="padding:12px 14px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6">
+                      <sc-for list="{{ w.items }}" as="i" hint-placeholder-count="5">
+                        <div>· {{ i }}</div>
+                      </sc-for>
+                      <div style="marginTop:6px; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px; color:#9c8dc4">{{ w.kcal }} KCAL</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ mealIsMonth }}" hint-placeholder-val="{{ false }}">
+              <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; boxShadow:5px 5px 0 rgba(75,59,107,.18); background:#fffdf7">
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr); background:#bfe9dd; borderBottom:3px solid #4b3b6b">
+                  <sc-for list="{{ dowHeads }}" as="d" hint-placeholder-count="7">
+                    <div style="padding:8px 4px; textAlign:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ d }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid; gridTemplateColumns:repeat(7,1fr)">
+                  <sc-for list="{{ mealMonthCells }}" as="c" hint-placeholder-count="35">
+                    <div style="{{ c.boxStyle }}">
+                      <div style="display:flex; justifyContent:space-between; alignItems:center">
+                        <span style="{{ c.dayStyle }}">{{ c.day }}</span>
+                        
+                      </div>
+                      <div style="display:flex; flexDirection:column; alignItems:center; gap:2px; fontSize:11px; lineHeight:1.4; color:#6b5b93; textAlign:center">
+                        <sc-for list="{{ c.menu }}" as="mi" hint-placeholder-count="5">
+                          <div>{{ mi }}</div>
+                        </sc-for>
+                        <div>{{ c.main }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSheet }}" hint-placeholder-val="{{ false }}">
           <div id="sheetPrintArea" style="display:flex; flexDirection:column; gap:18px">
             <div style="display:flex; alignItems:center; gap:12px; flexWrap:wrap">
               <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">수업 활동지</div>
@@ -473,10 +832,10 @@
                       <tr><th style="width:88px">유형</th><th>의미</th><th style="width:34%">질문 예시</th></tr>
                     </thead>
                     <tbody>
-                      <tr><td class="k" style="color:#c96a97">구성 분석</td><td style="background:#fdeef4">전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td style="background:#fdeef4">"~는 몇 %일까?"</td></tr>
-                      <tr><td class="k" style="color:#4f6a96">비교 분석</td><td style="background:#eef4fc">서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td style="background:#eef4fc">"~과 ~ 중 어느 쪽이 더 클까?"</td></tr>
-                      <tr><td class="k" style="color:#6b559b">분포 분석</td><td style="background:#f3eefc">데이터들이 주로 어디에 몰려있고 퍼져있는지 모양을 보는 것</td><td style="background:#f3eefc">"~는 주로 어디에 몰려 있을까?" <br>"유난히 다른 값이 있을까?"</br></td></tr>
-                      <tr><td class="k" style="color:#3d7f6c">관계 분석</td><td style="background:#ecf7f1">두 속성 간에 어떤 관계가 있는지 파악하는 것</td><td style="background:#ecf7f1">"~랑 ~는 서로 관련이 있을까?"</td></tr>                    </tbody>
+                      <tr><td class="k" style="color:#c96a97"><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 1행 유형이름" style="width:56px"></textarea> 분석</td><td style="background:#fdeef4">전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td style="background:#fdeef4">~는 <textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 1행 질문예시" style="width:90px"></textarea>?</td></tr>
+                      <tr><td class="k" style="color:#4f6a96"><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 2행 유형이름" style="width:56px"></textarea> 분석</td><td style="background:#eef4fc">서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td style="background:#eef4fc">~과 ~ 중 <textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 2행 질문예시" style="width:140px"></textarea>?</td></tr>
+                      <tr><td class="k" style="color:#6b559b"><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 3행 유형이름" style="width:56px"></textarea> 분석</td><td style="background:#f3eefc"><textarea class="blank" rows="2" aria-label="M1 유형표 3행 의미"></textarea></td><td style="background:#f3eefc"><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 3행 질문예시1" style="width:230px"></textarea>? <br><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 3행 질문예시2" style="width:225px"></textarea>?</br></td></tr>
+                      <tr><td class="k" style="color:#3d7f6c"><textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 4행 유형이름" style="width:56px"></textarea> 분석</td><td style="background:#ecf7f1"><textarea class="blank" rows="2" aria-label="M1 유형표 4행 의미"></textarea></td><td style="background:#ecf7f1">~랑 ~는 <textarea class="blank blank--inline" rows="1" aria-label="M1 유형표 4행 질문예시" style="width:140px"></textarea>?</td></tr>                    </tbody>
                   </table>
                 </div>
 
@@ -515,17 +874,17 @@
 
                 <div class="callout callout--reason">
                   <span class="c-lbl">📋 분포 분석이 뭘까요?</span>
-                  반 친구들의 시험 점수를 쭉 늘어놓았을 때 점수가 어느 구간에 많이 몰려있는지 살펴보는 것
+                  반 친구들의 시험 점수를 쭉 늘어놓았을 때 점수가 <textarea class="blank blank--inline" rows="1" aria-label="M2 분포분석 정의 빈칸" style="width:260px"></textarea> 살펴보는 것
                 </div>
                 <div class="callout callout--tip">
                   <span class="c-lbl">💬 이렇게 질문해요</span>
-                  <span class="em">"우리 반 중간고사 수학 점수는 보통 어느 구간에 몰려 있을까?"</span> 처럼 '어느 구간에 몰려 있는지', '유난히 다른 값(이상치)이 있는지' 묻는 질문이에요.
+                  <span class="em">"우리 반 중간고사 수학 점수는 보통 어느 구간에 몰려 있을까?"</span> 처럼 '어느 구간에 몰려 있는지', '유난히 특이한 값이 있는지' 묻는 질문이에요.
                 </div>
 
                 <div class="m-hd2">🧩 데이터 분석 과정</div>
                 <ul class="proc-list">
-                  <li><span class="tag">1. [문제 정하기]</span> 포켓몬들의 체력은 보통 어느 구간에 모여있을까?</li>
-                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 살펴볼 값은 '체력' 속성이에요.</li>
+                  <li><span class="tag">1. [문제 정하기]</span> <textarea class="blank" rows="1" aria-label="M2 문제정하기 빈칸"></textarea></li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 살펴볼 값은 '<textarea class="blank blank--inline" rows="1" aria-label="M2 속성파악 빈칸" style="width:70px"></textarea>' 속성이에요.</li>
                   <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
                 </ul>
 
@@ -550,16 +909,15 @@
                     <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
                     <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
                   </div>
-                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
-                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
-                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
-                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                  <div style="padding:14px 16px">
+                    <div class="cap-guide">
+                      <div class="cap-guide__shot"><img src="msi-asset:./assets/img-2116ea43.jpg" alt="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"><div class="cg-cap">WIN + SHIFT + S</div></div>
+                      <div class="cap-guide__steps">
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">1</span><span>위 사진처럼 키보드에서 <b>윈도우키 ⌂ + Shift + S</b> 를 함께 눌러요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">2</span><span>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">3</span><span>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</span></div>
+                      </div>
                     </div>
-                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
-                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
-                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
-                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
-                    </ol>
                   </div>
                 </div>
                 <div class="ans-lbl">📷 여기에 CODAP 그래프를 붙여넣으세요</div>
@@ -567,23 +925,19 @@
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
                 <div class="pz-controls">
-                  <button type="button" class="pz-copy">📋 복사</button>
                   <button type="button" class="pz-clear">🗑 지우기</button>
                 </div>
 
                 <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
                 <div class="callout callout--tip" style="margin-top:8px">
-                  <span class="c-lbl">🔎 이상치(outlier)가 무엇일까?</span>
-                  대부분의 값이 모여 있는 곳에서 <b>혼자 멀리 동떨어져 있는 값</b>이에요. 예를 들어 반 친구들의 키가 대부분 150~165cm인데 한 명만 195cm라면, 그 값이 이상치예요. 분포를 볼 때는 <b>"유난히 튀는 값이 있는지"</b>도 함께 살펴봐요.
+                  <span class="c-lbl">🔎 <textarea class="blank blank--inline" rows="1" aria-label="M2 이상치 용어 빈칸 1" style="width:70px"></textarea>(outlier)가 무엇일까?</span>
+                  대부분의 값이 모여 있는 곳에서 <b><textarea class="blank blank--inline" rows="1" aria-label="M2 이상치 정의 빈칸" style="width:200px"></textarea></b> 값이에요. 예를 들어 반 친구들의 키가 대부분 150~165cm인데 한 명만 195cm라면, 그 값이 <textarea class="blank blank--inline" rows="1" aria-label="M2 이상치 용어 빈칸 2" style="width:70px"></textarea>예요. 분포를 볼 때는 <b>"유난히 튀는 값이 있는지"</b>도 함께 살펴봐요.
                 </div>
                 <div class="ans-row">
                   <span class="ans-lbl">📝 그래프 해석 — 그래프를 보고 알게 된 사실을 적어 보자.</span>
                   <textarea class="blank" rows="2" placeholder="예: 체력은 주로 ○○~○○ 구간에 몰려 있고, 중앙값은 약 ○○ 예요." aria-label="M2 그래프 해석"></textarea>
                 </div>
-                <div class="ans-row">
-                  <span class="ans-lbl">✅ 나의 결정 — 이 결과를 보고 내가 내릴 수 있는 결론이나 판단을 적어 보자.</span>
-                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M2 나의 결정"></textarea>
-                </div>
+                
               </div>
             </div>
 
@@ -601,12 +955,12 @@
 
                 <div class="callout callout--reason">
                   <span class="c-lbl">📋 관계 분석이 뭘까요?</span>
-                  서로 다른 두 가지 특징(속성) 사이에 어떤 관련이 있는지 살펴보는 것<br>
+                  서로 다른 두 가지 특징(속성) 사이에 <textarea class="blank blank--inline" rows="1" aria-label="M3 관계분석 정의 빈칸" style="width:180px"></textarea> 살펴보는 것<br>
                   한쪽 값이 커질 때 다른 값도 함께 커지면 <b>양(+)의 관계</b>, 반대로 작아지면 <b>음(-)의 관계</b> 예요.
                 </div>
                 <div class="callout callout--tip">
                   <span class="c-lbl">💬 이렇게 질문해요</span>
-                  <span class="em">"공부 시간이 길수록 시험 점수도 높아질까?"</span> 처럼 두 속성을 '~할수록'으로 이어서 묻는 질문이에요.
+                  <span class="em">"공부 시간이 길수록 시험 점수도 높아질까?"</span> 처럼 두 속성을 <textarea class="blank blank--inline" rows="1" aria-label="M3 질문패턴 빈칸" style="width:90px"></textarea>으로 이어서 묻는 질문이에요.
                 </div>
 
                 <div class="m-hd2">📌 관계의 3가지 모습</div>
@@ -618,8 +972,8 @@
                       <circle cx="24" cy="60" r="3" fill="#2f7d6a"></circle><circle cx="38" cy="54" r="3" fill="#2f7d6a"></circle><circle cx="50" cy="46" r="3" fill="#2f7d6a"></circle><circle cx="63" cy="40" r="3" fill="#2f7d6a"></circle><circle cx="76" cy="30" r="3" fill="#2f7d6a"></circle><circle cx="90" cy="24" r="3" fill="#2f7d6a"></circle><circle cx="102" cy="16" r="3" fill="#2f7d6a"></circle>
                       <line x1="20" y1="62" x2="106" y2="14" stroke="#e08a3c" stroke-width="3"></line>
                     </svg>
-                    <div class="rl">양(+)의 관계</div>
-                    <div class="rd">한쪽이 커질 때 다른 값도 함께 커짐 (오른쪽 위로 올라감)</div>
+                    <div class="rl"><textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습1 이름" style="width:50px"></textarea>(+)의 관계</div>
+                    <div class="rd">한쪽이 커질 때 다른 값도 함께 커짐 <br>(오른쪽 <textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습1 방향" style="width:90px"></textarea>)</br></div>
                   </div>
                   <div class="rel-shape">
                     <svg viewBox="0 0 120 80" aria-hidden="true">
@@ -628,8 +982,8 @@
                       <circle cx="24" cy="16" r="3" fill="#8f6fd6"></circle><circle cx="38" cy="24" r="3" fill="#8f6fd6"></circle><circle cx="50" cy="30" r="3" fill="#8f6fd6"></circle><circle cx="63" cy="40" r="3" fill="#8f6fd6"></circle><circle cx="76" cy="48" r="3" fill="#8f6fd6"></circle><circle cx="90" cy="56" r="3" fill="#8f6fd6"></circle><circle cx="102" cy="62" r="3" fill="#8f6fd6"></circle>
                       <line x1="20" y1="14" x2="106" y2="62" stroke="#e08a3c" stroke-width="3"></line>
                     </svg>
-                    <div class="rl">음(-)의 관계</div>
-                    <div class="rd">한쪽이 커질 때 다른 값은 작아짐 (오른쪽 아래로 내려감)</div>
+                    <div class="rl"><textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습2 이름" style="width:50px"></textarea>(-)의 관계</div>
+                    <div class="rd">한쪽이 커질 때 다른 값은 작아짐 <br>(오른쪽 <textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습2 방향" style="width:90px"></textarea>)</br></div>
                   </div>
                   <div class="rel-shape">
                     <svg viewBox="0 0 120 80" aria-hidden="true">
@@ -638,15 +992,16 @@
                       <circle cx="24" cy="30" r="3" fill="#9aa3b2"></circle><circle cx="34" cy="52" r="3" fill="#9aa3b2"></circle><circle cx="46" cy="22" r="3" fill="#9aa3b2"></circle><circle cx="58" cy="44" r="3" fill="#9aa3b2"></circle><circle cx="70" cy="28" r="3" fill="#9aa3b2"></circle><circle cx="82" cy="50" r="3" fill="#9aa3b2"></circle><circle cx="96" cy="34" r="3" fill="#9aa3b2"></circle>
                       <line x1="16" y1="40" x2="110" y2="40" stroke="#e08a3c" stroke-width="3" stroke-dasharray="5 4"></line>
                     </svg>
-                    <div class="rl">관계 없음</div>
-                    <div class="rd">한쪽 값이 변해도 다른 값은 규칙 없이 흩어져 있음</div>
+                    <div class="rl"><textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습3 이름" style="width:90px"></textarea></div>
+                    <div class="rd">한쪽 값이 변해도 다른 값은 규칙 없이 <textarea class="blank blank--inline" rows="1" aria-label="M3 관계모습3 설명" style="width:110px"></textarea></div>
                   </div>
                 </div>
 
+                <div class="m-divider"></div>
                 <div class="m-hd2">🧩 데이터 분석 과정 ①</div>
                 <ul class="proc-list">
-                  <li><span class="tag">1. [문제 정하기]</span> 공격력이 높은 포켓몬일수록 방어력도 함께 높을까?</li>
-                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 관계를 살펴볼 두 속성은 '공격력'과 '방어력'이에요.</li>
+                  <li><span class="tag">1. [문제 정하기]</span> <textarea class="blank" rows="1" aria-label="M3 과정1 문제정하기 빈칸"></textarea></li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 관계를 살펴볼 두 속성은 '<textarea class="blank blank--inline" rows="1" aria-label="M3 과정1 속성1 빈칸" style="width:70px"></textarea>'과 '<textarea class="blank blank--inline" rows="1" aria-label="M3 과정1 속성2 빈칸" style="width:70px"></textarea>'이에요.</li>
                   <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
                 </ul>
 
@@ -670,16 +1025,15 @@
                     <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
                     <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
                   </div>
-                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
-                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
-                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
-                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                  <div style="padding:14px 16px">
+                    <div class="cap-guide">
+                      <div class="cap-guide__shot"><img src="msi-asset:./assets/img-2116ea43.jpg" alt="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"><div class="cg-cap">WIN + SHIFT + S</div></div>
+                      <div class="cap-guide__steps">
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">1</span><span>위 사진처럼 키보드에서 <b>윈도우키 ⌂ + Shift + S</b> 를 함께 눌러요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">2</span><span>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">3</span><span>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</span></div>
+                      </div>
                     </div>
-                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
-                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
-                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
-                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
-                    </ol>
                   </div>
                 </div>
                 <div class="ans-lbl">📷 여기에 CODAP 그래프를 붙여넣으세요</div>
@@ -687,22 +1041,21 @@
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
                 <div class="pz-controls">
-                  <button type="button" class="pz-copy">📋 복사</button>
                   <button type="button" class="pz-clear">🗑 지우기</button>
                 </div>
                 <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
                 <div class="callout callout--tip" style="margin-top:8px">
                   <span class="c-lbl">📐 용어</span>
-                  <b>최소제곱선</b> : 흩어져 있는 점들을 대표해서 흐름을 잘 설명해 주는 선.<br>
-                  <b>r (상관계수)</b> : x축과 y축 속성이 서로 얼마나 관련되어 있는지 알려 주는 -1 ~ 1 사이의 수치.
+                  <b>최소제곱선</b> : 흩어져 있는 점들을 대표해서 <textarea class="blank blank--inline" rows="1" aria-label="M3 용어 최소제곱선 빈칸" style="width:80px"></textarea>을 잘 설명해 주는 선.<br>
+                  <b>r (<textarea class="blank blank--inline" rows="1" aria-label="M3 용어 r 이름 빈칸" style="width:90px"></textarea>)</b> : x축과 y축 속성이 서로 <textarea class="blank blank--inline" rows="1" aria-label="M3 용어 r 정의 빈칸" style="width:160px"></textarea> 있는지 알려 주는 <textarea class="blank blank--inline" rows="1" aria-label="M3 용어 r범위1 빈칸" style="width:50px"></textarea> ~ <textarea class="blank blank--inline" rows="1" aria-label="M3 용어 r범위2 빈칸" style="width:50px"></textarea> 사이의 수치.
                 </div>
                 <div class="type-scroll">
                   <table class="type-table">
                     <thead><tr><th style="width:44%">r 값</th><th>의미</th></tr></thead>
                     <tbody>
-                      <tr><td class="k">+1 에 가까울수록</td><td>양의 상관관계 (한쪽이 커질수록 다른 쪽도 커짐)</td></tr>
-                      <tr><td class="k">-1 에 가까울수록</td><td>음의 상관관계 (한쪽이 커질수록 다른 쪽은 작아짐)</td></tr>
-                      <tr><td class="k">0 에 가까울수록</td><td>아무 관계가 없음</td></tr>
+                      <tr><td class="k"><textarea class="blank blank--inline" rows="1" aria-label="M3 r값표 1행 값" style="width:50px"></textarea> 에 가까울수록</td><td><textarea class="blank blank--inline" rows="1" aria-label="M3 r값표 1행 의미" style="width:50px"></textarea>의 상관관계 (한쪽이 커질수록 다른 쪽도 커짐)</td></tr>
+                      <tr><td class="k"><textarea class="blank blank--inline" rows="1" aria-label="M3 r값표 2행 값" style="width:50px"></textarea> 에 가까울수록</td><td><textarea class="blank blank--inline" rows="1" aria-label="M3 r값표 2행 의미" style="width:50px"></textarea>의 상관관계 (한쪽이 커질수록 다른 쪽은 작아짐)</td></tr>
+                      <tr><td class="k"><textarea class="blank blank--inline" rows="1" aria-label="M3 r값표 3행 값" style="width:50px"></textarea> 에 가까울수록</td><td>아무 관계가 없음</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -710,16 +1063,13 @@
                   <span class="ans-lbl">📝 그래프 해석 — r 값과 점들의 모양을 보고 알게 된 사실을 적어 보자.</span>
                   <textarea class="blank" rows="2" placeholder="예: r = 약 ○○ 이고 점들이 오른쪽 위로 올라가는 모양이라 양의 관계예요." aria-label="M3 그래프 해석"></textarea>
                 </div>
-                <div class="ans-row">
-                  <span class="ans-lbl">✅ 나의 결정 — 결론이나 판단을 적어 보자.</span>
-                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M3 나의 결정"></textarea>
-                </div>
+
 
                 <div class="m-divider"></div>
                 <div class="m-hd2">🧩 데이터 분석 과정 ②</div>
                 <ul class="proc-list">
-                  <li><span class="tag">1. [문제 정하기]</span> 포획률이 낮아 잡기 어려운 포켓몬일수록 공격력이 더 높을까?</li>
-                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 두 속성은 '포획률'과 '공격력'이에요.</li>
+                  <li><span class="tag">1. [문제 정하기]</span> <textarea class="blank" rows="1" aria-label="M3 과정2 문제정하기 빈칸"></textarea></li>
+                  <li><span class="tag">2. [데이터 수집 · 속성 파악]</span> 두 속성은 '<textarea class="blank blank--inline" rows="1" aria-label="M3 과정2 속성1 빈칸" style="width:70px"></textarea>'과 '<textarea class="blank blank--inline" rows="1" aria-label="M3 과정2 속성2 빈칸" style="width:70px"></textarea>'이에요.</li>
                   <li><span class="tag">3. [데이터 분석하기]</span> 아래 순서대로 CODAP 그래프를 그려요.</li>
                 </ul>
                 <div class="m-hd2">🖥 CODAP 그래프 그리기</div>
@@ -730,7 +1080,7 @@
                   <li><b>Measure(측정)</b> 클릭 → <b>최소제곱선</b> 클릭 → <b>Show r</b> 클릭.</li>
                   <li>선이 뜬다면 완성이에요.</li>
                 </ol>
-                <div class="shot-grid">
+                <div class="shot-grid shot-grid--2x2">
                   <div class="shot-ph" data-shot="graph-btn-5b"><img src="msi-asset:shared/images/그래프1.png" alt=""><span class="cap">① 그래프 버튼을 눌러 새 그래프 창 열기</span></div>
                   <div class="shot-ph" data-shot="m5b-a"><img src="msi-asset:./assets/관계분석1.png" alt=""><span class="cap">② x축을 클릭해 ③ '포획률' 선택</span></div>
                   <div class="shot-ph" data-shot="m5b-b"><img src="msi-asset:./assets/관계분석2.png" alt=""><span class="cap">④ y축을 클릭해 ⑤ '공격력' 선택</span></div>
@@ -741,16 +1091,15 @@
                     <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">PASTE</span>
                     <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px">스샷으로 캡처하고 활동지에 붙여넣는 방법</span>
                   </div>
-                  <div style="padding:14px 16px; display:flex; flexDirection:column; gap:10px">
-                    <div style="display:flex; flexDirection:column; gap:6px; alignItems:center">
-                      <div class="kb-shot" role="img" aria-label="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"></div>
-                      <div style="fontSize:13px; color:#8b7cb8; textAlign:center">빨간 칸이 <b>윈도우키 &#8862;</b> &#183; <b>Shift</b> &#183; <b>S</b> 위치. 세 개를 함께 눌러요.</div>
+                  <div style="padding:14px 16px">
+                    <div class="cap-guide">
+                      <div class="cap-guide__shot"><img src="msi-asset:./assets/img-2116ea43.jpg" alt="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"><div class="cg-cap">WIN + SHIFT + S</div></div>
+                      <div class="cap-guide__steps">
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">1</span><span>위 사진처럼 키보드에서 <b>윈도우키 ⌂ + Shift + S</b> 를 함께 눌러요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">2</span><span>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</span></div>
+                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">3</span><span>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</span></div>
+                      </div>
                     </div>
-                    <ol style="margin:0; paddingLeft:20px; display:flex; flexDirection:column; gap:6px; fontSize:14px; lineHeight:1.6; color:#4b3b6b">
-                      <li>위 사진처럼 키보드에서 <b>윈도우키 &#8862; + Shift + S</b> 를 함께 눌러요.</li>
-                      <li>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</li>
-                      <li>아래 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</li>
-                    </ol>
                   </div>
                 </div>
 
@@ -759,7 +1108,6 @@
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
                 <div class="pz-controls">
-                  <button type="button" class="pz-copy">📋 복사</button>
                   <button type="button" class="pz-clear">🗑 지우기</button>
                 </div>
                 <ul class="proc-list" style="margin-top:8px"><li><span class="tag">4. [데이터 해석하기]</span> 붙여넣은 그래프를 보고 알게 된 사실을 정리하고, 그것으로 어떤 결론을 내릴 수 있는지 생각해요.</li></ul>
@@ -767,10 +1115,7 @@
                   <span class="ans-lbl">📝 그래프 해석 — 알게 된 사실을 적어 보자.</span>
                   <textarea class="blank" rows="2" placeholder="예: r = 약 ○○ 이고 점들이 오른쪽 아래로 내려가는 모양이라 음의 관계예요." aria-label="M3 과정2 그래프 해석"></textarea>
                 </div>
-                <div class="ans-row">
-                  <span class="ans-lbl">✅ 나의 결정 — 결론이나 판단을 적어 보자.</span>
-                  <textarea class="blank" rows="2" placeholder="여기에 적어요" aria-label="M3 과정2 나의 결정"></textarea>
-                </div>
+
               </div>
             </div>
 
@@ -798,10 +1143,10 @@
                       <tr><th style="width:88px">유형</th><th>의미</th><th style="width:34%">질문 예시</th></tr>
                     </thead>
                     <tbody>
-                      <tr><td class="k" style="color:#c96a97">구성 분석</td><td>전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td>"~는 몇 %일까?"</td></tr>
-                      <tr><td class="k" style="color:#4f6a96">비교 분석</td><td>서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td>"~과 ~ 중 어느 쪽이 더 클까?"</td></tr>
-                      <tr><td class="k" style="color:#6b559b">분포 분석</td><td>데이터들이 주로 어디에 몰려있고 퍼져있는지 모양을 보는 것</td><td>"~는 주로 어디에 몰려 있을까?" <br>"유난히 다른 값이 있을까?"</br></td></tr>
-                      <tr><td class="k" style="color:#3d7f6c">관계 분석</td><td>두 속성 간에 어떤 관계가 있는지 파악하는 것</td><td>"~랑 ~는 서로 관련이 있을까?"</td></tr>
+                      <tr><td class="k" style="color:#c96a97">구성 분석</td><td>전체에서 각 그룹들이 각각 몇 %를 차지하는지 보는 것</td><td>~는 몇 %일까?</td></tr>
+                      <tr><td class="k" style="color:#4f6a96">비교 분석</td><td>서로 다른 그룹끼리 누가 더 크고 작은지 비교하는 것</td><td>~과 ~ 중 어느 쪽이 더 클까?</td></tr>
+                      <tr><td class="k" style="color:#6b559b">분포 분석</td><td>데이터들이 주로 어디에 몰려있고 퍼져있는지 모양을 보는 것</td><td>~는 주로 어디에 몰려 있을까? <br>유난히 튀는 특이한 값이 있을까?</br></td></tr>
+                      <tr><td class="k" style="color:#3d7f6c">관계 분석</td><td>두 속성 간에 어떤 관계가 있는지 파악하는 것</td><td>~랑 ~는 서로 관련이 있을까?</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -861,6 +1206,7 @@
               </sc-if>
             </div>
           </div>
+        </sc-if>
 
       </div>
     </div>
@@ -871,8 +1217,8 @@
     </div>
   </div>
 </div>
-<!-- [design.md §10] 활동 진행률 플로팅 위젯 — zoom:1.1 래퍼 밖에 둠(탭이 하나뿐이라 항상 표시) -->
-<div class="sheet-progress" aria-label="활동 진행률" style="display:flex">
+<!-- [design.md §10] 활동 진행률 플로팅 위젯 — zoom:1.1 래퍼 밖에 두고 sheetWidgetDisplay 로 탭 게이팅 -->
+<div class="sheet-progress" aria-label="활동 진행률" style="display:{{ sheetWidgetDisplay }}">
   <div class="sp-head">PROGRESS</div>
   <div class="sp-body">
     <div class="sp-title">활동 진행률</div>
@@ -889,20 +1235,701 @@
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script>
+<!-- 선택: 실시간 조회를 인증키로 하려면 output/neis.config.js (window.NEIS_KEY='...') 를 두면 됨. 없어도 무인증으로 동작. -->
+<!-- NEIS 스냅샷: scripts/fetch-neis.ps1 실행 후 scripts/build-webapp-data.ps1 이 아래 내용을 갱신 -->
+<script type="application/json" id="neis-snapshot">
+/*NEIS_SNAPSHOT_START*/{"generatedAt":"2026-09-03T13:05:23+09:00","school":{"schoolCode":"7692151","name":"신현중학교","officeCode":"J10"},"timetable":{"1":{"1":{"2026-08-31":{"periods":["수학","사회","기술·가정","과학","자율·자치활동","체육"]},"2026-09-01":{"periods":["과학","도덕","음악","체육","수학","국어","동아리활동"]},"2026-09-02":{"periods":["동아리활동","한문","국어","영어","체육","수학"]},"2026-09-03":{"periods":["국어","영어","사회","기술·가정","도덕","한문","음악"]},"2026-09-04":{"periods":["수학","도덕","사회","영어","과학","기술·가정"]},"2026-09-07":{"periods":["수학","사회","기술·가정","과학","국어","체육"]},"2026-09-08":{"periods":["과학","도덕","음악","체육","수학","국어","동아리활동"]},"2026-09-09":{"periods":["동아리활동","한문","국어","영어","체육","수학"]},"2026-09-10":{"periods":["국어","영어","사회","기술·가정","도덕","한문","음악"]},"2026-09-11":{"periods":["수학","도덕","사회","영어","과학","기술·가정"]},"2026-09-14":{"periods":["수학","사회","기술·가정","과학","국어","체육"]},"2026-09-15":{"periods":["과학","도덕","음악","체육","수학","국어","동아리활동"]},"2026-09-16":{"periods":["동아리활동","한문","국어","영어","체육","수학"]},"2026-09-17":{"periods":["국어","영어","사회","기술·가정","도덕","한문","음악"]},"2026-09-18":{"periods":["수학","도덕","사회","영어","과학","기술·가정"]},"2026-09-21":{"periods":["수학","사회","기술·가정","과학","국어","체육"]},"2026-09-22":{"periods":["과학","도덕","음악","체육","수학","국어","동아리활동"]},"2026-09-23":{"periods":["동아리활동","한문","국어","영어","체육","수학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"2":{"2026-08-31":{"periods":["국어","수학","도덕","사회","자율·자치활동","과학"]},"2026-09-01":{"periods":["영어","사회","체육","국어","한문","기술·가정","동아리활동"]},"2026-09-02":{"periods":["동아리활동","수학","음악","한문","영어","국어"]},"2026-09-03":{"periods":["체육","기술·가정","수학","영어","과학","도덕","사회"]},"2026-09-04":{"periods":["체육","국어","과학","수학","음악","도덕"]},"2026-09-07":{"periods":["국어","수학","도덕","사회","기술·가정","과학"]},"2026-09-08":{"periods":["영어","사회","체육","국어","한문","기술·가정","동아리활동"]},"2026-09-09":{"periods":["동아리활동","수학","음악","한문","영어","국어"]},"2026-09-10":{"periods":["체육","기술·가정","수학","영어","과학","도덕","사회"]},"2026-09-11":{"periods":["체육","국어","과학","수학","음악","도덕"]},"2026-09-14":{"periods":["국어","수학","도덕","사회","기술·가정","과학"]},"2026-09-15":{"periods":["영어","사회","체육","국어","한문","기술·가정","동아리활동"]},"2026-09-16":{"periods":["동아리활동","수학","음악","한문","영어","국어"]},"2026-09-17":{"periods":["체육","기술·가정","수학","영어","과학","도덕","사회"]},"2026-09-18":{"periods":["체육","국어","과학","수학","음악","도덕"]},"2026-09-21":{"periods":["국어","수학","도덕","사회","기술·가정","과학"]},"2026-09-22":{"periods":["영어","사회","체육","국어","한문","기술·가정","동아리활동"]},"2026-09-23":{"periods":["동아리활동","수학","음악","한문","영어","국어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"3":{"2026-08-31":{"periods":["기술·가정","한문","과학","국어","자율·자치활동","사회"]},"2026-09-01":{"periods":["한문","영어","수학","도덕","국어","과학","동아리활동"]},"2026-09-02":{"periods":["동아리활동","영어","체육","수학","과학","사회"]},"2026-09-03":{"periods":["기술·가정","사회","국어","도덕","음악","체육","수학"]},"2026-09-04":{"periods":["영어","음악","수학","기술·가정","체육","국어"]},"2026-09-07":{"periods":["기술·가정","한문","과학","국어","도덕","사회"]},"2026-09-08":{"periods":["한문","영어","수학","도덕","국어","과학","동아리활동"]},"2026-09-09":{"periods":["동아리활동","영어","체육","수학","과학","사회"]},"2026-09-10":{"periods":["기술·가정","사회","국어","도덕","음악","체육","수학"]},"2026-09-11":{"periods":["영어","음악","수학","기술·가정","체육","국어"]},"2026-09-14":{"periods":["기술·가정","한문","과학","국어","도덕","사회"]},"2026-09-15":{"periods":["한문","영어","수학","도덕","국어","과학","동아리활동"]},"2026-09-16":{"periods":["동아리활동","영어","체육","수학","과학","사회"]},"2026-09-17":{"periods":["기술·가정","사회","국어","도덕","음악","체육","수학"]},"2026-09-18":{"periods":["영어","음악","수학","기술·가정","체육","국어"]},"2026-09-21":{"periods":["기술·가정","한문","과학","국어","도덕","사회"]},"2026-09-22":{"periods":["한문","영어","수학","도덕","국어","과학","동아리활동"]},"2026-09-23":{"periods":["동아리활동","영어","체육","수학","과학","사회"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"4":{"2026-08-31":{"periods":["과학","체육","국어","영어","자율·자치활동","도덕"]},"2026-09-01":{"periods":["사회","수학","기술·가정","과학","체육","음악","동아리활동"]},"2026-09-02":{"periods":["동아리활동","기술·가정","영어","도덕","국어","한문"]},"2026-09-03":{"periods":["수학","도덕","음악","국어","사회","기술·가정","체육"]},"2026-09-04":{"periods":["영어","과학","한문","사회","국어","수학"]},"2026-09-07":{"periods":["과학","체육","국어","영어","수학","도덕"]},"2026-09-08":{"periods":["사회","수학","기술·가정","과학","체육","음악","동아리활동"]},"2026-09-09":{"periods":["동아리활동","기술·가정","영어","도덕","국어","한문"]},"2026-09-10":{"periods":["수학","도덕","음악","국어","사회","기술·가정","체육"]},"2026-09-11":{"periods":["영어","과학","한문","사회","국어","수학"]},"2026-09-14":{"periods":["과학","체육","국어","영어","수학","도덕"]},"2026-09-15":{"periods":["사회","수학","기술·가정","과학","체육","음악","동아리활동"]},"2026-09-16":{"periods":["동아리활동","기술·가정","영어","도덕","국어","한문"]},"2026-09-17":{"periods":["수학","도덕","음악","국어","사회","기술·가정","체육"]},"2026-09-18":{"periods":["영어","과학","한문","사회","국어","수학"]},"2026-09-21":{"periods":["과학","체육","국어","영어","수학","도덕"]},"2026-09-22":{"periods":["사회","수학","기술·가정","과학","체육","음악","동아리활동"]},"2026-09-23":{"periods":["동아리활동","기술·가정","영어","도덕","국어","한문"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"5":{"2026-08-31":{"periods":["체육","도덕","음악","수학","자율·자치활동","영어"]},"2026-09-01":{"periods":["사회","기술·가정","국어","영어","도덕","한문","동아리활동"]},"2026-09-02":{"periods":["동아리활동","국어","수학","과학","기술·가정","체육"]},"2026-09-03":{"periods":["과학","수학","사회","음악","영어","국어","기술·가정"]},"2026-09-04":{"periods":["도덕","체육","국어","한문","사회","수학"]},"2026-09-07":{"periods":["체육","도덕","음악","수학","과학","영어"]},"2026-09-08":{"periods":["사회","기술·가정","국어","영어","도덕","한문","동아리활동"]},"2026-09-09":{"periods":["동아리활동","국어","수학","과학","기술·가정","체육"]},"2026-09-10":{"periods":["과학","수학","사회","음악","영어","국어","기술·가정"]},"2026-09-11":{"periods":["도덕","체육","국어","한문","사회","수학"]},"2026-09-14":{"periods":["체육","도덕","음악","수학","과학","영어"]},"2026-09-15":{"periods":["사회","기술·가정","국어","영어","도덕","한문","동아리활동"]},"2026-09-16":{"periods":["동아리활동","국어","수학","과학","기술·가정","체육"]},"2026-09-17":{"periods":["과학","수학","사회","음악","영어","국어","기술·가정"]},"2026-09-18":{"periods":["도덕","체육","국어","한문","사회","수학"]},"2026-09-21":{"periods":["체육","도덕","음악","수학","과학","영어"]},"2026-09-22":{"periods":["사회","기술·가정","국어","영어","도덕","한문","동아리활동"]},"2026-09-23":{"periods":["동아리활동","국어","수학","과학","기술·가정","체육"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"6":{"2026-08-31":{"periods":["사회","수학","과학","기술·가정","자율·자치활동","국어"]},"2026-09-01":{"periods":["음악","한문","수학","도덕","과학","영어","동아리활동"]},"2026-09-02":{"periods":["기술·가정","동아리활동","국어","음악","사회","수학"]},"2026-09-03":{"periods":["국어","영어","체육","한문","과학","사회","도덕"]},"2026-09-04":{"periods":["도덕","기술·가정","수학","체육","영어","국어"]},"2026-09-07":{"periods":["사회","수학","과학","기술·가정","체육","국어"]},"2026-09-08":{"periods":["음악","한문","수학","도덕","과학","영어","동아리활동"]},"2026-09-09":{"periods":["기술·가정","동아리활동","국어","음악","사회","수학"]},"2026-09-10":{"periods":["국어","영어","체육","한문","과학","사회","도덕"]},"2026-09-11":{"periods":["도덕","기술·가정","수학","체육","영어","국어"]},"2026-09-14":{"periods":["사회","수학","과학","기술·가정","체육","국어"]},"2026-09-15":{"periods":["음악","한문","수학","도덕","과학","영어","동아리활동"]},"2026-09-16":{"periods":["기술·가정","동아리활동","국어","음악","사회","수학"]},"2026-09-17":{"periods":["국어","영어","체육","한문","과학","사회","도덕"]},"2026-09-18":{"periods":["도덕","기술·가정","수학","체육","영어","국어"]},"2026-09-21":{"periods":["사회","수학","과학","기술·가정","체육","국어"]},"2026-09-22":{"periods":["음악","한문","수학","도덕","과학","영어","동아리활동"]},"2026-09-23":{"periods":["기술·가정","동아리활동","국어","음악","사회","수학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"7":{"2026-08-31":{"periods":["기술·가정","사회","한문","체육","자율·자치활동","과학"]},"2026-09-01":{"periods":["영어","수학","사회","음악","국어","체육","동아리활동"]},"2026-09-02":{"periods":["과학","동아리활동","기술·가정","국어","영어","도덕"]},"2026-09-03":{"periods":["음악","한문","도덕","사회","기술·가정","수학","국어"]},"2026-09-04":{"periods":["국어","도덕","영어","수학","과학","체육"]},"2026-09-07":{"periods":["기술·가정","과학","한문","체육","수학","사회"]},"2026-09-08":{"periods":["영어","수학","사회","음악","국어","체육","동아리활동"]},"2026-09-09":{"periods":["과학","동아리활동","기술·가정","국어","영어","도덕"]},"2026-09-10":{"periods":["음악","한문","도덕","사회","기술·가정","수학","국어"]},"2026-09-11":{"periods":["국어","도덕","영어","수학","과학","체육"]},"2026-09-14":{"periods":["기술·가정","과학","한문","체육","수학","사회"]},"2026-09-15":{"periods":["영어","수학","사회","음악","국어","체육","동아리활동"]},"2026-09-16":{"periods":["과학","동아리활동","기술·가정","국어","영어","도덕"]},"2026-09-17":{"periods":["음악","한문","도덕","사회","기술·가정","수학","국어"]},"2026-09-18":{"periods":["국어","도덕","영어","수학","과학","체육"]},"2026-09-21":{"periods":["기술·가정","과학","한문","체육","수학","사회"]},"2026-09-22":{"periods":["영어","수학","사회","음악","국어","체육","동아리활동"]},"2026-09-23":{"periods":["과학","동아리활동","기술·가정","국어","영어","도덕"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"8":{"2026-08-31":{"periods":["영어","음악","국어","수학","자율·자치활동","한문"]},"2026-09-01":{"periods":["국어","체육","과학","기술·가정","수학","사회","동아리활동"]},"2026-09-02":{"periods":["수학","동아리활동","도덕","사회","국어","과학"]},"2026-09-03":{"periods":["한문","과학","기술·가정","국어","체육","도덕","영어"]},"2026-09-04":{"periods":["음악","사회","체육","기술·가정","수학","영어"]},"2026-09-07":{"periods":["영어","음악","국어","수학","도덕","한문"]},"2026-09-08":{"periods":["국어","체육","과학","기술·가정","수학","사회","동아리활동"]},"2026-09-09":{"periods":["수학","동아리활동","도덕","사회","국어","과학"]},"2026-09-10":{"periods":["한문","과학","기술·가정","국어","체육","도덕","영어"]},"2026-09-11":{"periods":["음악","사회","체육","기술·가정","수학","영어"]},"2026-09-14":{"periods":["영어","음악","국어","수학","도덕","한문"]},"2026-09-15":{"periods":["국어","체육","과학","기술·가정","수학","사회","동아리활동"]},"2026-09-16":{"periods":["수학","동아리활동","도덕","사회","국어","과학"]},"2026-09-17":{"periods":["한문","과학","기술·가정","국어","체육","도덕","영어"]},"2026-09-18":{"periods":["음악","사회","체육","기술·가정","수학","영어"]},"2026-09-21":{"periods":["영어","음악","국어","수학","도덕","한문"]},"2026-09-22":{"periods":["국어","체육","과학","기술·가정","수학","사회","동아리활동"]},"2026-09-23":{"periods":["수학","동아리활동","도덕","사회","국어","과학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"9":{"2026-08-31":{"periods":["수학","국어","체육","사회","자율·자치활동","음악"]},"2026-09-01":{"periods":["체육","과학","영어","수학","도덕","국어","동아리활동"]},"2026-09-02":{"periods":["도덕","동아리활동","수학","영어","음악","기술·가정"]},"2026-09-03":{"periods":["수학","기술·가정","영어","과학","사회","국어","체육"]},"2026-09-04":{"periods":["한문","국어","사회","도덕","기술·가정","과학"]},"2026-09-07":{"periods":["수학","국어","체육","사회","한문","음악"]},"2026-09-08":{"periods":["체육","과학","영어","국어","도덕","수학","동아리활동"]},"2026-09-09":{"periods":["도덕","동아리활동","수학","영어","음악","기술·가정"]},"2026-09-10":{"periods":["수학","기술·가정","영어","과학","사회","국어","체육"]},"2026-09-11":{"periods":["한문","국어","사회","도덕","기술·가정","과학"]},"2026-09-14":{"periods":["수학","국어","체육","사회","한문","음악"]},"2026-09-15":{"periods":["체육","과학","영어","국어","도덕","수학","동아리활동"]},"2026-09-16":{"periods":["도덕","동아리활동","수학","영어","음악","기술·가정"]},"2026-09-17":{"periods":["수학","기술·가정","영어","과학","사회","국어","체육"]},"2026-09-18":{"periods":["한문","국어","사회","도덕","기술·가정","과학"]},"2026-09-21":{"periods":["수학","국어","체육","사회","한문","음악"]},"2026-09-22":{"periods":["체육","과학","영어","국어","도덕","수학","동아리활동"]},"2026-09-23":{"periods":["도덕","동아리활동","수학","영어","음악","기술·가정"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}}},"2":{"1":{"2026-08-31":{"periods":["국어","미술","미술","진로활동","자율·자치활동","수학"]},"2026-09-01":{"periods":["수학","과학","도덕","체육","국어","음악","기술·가정"]},"2026-09-02":{"periods":["정보","과학","동아리활동","기술·가정","체육","영어"]},"2026-09-03":{"periods":["과학","음악","수학","체육","도덕","국어","역사"]},"2026-09-04":{"periods":["역사","정보","영어","국어","수학","과학"]},"2026-09-07":{"periods":["국어","미술","미술","과학","영어","수학"]},"2026-09-08":{"periods":["수학","과학","도덕","체육","국어","음악","기술·가정"]},"2026-09-09":{"periods":["정보","과학","동아리활동","기술·가정","체육","영어"]},"2026-09-10":{"periods":["과학","음악","수학","체육","도덕","국어","역사"]},"2026-09-11":{"periods":["역사","정보","영어","국어","수학","진로활동"]},"2026-09-14":{"periods":["국어","미술","미술","과학","영어","수학"]},"2026-09-15":{"periods":["수학","과학","도덕","체육","국어","음악","기술·가정"]},"2026-09-16":{"periods":["정보","과학","동아리활동","기술·가정","체육","영어"]},"2026-09-17":{"periods":["과학","음악","수학","체육","도덕","국어","역사"]},"2026-09-18":{"periods":["역사","정보","영어","국어","수학","진로활동"]},"2026-09-21":{"periods":["국어","미술","미술","과학","영어","수학"]},"2026-09-22":{"periods":["수학","과학","도덕","체육","국어","음악","기술·가정"]},"2026-09-23":{"periods":["정보","과학","동아리활동","기술·가정","체육","영어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"2":{"2026-08-31":{"periods":["음악","기술·가정","국어","영어","자율·자치활동","도덕"]},"2026-09-01":{"periods":["과학","국어","진로활동","수학","기술·가정","미술","미술"]},"2026-09-02":{"periods":["수학","체육","동아리활동","역사","국어","음악"]},"2026-09-03":{"periods":["도덕","과학","영어","정보","수학","과학","체육"]},"2026-09-04":{"periods":["과학","국어","수학","정보","역사","영어"]},"2026-09-07":{"periods":["음악","기술·가정","국어","영어","체육","도덕"]},"2026-09-08":{"periods":["과학","국어","진로활동","수학","기술·가정","미술","미술"]},"2026-09-09":{"periods":["수학","체육","동아리활동","역사","국어","음악"]},"2026-09-10":{"periods":["도덕","과학","영어","정보","수학","과학","체육"]},"2026-09-11":{"periods":["과학","국어","수학","정보","역사","영어"]},"2026-09-14":{"periods":["음악","기술·가정","국어","영어","체육","도덕"]},"2026-09-15":{"periods":["과학","국어","진로활동","수학","기술·가정","미술","미술"]},"2026-09-16":{"periods":["수학","체육","동아리활동","역사","국어","음악"]},"2026-09-17":{"periods":["도덕","과학","영어","정보","수학","과학","체육"]},"2026-09-18":{"periods":["과학","국어","수학","정보","역사","영어"]},"2026-09-21":{"periods":["음악","기술·가정","국어","영어","체육","도덕"]},"2026-09-22":{"periods":["과학","국어","진로활동","수학","기술·가정","미술","미술"]},"2026-09-23":{"periods":["수학","체육","동아리활동","역사","국어","음악"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"3":{"2026-08-31":{"periods":["영어","수학","체육","국어","자율·자치활동","진로활동"]},"2026-09-01":{"periods":["기술·가정","영어","수학","도덕","음악","국어","과학"]},"2026-09-02":{"periods":["도덕","국어","동아리활동","과학","수학","역사"]},"2026-09-03":{"periods":["음악","과학","국어","체육","영어","수학","정보"]},"2026-09-04":{"periods":["미술","미술","역사","기술·가정","과학","체육"]},"2026-09-07":{"periods":["영어","수학","체육","국어","정보","진로활동"]},"2026-09-08":{"periods":["기술·가정","영어","수학","도덕","음악","국어","과학"]},"2026-09-09":{"periods":["도덕","국어","동아리활동","과학","수학","역사"]},"2026-09-10":{"periods":["음악","과학","국어","체육","영어","수학","정보"]},"2026-09-11":{"periods":["미술","미술","역사","기술·가정","과학","체육"]},"2026-09-14":{"periods":["영어","수학","체육","국어","정보","진로활동"]},"2026-09-15":{"periods":["기술·가정","영어","수학","도덕","음악","국어","과학"]},"2026-09-16":{"periods":["도덕","국어","동아리활동","과학","수학","역사"]},"2026-09-17":{"periods":["음악","과학","국어","체육","영어","수학","정보"]},"2026-09-18":{"periods":["미술","미술","역사","기술·가정","과학","체육"]},"2026-09-21":{"periods":["영어","수학","체육","국어","정보","진로활동"]},"2026-09-22":{"periods":["기술·가정","영어","수학","도덕","음악","국어","과학"]},"2026-09-23":{"periods":["도덕","국어","동아리활동","과학","수학","역사"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"4":{"2026-08-31":{"periods":["도덕","정보","영어","수학","자율·자치활동","미술"]},"2026-09-01":{"periods":["영어","과학","음악","국어","체육","정보","수학"]},"2026-09-02":{"periods":["과학","기술·가정","동아리활동","체육","음악","국어"]},"2026-09-03":{"periods":["진로활동","수학","체육","기술·가정","국어","역사","과학"]},"2026-09-04":{"periods":["국어","역사","수학","과학","영어","도덕"]},"2026-09-07":{"periods":["도덕","정보","영어","수학","미술","미술"]},"2026-09-08":{"periods":["영어","과학","음악","국어","체육","정보","수학"]},"2026-09-09":{"periods":["과학","기술·가정","동아리활동","체육","음악","국어"]},"2026-09-10":{"periods":["진로활동","수학","체육","기술·가정","국어","역사","과학"]},"2026-09-11":{"periods":["국어","역사","수학","과학","영어","도덕"]},"2026-09-14":{"periods":["도덕","정보","영어","수학","미술","미술"]},"2026-09-15":{"periods":["영어","과학","음악","국어","체육","정보","수학"]},"2026-09-16":{"periods":["과학","기술·가정","동아리활동","체육","음악","국어"]},"2026-09-17":{"periods":["진로활동","수학","체육","기술·가정","국어","역사","과학"]},"2026-09-18":{"periods":["국어","역사","수학","과학","영어","도덕"]},"2026-09-21":{"periods":["도덕","정보","영어","수학","미술","미술"]},"2026-09-22":{"periods":["영어","과학","음악","국어","체육","정보","수학"]},"2026-09-23":{"periods":["과학","기술·가정","동아리활동","체육","음악","국어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"5":{"2026-08-31":{"periods":["수학","체육","정보","음악","자율·자치활동","국어"]},"2026-09-01":{"periods":["체육","수학","역사","과학","도덕","영어","정보"]},"2026-09-02":{"periods":["국어","영어","동아리활동","수학","과학","기술·가정"]},"2026-09-03":{"periods":["수학","국어","과학","영어","체육","미술","미술"]},"2026-09-04":{"periods":["기술·가정","과학","도덕","진로활동","국어","음악"]},"2026-09-07":{"periods":["수학","체육","정보","음악","역사","국어"]},"2026-09-08":{"periods":["체육","수학","역사","과학","도덕","영어","정보"]},"2026-09-09":{"periods":["국어","영어","동아리활동","수학","과학","기술·가정"]},"2026-09-10":{"periods":["수학","국어","과학","영어","체육","미술","미술"]},"2026-09-11":{"periods":["기술·가정","과학","도덕","진로활동","국어","음악"]},"2026-09-14":{"periods":["수학","체육","정보","음악","역사","국어"]},"2026-09-15":{"periods":["체육","수학","역사","과학","도덕","영어","정보"]},"2026-09-16":{"periods":["국어","영어","동아리활동","수학","과학","기술·가정"]},"2026-09-17":{"periods":["수학","국어","과학","영어","체육","미술","미술"]},"2026-09-18":{"periods":["기술·가정","과학","도덕","진로활동","국어","음악"]},"2026-09-21":{"periods":["수학","체육","정보","음악","역사","국어"]},"2026-09-22":{"periods":["체육","수학","역사","과학","도덕","영어","정보"]},"2026-09-23":{"periods":["국어","영어","동아리활동","수학","과학","기술·가정"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"6":{"2026-08-31":{"periods":["국어","과학","역사","기술·가정","자율·자치활동","정보"]},"2026-09-01":{"periods":["국어","음악","수학","미술","미술","체육","영어"]},"2026-09-02":{"periods":["체육","정보","동아리활동","영어","도덕","수학"]},"2026-09-03":{"periods":["영어","도덕","과학","진로활동","기술·가정","과학","국어"]},"2026-09-04":{"periods":["음악","체육","과학","국어","수학","역사"]},"2026-09-07":{"periods":["국어","과학","역사","기술·가정","수학","정보"]},"2026-09-08":{"periods":["국어","음악","수학","미술","미술","체육","영어"]},"2026-09-09":{"periods":["체육","정보","동아리활동","영어","도덕","수학"]},"2026-09-10":{"periods":["영어","도덕","과학","진로활동","기술·가정","과학","국어"]},"2026-09-11":{"periods":["음악","체육","과학","국어","수학","역사"]},"2026-09-14":{"periods":["국어","과학","역사","기술·가정","수학","정보"]},"2026-09-15":{"periods":["국어","음악","수학","미술","미술","체육","영어"]},"2026-09-16":{"periods":["체육","정보","동아리활동","영어","도덕","수학"]},"2026-09-17":{"periods":["영어","도덕","과학","진로활동","기술·가정","과학","국어"]},"2026-09-18":{"periods":["음악","체육","과학","국어","수학","역사"]},"2026-09-21":{"periods":["국어","과학","역사","기술·가정","수학","정보"]},"2026-09-22":{"periods":["국어","음악","수학","미술","미술","체육","영어"]},"2026-09-23":{"periods":["체육","정보","동아리활동","영어","도덕","수학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"7":{"2026-08-31":{"periods":["체육","수학","음악","영어","자율·자치활동","국어"]},"2026-09-01":{"periods":["정보","국어","과학","진로활동","체육","수학","역사"]},"2026-09-02":{"periods":["국어","도덕","영어","동아리활동","미술","미술"]},"2026-09-03":{"periods":["기술·가정","역사","정보","수학","국어","영어","과학"]},"2026-09-04":{"periods":["수학","음악","기술·가정","도덕","체육","과학"]},"2026-09-07":{"periods":["체육","수학","음악","영어","과학","국어"]},"2026-09-08":{"periods":["정보","국어","과학","진로활동","체육","수학","역사"]},"2026-09-09":{"periods":["국어","도덕","영어","동아리활동","미술","미술"]},"2026-09-10":{"periods":["기술·가정","역사","정보","수학","국어","영어","과학"]},"2026-09-11":{"periods":["수학","음악","기술·가정","도덕","체육","과학"]},"2026-09-14":{"periods":["체육","수학","음악","영어","과학","국어"]},"2026-09-15":{"periods":["정보","국어","과학","진로활동","체육","수학","역사"]},"2026-09-16":{"periods":["국어","도덕","영어","동아리활동","미술","미술"]},"2026-09-17":{"periods":["기술·가정","역사","정보","수학","국어","영어","과학"]},"2026-09-18":{"periods":["수학","음악","기술·가정","도덕","체육","과학"]},"2026-09-21":{"periods":["체육","수학","음악","영어","과학","국어"]},"2026-09-22":{"periods":["정보","국어","과학","진로활동","체육","수학","역사"]},"2026-09-23":{"periods":["국어","도덕","영어","동아리활동","미술","미술"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"8":{"2026-08-31":{"periods":["영어","수학","도덕","역사","자율·자치활동","체육"]},"2026-09-01":{"periods":["진로활동","체육","정보","수학","국어","영어","과학"]},"2026-09-02":{"periods":["과학","역사","음악","동아리활동","국어","정보"]},"2026-09-03":{"periods":["체육","국어","영어","음악","과학","수학","기술·가정"]},"2026-09-04":{"periods":["도덕","과학","수학","미술","미술","국어"]},"2026-09-07":{"periods":["영어","수학","도덕","역사","기술·가정","체육"]},"2026-09-08":{"periods":["진로활동","체육","정보","수학","국어","영어","과학"]},"2026-09-09":{"periods":["과학","역사","음악","동아리활동","국어","정보"]},"2026-09-10":{"periods":["체육","국어","영어","음악","과학","수학","기술·가정"]},"2026-09-11":{"periods":["도덕","과학","수학","미술","미술","국어"]},"2026-09-14":{"periods":["영어","수학","도덕","역사","기술·가정","체육"]},"2026-09-15":{"periods":["진로활동","체육","정보","수학","국어","영어","과학"]},"2026-09-16":{"periods":["과학","역사","음악","동아리활동","국어","정보"]},"2026-09-17":{"periods":["체육","국어","영어","음악","과학","수학","기술·가정"]},"2026-09-18":{"periods":["도덕","과학","수학","미술","미술","국어"]},"2026-09-21":{"periods":["영어","수학","도덕","역사","기술·가정","체육"]},"2026-09-22":{"periods":["진로활동","체육","정보","수학","국어","영어","과학"]},"2026-09-23":{"periods":["과학","역사","음악","동아리활동","국어","정보"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"9":{"2026-08-31":{"periods":["과학","도덕","영어","국어","자율·자치활동","과학"]},"2026-09-01":{"periods":["역사","기술·가정","체육","영어","과학","국어","수학"]},"2026-09-02":{"periods":["수학","미술","미술","동아리활동","정보","체육"]},"2026-09-03":{"periods":["정보","도덕","역사","국어","수학","체육","진로활동"]},"2026-09-04":{"periods":["과학","수학","국어","음악","영어","기술·가정"]},"2026-09-07":{"periods":["과학","도덕","영어","국어","음악","과학"]},"2026-09-08":{"periods":["역사","기술·가정","체육","영어","과학","국어","수학"]},"2026-09-09":{"periods":["수학","미술","미술","동아리활동","정보","체육"]},"2026-09-10":{"periods":["정보","도덕","역사","국어","수학","체육","진로활동"]},"2026-09-11":{"periods":["과학","수학","국어","음악","영어","기술·가정"]},"2026-09-14":{"periods":["과학","도덕","영어","국어","음악","과학"]},"2026-09-15":{"periods":["역사","기술·가정","체육","영어","과학","국어","수학"]},"2026-09-16":{"periods":["수학","미술","미술","동아리활동","정보","체육"]},"2026-09-17":{"periods":["정보","도덕","역사","국어","수학","체육","진로활동"]},"2026-09-18":{"periods":["과학","수학","국어","음악","영어","기술·가정"]},"2026-09-21":{"periods":["과학","도덕","영어","국어","음악","과학"]},"2026-09-22":{"periods":["역사","기술·가정","체육","영어","과학","국어","수학"]},"2026-09-23":{"periods":["수학","미술","미술","동아리활동","정보","체육"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"10":{"2026-08-31":{"periods":["역사","과학","수학","체육","자율·자치활동","영어"]},"2026-09-01":{"periods":["미술","미술","도덕","정보","수학","과학","기술·가정"]},"2026-09-02":{"periods":["국어","수학","진로활동","동아리활동","음악","음악"]},"2026-09-03":{"periods":["수학","체육","기술·가정","영어","역사","과학","국어"]},"2026-09-04":{"periods":["체육","영어","과학","국어","정보","도덕"]},"2026-09-07":{"periods":["역사","과학","수학","체육","국어","영어"]},"2026-09-08":{"periods":["미술","미술","도덕","정보","수학","과학","기술·가정"]},"2026-09-09":{"periods":["국어","수학","진로활동","동아리활동","음악","음악"]},"2026-09-10":{"periods":["수학","체육","기술·가정","영어","역사","과학","국어"]},"2026-09-11":{"periods":["체육","영어","과학","국어","정보","도덕"]},"2026-09-14":{"periods":["역사","과학","수학","체육","국어","영어"]},"2026-09-15":{"periods":["미술","미술","도덕","정보","수학","과학","기술·가정"]},"2026-09-16":{"periods":["국어","수학","진로활동","동아리활동","음악","음악"]},"2026-09-17":{"periods":["수학","체육","기술·가정","영어","역사","과학","국어"]},"2026-09-18":{"periods":["체육","영어","과학","국어","정보","도덕"]},"2026-09-21":{"periods":["역사","과학","수학","체육","국어","영어"]},"2026-09-22":{"periods":["미술","미술","도덕","정보","수학","과학","기술·가정"]},"2026-09-23":{"periods":["국어","수학","진로활동","동아리활동","음악","음악"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"11":{"2026-08-31":{"periods":["진로활동","체육","도덕","국어","자율·자치활동","수학"]},"2026-09-01":{"periods":["도덕","과학","수학","역사","영어","국어","체육"]},"2026-09-02":{"periods":["역사","음악","음악","동아리활동","수학","영어"]},"2026-09-03":{"periods":["영어","기술·가정","미술","미술","국어","정보","과학"]},"2026-09-04":{"periods":["정보","과학","체육","기술·가정","국어","수학"]},"2026-09-07":{"periods":["진로활동","체육","도덕","국어","과학","수학"]},"2026-09-08":{"periods":["도덕","과학","수학","역사","영어","국어","체육"]},"2026-09-09":{"periods":["역사","음악","음악","동아리활동","수학","영어"]},"2026-09-10":{"periods":["영어","기술·가정","미술","미술","국어","정보","과학"]},"2026-09-11":{"periods":["정보","과학","체육","기술·가정","국어","수학"]},"2026-09-14":{"periods":["진로활동","체육","도덕","국어","과학","수학"]},"2026-09-15":{"periods":["도덕","과학","수학","역사","영어","국어","체육"]},"2026-09-16":{"periods":["역사","음악","음악","동아리활동","수학","영어"]},"2026-09-17":{"periods":["영어","기술·가정","미술","미술","국어","정보","과학"]},"2026-09-18":{"periods":["정보","과학","체육","기술·가정","국어","수학"]},"2026-09-21":{"periods":["진로활동","체육","도덕","국어","과학","수학"]},"2026-09-22":{"periods":["도덕","과학","수학","역사","영어","국어","체육"]},"2026-09-23":{"periods":["역사","음악","음악","동아리활동","수학","영어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}}},"3":{"1":{"2026-08-31":{"periods":["영어","역사","기술·가정","체육","자율활동","미술"]},"2026-09-01":{"periods":["수학","사회","체육","생활 중국어","역사","국어","과학"]},"2026-09-02":{"periods":["국어","체육","수학","음악","과학","영어"]},"2026-09-03":{"periods":["국어","과학","동아리활동","사회","영어","수학","동아리활동"]},"2026-09-04":{"periods":["기술·가정","영어","역사","과학","국어","생활 중국어"]},"2026-09-07":{"periods":["영어","역사","기술·가정","체육","사회","미술"]},"2026-09-08":{"periods":["수학","사회","체육","생활 중국어","역사","국어","과학"]},"2026-09-09":{"periods":["국어","체육","수학","음악","과학","영어"]},"2026-09-10":{"periods":["국어","과학","동아리활동","사회","영어","수학","동아리활동"]},"2026-09-11":{"periods":["기술·가정","영어","역사","과학","국어","생활 중국어"]},"2026-09-14":{"periods":["영어","역사","기술·가정","체육","사회","미술"]},"2026-09-15":{"periods":["수학","사회","체육","생활 중국어","역사","국어","과학"]},"2026-09-16":{"periods":["국어","체육","수학","음악","과학","영어"]},"2026-09-17":{"periods":["국어","과학","동아리활동","사회","영어","수학","동아리활동"]},"2026-09-18":{"periods":["기술·가정","영어","역사","과학","국어","생활 중국어"]},"2026-09-21":{"periods":["영어","역사","기술·가정","체육","사회","미술"]},"2026-09-22":{"periods":["수학","사회","체육","생활 중국어","역사","국어","과학"]},"2026-09-23":{"periods":["국어","체육","수학","음악","과학","영어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"2":{"2026-08-31":{"periods":["수학","생활 중국어","영어","역사","자율활동","기술·가정"]},"2026-09-01":{"periods":["국어","수학","기술·가정","미술","과학","역사","영어"]},"2026-09-02":{"periods":["과학","영어","국어","과학","사회","체육"]},"2026-09-03":{"periods":["생활 중국어","사회","동아리활동","체육","음악","영어","동아리활동"]},"2026-09-04":{"periods":["과학","사회","국어","역사","체육","수학"]},"2026-09-07":{"periods":["수학","생활 중국어","영어","역사","국어","기술·가정"]},"2026-09-08":{"periods":["국어","수학","기술·가정","미술","과학","역사","영어"]},"2026-09-09":{"periods":["과학","영어","국어","과학","사회","체육"]},"2026-09-10":{"periods":["생활 중국어","사회","동아리활동","체육","음악","영어","동아리활동"]},"2026-09-11":{"periods":["과학","사회","국어","역사","체육","수학"]},"2026-09-14":{"periods":["수학","생활 중국어","영어","역사","국어","기술·가정"]},"2026-09-15":{"periods":["국어","수학","기술·가정","미술","과학","역사","영어"]},"2026-09-16":{"periods":["과학","영어","국어","과학","사회","체육"]},"2026-09-17":{"periods":["생활 중국어","사회","동아리활동","체육","음악","영어","동아리활동"]},"2026-09-18":{"periods":["과학","사회","국어","역사","체육","수학"]},"2026-09-21":{"periods":["수학","생활 중국어","영어","역사","국어","기술·가정"]},"2026-09-22":{"periods":["국어","수학","기술·가정","미술","과학","역사","영어"]},"2026-09-23":{"periods":["과학","영어","국어","과학","사회","체육"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"3":{"2026-08-31":{"periods":["체육","국어","생활 중국어","영어","자율활동","과학"]},"2026-09-01":{"periods":["기술·가정","영어","사회","음악","수학","체육","수학"]},"2026-09-02":{"periods":["사회","역사","체육","기술·가정","생활 중국어","과학"]},"2026-09-03":{"periods":["영어","과학","동아리활동","수학","역사","국어","동아리활동"]},"2026-09-04":{"periods":["과학","국어","미술","국어","영어","사회"]},"2026-09-07":{"periods":["체육","국어","생활 중국어","영어","역사","과학"]},"2026-09-08":{"periods":["기술·가정","영어","사회","음악","수학","체육","국어"]},"2026-09-09":{"periods":["사회","역사","체육","기술·가정","생활 중국어","과학"]},"2026-09-10":{"periods":["영어","과학","동아리활동","수학","역사","국어","동아리활동"]},"2026-09-11":{"periods":["과학","수학","미술","국어","영어","사회"]},"2026-09-14":{"periods":["체육","국어","생활 중국어","영어","역사","과학"]},"2026-09-15":{"periods":["기술·가정","영어","사회","음악","수학","체육","국어"]},"2026-09-16":{"periods":["사회","역사","체육","기술·가정","생활 중국어","과학"]},"2026-09-17":{"periods":["영어","과학","동아리활동","수학","역사","국어","동아리활동"]},"2026-09-18":{"periods":["과학","수학","미술","국어","영어","사회"]},"2026-09-21":{"periods":["체육","국어","생활 중국어","영어","역사","과학"]},"2026-09-22":{"periods":["기술·가정","영어","사회","음악","수학","체육","국어"]},"2026-09-23":{"periods":["사회","역사","체육","기술·가정","생활 중국어","과학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"4":{"2026-08-31":{"periods":["기술·가정","수학","사회","국어","자율활동","과학"]},"2026-09-01":{"periods":["체육","국어","영어","수학","과학","사회","기술·가정"]},"2026-09-02":{"periods":["수학","과학","사회","영어","미술","국어"]},"2026-09-03":{"periods":["역사","역사","동아리활동","국어","생활 중국어","체육","동아리활동"]},"2026-09-04":{"periods":["생활 중국어","체육","영어","과학","역사","음악"]},"2026-09-07":{"periods":["기술·가정","역사","사회","국어","영어","과학"]},"2026-09-08":{"periods":["체육","국어","영어","수학","과학","사회","기술·가정"]},"2026-09-09":{"periods":["수학","과학","사회","영어","미술","국어"]},"2026-09-10":{"periods":["역사","수학","동아리활동","국어","생활 중국어","체육","동아리활동"]},"2026-09-11":{"periods":["생활 중국어","체육","영어","과학","역사","음악"]},"2026-09-14":{"periods":["기술·가정","역사","사회","국어","영어","과학"]},"2026-09-15":{"periods":["체육","국어","영어","수학","과학","사회","기술·가정"]},"2026-09-16":{"periods":["수학","과학","사회","영어","미술","국어"]},"2026-09-17":{"periods":["역사","수학","동아리활동","국어","생활 중국어","체육","동아리활동"]},"2026-09-18":{"periods":["생활 중국어","체육","영어","과학","역사","음악"]},"2026-09-21":{"periods":["기술·가정","역사","사회","국어","영어","과학"]},"2026-09-22":{"periods":["체육","국어","영어","수학","과학","사회","기술·가정"]},"2026-09-23":{"periods":["수학","과학","사회","영어","미술","국어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"5":{"2026-08-31":{"periods":["사회","영어","과학","국어","자율활동","수학"]},"2026-09-01":{"periods":["음악","과학","생활 중국어","역사","국어","영어","체육"]},"2026-09-02":{"periods":["국어","영어","기술·가정","수학","역사","과학"]},"2026-09-03":{"periods":["사회","체육","동아리활동","과학","기술·가정","미술","동아리활동"]},"2026-09-04":{"periods":["역사","생활 중국어","국어","사회","수학","영어"]},"2026-09-07":{"periods":["사회","영어","과학","국어","체육","수학"]},"2026-09-08":{"periods":["음악","과학","생활 중국어","역사","국어","영어","체육"]},"2026-09-09":{"periods":["국어","영어","기술·가정","수학","역사","과학"]},"2026-09-10":{"periods":["사회","체육","동아리활동","과학","기술·가정","미술","동아리활동"]},"2026-09-11":{"periods":["역사","생활 중국어","국어","사회","수학","영어"]},"2026-09-14":{"periods":["사회","영어","과학","국어","체육","수학"]},"2026-09-15":{"periods":["음악","과학","생활 중국어","역사","국어","영어","체육"]},"2026-09-16":{"periods":["국어","영어","기술·가정","수학","역사","과학"]},"2026-09-17":{"periods":["사회","체육","동아리활동","과학","기술·가정","미술","동아리활동"]},"2026-09-18":{"periods":["역사","생활 중국어","국어","사회","수학","영어"]},"2026-09-21":{"periods":["사회","영어","과학","국어","체육","수학"]},"2026-09-22":{"periods":["음악","과학","생활 중국어","역사","국어","영어","체육"]},"2026-09-23":{"periods":["국어","영어","기술·가정","수학","역사","과학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"6":{"2026-08-31":{"periods":["국어","과학","체육","수학","자율활동","영어"]},"2026-09-01":{"periods":["영어","국어","음악","과학","사회","역사","생활 중국어"]},"2026-09-02":{"periods":["영어","역사","사회","국어","과학","수학"]},"2026-09-03":{"periods":["체육","미술","동아리활동","역사","영어","기술·가정","동아리활동"]},"2026-09-04":{"periods":["사회","기술·가정","수학","체육","과학","국어"]},"2026-09-07":{"periods":["국어","과학","체육","생활 중국어","수학","영어"]},"2026-09-08":{"periods":["영어","국어","음악","과학","사회","역사","생활 중국어"]},"2026-09-09":{"periods":["영어","역사","사회","국어","과학","수학"]},"2026-09-10":{"periods":["체육","미술","동아리활동","역사","영어","기술·가정","동아리활동"]},"2026-09-11":{"periods":["사회","기술·가정","수학","체육","과학","국어"]},"2026-09-14":{"periods":["국어","과학","체육","생활 중국어","수학","영어"]},"2026-09-15":{"periods":["영어","국어","음악","과학","사회","역사","생활 중국어"]},"2026-09-16":{"periods":["영어","역사","사회","국어","과학","수학"]},"2026-09-17":{"periods":["체육","미술","동아리활동","역사","영어","기술·가정","동아리활동"]},"2026-09-18":{"periods":["사회","기술·가정","수학","체육","과학","국어"]},"2026-09-21":{"periods":["국어","과학","체육","생활 중국어","수학","영어"]},"2026-09-22":{"periods":["영어","국어","음악","과학","사회","역사","생활 중국어"]},"2026-09-23":{"periods":["영어","역사","사회","국어","과학","수학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"7":{"2026-08-31":{"periods":["수학","국어","영어","체육","자율활동","역사"]},"2026-09-01":{"periods":["과학","역사","국어","기술·가정","생활 중국어","사회","영어"]},"2026-09-02":{"periods":["사회","미술","체육","수학","영어","국어"]},"2026-09-03":{"periods":["국어","체육","생활 중국어","동아리활동","과학","음악","동아리활동"]},"2026-09-04":{"periods":["기술·가정","영어","역사","과학","사회","수학"]},"2026-09-07":{"periods":["수학","국어","영어","체육","과학","역사"]},"2026-09-08":{"periods":["과학","역사","국어","기술·가정","생활 중국어","사회","영어"]},"2026-09-09":{"periods":["사회","미술","체육","수학","영어","국어"]},"2026-09-10":{"periods":["국어","체육","생활 중국어","동아리활동","과학","음악","동아리활동"]},"2026-09-11":{"periods":["기술·가정","영어","역사","과학","사회","수학"]},"2026-09-14":{"periods":["수학","국어","영어","체육","과학","역사"]},"2026-09-15":{"periods":["과학","역사","국어","기술·가정","생활 중국어","사회","영어"]},"2026-09-16":{"periods":["사회","미술","체육","수학","영어","국어"]},"2026-09-17":{"periods":["국어","체육","생활 중국어","동아리활동","과학","음악","동아리활동"]},"2026-09-18":{"periods":["기술·가정","영어","역사","과학","사회","수학"]},"2026-09-21":{"periods":["수학","국어","영어","체육","과학","역사"]},"2026-09-22":{"periods":["과학","역사","국어","기술·가정","생활 중국어","사회","영어"]},"2026-09-23":{"periods":["사회","미술","체육","수학","영어","국어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"8":{"2026-08-31":{"periods":["체육","사회","기술·가정","과학","자율활동","수학"]},"2026-09-01":{"periods":["역사","생활 중국어","영어","수학","국어","사회","체육"]},"2026-09-02":{"periods":["음악","생활 중국어","국어","과학","사회","역사"]},"2026-09-03":{"periods":["미술","국어","과학","동아리활동","수학","영어","동아리활동"]},"2026-09-04":{"periods":["영어","국어","기술·가정","역사","과학","체육"]},"2026-09-07":{"periods":["체육","사회","수학","과학","영어","기술·가정"]},"2026-09-08":{"periods":["역사","생활 중국어","영어","수학","국어","사회","체육"]},"2026-09-09":{"periods":["음악","생활 중국어","국어","과학","사회","역사"]},"2026-09-10":{"periods":["미술","국어","과학","동아리활동","수학","영어","동아리활동"]},"2026-09-11":{"periods":["영어","국어","기술·가정","역사","과학","체육"]},"2026-09-14":{"periods":["체육","사회","수학","과학","영어","기술·가정"]},"2026-09-15":{"periods":["역사","생활 중국어","영어","수학","국어","사회","체육"]},"2026-09-16":{"periods":["음악","생활 중국어","국어","과학","사회","역사"]},"2026-09-17":{"periods":["미술","국어","과학","동아리활동","수학","영어","동아리활동"]},"2026-09-18":{"periods":["영어","국어","기술·가정","역사","과학","체육"]},"2026-09-21":{"periods":["체육","사회","수학","과학","영어","기술·가정"]},"2026-09-22":{"periods":["역사","생활 중국어","영어","수학","국어","사회","체육"]},"2026-09-23":{"periods":["음악","생활 중국어","국어","과학","사회","역사"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"9":{"2026-08-31":{"periods":["생활 중국어","체육","수학","사회","자율활동","영어"]},"2026-09-01":{"periods":["수학","국어","사회","체육","영어","기술·가정","과학"]},"2026-09-02":{"periods":["기술·가정","과학","역사","국어","체육","사회"]},"2026-09-03":{"periods":["과학","영어","수학","동아리활동","역사","국어","동아리활동"]},"2026-09-04":{"periods":["영어","국어","음악","미술","과학","생활 중국어"]},"2026-09-07":{"periods":["생활 중국어","체육","영어","사회","역사","수학"]},"2026-09-08":{"periods":["수학","국어","사회","체육","영어","기술·가정","과학"]},"2026-09-09":{"periods":["기술·가정","과학","역사","국어","체육","사회"]},"2026-09-10":{"periods":["과학","영어","수학","동아리활동","역사","국어","동아리활동"]},"2026-09-11":{"periods":["영어","국어","음악","미술","과학","생활 중국어"]},"2026-09-14":{"periods":["생활 중국어","체육","영어","사회","역사","수학"]},"2026-09-15":{"periods":["수학","국어","사회","체육","영어","기술·가정","과학"]},"2026-09-16":{"periods":["기술·가정","과학","역사","국어","체육","사회"]},"2026-09-17":{"periods":["과학","영어","수학","동아리활동","역사","국어","동아리활동"]},"2026-09-18":{"periods":["영어","국어","음악","미술","과학","생활 중국어"]},"2026-09-21":{"periods":["생활 중국어","체육","영어","사회","역사","수학"]},"2026-09-22":{"periods":["수학","국어","사회","체육","영어","기술·가정","과학"]},"2026-09-23":{"periods":["기술·가정","과학","역사","국어","체육","사회"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"10":{"2026-08-31":{"periods":["사회","역사","역사","영어","자율활동","국어"]},"2026-09-01":{"periods":["과학","체육","과학","국어","수학","생활 중국어","역사"]},"2026-09-02":{"periods":["수학","영어","사회","체육","기술·가정","과학"]},"2026-09-03":{"periods":["국어","생활 중국어","음악","동아리활동","미술","영어","동아리활동"]},"2026-09-04":{"periods":["체육","영어","수학","과학","사회","국어"]},"2026-09-07":{"periods":["사회","생활 중국어","역사","영어","기술·가정","국어"]},"2026-09-08":{"periods":["과학","체육","과학","국어","수학","생활 중국어","역사"]},"2026-09-09":{"periods":["수학","영어","사회","체육","기술·가정","과학"]},"2026-09-10":{"periods":["국어","역사","음악","동아리활동","미술","영어","동아리활동"]},"2026-09-11":{"periods":["체육","영어","수학","과학","사회","국어"]},"2026-09-14":{"periods":["사회","생활 중국어","역사","영어","기술·가정","국어"]},"2026-09-15":{"periods":["과학","체육","과학","국어","수학","생활 중국어","역사"]},"2026-09-16":{"periods":["수학","영어","사회","체육","기술·가정","과학"]},"2026-09-17":{"periods":["국어","역사","음악","동아리활동","미술","영어","동아리활동"]},"2026-09-18":{"periods":["체육","영어","수학","과학","사회","국어"]},"2026-09-21":{"periods":["사회","생활 중국어","역사","영어","기술·가정","국어"]},"2026-09-22":{"periods":["과학","체육","과학","국어","수학","생활 중국어","역사"]},"2026-09-23":{"periods":["수학","영어","사회","체육","기술·가정","과학"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"11":{"2026-08-31":{"periods":["국어","음악","과학","기술·가정","자율활동","생활 중국어"]},"2026-09-01":{"periods":["생활 중국어","기술·가정","영어","역사","체육","국어","사회"]},"2026-09-02":{"periods":["역사","국어","과학","미술","수학","영어"]},"2026-09-03":{"periods":["영어","사회","체육","동아리활동","국어","수학","동아리활동"]},"2026-09-04":{"periods":["과학","수학","체육","사회","역사","영어"]},"2026-09-07":{"periods":["국어","음악","과학","기술·가정","과학","생활 중국어"]},"2026-09-08":{"periods":["생활 중국어","기술·가정","영어","역사","체육","국어","사회"]},"2026-09-09":{"periods":["역사","국어","과학","미술","수학","영어"]},"2026-09-10":{"periods":["영어","사회","체육","동아리활동","국어","수학","동아리활동"]},"2026-09-11":{"periods":["과학","수학","체육","사회","역사","영어"]},"2026-09-14":{"periods":["국어","음악","과학","기술·가정","과학","생활 중국어"]},"2026-09-15":{"periods":["생활 중국어","기술·가정","영어","역사","체육","국어","사회"]},"2026-09-16":{"periods":["역사","국어","과학","미술","수학","영어"]},"2026-09-17":{"periods":["영어","사회","체육","동아리활동","국어","수학","동아리활동"]},"2026-09-18":{"periods":["과학","수학","체육","사회","역사","영어"]},"2026-09-21":{"periods":["국어","음악","과학","기술·가정","과학","생활 중국어"]},"2026-09-22":{"periods":["생활 중국어","기술·가정","영어","역사","체육","국어","사회"]},"2026-09-23":{"periods":["역사","국어","과학","미술","수학","영어"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}},"12":{"2026-08-31":{"periods":["과학","국어","음악","수학","자율활동","체육"]},"2026-09-01":{"periods":["사회","역사","미술","생활 중국어","과학","영어","수학"]},"2026-09-02":{"periods":["체육","수학","영어","기술·가정","국어","역사"]},"2026-09-03":{"periods":["사회","국어","역사","동아리활동","체육","과학","동아리활동"]},"2026-09-04":{"periods":["생활 중국어","사회","과학","영어","국어","기술·가정"]},"2026-09-07":{"periods":["과학","국어","음악","수학","영어","체육"]},"2026-09-08":{"periods":["사회","역사","미술","생활 중국어","과학","영어","수학"]},"2026-09-09":{"periods":["체육","수학","영어","기술·가정","국어","역사"]},"2026-09-10":{"periods":["사회","국어","역사","동아리활동","체육","과학","동아리활동"]},"2026-09-11":{"periods":["생활 중국어","사회","과학","영어","국어","기술·가정"]},"2026-09-14":{"periods":["과학","국어","음악","수학","영어","체육"]},"2026-09-15":{"periods":["사회","역사","미술","생활 중국어","과학","영어","수학"]},"2026-09-16":{"periods":["체육","수학","영어","기술·가정","국어","역사"]},"2026-09-17":{"periods":["사회","국어","역사","동아리활동","체육","과학","동아리활동"]},"2026-09-18":{"periods":["생활 중국어","사회","과학","영어","국어","기술·가정"]},"2026-09-21":{"periods":["과학","국어","음악","수학","영어","체육"]},"2026-09-22":{"periods":["사회","역사","미술","생활 중국어","과학","영어","수학"]},"2026-09-23":{"periods":["체육","수학","영어","기술·가정","국어","역사"]},"2026-09-24":{"periods":["추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴","추석연휴"]},"2026-09-25":{"periods":["추석","추석","추석","추석","추석","추석"]}}}},"meal":{"2026-09-01":{"items":[{"name":"찹쌀밥","al":[]},{"name":"쇠고기미역국","al":[5,6,13,16]},{"name":"매운돼지갈비찜","al":[5,6,10,13]},{"name":"두부들깨샐러드","al":[1,5,6,12,13]},{"name":"배추김치","al":[9]},{"name":"베리무스케익","al":[1,2,5,6]}],"kcal":804,"type":"중식"},"2026-09-02":{"items":[{"name":"미니현미밥","al":[]},{"name":"국수장국","al":[5,6,9,13]},{"name":"청포묵김가루무침","al":[5,6]},{"name":"닭강정","al":[1,5,6,15]},{"name":"김치채무침","al":[9,13]},{"name":"포도","al":[]}],"kcal":642,"type":"중식"},"2026-09-03":{"items":[{"name":"흑미밥","al":[]},{"name":"돼지뼈해장국","al":[5,6,9,10]},{"name":"아삭이고추무침","al":[5,6,13]},{"name":"초당옥수수바","al":[2]},{"name":"훈제오리+무쌈+치폴레마요소스","al":[1,5]},{"name":"섞박지","al":[9]}],"kcal":948,"type":"중식"},"2026-09-04":{"items":[{"name":"기장밥","al":[]},{"name":"감자옹심이맑은국","al":[5,6,17]},{"name":"도라지오이무침","al":[5,6,13]},{"name":"돼지불고기","al":[10]},{"name":"배추김치","al":[9]},{"name":"요거트+후르츠칵테일,냉동망고","al":[2,11,13]}],"kcal":728,"type":"중식"},"2026-09-07":{"items":[{"name":"옥수수밥","al":[]},{"name":"톳가락국수무침","al":[5,6,13]},{"name":"사골떡만두국","al":[1,5,6,10,16,18]},{"name":"도토리묵/양념장","al":[5,6]},{"name":"생선까스","al":[1,5,6]},{"name":"총각김치","al":[9]},{"name":"타르타르소스","al":[1,5]}],"kcal":793,"type":"중식"},"2026-09-08":{"items":[{"name":"차조밥","al":[]},{"name":"설렁탕/소면사리","al":[5,6,13,16]},{"name":"돈육김치볶음","al":[5,6,9,10,13]},{"name":"뮤즐리멸치볶음","al":[2,5,6,13]},{"name":"섞박지","al":[9]},{"name":"제주","al":[5]}],"kcal":761,"type":"중식"},"2026-09-09":{"items":[{"name":"귀리밥","al":[]},{"name":"탄탄면","al":[2,4,5,6,9,10,12,13,16,17,18]},{"name":"새우꼬치튀김","al":[1,5,6,9,12,13]},{"name":"깍두기","al":[9]},{"name":"마시는요구르트","al":[2]},{"name":"열대과일샐러드","al":[1,2,5,6]}],"kcal":801,"type":"중식"},"2026-09-10":{"items":[{"name":"혼합잡곡밥","al":[5]},{"name":"콩나물김치국","al":[5,6,9]},{"name":"사태떡찜","al":[1,5,6,10,13]},{"name":"야채계란말이","al":[1,5,13]},{"name":"깍두기","al":[9]},{"name":"아이스망고바","al":[]}],"kcal":765,"type":"중식"},"2026-09-11":{"items":[{"name":"율무밥","al":[]},{"name":"동태찌개","al":[5,6]},{"name":"연두부찜/양념장","al":[5,6]},{"name":"로제찜닭","al":[2,5,6,10,12,13,15,16,18]},{"name":"배추김치","al":[9]},{"name":"하우스귤","al":[]}],"kcal":767,"type":"중식"},"2026-09-14":{"items":[{"name":"기장밥","al":[]},{"name":"김치짜글이","al":[1,2,5,6,9,10,13,15,16]},{"name":"콩나물무침","al":[5,6]},{"name":"가자미구이","al":[5,6,12,13]},{"name":"갈떡꼬치","al":[5,6,10,15,16]},{"name":"오이김치","al":[9]}],"kcal":869,"type":"중식"},"2026-09-15":{"items":[{"name":"곤드레나물밥/간장양념장","al":[5,6]},{"name":"미소된장국","al":[5,6,9]},{"name":"무생채","al":[13]},{"name":"김구이4g","al":[]},{"name":"닭장각구이","al":[5,6,12,13,15,18]},{"name":"떠먹는요구르트","al":[2]}],"kcal":751,"type":"중식"},"2026-09-16":{"items":[{"name":"밥+김가루","al":[1,2,5,6,9,13,16,18]},{"name":"물쫄면","al":[1,5,6,13,16]},{"name":"돈파이","al":[10]},{"name":"배추김치","al":[9]},{"name":"미니아이스슈","al":[1,2,5,6]},{"name":"샤인머스켓","al":[]}],"kcal":837,"type":"중식"},"2026-09-17":{"items":[{"name":"현미밥","al":[]},{"name":"육개장","al":[5,6,16]},{"name":"파채무침","al":[]},{"name":"꽃맛살샐러드","al":[1,5,6,8,13,18]},{"name":"언양식반달불고기","al":[2,16]},{"name":"모둠부각","al":[5,6]},{"name":"갓김치","al":[9]},{"name":"배추김치","al":[9]}],"kcal":528,"type":"중식"},"2026-09-18":{"items":[{"name":"보리밥","al":[]},{"name":"시래기된장국","al":[5,6,18]},{"name":"치즈불닭","al":[2,5,6,12,13,15,16,18]},{"name":"감자채햄볶음","al":[1,2,5,6,10,15,16]},{"name":"배추김치","al":[9]},{"name":"사과","al":[]}],"kcal":743,"type":"중식"},"2026-09-21":{"items":[{"name":"현미밥","al":[]},{"name":"갈비탕","al":[1,5,6,16]},{"name":"오징어링야채초무침","al":[1,5,6,13,17]},{"name":"메밀전병","al":[2,3,5,6,16,18]},{"name":"동태전35g,깻잎전35g","al":[1,5,6,10,15,16]},{"name":"배추김치","al":[9]},{"name":"유기농쌀식혜","al":[]},{"name":"송편 48g","al":[]}],"kcal":973,"type":"중식"},"2026-09-22":{"items":[{"name":"보리밥","al":[]},{"name":"근대된장국","al":[5,6]},{"name":"오리엔탈돈육구이","al":[2,5,6,10,13]},{"name":"실곤약야채무침","al":[5,6,13]},{"name":"치커리파무침","al":[5,6,13]},{"name":"보쌈김치","al":[9]},{"name":"요구르트","al":[2]}],"kcal":890,"type":"중식"},"2026-09-23":{"items":[{"name":"비빔밥","al":[5,6,13]},{"name":"미소된장국","al":[5,6,9]},{"name":"볶은고추장","al":[5,6,12,13,16]},{"name":"회오리감자","al":[1,2,5,6]},{"name":"백김치","al":[9]},{"name":"아이스요거트","al":[1,2,5]},{"name":"무화과","al":[]}],"kcal":713,"type":"중식"},"2026-09-28":{"items":[{"name":"김가루주먹밥","al":[]},{"name":"꼬지어묵국","al":[1,5,6]},{"name":"찜닭","al":[5,6,13,15]},{"name":"모듬튀김","al":[1,5,6,16,17]},{"name":"총각김치","al":[9]},{"name":"파인애플","al":[]}],"kcal":906,"type":"중식"},"2026-09-29":{"items":[{"name":"보리밥","al":[]},{"name":"된장찌개","al":[5,6]},{"name":"양배추찜/오이/쌈장","al":[5,6,13]},{"name":"제육볶음","al":[5,6,10,13]},{"name":"배추김치","al":[9]},{"name":"리얼치즈미니롤케익","al":[1,2,5,6,10,15,16,18]}],"kcal":651,"type":"중식"},"2026-09-30":{"items":[{"name":"미니현미밥","al":[]},{"name":"크림스파게티","al":[1,2,5,6,10,13,16]},{"name":"양상추샐러드&오리엔탈드레싱","al":[5,6,12,13]},{"name":"깍두기","al":[9]},{"name":"피자","al":[1,2,5,6,10,12,13,15,16]},{"name":"저당사과 곤약젤리","al":[]}],"kcal":970,"type":"중식"}}}/*NEIS_SNAPSHOT_END*/
+</script>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#f7a8c4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#f7a8c4&quot;,&quot;#c4d8f7&quot;,&quot;#d6c4f5&quot;,&quot;#bfe9dd&quot;]}}">
+const SUBJECTS = ['국어','수학','영어','과학','사회','역사','도덕','기술가정','정보','체육','음악','미술','한문','진로','보건','자율','창체'];
+const SUB_COLOR = {
+  국어:'#f9cade', 수학:'#c4d8f7', 영어:'#fbe6a2', 과학:'#bfe9dd', 사회:'#e8d9b8',
+  역사:'#f7bfb2', 도덕:'#eec6ea', 기술가정:'#d8f0c4', 정보:'#a9dce4', 체육:'#c9e8b8',
+  음악:'#d6c4f5', 미술:'#ffe0cc', 한문:'#cfeaf5', 진로:'#9db2f2', 보건:'#f5b7c8',
+  자율:'#e3e0b0', 창체:'#c9c2ea'
+};
+const ROOMS = { 음악:'음악실', 미술:'미술실', 체육:'체육관', 과학:'과학실', 기술가정:'실습실', 정보:'컴퓨터실', 보건:'보건실' };
+const TEACHERS = ['김하늘','박지우','이서연','최민준','정다온','한별','오유진'];
+const PERIODS = [['1교시','09:00','1ST','09:45'],['2교시','09:55','2ND','10:40'],['3교시','10:50','3RD','11:35'],['4교시','11:45','4TH','12:35'],['5교시','13:35','5TH','14:20'],['6교시','14:30','6TH','15:15'],['7교시','15:25','7TH','16:10']];
+const DAYS = ['월','화','수','목','금'];
+const MEAL_SETS = [
+  { items:['기장밥','미역국','돈육간장구이','콩나물무침','깍두기'], kcal:682, icon:'🍚' },
+  { items:['카레라이스','유부장국','치킨텐더','오이생채','배추김치'], kcal:735, icon:'🍛' },
+  { items:['찹쌀밥','순두부찌개','고등어구이','시금치나물','포기김치'], kcal:648, icon:'🐟' },
+  { items:['볶음밥','계란국','만두튀김','단무지','요구르트'], kcal:711, icon:'🥟' },
+  { items:['잡곡밥','된장찌개','제육볶음','도토리묵','깍두기'], kcal:756, icon:'🥘' },
+  { items:['비빔밥','콩나물국','메추리알조림','과일샐러드','김치'], kcal:669, icon:'🥗' },
+  { items:['백미밥','떡국','생선까스','브로콜리무침','배추김치'], kcal:698, icon:'🍜' },
+  { items:['크림스파게티','옥수수스프','마늘빵','토마토샐러드','피클'], kcal:724, icon:'🍝' }
+];
+const TAGS = ['주식','국물','주찬','부찬','김치'];
+const ALLERGENS = [
+  null,
+  { n: 1, name: '난류', color: '#ff4d6d' }, { n: 2, name: '우유', color: '#ff7a1a' },
+  { n: 3, name: '메밀', color: '#ffb800' }, { n: 4, name: '땅콩', color: '#e8d000' },
+  { n: 5, name: '대두', color: '#9ed900' }, { n: 6, name: '밀', color: '#2fc744' },
+  { n: 7, name: '고등어', color: '#00c9a7' }, { n: 8, name: '게', color: '#00bcd4' },
+  { n: 9, name: '새우', color: '#0091ff' }, { n: 10, name: '돼지고기', color: '#3d5afe' },
+  { n: 11, name: '복숭아', color: '#7c4dff' }, { n: 12, name: '토마토', color: '#b429ff' },
+  { n: 13, name: '아황산류', color: '#e040fb' }, { n: 14, name: '호두', color: '#ff2d95' },
+  { n: 15, name: '닭고기', color: '#ff5252' }, { n: 16, name: '소고기', color: '#c1440e' },
+  { n: 17, name: '오징어', color: '#00867d' }, { n: 18, name: '조개류', color: '#5d6dff' },
+  { n: 19, name: '잣', color: '#8d6e00' }
+];
+const DISH_ALLERGY = [
+  ['미역국', [5, 6]], ['돈육', [5, 6, 10]], ['제육', [5, 6, 10]], ['콩나물', [5]],
+  ['김치', [13]], ['깍두기', [13]], ['카레', [2, 5, 6, 10]], ['유부', [5, 6]],
+  ['치킨', [1, 5, 6, 15]], ['생채', [13]], ['순두부', [5]], ['고등어', [7, 13]],
+  ['볶음밥', [1, 5, 6]], ['계란', [1]], ['만두', [1, 5, 6, 10]], ['단무지', [13]],
+  ['요구르트', [2]], ['된장', [5, 6]], ['도토리묵', [6]], ['비빔밥', [1, 5, 6]],
+  ['메추리알', [1, 5, 6]], ['과일샐러드', [2, 11, 12]], ['떡국', [1, 5, 6, 16]],
+  ['까스', [1, 5, 6, 17]], ['스파게티', [2, 5, 6]], ['스프', [2, 5, 6]],
+  ['마늘빵', [2, 5, 6]], ['토마토', [1, 12]], ['피클', [13]]
+];
+function allergyOf(name) {
+  const hit = DISH_ALLERGY.find(([k]) => name.indexOf(k) >= 0);
+  return (hit ? hit[1] : []).map(n => ALLERGENS[n]);
+}
+const ALLERGY = ['5.우유 6.대두','1.난류 5.우유','4.고등어 13.땅콩','1.난류 6.대두','10.돼지고기'];
+
+/* ===== NEIS(나이스) 교육정보 개방 포털 — 신현중학교 실데이터 =====
+   - 기본 데이터: 아래 <script id="neis-snapshot">에 미리 받아 둔 스냅샷
+     (scripts/fetch-neis.ps1 이 인증키로 받아 scripts/build-webapp-data.ps1 이 주입).
+   - 실시간 갱신: open.neis.go.kr/hub 를 인증키 없이 직접 호출(CORS 허용).
+     인증키 없이 호출하면 1페이지당 5행만 오므로 pIndex 를 늘려가며 이어 받는다.
+     window.NEIS_KEY 가 있으면(gitignore된 output/neis.config.js) 키를 붙여 한 번에 받는다. */
+const NEIS_HUB = 'https://open.neis.go.kr/hub';
+const NEIS_OFFICE = 'J10';        // 경기도교육청
+const NEIS_SCHOOL = '7692151';    // 신현중학교 행정표준코드
+
+function neisPage(endpoint, params, pIndex) {
+  var base = {
+    Type: 'json', pIndex: String(pIndex), pSize: '100',
+    ATPT_OFCDC_SC_CODE: NEIS_OFFICE, SD_SCHUL_CODE: NEIS_SCHOOL
+  };
+  if (typeof window !== 'undefined' && window.NEIS_KEY) base.KEY = window.NEIS_KEY;
+  var q = new URLSearchParams(Object.assign(base, params));
+  return fetch(NEIS_HUB + '/' + endpoint + '?' + q.toString())
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      var root = j[endpoint];
+      if (!root) return { rows: [], total: 0 };            // INFO-200 등
+      var head = root[0] && root[0].head;
+      var res = head && head[1] && head[1].RESULT;
+      if (res && res.CODE !== 'INFO-000' && res.CODE !== 'INFO-200') return { rows: [], total: 0 };
+      var total = (head && head[0] && head[0].list_total_count) || 0;
+      return { rows: (root[1] && root[1].row) || [], total: total };
+    })
+    .catch(function () { return { rows: [], total: 0 }; });
+}
+/* 여러 페이지를 이어 받아 전체 행 배열로 돌려준다(무인증 5행/페이지 대응). */
+function neisFetchAll(endpoint, params, maxPages) {
+  maxPages = maxPages || 40;
+  var acc = [];
+  function step(p) {
+    return neisPage(endpoint, params, p).then(function (res) {
+      acc = acc.concat(res.rows);
+      var more = res.rows.length > 0 && acc.length < res.total && p < maxPages;
+      return more ? step(p + 1) : acc;
+    });
+  }
+  return step(1);
+}
+function ymd(d) {
+  return d.getFullYear() + '-' +
+    ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+}
+function ymdN(d) { return ymd(d).replace(/-/g, ''); }
+function mondayOf(d) { var m = new Date(d); m.setDate(d.getDate() - ((d.getDay() + 6) % 7)); m.setHours(0,0,0,0); return m; }
+
+/* 과목명 -> 파스텔 색 (미등록 과목은 이름 해시로 팔레트에서 배정) */
+var SUB_COLOR_EXT = Object.assign({}, SUB_COLOR, {
+  '기술·가정': '#d8f0c4', '기술가정': '#d8f0c4', '가정': '#d8f0c4',
+  '자율·자치활동': '#e3e0b0', '자율': '#e3e0b0', '자치활동': '#e3e0b0',
+  '동아리활동': '#c9c2ea', '진로활동': '#9db2f2', '진로와 직업': '#9db2f2',
+  '창의적체험활동': '#c9c2ea', '학교스포츠클럽': '#c9e8b8', '스포츠클럽': '#c9e8b8',
+  '한문': '#cfeaf5', '역사': '#f7bfb2', '한국사': '#f7bfb2', '기술': '#d8f0c4'
+});
+var SUB_PALETTE = ['#f9cade','#c4d8f7','#fbe6a2','#bfe9dd','#e8d9b8','#f7bfb2','#eec6ea','#d8f0c4','#a9dce4','#d6c4f5','#ffe0cc','#cfeaf5'];
+/* 수업 활동지 탭 activity 카드 헤더 accent 순환 — design.md §4.1 (8색, 이후 루프)
+   mint → blue → yellow → purple → mint → lilac → salmon → olive
+   ACTIVITY_N 헤더 색 = SHEET_ACT_ACCENT[(N-1) % 8]. 현재 카드(1~7)는 헤더 색이 하드코딩돼 있고
+   이 상수는 다음 활동 카드(ACTIVITY_8~) 추가 시 색 선택 근거로 쓴다. */
+var SHEET_ACT_ACCENT = ['#a9dce4','#c4d8f7','#fbe6a2','#d6c4f5','#bfe9dd','#eec6ea','#f7bfb2','#e3e0b0'];
+function subColor(s) {
+  if (!s) return '#f1edf9';
+  if (SUB_COLOR_EXT[s]) return SUB_COLOR_EXT[s];
+  var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return SUB_PALETTE[h % SUB_PALETTE.length];
+}
+/* 급식 메뉴 이름 정리: (1) '(...)' 괄호 묶음 제거 → (2) 첫 '.' 또는 첫 '-' 이후 버림 → (3) trim.
+   예) "베리무스케익.27g"→"베리무스케익", "매운돼지갈비찜(21-중-식).중 (5.6.10.13)"→"매운돼지갈비찜",
+       "연두부찜(벌크,원통형)/양념장"→"연두부찜/양념장" */
+function dishName(s) { return String(s == null ? '' : s).replace(/\([^)]*\)/g, '').split(/[.\-]/)[0].trim(); }
+/* 급식 메뉴 한 줄 -> { name, al:[번호] } */
+function parseDish(line) {
+  var al = [];
+  var m = line.match(/\(([\d.\s]+)\)\s*$/);
+  if (m) al = m[1].split(/[.\s]+/).filter(Boolean).map(Number);
+  return { name: dishName(line), al: al };
+}
 
 class Component extends DCLogic {
   state = {
+    tab: 'rules', timeView: 'day', mealView: 'day',
+    grade: 3, cls: 2, dayIdx: 2,
     fGrade: '', fClass: '', fNum: '', fName: '',
     fq: [null, null, null, null, null],
-    saved: false, savedName: ''
+    q1Pick: '', prog2: '', a3: [null, null, null], ox: [null, null, null, null, null], reflect: '', checks: [false, false, false, false],
+    saved: false, savedName: '', sheetTick: 0,
+    tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', neisErr: ''
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this._tick = setInterval(() => this.setState({ now: new Date() }), 60000);
+    this._snap = this.readSnapshot();
+    // 첫 로드 시 기본 선택: 지금 정보 수업 중이거나 다음 정보 교시인 2학년 반 (1회만)
+    const pick = this.pickInfoClass();
+    // 스냅샷으로 즉시 채우고, 이어서 NEIS 실시간 조회로 갱신
+    const seedTT = this.snapTimetable(pick.grade, pick.cls);
+    this.setState({ grade: pick.grade, cls: pick.cls, tt: seedTT, meal: this._snap.meal || {} });
+    this.loadTimetable(pick.grade, pick.cls);
+    this.loadMeal(new Date());
+    // ACTIVITY_5 만화 판매량 표(#mangaTable): 복사/잘라내기/우클릭/드래그 차단.
+    // 활동지 탭은 sc-if 로 늦게 마운트되므로 document 위임으로 그 표 안에서만 막는다.
+    // (드래그 텍스트 선택 자체는 .no-copy user-select:none 으로 방지)
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach((ev) =>
+      document.addEventListener(ev, (e) => {
+        const n = e.target;
+        if (n && n.closest && n.closest('#mangaTable')) e.preventDefault();
+      })
+    );
+    // 수업 활동지 탭의 DOM 기반 활동(빈칸 입력·순서/짝짓기 드래그·스샷 붙여넣기) 변화를
+    // 감지해 진행률 위젯을 갱신한다. React state 로 관리되지 않으므로 sheetTick 을 올려 리렌더.
+    this._watchSheetActivities();
+  }
+  componentWillUnmount() {
+    clearInterval(this._tick);
+    if (this._sheetMo) this._sheetMo.disconnect();
+    clearTimeout(this._sheetT);
+  }
+
+  /* 활동지 DOM 활동 감시 — sheetProgress() 결과가 실제로 바뀔 때만 setState 해 렌더 루프를 막는다. */
+  _watchSheetActivities() {
+    const bump = () => {
+      let sig = '';
+      try { const p = this._progressParts(); sig = p.done + '/' + p.total; } catch (e) { return; }
+      if (sig === this._sheetSig) return;
+      this._sheetSig = sig;
+      this.setState((st) => ({ sheetTick: (st.sheetTick || 0) + 1 }));
+    };
+    const schedule = () => { clearTimeout(this._sheetT); this._sheetT = setTimeout(bump, 80); };
+    document.addEventListener('input', (e) => {
+      const n = e.target;
+      if (n && n.classList && n.classList.contains('blank')) schedule();
+    }, true);
+    document.addEventListener('paste', () => setTimeout(schedule, 60), true);
+    document.addEventListener('click', () => setTimeout(schedule, 60), true);
+    if (typeof MutationObserver === 'function') {
+      this._sheetMo = new MutationObserver(schedule);
+      this._sheetMo.observe(document.body, {
+        subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'data-filled']
+      });
+    }
+    setTimeout(bump, 400);
+  }
+
+  /* 수업 활동지 탭 — 활동별(빈칸 채우기·드래그·붙여넣기·객관식…) 진행 상태. React state + DOM 혼합, 총 13개. */
+  sheetProgress() {
+    const s = this.state;
+    const all = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
+    const typed = (el) => {
+      if (!el) return false;
+      if (el.tagName === 'TEXTAREA') return (el.value || '').trim().length > 0;
+      return (el.textContent || '').trim().length > 0;
+    };
+    const blanks = (act) => all('[data-act="' + act + '"] textarea.blank');
+    const rangeFilled = (list, from, to) => {
+      const a = list.slice(from, to);
+      return a.length > 0 && a.every(typed);
+    };
+    const seqSlots = all('.seq-slot[data-check-group="seqTrayPrev"]');
+    const caSlots = all('.ca-slot');
+    const shot = document.querySelector('.shot-paste');
+    const a1 = blanks(1), a4 = blanks(4), a5 = blanks(5);
+    return [
+      { label: '내 정보 · 이름 적기', done: !!(s.fName && s.fName.trim()) },
+      { label: '복습 · 4단계 순서 배열', done: seqSlots.length === 4 && seqSlots.every((n) => n.classList.contains('is-filled')) },
+      { label: '활동1 · 문제 정하기 빈칸', done: typed(a1[0]) },
+      { label: '활동1 · 좋은 문제 3가지 조건', done: rangeFilled(a1, 1, 4) },
+      { label: '활동1 · 데이터 분석 질문 고르기', done: !!s.q1Pick },
+      { label: '활동2 · 표 만드는 프로그램 이름', done: !!(s.prog2 && s.prog2.trim()) },
+      { label: '활동3 · 행·열·셀 짝짓기', done: Array.isArray(s.a3) && s.a3.every((v) => v != null) },
+      { label: '활동4 · 속성 빈칸 채우기', done: typed(a4[0]) },
+      { label: '활동4 · 셀 주소 4문항', done: rangeFilled(a4, 1, 5) },
+      { label: '활동4 · 셀 주소 순서(드래그)', done: caSlots.length === 2 && caSlots.every((n) => n.classList.contains('is-filled')) },
+      { label: '활동5 · 표 읽기 2문항', done: rangeFilled(a5, 0, 2) },
+      { label: '활동5 · 스크린샷 붙여넣기', done: !!(shot && (shot.querySelector('img') || (shot.textContent || '').trim().length > 0)) },
+      { label: '활동6 · 형성평가 O/X', done: Array.isArray(s.ox) && s.ox.every((v) => v != null) }
+    ];
+  }
+
+  // [data5] 활동 진행률 세분화 — 미션 빈칸(textarea.blank[aria-label]) + 그래프 붙여넣기 칸(.paste-zone) + 형성평가(fq) 항목 단위 집계
+  _progressParts() {
+    const root = document.getElementById('sheetPrintArea');
+    const blanks = root ? Array.prototype.slice.call(root.querySelectorAll('textarea.blank[aria-label]')) : [];
+    const blanksDone = blanks.filter((el) => (el.value || '').trim().length > 0).length;
+    const zones = root ? Array.prototype.slice.call(root.querySelectorAll('.paste-zone')) : [];
+    const zonesDone = zones.filter((z) => z._imgData || (z.classList && z.classList.contains('is-filled'))).length;
+    const fq = this.state.fq || [];
+    return {
+      done: blanksDone + zonesDone + fq.filter(Boolean).length,
+      total: blanks.length + zones.length + fq.length
+    };
+  }
+
+  /* 스냅샷 2학년 시간표에서 '지금 정보 수업 중이거나 가장 가까운 다음 정보 교시'인 반을 고른다 */
+  pickInfoClass() {
+    const base = { grade: 2, cls: 1 };
+    const byCls = (this._snap && this._snap.tt && this._snap.tt['2']) || null;
+    if (!byCls) return base;
+    const toMin = (str) => { const a = str.split(':'); return (+a[0]) * 60 + (+a[1]); };
+    const nowM = this.nowMin();
+    const dateSet = {};
+    for (let c = 1; c <= 11; c++) {
+      const bc = byCls[String(c)];
+      if (bc) Object.keys(bc).forEach((d) => { dateSet[d] = 1; });
+    }
+    const todayStr = ymd(new Date());
+    const dates = Object.keys(dateSet).sort().filter((d) => d >= todayStr);
+    for (let di = 0; di < dates.length; di++) {
+      const dstr = dates[di];
+      const hits = [];
+      for (let c = 1; c <= 11; c++) {
+        const day = byCls[String(c)] && byCls[String(c)][dstr];
+        if (day && day.periods) {
+          for (let i = 0; i < day.periods.length; i++) {
+            if (day.periods[i] === '정보' && PERIODS[i]) {
+              hits.push({ cls: c, start: toMin(PERIODS[i][1]), end: toMin(PERIODS[i][3]) });
+            }
+          }
+        }
+      }
+      if (!hits.length) continue;
+      if (dstr === todayStr) {
+        const live = hits.filter((h) => nowM >= h.start && nowM <= h.end).sort((a, b) => a.start - b.start)[0];
+        if (live) return { grade: 2, cls: live.cls };
+        const next = hits.filter((h) => nowM < h.start).sort((a, b) => a.start - b.start)[0];
+        if (next) return { grade: 2, cls: next.cls };
+        return { grade: 2, cls: hits.slice().sort((a, b) => b.start - a.start)[0].cls };
+      }
+      return { grade: 2, cls: hits.slice().sort((a, b) => a.start - b.start)[0].cls };
+    }
+    return base;
+  }
+
+  /* <script id="neis-snapshot"> 파싱 */
+  readSnapshot() {
+    try {
+      const el = document.getElementById('neis-snapshot');
+      const raw = (((el && el.textContent) || '{}').replace(/\/\*[\s\S]*?\*\//g, '')).trim() || '{}';
+      const j = JSON.parse(raw);
+      return { tt: j.timetable || {}, meal: j.meal || {} };
+    } catch (e) { return { tt: {}, meal: {} }; }
+  }
+  /* 스냅샷의 학년/반 시간표 -> { 'YYYY-MM-DD': { 교시: 과목 } } */
+  snapTimetable(grade, cls) {
+    const snap = (this._snap || (this._snap = this.readSnapshot())).tt;
+    const byClass = snap[grade] && snap[grade][cls];
+    const out = {};
+    if (byClass) {
+      Object.keys(byClass).forEach((d) => {
+        const day = byClass[d];
+        if (day && day.periods) {
+          out[d] = {};
+          day.periods.forEach((sub, i) => { if (sub) out[d][i + 1] = sub; });
+        } else if (day && day.holiday) {
+          out[d] = { holiday: day.holiday };
+        }
+      });
+    }
+    return out;
+  }
+
+  /* 선택된 학년/반의 시간표: 이번 주 ~ 2주 후를 NEIS 에서 실시간 조회해 스냅샷 위에 덮어씀 */
+  loadTimetable(grade, cls) {
+    const key = grade + '-' + cls;
+    if (this._ttPending === key) return;
+    this._ttPending = key;
+    const from = mondayOf(new Date());
+    const to = new Date(from); to.setDate(from.getDate() + 27);
+    neisFetchAll('misTimetable', {
+      GRADE: String(grade), CLASS_NM: String(cls),
+      TI_FROM_YMD: ymdN(from), TI_TO_YMD: ymdN(to)
+    }).then((rows) => {
+      this._ttPending = '';
+      if (grade !== this.state.grade || cls !== this.state.cls) return;
+      const tt = this.snapTimetable(grade, cls);   // 스냅샷을 바탕으로
+      rows.forEach((r) => {
+        const d = String(r.ALL_TI_YMD).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+        const p = Number(r.PERIO);
+        const sub = (r.ITRT_CNTNT || '').trim();
+        if (!tt[d] || tt[d].holiday) tt[d] = {};
+        if (!tt[d][p]) tt[d][p] = sub;              // NEIS 중복(빈값+실값) 시 실값 우선
+      });
+      this.setState({ tt: tt, ttLoadedKey: key });
+    });
+  }
+
+  /* 이번 달 급식: NEIS 실시간 조회해 스냅샷 위에 병합 */
+  loadMeal(dateInMonth) {
+    const first = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth(), 1);
+    const last = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth() + 1, 0);
+    const mk = ymd(first).slice(0, 7);
+    if (this._mealPending === mk) return;
+    this._mealPending = mk;
+    neisFetchAll('mealServiceDietInfo', {
+      MLSV_FROM_YMD: ymdN(first), MLSV_TO_YMD: ymdN(last)
+    }).then((rows) => {
+      this._mealPending = '';
+      const meal = Object.assign({}, (this._snap && this._snap.meal) || {});
+      rows.forEach((r) => {
+        const d = String(r.MLSV_YMD).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+        const lines = String(r.DDISH_NM || '').split(/<br\s*\/?>/i)
+          .map((x) => x.trim()).filter(Boolean);
+        const items = lines.map(parseDish);
+        const kcal = Math.round(parseFloat(String(r.CAL_INFO || '').replace(/[^\d.]/g, '')) || 0);
+        meal[d] = { items: items, kcal: kcal, type: r.MMEAL_SC_NM || '중식' };
+      });
+      if (Object.keys(meal).length) this.setState({ meal: meal, mealLoadedMonth: mk });
+    });
+  }
+
+  nowMin() {
+    const n = this.state.now || new Date();
+    return n.getHours() * 60 + n.getMinutes();
+  }
+
+  isPast(endStr) {
+    const [h, m] = endStr.split(':').map(Number);
+    return this.nowMin() > h * 60 + m;
+  }
+
+  chip(active, pal) {
+    const bg = active ? (pal || '#f7a8c4') : '#fffdf7';
+    return 'cursor:pointer; padding:8px 15px; border:3px solid #4b3b6b; borderRadius:9px; background:' + bg +
+      '; fontFamily:\'CookieRun\', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; boxShadow:' + (active ? '2px 2px 0 rgba(75,59,107,.35)' : '3px 3px 0 rgba(75,59,107,.15)') +
+      '; transform:' + (active ? 'translate(1px,1px)' : 'none');
+  }
+
+  tabStyle(active, color, cap) {
+    return "cursor:pointer; padding:" + (active ? '9px 16px 8px' : '6px 15px 5px') +
+      "; marginTop:" + (active ? '0' : '3px') +
+      "; borderTop:3px solid #4b3b6b; borderLeft:3px solid #4b3b6b; borderRight:3px solid #4b3b6b; borderBottom:" + (active ? 'none' : '3px solid #4b3b6b') + "; borderRadius:12px 12px 0 0; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; whiteSpace:nowrap; display:flex; alignItems:center; gap:6px; marginBottom:-4px; background:" +
+      (active ? '#fffdf7' : color) +
+      '; color:' + (active ? '#4b3b6b' : '#6b5b93') +
+      '; boxShadow:' + (active ? 'inset 0 5px 0 ' + cap + ', 0 -3px 8px rgba(75,59,107,.14)' : 'inset 0 -7px 10px rgba(75,59,107,.09)') +
+      '; zIndex:' + (active ? 2 : 1);
+  }
+
+  /* 이번 주 월요일 기준 d(0=월..4=금) 요일, p(0-based) 교시의 실제 과목 */
+  subjectAt(d, p) {
+    const monday = mondayOf(this.state.now || new Date());
+    const dt = new Date(monday); dt.setDate(monday.getDate() + d);
+    const day = (this.state.tt || {})[ymd(dt)];
+    return day ? (day[p + 1] || '') : '';
+  }
+  /* 특정 날짜(Date)의 p(0-based) 교시 과목 */
+  subjectOn(dateObj, p) {
+    const day = (this.state.tt || {})[ymd(dateObj)];
+    return day ? (day[p + 1] || '') : '';
+  }
+
+  mealFor(n) { return MEAL_SETS[Math.abs(n) % MEAL_SETS.length]; }
+
+  monthGrid(fn) {
+    const first = new Date(2026, 8, 1);
+    const pad = first.getDay();
+    const total = 30;
+    const nowD = this.state.now || new Date();
+    const nowInMonth = nowD.getFullYear() === 2026 && nowD.getMonth() === 8;
+    const out = [];
+    for (let i = 0; i < 35; i++) {
+      const day = i - pad + 1;
+      const inMonth = day >= 1 && day <= total;
+      const dow = i % 7;
+      const weekend = dow === 0 || dow === 6;
+      const today = nowInMonth && day === nowD.getDate();
+      const boxStyle = 'minHeight:120px; padding:7px 8px; display:flex; flexDirection:column; gap:5px; borderRight:2px dashed rgba(75,59,107,.22); borderBottom:2px dashed rgba(75,59,107,.22); position:relative; background:' +
+        (!inMonth ? '#f1edf9' : today ? '#fdeaf3' : weekend ? '#f7f4fd' : '#fffdf7') +
+        (today ? '; boxShadow:inset 0 0 0 4px #ee9dbf' : '');
+      const dayStyle = today
+        ? "fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#ee9dbf; color:#fffdf7; border:2px solid #4b3b6b; borderRadius:20px; padding:2px 8px"
+        : "fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px";
+      out.push(Object.assign({ day: inMonth ? String(day) : '', boxStyle, dayStyle, todayMark: today ? '오늘' : '' }, inMonth && !weekend ? fn(day, dow) : { chips: [], badge: '', main: weekend && inMonth ? '휴무' : '', icon: '' }));
+    }
+    return out;
+  }
 
   renderVals() {
     const s = this.state;
     const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    const accent = this.props.accent ?? '#f7a8c4';
+
+    const CLASS_MAX = { 1: 9, 2: 11, 3: 12 };
+    const gradeOpts = [1, 2, 3].map(g => ({ value: String(g), label: g + '학년' }));
+    const classCount = CLASS_MAX[s.grade] || 12;
+    const classOpts = Array.from({ length: classCount }, (_, i) => ({ value: String(i + 1), label: (i + 1) + '반' }));
+
+    const nowDate = s.now || new Date();
+    const monday = new Date(nowDate);
+    monday.setDate(nowDate.getDate() - ((nowDate.getDay() + 6) % 7));
+    const weekDates = DAYS.map((_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+    });
+    const todayDow = (nowDate.getDay() + 6) % 7;
+    const mkViews = (cur, key, pal) => [['day', '일간'], ['week', '주간'], ['month', '월간']].map(([v, l]) => ({
+      label: l, style: this.chip(cur === v, pal), pick: () => this.setState({ [key]: v })
+    }));
+
+    const todayObj = new Date(nowDate);
+    let lastP = 0;
+    for (let i = 0; i < PERIODS.length; i++) { if (this.subjectOn(todayObj, i)) lastP = i + 1; }
+    const dayPeriods = lastP ? PERIODS.slice(0, lastP) : PERIODS;
+    const dayRows = dayPeriods.map((p, i) => {
+      const sub = this.subjectOn(todayObj, i);
+      const past = this.isPast(p[3]);
+      const [ph, pm] = p[1].split(':').map(Number);
+      const [eh, em] = p[3].split(':').map(Number);
+      const start = ph * 60 + pm;
+      const end = eh * 60 + em;
+      const nowM = this.nowMin();
+      const live = nowM >= start && nowM <= end;
+      const tagBase = "borderRadius:999px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; letterSpacing:.5px; whiteSpace:nowrap; ";
+      return {
+        statusLabel: past ? '완료' : live ? '진행 중' : '예정',
+        statusStyle: tagBase + (past
+          ? 'background:#ece9f3; color:#8a82a6'
+          : live
+            ? 'background:#7b5cd6; color:#fffdf7; boxShadow:0 2px 6px rgba(123,92,214,.35)'
+            : 'background:#fffdf7; color:#7b6ba8; border:2px dashed #cfc6e6; padding:2px 10px'),
+        tagStyle: "border:2px solid #4b3b6b; borderRadius:8px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px; whiteSpace:nowrap; background:" + subColor(sub),
+        rowStyle: 'display:grid; gridTemplateColumns:88px 1fr; borderBottom:2px dashed rgba(75,59,107,.22); background:' + (live ? '#f6f2ff' : '#fffdf7') + (past ? '; opacity:.45; filter:saturate(.4)' : ''),
+        period: p[0], periodEn: p[2] + ' · ' + p[0], time: p[1], endTime: '~' + p[3], subject: sub || '—',
+        room: ROOMS[sub] || (s.grade + '-' + s.cls + ' 교실'),
+        teacher: TEACHERS[(s.grade + s.cls + i) % TEACHERS.length] + ' 선생님',
+        color: subColor(sub)
+      };
+    });
+
+    // 같은 과목이 4교시 이상 연속되면 한 줄로 합침 (일간 표 전용)
+    const dayRowsMerged = [];
+    const toMinS = (str) => { const a = String(str).replace('~', '').split(':'); return (+a[0]) * 60 + (+a[1]); };
+    for (let k = 0; k < dayRows.length;) {
+      const rsub = dayRows[k].subject;
+      let j = k;
+      while (j < dayRows.length && dayRows[j].subject === rsub) j++;
+      if (rsub && rsub !== '—' && j - k >= 4) {
+        const first = dayRows[k], last = dayRows[j - 1];
+        const rStart = toMinS(first.time), rEnd = toMinS(last.endTime), nowM = this.nowMin();
+        const rPast = nowM > rEnd;
+        const rLive = !rPast && nowM >= rStart && nowM <= rEnd;
+        const tagBase = "borderRadius:999px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; letterSpacing:.5px; whiteSpace:nowrap; ";
+        dayRowsMerged.push({
+          statusLabel: rPast ? '완료' : rLive ? '진행 중' : '예정',
+          statusStyle: tagBase + (rPast
+            ? 'background:#ece9f3; color:#8a82a6'
+            : rLive
+              ? 'background:#7b5cd6; color:#fffdf7; boxShadow:0 2px 6px rgba(123,92,214,.35)'
+              : 'background:#fffdf7; color:#7b6ba8; border:2px dashed #cfc6e6; padding:2px 10px'),
+          tagStyle: first.tagStyle,
+          rowStyle: 'display:grid; gridTemplateColumns:88px 1fr; borderBottom:2px dashed rgba(75,59,107,.22); background:' + (rLive ? '#f6f2ff' : '#fffdf7') + '; paddingTop:18px; paddingBottom:18px' + (rPast ? '; opacity:.45; filter:saturate(.4)' : ''),
+          period: '', periodEn: '', time: '', endTime: '', subject: rsub,
+          room: first.room, teacher: first.teacher, color: first.color
+        });
+      } else {
+        for (let m = k; m < j; m++) dayRowsMerged.push(dayRows[m]);
+      }
+      k = j;
+    }
+
+    const TODAY_D = todayDow <= 4 ? todayDow : -1;
+    const todayMid = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
+    const dayMid = (d) => { const cd = new Date(monday); cd.setDate(monday.getDate() + d); return new Date(cd.getFullYear(), cd.getMonth(), cd.getDate()).getTime(); };
+    const weekRows = PERIODS.map((p, i) => ({
+      period: p[0], time: p[1], endTime: p[3],
+      cells: DAYS.map((_, d) => {
+        const sub = this.subjectAt(d, i);
+        const t = d === TODAY_D;
+        const isPastDay = dayMid(d) < todayMid;
+        const past = isPastDay || (t && this.isPast(p[3]));
+        return {
+          subject: sub || '·',
+          cellStyle: 'padding:8px 6px; borderRight:2px dashed rgba(75,59,107,.25); display:flex; alignItems:center; justifyContent:center' + (t ? '; background:rgba(123,92,214,.06)' : '') + (past ? '; opacity:.4; filter:saturate(.35)' : ''),
+          style: 'width:100%; textAlign:center; padding:9px 4px; border:3px solid #4b3b6b; borderRadius:9px; background:' + subColor(sub) + '; color:' + (sub ? '#4b3b6b' : '#b9aedb') + "; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px"
+        };
+      })
+    }));
+    // 하루에 같은 과목이 4교시 이상 연속이면 그 요일 열에서 과목명 1번만, 나머지 칸은 태그 박스 숨김
+    for (let d = 0; d < DAYS.length; d++) {
+      for (let i = 0; i < weekRows.length;) {
+        const wsub = this.subjectAt(d, i);
+        let j = i;
+        while (j < weekRows.length && this.subjectAt(d, j) === wsub) j++;
+        if (wsub && wsub !== '·' && wsub !== '—' && j - i >= 4) {
+          for (let r = i + 1; r < j; r++) {
+            weekRows[r].cells[d].subject = '';
+            weekRows[r].cells[d].style = 'display:none';
+          }
+        }
+        i = j;
+      }
+    }
+    const weekHeads = DAYS.map((d, i) => ({
+      label: d + '요일',
+      date: weekDates[i],
+      style: "padding:8px 8px 9px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; textAlign:center; borderRight:2px dashed rgba(75,59,107,.35)" + (i === TODAY_D ? "; background:rgba(123,92,214,.12)" : "") + (dayMid(i) < todayMid ? "; opacity:.55" : ""),
+      dateStyle: "fontFamily:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:12px; color:#5a4a86; marginTop:3px"
+    }));
+
+    const monthCells = this.monthGrid((day) => {
+      const dObj = new Date(2026, 8, day);
+      const rawChips = PERIODS.map((p, k) => {
+        const sub = this.subjectOn(dObj, k);
+        if (!sub) return null;
+        return {
+          label: (k + 1) + '교시',
+          sub,
+          style: 'display:flex; alignItems:center; gap:4px; fontSize:10px; color:#7b6ba8',
+          subStyle: 'border:1px solid #4b3b6b; borderRadius:4px; padding:0 4px; fontSize:10px; color:#4b3b6b; background:' + subColor(sub)
+        };
+      }).filter(Boolean);
+      // 화면상 같은 과목 chip 이 4개 이상 연속이면 chip 하나로 합침("N교시" 라벨 제거)
+      const chips = [];
+      for (let k = 0; k < rawChips.length;) {
+        let j = k;
+        while (j < rawChips.length && rawChips[j].sub === rawChips[k].sub) j++;
+        if (j - k >= 4) {
+          chips.push({ label: '', sub: rawChips[k].sub, style: rawChips[k].style, subStyle: rawChips[k].subStyle });
+        } else {
+          for (let m = k; m < j; m++) chips.push(rawChips[m]);
+        }
+        k = j;
+      }
+      return { badge: '', chips: chips };
+    });
+
+    const dowEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const tMeal = (s.meal || {})[ymd(todayObj)];
+    const todayMeal = {
+      date: todayObj.getFullYear() + '.' + ('0' + (todayObj.getMonth() + 1)).slice(-2) + '.' +
+        ('0' + todayObj.getDate()).slice(-2) + ' ' + dowEn[todayObj.getDay()],
+      kcal: tMeal ? tMeal.kcal : 0,
+      allergy: '',
+      items: (tMeal && tMeal.items.length ? tMeal.items : [{ name: '오늘은 급식 정보가 없어요', al: [] }]).map((it) => ({
+        name: dishName(it.name),
+        allergens: it.al.map((n) => {
+          const a = ALLERGENS[n];
+          return {
+            label: a ? a.name : String(n),
+            style: 'borderRadius:6px; padding:2px 7px; fontFamily:\'CookieRun\', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:11px; whiteSpace:nowrap; color:#fff; background:' + (a ? a.color : '#9c8dc4')
+          };
+        })
+      }))
+    };
+    const weekColors = ['#f9cade', '#c4d8f7', '#bfe9dd', '#fbe6a2', '#d6c4f5'];
+    const weekMeals = DAYS.map((d, i) => {
+      const dt = new Date(monday); dt.setDate(monday.getDate() + i);
+      const mm = (s.meal || {})[ymd(dt)];
+      return {
+        day: d + '요일',
+        date: ('0' + (dt.getMonth() + 1)).slice(-2) + '.' + ('0' + dt.getDate()).slice(-2),
+        items: mm && mm.items.length ? mm.items.map((it) => dishName(it.name)) : ['급식 없음'],
+        kcal: mm ? mm.kcal : 0,
+        color: weekColors[i]
+      };
+    });
+    const mealMonthCells = this.monthGrid((day) => {
+      const mm = (s.meal || {})[ymd(new Date(2026, 8, day))];
+      return { icon: '', main: '', menu: mm ? mm.items.map((it) => dishName(it.name)).slice(0, 6) : [], chips: [] };
+    });
+
+    const stepLabels = ['1단계 · 문제 정하기', '2단계 · 데이터 수집 · 특성 파악', '3단계 · 데이터 분석하기', '4단계 · 결과 해석 · 공유'];
+    const steps = stepLabels.map((l, i) => ({
+      label: l, mark: s.checks[i] ? '✓' : '',
+      style: 'cursor:pointer; display:flex; alignItems:center; gap:11px; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; background:' + (s.checks[i] ? '#eaf8f2' : '#fdf6fa'),
+      boxStyle: 'width:24px; height:24px; flex:none; border:3px solid #4b3b6b; borderRadius:6px; display:flex; alignItems:center; justifyContent:center; fontSize:14px; background:' + (s.checks[i] ? '#bfe9dd' : '#fff'),
+      toggle: () => this.setState(st => { const c = st.checks.slice(); c[i] = !c[i]; return { checks: c }; })
+    }));
+
+    const Q1_OPTS = ['최근 한 달간 미세먼지 농도는 어떻게 변했을까?', '어떤 색깔이 가장 예쁜가?', '지난 한 달간 우리 반에서 지각은 몇 번 발생했는가?', '편의점에서 비 오는 날 우산이 평소보다 몇 개나 더 팔릴까?'];
+    const Q1_NUM = ['①', '②', '③', '④'];
+    const Q1_ANSWER = 1;   // ② — 사람마다 답이 다른 주관적 질문이라 데이터로 확인 불가
+    const q1 = Q1_OPTS.map((text, i) => {
+      const picked = s.q1Pick === Q1_NUM[i];
+      const right = i === Q1_ANSWER;
+      const bg = picked ? (right ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return {
+        label: Q1_NUM[i] + ' ' + text,
+        pick: () => this.setState({ q1Pick: Q1_NUM[i] }),
+        style: 'cursor:pointer; textAlign:left; padding:11px 13px; border:3px solid #4b3b6b; borderRadius:10px; fontSize:15px; lineHeight:1.6; background:' + bg +
+          (picked ? '; boxShadow:2px 2px 0 rgba(75,59,107,.28); transform:translate(1px,1px)' : '; boxShadow:3px 3px 0 rgba(75,59,107,.12)')
+      };
+    });
+    const q1Right = s.q1Pick === Q1_NUM[Q1_ANSWER];
+    const q1Feedback = !s.q1Pick ? ''
+      : q1Right ? '정답이에요. ②는 사람마다 답이 다른 주관적인 질문이라, 숫자나 기록으로는 확인할 수 없어요.'
+        : '아직이에요. 숫자나 기록으로 답할 수 없는 질문을 찾아 봐요.';
+    const q1FeedbackStyle = 'padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; fontSize:14px; lineHeight:1.7; background:' + (q1Right ? '#eaf8f2' : '#fdf3f0');
+
+    const A3_Q = [
+      { t: '주황색으로 칠해진 줄은 무엇이라고 부를까요?', a: '행' },
+      { t: '파란색으로 칠해진 줄은 무엇이라고 부를까요?', a: '열' },
+      { t: '두 색이 겹쳐 보라색이 된 한 칸은 무엇이라고 부를까요?', a: '셀' }
+    ];
+    const a3ChipStyle = (i, v) => {
+      const pick = s.a3[i];
+      const bg = pick === v ? (v === A3_Q[i].a ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return "cursor:pointer; border:2px solid #4b3b6b; borderRadius:7px; padding:3px 11px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    };
+    const a3Pick = (i, v) => () => this.setState(st => { const a = st.a3.slice(); a[i] = v; return { a3: a }; });
+    const a3Items = A3_Q.map((q, i) => {
+      const pick = s.a3[i];
+      const right = pick === q.a;
+      return {
+        text: q.t,
+        opts: ['행', '열', '셀'].map(v => ({ v: v, style: a3ChipStyle(i, v), pick: a3Pick(i, v) })),
+        fb: !pick ? '' : (right ? '⭕ 정답이에요.' : '❌ 정답은 ' + q.a + ' 이에요.'),
+        fbStyle: "fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px; color:" + (right ? '#3d7f6c' : '#a65a86')
+      };
+    });
+
+    const OX_Q = [
+      { t: "'어떤 음악이 가장 아름다운가?'는 데이터로 답할 수 있는 질문이다.", a: 'X' },
+      { t: '데이터로 해결할 문제를 정할 때, 문제의 범위는 넓을수록 데이터 분석이 쉬워진다.', a: 'X' },
+      { t: "표에서 가로줄은 '행'이라고 부른다.", a: 'O' },
+      { t: '표에서 세로줄은 숫자(1, 2, 3…)로 표시된다.', a: 'X' },
+      { t: "행과 열이 만나는 하나의 칸을 '셀'이라고 부른다.", a: 'O' }
+    ];
+    const oxCircle = (i, v) => {
+      const pick = s.ox[i];
+      const bg = pick === v ? (v === OX_Q[i].a ? '#d8f0c4' : '#f7bfb2') : '#fffdf7';
+      return "cursor:pointer; width:34px; height:34px; border:3px solid #4b3b6b; borderRadius:50%; display:flex; alignItems:center; justifyContent:center; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    };
+    const oxPick = (i, v) => () => this.setState(st => { const a = st.ox.slice(); a[i] = v; return { ox: a }; });
+    const oxItems = OX_Q.map((q, i) => {
+      const pick = s.ox[i];
+      const right = pick === q.a;
+      return {
+        text: (i + 1) + '. ' + q.t,
+        oStyle: oxCircle(i, 'O'), xStyle: oxCircle(i, 'X'),
+        pickO: oxPick(i, 'O'), pickX: oxPick(i, 'X'),
+        fb: !pick ? '' : (right ? '⭕ 정답이에요.' : '❌ 다시 생각해 봐요. 정답은 ' + q.a + ' 예요.'),
+        fbStyle: "fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px; color:" + (right ? '#3d7f6c' : '#a65a86')
+      };
+    });
 
     // ── 형성평가: 질문 → 분석 유형 고르기 (4지선다, 클릭 즉시 채점) ──
     const FQ = [
@@ -945,25 +1972,75 @@ class Component extends DCLogic {
       };
     });
 
-    // ── 활동 진행률 (이름 + 형성평가 5문항) ──
-    const sheetChecklist = [
-      !!(s.fName && s.fName.trim()),
-      !!s.fq[0], !!s.fq[1], !!s.fq[2], !!s.fq[3], !!s.fq[4]
-    ];
-    const sheetDone = sheetChecklist.filter(Boolean).length;
-    const sheetTotal = sheetChecklist.length;
+
+    void s.sheetTick;   // DOM 활동(빈칸·붙여넣기) 변화 시 _watchSheetActivities 가 sheetTick 을 올려 리렌더
+    const _p = this._progressParts();
+    const sheetDone = _p.done;
+    const sheetTotal = _p.total || 1;
     const sheetPct = Math.round(sheetDone / sheetTotal * 100);
     const sheetFillStyle = 'width:' + sheetPct + '%';
     const sheetSaved = !!s.saved;
-    const sheetAria = sheetTotal + '개 중 ' + sheetDone + '개 완료';
+    const sheetAria = sheetTotal + '개 항목 중 ' + sheetDone + '개 완료';
+    const sheetWidgetDisplay = s.tab === 'sheet' ? 'flex' : 'none';   // 위젯은 zoom 래퍼 밖이라 sc-if 대신 display 로 탭 게이팅
 
     return {
-      sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria,
-      fGrade: s.fGrade, fClass: s.fClass, fNum: s.fNum, fName: s.fName,
+      sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria, sheetWidgetDisplay,
+      isRules: s.tab === 'rules', isTime: s.tab === 'time', isMeal: s.tab === 'meal', isSheet: s.tab === 'sheet',
+      goRules: () => this.setState({ tab: 'rules' }), goTime: () => this.setState({ tab: 'time' }),
+      goMeal: () => this.setState({ tab: 'meal' }), goSheet: () => this.setState({ tab: 'sheet' }),
+      tabRules: this.tabStyle(s.tab === 'rules', '#fbe6a2', '#f0c95c'),
+      tabTime: this.tabStyle(s.tab === 'time', '#c4d8f7', '#7fa9e8'),
+      tabMeal: this.tabStyle(s.tab === 'meal', '#bfe9dd', '#6fc9b0'),
+      tabSheet: this.tabStyle(s.tab === 'sheet', '#f9cade', '#ee9dbf'),
+      gradeOpts, classOpts, gradeVal: String(s.grade), classVal: String(s.cls),
+      setGrade: (e) => {
+        const g = Number(e.target.value);
+        const max = ({ 1: 9, 2: 11, 3: 12 })[g] || 12;
+        const c = Math.min(this.state.cls, max);
+        this.setState({ grade: g, cls: c });
+        this.loadTimetable(g, c);
+      },
+      setCls: (e) => {
+        const c = Number(e.target.value);
+        this.setState({ cls: c });
+        this.loadTimetable(this.state.grade, c);
+      },
+      timeViews: mkViews(s.timeView, 'timeView', accent), mealViews: mkViews(s.mealView, 'mealView', '#bfe9dd'),
+      timeIsDay: s.timeView === 'day', timeIsWeek: s.timeView === 'week', timeIsMonth: s.timeView === 'month',
+      mealIsDay: s.mealView === 'day', mealIsWeek: s.mealView === 'week', mealIsMonth: s.mealView === 'month',
+      timeCaption: s.grade + '학년 ' + s.cls + '반 · 2026학년도 2학기',
+      mealCaption: '신현중학교 급식실 · 2026년 9월',
+      todayLabel: (() => {
+        const n = s.now || new Date();
+        return n.getFullYear() + '년 ' + (n.getMonth() + 1) + '월 ' + n.getDate() + '일 (' + ['일', '월', '화', '수', '목', '금', '토'][n.getDay()] + ')';
+      })(),
+      dayRows: dayRowsMerged, weekRows, weekHeads, monthCells,
+      dowHeads: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      todayMeal, weekMeals, mealMonthCells,
+      fGrade: s.fGrade, fClass: s.fClass, fNum: s.fNum, fName: s.fName, reflect: s.reflect,
       setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
-      fqItems,
-      saved: s.saved, savedName: s.savedName || '이름 없는 친구',
+      setReflect: set('reflect'),
+      q1, q1Feedback, q1FeedbackStyle,
+      a3Items, oxItems, fqItems,
+      prog2: s.prog2, setProg2: set('prog2'),
+      steps, saved: s.saved, savedName: s.savedName || '이름 없는 친구',
       savePdf: () => {
+        // ── 제출 전 가드: 이름 미입력 · 진행률 부족이면 팝업 안내 후 중단 ──
+        if (!String(this.state.fName == null ? '' : this.state.fName).trim()) {
+          window.alert('이름을 적어주세요.');
+          const _nf = document.querySelector('#sheetPrintArea textarea[placeholder="이름을 적어요"]');
+          if (_nf) _nf.focus();
+          return;
+        }
+        const _pp = (typeof this._progressParts === 'function')
+          ? this._progressParts()
+          : { done: sheetDone, total: sheetTotal };
+        const _pct = _pp.total ? Math.round(_pp.done / _pp.total * 100) : 0;
+        if (_pct <= 70) {
+          window.alert('활동지를 모두 채워주세요.\n(현재 ' + _pct + '% 완료)');
+          return;
+        }
+
         const dig = (v) => String(v == null ? '' : v).replace(/[^0-9]/g, '');
         const pad2 = (v) => { const d = dig(v); return d ? (d.length < 2 ? ('0' + d).slice(-2) : d) : ''; };
         const name = String(s.fName == null ? '' : s.fName).trim();
@@ -1010,6 +2087,7 @@ class Component extends DCLogic {
         // textarea.blank → div (html2canvas 가 textarea 내부 글자를 못 그림).
         const liveTAs = src.querySelectorAll('textarea.blank');
         const cloneTAs = clone.querySelectorAll('textarea.blank');
+        const blankBoxes = [];
         for (let i = 0; i < cloneTAs.length; i++) {
           const ta = cloneTAs[i];
           const live = liveTAs[i];
@@ -1023,7 +2101,7 @@ class Component extends DCLogic {
             + ' box-sizing:border-box; background:#ffffff; color:#26224a;'
             + " font-family:'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif;"
             + ' font-size:15px; line-height:1.6; white-space:pre-wrap; overflow-wrap:break-word; word-break:break-word;');
-          if (ta.parentNode) ta.parentNode.replaceChild(box, ta);
+          if (ta.parentNode) { ta.parentNode.replaceChild(box, ta); blankBoxes.push(box); }
         }
 
         clone.removeAttribute('id');
@@ -1032,6 +2110,19 @@ class Component extends DCLogic {
 
         holder.appendChild(clone);
         document.body.appendChild(holder);
+
+        // [빈칸 클리핑 방지] html2canvas 1.4.1 은 표 셀 등 안에서 여러 줄로 늘어난 빈칸(div)을
+        // 자연 높이로 잘라 그리는 버그가 있다. clone 을 DOM 에 붙인 뒤 실제 콘텐츠 높이를
+        // 재서(scrollHeight) 각 빈칸 div 에 명시적으로 고정하면, 늘어난 답 텍스트가 전부 보인다.
+        for (let i = 0; i < blankBoxes.length; i++) {
+          const b = blankBoxes[i];
+          b.style.height = 'auto';
+          b.style.overflow = 'visible';
+          const h = b.scrollHeight;
+          if (h > 0) b.style.height = (h + 6) + 'px';
+          const cell = b.closest ? b.closest('td, th') : null;
+          if (cell) cell.style.height = 'auto';
+        }
 
         const done = () => {
           if (holder.parentNode) holder.parentNode.removeChild(holder);

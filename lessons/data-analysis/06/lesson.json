@@ -3,7 +3,7 @@
   "unitTitle": "데이터분석",
   "no": "06",
   "title": "데이터 시각화 ② 분포·관계 분석",
-  "shell": "sheet",
+  "shell": "portal",
   "status": "live",
-  "importedFrom": "output/데이터분석/6차시/data6.html"
+  "importedFrom": "input/데이터분석/data06.html"
 }
