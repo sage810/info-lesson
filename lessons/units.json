@@ -1,0 +1,5 @@
+[
+  { "unit": "data-analysis", "title": "데이터 분석", "planned": 10 },
+  { "unit": "ai", "title": "인공지능", "planned": 8 },
+  { "unit": "ethics", "title": "정보 윤리", "planned": 6 }
+]

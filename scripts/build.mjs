@@ -6,12 +6,13 @@
 //   npm run build -- --pages      → GitHub Pages 용만 (--embed 는 구글 사이트 붙여넣기용만)
 //
 // 결과
-//   dist/pages/index.html                         차시 목록 (GitHub Pages 첫 화면)
+//   dist/pages/index.html                         첫 화면: 수업 활동지(차시 목록) · 학습 자료
 //   dist/pages/<단원>/<차시>/index.html · teacher.html   학생용 · 교사용(진행률 위젯 숨김)
+//   dist/pages/materials/<파일>                    학습 자료 (materials/ 그대로 복사)
 //   dist/embed/<단원>-<차시>.html · .teacher.html        한 파일짜리 (구글 사이트 "삽입할 코드"용)
 import fs from 'node:fs';
 import path from 'node:path';
-import { DIST_DIR, SHARED_DIR, pickLessons, listLessons, writeText, rel } from './lib/common.mjs';
+import { DIST_DIR, SHARED_DIR, pickLessons, listLessons, loadUnits, listMaterials, writeText, rel } from './lib/common.mjs';
 import { renderLesson } from './lib/render.mjs';
 import { renderIndex } from './lib/index-page.mjs';
 
@@ -52,7 +53,13 @@ export function build(args = []) {
   if (doPages) {
     // 목록 페이지는 항상 전체 차시 기준으로 다시 만든다
     const pagesDir = path.join(DIST_DIR, 'pages');
-    writeText(path.join(pagesDir, 'index.html'), renderIndex(listLessons()));
+    const materials = listMaterials();
+    writeText(path.join(pagesDir, 'index.html'), renderIndex(listLessons(), loadUnits(), materials));
+    for (const m of materials) {
+      const to = path.join(pagesDir, 'materials', m.file);
+      fs.mkdirSync(path.dirname(to), { recursive: true });
+      fs.copyFileSync(m.src, to);
+    }
     writeText(path.join(pagesDir, '.nojekyll'), '');
     for (const f of ['CookieRun-700.woff2', 'Maplestory-300.woff2', 'Maplestory-700.woff2']) {
       const src = path.join(SHARED_DIR, 'fonts', f);

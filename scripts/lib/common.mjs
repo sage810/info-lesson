@@ -8,6 +8,7 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const LESSONS_DIR = path.join(ROOT, 'lessons');
 export const SHARED_DIR = path.join(ROOT, 'shared');
 export const DIST_DIR = path.join(ROOT, 'dist');
+export const MATERIALS_DIR = path.join(ROOT, 'materials');
 
 // 확장자 → data: URI 의 MIME. 가져오기(import) 때 원본 MIME 과 일치하는 경우에만 파일로 뺀다.
 export const MIME_BY_EXT = {
@@ -52,6 +53,32 @@ export function listLessons() {
     }
   }
   return out;
+}
+
+// lessons/units.json — 첫 화면의 단원 순서·이름·예정 차시 수. [{ "unit": "ai", "title": "인공지능", "planned": 8 }]
+export function loadUnits() {
+  const p = path.join(LESSONS_DIR, 'units.json');
+  return fs.existsSync(p) ? JSON.parse(readText(p)) : [];
+}
+
+// materials/ 의 학습 자료 파일. materials.json 에 적은 순서·제목·설명이 먼저, 안 적은 파일은 파일 이름 순으로 뒤에 붙는다.
+//   materials.json: [{ "file": "개념정리.pdf", "title": "데이터 분석 개념 정리", "desc": "1~4차시 핵심" }]
+export function listMaterials() {
+  if (!fs.existsSync(MATERIALS_DIR)) return [];
+  const files = fs.readdirSync(MATERIALS_DIR).sort()
+    .filter((f) => f !== 'materials.json' && !f.startsWith('.') && fs.statSync(path.join(MATERIALS_DIR, f)).isFile());
+  const metaPath = path.join(MATERIALS_DIR, 'materials.json');
+  const meta = fs.existsSync(metaPath) ? JSON.parse(readText(metaPath)) : [];
+  const out = [];
+  for (const m of meta) {
+    if (files.includes(m.file)) out.push(m);
+    else console.warn(`△ materials.json 에 적은 파일이 materials/ 에 없어요: ${m.file}`);
+  }
+  for (const f of files) if (!meta.some((m) => m.file === f)) out.push({ file: f });
+  return out.map((m) => {
+    const src = path.join(MATERIALS_DIR, m.file);
+    return { ...m, title: m.title || path.parse(m.file).name, size: fs.statSync(src).size, src };
+  });
 }
 
 // "06", "data-analysis/06", "data-analysis" 처럼 느슨하게 받은 인자로 차시를 고른다. 비우면 전부.
@@ -99,7 +126,8 @@ export async function launchBrowser() {
 export async function serveStatic(dir, port = 0) {
   const http = await import('node:http');
   const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css',
-    '.json': 'application/json', ...MIME_BY_EXT };
+    '.json': 'application/json', '.txt': 'text/plain; charset=utf-8', '.csv': 'text/csv; charset=utf-8', '.pdf': 'application/pdf',
+    ...MIME_BY_EXT };
   const server = http.createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';

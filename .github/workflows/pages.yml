@@ -6,7 +6,7 @@ name: 활동지 배포 (GitHub Pages)
 on:
   push:
     branches: [main]
-    paths: ['lessons/**', 'shared/**', 'scripts/**', 'data/neis-snapshot.json', 'site.config.json', '.github/workflows/pages.yml']
+    paths: ['lessons/**', 'materials/**', 'shared/**', 'scripts/**', 'data/neis-snapshot.json', 'site.config.json', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:

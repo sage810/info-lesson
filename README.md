@@ -12,6 +12,8 @@
 | 폴더 | 무엇 | 손으로 고치나? |
 |---|---|---|
 | `lessons/<단원>/<차시>/` | **차시 하나의 모든 것**: `lesson.html`(소스) · `assets/`(그 차시 그림) · `answers.json`(정답) · `spec.md`(기획) · `lesson.json`(제목·상태) | ✅ 여기만 고쳐요 |
+| `lessons/units.json` | 첫 화면 "수업 활동지"의 **단원 순서·이름·예정 차시 수** (예정인데 아직 없는 차시는 "준비 중" 칸으로 보여요). 새 단원 폴더 이름: 데이터 분석 `data-analysis` · 인공지능 `ai` · 정보 윤리 `ethics` | 단원·차시 수가 바뀔 때 |
+| `materials/` | 첫 화면 "학습 자료"에 올릴 파일(PDF·슬라이드 등). 넣기만 하면 카드가 생기고, 제목·설명·순서는 `materials.json` 에 `[{ "file": "파일.pdf", "title": "…", "desc": "…" }]` (안 적으면 파일 이름이 제목). PDF·그림은 새 탭에서 열리고 나머지는 내려받기. 한 파일 100MB 까지 | ✅ 자료를 올릴 때 |
 | `shared/` | 여러 차시가 같이 쓰는 것: `fonts/` · `vendor/`(React·jsPDF 등 라이브러리) · `partials/`(순서배열·붙여넣기 칸 등 동작 스크립트) · `images/` · `runtime/msi-hook.js`(제출·NEIS 연결) | 가끔 (바꾸면 모든 차시에 반영) |
 | `docs/rules/` | 규칙: 디자인(`design.md`) · 활동 유형(`components.md`) · PDF 버튼(`pdf.md`) · 임베드(`embed.md`) · 4탭 탭 명세(`portal/`) · 4탭으로 옮기기(`shell-porting.md`) | 규칙이 바뀔 때 |
 | `docs/log/` | 작업 이력(구현 노트·활동 설계 기록) | 새 활동 유형을 만들면 한 절 추가 |
@@ -46,7 +48,8 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 | 하고 싶은 것 | Claude 에게 | 직접 |
 |---|---|---|
 | 활동지 고치기 | "06 이상치 카드 빈칸으로 만들어줘" | `lessons/…/lesson.html` 수정 → `npm run check -- 06` |
-| 새 차시 | "/lesson-new 08 …" | `npm run new -- data-analysis/08 --from 07 --title "…"` |
+| 새 차시 | "/lesson-new 08 …" | `npm run new -- data-analysis/08 --from 07 --title "…"` (새 단원: `ai/01` · `ethics/01`) |
+| 학습 자료 올리기 | "이 PDF 학습 자료에 올려줘" | 파일을 `materials/` 에 넣기 → (제목·설명은 `materials.json`) → `npm run build` |
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |
 | 완성된 HTML 파일 들여오기 | "이 파일 06차시로 가져와줘" | `npm run import -- <파일> data-analysis/06` |
