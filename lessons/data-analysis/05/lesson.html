@@ -667,13 +667,15 @@
                   </div>
                   <div style="padding:18px; display:flex; flexDirection:column; gap:12px">
                     <sc-for list="{{ todayMeal.items }}" as="m" hint-placeholder-count="5">
-                      <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa">
+                      <div style="display:flex; flexDirection:column; alignItems:center; justifyContent:center; gap:6px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa; textAlign:center">
                         <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px">{{ m.name }}</span>
-                        <span style="display:flex; gap:5px; flexWrap:wrap">
-                          <sc-for list="{{ m.allergens }}" as="a" hint-placeholder-count="2">
-                            <span style="{{ a.style }}">{{ a.label }}</span>
-                          </sc-for>
-                        </span>
+                        <sc-if value="{{ m.hasAl }}" hint-placeholder-val="{{ true }}">
+                          <span style="display:flex; gap:5px; flexWrap:wrap; justifyContent:center">
+                            <sc-for list="{{ m.allergens }}" as="a" hint-placeholder-count="2">
+                              <span style="{{ a.style }}">{{ a.label }}</span>
+                            </sc-for>
+                          </span>
+                        </sc-if>
                       </div>
                     </sc-for>
                     <div style="display:flex; alignItems:center; justifyContent:center; gap:10px; padding:11px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#bfe9dd">
@@ -1752,6 +1754,7 @@ class Component extends DCLogic {
       allergy: '',
       items: (tMeal && tMeal.items.length ? tMeal.items : [{ name: '오늘은 급식 정보가 없어요', al: [] }]).map((it) => ({
         name: dishName(it.name),
+        hasAl: it.al.length > 0,
         allergens: it.al.map((n) => {
           const a = ALLERGENS[n];
           return {

@@ -114,8 +114,10 @@
 - 헤더 스트립: `padding:9px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between`
   - 왼쪽 `TODAY_LUNCH`(Silkscreen 11px), 오른쪽 `{{ todayMeal.date }}` → `"2026.09.03 THU"` 형식(Silkscreen 10px)
 - 본문: `padding:18px; gap:12px`
-  - `todayMeal.items` 각각: `display:flex; alignItems:center; justifyContent:center; gap:12px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa`
-    - 메뉴 이름(`CookieRun 700 19px`) + 알레르기 태그들(§3.3)
+  - `todayMeal.items` 각각: `display:flex; flexDirection:column; alignItems:center; justifyContent:center; gap:6px; padding:10px 12px; border:3px solid #4b3b6b; borderRadius:10px; background:#fdf6fa; textAlign:center`
+    - 첫 줄: 메뉴 이름(`CookieRun 700 19px`) 가운데
+    - 둘째 줄: 알레르기 태그들(§3.3) — `display:flex; gap:5px; flexWrap:wrap; justifyContent:center`.
+      항목에 `hasAl: it.al.length > 0` 을 두고 `<sc-if value="{{ m.hasAl }}">` 로 감싸서, 태그 없는 메뉴는 둘째 줄을 그리지 않는다(2026-09-29)
   - 마지막 TOTAL 줄: `background:#bfe9dd; border:3px solid #4b3b6b; borderRadius:10px` — `TOTAL`(Silkscreen 10px `#3d7f6c`) · `오늘 전체 칼로리`(CookieRun 700 17px) · `{{ todayMeal.kcal }} kcal`(CookieRun 700 20px)
 - **데이터 없는 날**: `items` = `[{ name: '오늘은 급식 정보가 없어요', al: [] }]`, `kcal: 0`
 
