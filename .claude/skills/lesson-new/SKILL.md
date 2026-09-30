@@ -17,6 +17,7 @@ description: >
 PDF 를 받았으면 모든 페이지를 확인한다(표·그림·발문·빈칸 위치). 그림이 필요하면 `input/<단원>/<N>차시/` 에 PNG 로 달라고 한다.
 **PDF 내용으로 차시를 만들 때는 `references/from-pdf.md` 절차를 따른다** — PDF 읽는 도구(`references/pdf-pages.mjs`),
 PDF 요소 → 부품 표, 선생님께 물을 것 체크리스트, 조립·확인 순서가 있다.
+**「활동지 양식.docx」(`docs/templates/`)를 채워 왔으면 `references/from-template.md`** — docx 읽는 도구(`references/docx-read.mjs`)와 표기 → 부품 표.
 
 ## 2. 아이디어 2~3개 제안 ✋
 
