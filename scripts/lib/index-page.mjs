@@ -1,4 +1,4 @@
-// GitHub Pages 첫 화면 — 수업 활동지(lessons/*/lesson.json + lessons/units.json) · 학습 자료(materials/). 손으로 고칠 필요 없음.
+// GitHub Pages 첫 화면 — 수업 활동지(lessons/*/lesson.json + lessons/units.json) · 수업 자료(materials/). 손으로 고칠 필요 없음.
 // 디자인은 docs/rules/design.md 의 토큰(잉크·크림 종이·격자 배경·파스텔 헤더)을 그대로 쓴다.
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ACCENTS = ['#a9dce4', '#c4d8f7', '#fbe6a2', '#d6c4f5', '#bfe9dd', '#eec6ea', '#f7bfb2', '#e3e0b0'];
@@ -36,7 +36,7 @@ export function renderIndex(lessons, units = [], materials = []) {
     const range = u.planned ? `1–${u.planned}차시` : `${u.items.length}차시`;
     return `
       <section class="unit" style="--accent:${ACCENTS[i % ACCENTS.length]}">
-        <div class="unit-head"><p class="range">${range}</p><h3>${esc(u.title)}</h3></div>
+        <div class="unit-head"><h3>${esc(u.title)}</h3><span class="range">${range}</span></div>
         ${rows.length ? `<ol class="rows">${rows.join('')}
         </ol>` : '<p class="empty">아직 등록된 차시가 없어요.</p>'}
       </section>`;
@@ -92,8 +92,9 @@ export function renderIndex(lessons, units = [], materials = []) {
   /* 수업 활동지: 단원마다 세로 칸, 칸 안에 차시가 한 줄씩 */
   .units{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px;align-items:start}
   .unit{border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--paper);box-shadow:5px 5px 0 var(--sh)}
-  .unit-head{background:var(--accent);border-bottom:3px solid var(--ink);padding:12px 16px 14px}
-  .range{margin:0 0 4px;font-size:12px}
+  /* 단원 이름(왼쪽) + 예정 차시 태그(같은 줄 오른쪽, 흰 바탕) */
+  .unit-head{background:var(--accent);border-bottom:3px solid var(--ink);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .range{flex:none;font-size:12px;font-weight:700;line-height:1;border:2px solid var(--ink);border-radius:6px;padding:5px 8px;background:#fff;white-space:nowrap}
   .unit h3{margin:0;font-family:'CookieRun',sans-serif;font-weight:700;font-size:19px}
   .unit .empty{padding:14px 16px}
   .rows{list-style:none;margin:0;padding:0}
@@ -110,7 +111,7 @@ export function renderIndex(lessons, units = [], materials = []) {
   .row.soon .num{color:#a596cc}
   .row.soon .name{font-weight:300;color:var(--muted-2)}
   .draft{font-size:12px;border:2px dashed var(--ink);border-radius:6px;padding:1px 6px;background:var(--paper);white-space:nowrap}
-  /* 학습 자료: 파일 카드 */
+  /* 수업 자료: 파일 카드 */
   .cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:14px}
   .card{display:flex;flex-direction:column;border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--paper);box-shadow:5px 5px 0 var(--sh)}
   .card .head{background:var(--accent);border-bottom:3px solid var(--ink);padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
@@ -129,7 +130,7 @@ export function renderIndex(lessons, units = [], materials = []) {
 <div class="window">
   <div class="titlebar">
     <h1>🏫 신현중학교 정보</h1>
-    <nav class="nav" aria-label="바로 가기"><a class="chip" href="#lessons">📝 수업 활동지</a><a class="chip" href="#materials">📂 학습 자료</a></nav>
+    <nav class="nav" aria-label="바로 가기"><a class="chip" href="#lessons">📝 수업 활동지</a><a class="chip" href="#materials">📂 수업 자료</a></nav>
   </div>
   <main>
     <ul class="notice">
@@ -142,7 +143,7 @@ export function renderIndex(lessons, units = [], materials = []) {
       </div>` : '<p class="empty">아직 등록된 차시가 없어요.</p>'}
     </section>
     <section class="area" id="materials">
-      <h2>📂 학습 자료</h2>
+      <h2>📂 수업 자료</h2>
       ${fileCards ? `<ul class="cards">${fileCards}
       </ul>` : '<p class="empty">아직 올린 자료가 없어요.</p>'}
     </section>

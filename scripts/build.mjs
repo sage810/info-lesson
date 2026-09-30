@@ -6,9 +6,9 @@
 //   npm run build -- --pages      → GitHub Pages 용만 (--embed 는 구글 사이트 붙여넣기용만)
 //
 // 결과
-//   dist/pages/index.html                         첫 화면: 수업 활동지(차시 목록) · 학습 자료
+//   dist/pages/index.html                         첫 화면: 수업 활동지(차시 목록) · 수업 자료
 //   dist/pages/<단원>/<차시>/index.html · teacher.html   학생용 · 교사용(진행률 위젯 숨김)
-//   dist/pages/materials/<파일>                    학습 자료 (materials/ 그대로 복사)
+//   dist/pages/materials/<파일>                    수업 자료 (materials/ 그대로 복사)
 //   dist/embed/<단원>-<차시>.html · .teacher.html        한 파일짜리 (구글 사이트 "삽입할 코드"용)
 import fs from 'node:fs';
 import path from 'node:path';

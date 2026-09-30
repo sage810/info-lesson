@@ -61,7 +61,7 @@ export function loadUnits() {
   return fs.existsSync(p) ? JSON.parse(readText(p)) : [];
 }
 
-// materials/ 의 학습 자료 파일. materials.json 에 적은 순서·제목·설명이 먼저, 안 적은 파일은 파일 이름 순으로 뒤에 붙는다.
+// materials/ 의 수업 자료 파일. materials.json 에 적은 순서·제목·설명이 먼저, 안 적은 파일은 파일 이름 순으로 뒤에 붙는다.
 //   materials.json: [{ "file": "개념정리.pdf", "title": "데이터 분석 개념 정리", "desc": "1~4차시 핵심" }]
 export function listMaterials() {
   if (!fs.existsSync(MATERIALS_DIR)) return [];
