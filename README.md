@@ -29,7 +29,9 @@
 
 | 차시 | 제목 | 틀(shell) | 정답 |
 |---|---|---|---|
-| `data-analysis/02` | 파일과 확장자 | standalone | — |
+| `data-analysis/01` | 디지털 데이터 | portal (4탭) | `answers.json` (끌어 놓기·미니 퀴즈, 정답지 PDF 가능) |
+| `data-analysis/02` | 파일과 확장자 | portal (4탭) | `answers.json` (끌어 놓기·미니 퀴즈·O/X, 정답지 PDF 가능) |
+| `data-analysis/03` | 데이터 과학 | portal (4탭) | `answers.json` (빈칸·사례 고르기·O/X, 정답지 PDF 가능) |
 | `data-analysis/04` | 데이터로 문제 해결하기 — 4단계와 표 읽기 | portal (4탭) | `answers.md` (순서 배열) |
 | `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | — |
 | `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | portal (4탭) | `answers.json` (정답지 PDF 가능) |
@@ -53,6 +55,7 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |
 | 완성된 HTML 파일 들여오기 | "이 파일 06차시로 가져와줘" | `npm run import -- <파일> data-analysis/06` |
+| 4탭 화면을 지금 규칙대로 맞추기 (가져온 뒤·옛 차시) | "06 4탭 화면 최신으로" | `npm run portal-upgrade -- 06` (이미 적용된 건 건너뜀, `--dry` 로 미리 보기) |
 | 시간표·급식 데이터 갱신 | "NEIS 데이터 새로 받아서 반영" | `pwsh scripts/fetch-neis.ps1` → `npm run neis` → `npm run build` |
 | 내 컴퓨터에서 미리 보기 | — | `npm run build` → `npm run serve` |
 | 배포 | "완료, 올려줘" | 커밋 → `git push` (Pages 자동 배포) |

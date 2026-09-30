@@ -1,0 +1,12 @@
+{
+  "_설명": "1차시 정답. 끌어 놓기(이름표 누르기 → 칸 누르기)와 미니 퀴즈만 정답이 있고, 서술형 15칸은 정해진 정답이 없어 비워 둔다(선생님 결정 2026-09-30).",
+  "name": "교사용 정답지",
+  "fill": {},
+  "click": [
+    ".ca-chip[data-v='아날로그']:visible", "#m1Slot1:visible",
+    ".ca-chip[data-v='디지털']:visible", "#m1Slot2:visible",
+    ".ca-chip[data-v='아날로그']:visible", "#m1Slot3:visible",
+    ".ca-chip[data-v='디지털']:visible", "#m1Slot4:visible",
+    "#mq-image:visible", "#mq-sound:visible", "#mqCheck:visible"
+  ]
+}

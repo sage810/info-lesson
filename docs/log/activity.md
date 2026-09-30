@@ -110,3 +110,77 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - **PDF(savePdf)**: hide 목록 `.pz-controls` 유지로 충분(신규 요소는 인쇄돼야 정상).
 - 헤드리스 렌더는 이 환경에서 Edge 불가 → Chrome `--headless=new` `--dump-dom` 으로 하이드레이션 확인
   (`데이터 시각화`×10, `형성평가`×3, MISSION_1~5, 미치환 `{{ }}` 0).
+
+## 디지털 데이터 — PDF 학습지에서 만든 4탭 차시 (lessons/data-analysis/01) — 2026-09-30
+
+`input/데이터분석/데이터 1차시.pdf`(학생 작성본, 쪽마다 그림 한 장)의 **내용만** 옮겨 06 복사본 위에 조립.
+다시 할 때의 절차는 `.claude/skills/lesson-new/references/from-pdf.md`.
+
+### 새로 쓴 활동 요소 (원본 코드: `lessons/data-analysis/01/lesson.html`)
+- **제미나이에게 물어보기 상자** `.callout--gemini`(#f3eefe) — 질문 예시 + "제미나이 답변 요약 ▸" + `textarea.blank rows=2`.
+  안내 문구의 "보라색 상자"와 맞추려고 **연보라는 제미나이 전용**, 안내는 `.callout--info`(#f4f8fe), Tip 은 `--reason`(민트).
+  안내 상자에 `a.gm-btn` "🤖 제미나이 열기"(gemini.google.com 새 탭, 인쇄 시 숨김).
+- **사진 + 이름표 끌어 놓기** — 공용 `chip-slot` 재사용(이름표 2장을 4칸에 복사해 놓기). 줄 배치 `.m1-grid/.m1-row/.m1-pic/.m1-info`
+  (넓으면 2×2, 700px 이하 1열). 그림은 새로 그린 SVG(`assets/m1-*.svg`, **width·height 필수** — 없으면 PDF 에서 빈 칸).
+  `chip-slot.js` 채점 문구를 칸 수에 맞게 일반화(2칸이면 예전과 같은 "두 칸").
+- **모두 고르기 퀴즈** `MQ`/`mqItems` — 보기 토글(`this.chip(on, '#d6c4f5')`) + "✅ 정답 확인"(`#mqCheck`)으로 채점.
+  오답 피드백은 고른 오답(`no`)·빠뜨린 정답(`miss`)마다 이유 한 줄 + 정답.
+
+### 통합 주의
+- **진행률** `_progressParts()` = 빈칸 15 + `.ca-slot.is-filled` 4 + 퀴즈(정답 확인 1번 이상) 1 → 20.
+- **정답지**: 서술형 정답이 없어 진행률이 25% → `npm run teacher` 가 `window.__MSI_ANSWER_SHEET` 를 붙이고, 활동지는 그때만 70% 확인을 건너뜀.
+  끌어 놓기 정답은 `answers.json` click 에 `".ca-chip[data-v='…']:visible"` → `"#m1SlotN:visible"` 두 번.
+- **NEIS 스냅샷**: 06 에서 복사해 온 옛 데이터(9/3 판)를 표식으로 되돌림 — 06 도 함께 고침(가져오기 때 박힌 것).
+
+## 4탭 화면 다듬기 — 칩 탭 · 시간표 날짜 카드 · 급식 ◀ 날짜 ▶ (01·04·05·06) — 2026-09-30
+
+04 에서 선생님과 하나씩 맞춘 뒤 `scripts/portal-upgrade.mjs`(`npm run portal-upgrade`)로 묶어 01·05·06 에 적용.
+스크립트는 옛 04 에 돌린 결과가 손으로 고친 04 와 바이트 단위로 같은지 확인했고, 두 번 돌려도 바뀌지 않는다(멱등).
+
+### 바뀐 것 (규칙: `docs/rules/portal/rule.md` §2 · `timetable.md` §4.1 · `lunch.md` §2.2·§5)
+- **제목줄 탭** — 제목줄 아래에 걸린 탭(`tabStyle`) → 첫 화면과 같은 **칩 버튼**(`tabChip(active,color)`), 오른쪽 정렬.
+  고른 탭 = 탭 색 + 눌린 모양, 안 고른 탭 hover = 떠오르기만(노랑으로 바꾸면 고른 "이용 규칙"과 헷갈려서). 560px 이하 2×2.
+- **시간표 날짜 카드** — 제목 옆 → 제목 아래 줄.
+- **급식 `◀ 날짜 ▶`** — 일간: 하루씩, 토·일 건너뜀 / 주간: `9월 28일 (월) ~ 10월 2일 (금)` 한 주씩 / 월간: `2026년 10월` 한 달씩.
+  `monthGrid(fn, 연, 월)` 로 일반화(안 주면 예전 2026년 9월 — 시간표 월간은 그대로). 다른 달은 그때 받아 합침.
+
+### 통합 주의
+- 처음 열 때 이번 주가 두 달에 걸치면(9/28~10/2) 다음 달 급식도 받아야 주간 10/1·10/2 가 "급식 없음"이 안 된다.
+- 두 달을 연달아 받을 때 `setState({ meal })` 로 덮어쓰면 한쪽이 사라짐 → 함수형 `setState((st) => …)` 로 합친다.
+- 주간 카드 문구는 두 조각(`md-part`) — 폰에서 "~ 10 / 월 2일" 처럼 날짜 중간이 끊기지 않게.
+- 인라인 스타일(dc-runtime)이라 hover·좁은 화면 조정은 CSS 에서 `!important` 로 덮는다.
+- 확인: 날짜를 고정(`page.clock.install`)하고 월 ◀ → 지난주 금, 금 ▶ → 다음 주 월, 추석(9/24·25)·대체공휴일(10/5) = "이 날은 급식 정보가 없어요".
+
+## 파일과 확장자 — PDF 학습지로 02 덮어쓰기 (lessons/data-analysis/02) — 2026-09-30
+
+`input/데이터분석/데이터 2차시 활동지.pdf`(학생 작성본 6쪽) → 01 복사본 위에 조립(절차: `.claude/skills/lesson-new/references/from-pdf.md`).
+예전 02(한 화면 "파일과 확장자", data2.html 가져온 판)는 통째로 바꿈 — git 기록에 있음.
+
+### 새로 쓴 활동 요소 (원본 코드: `lessons/data-analysis/02/lesson.html`)
+- **끌어 놓기 묶음 · 버튼 채점** — 공용 `shared/partials/chip-slot.js` 확장: `[data-ca-group]` 안의 칸끼리만 채점하고 결과는 묶음 안 `.ca-result`,
+  `data-ca-check="button"` 이면 `button.ca-check`(✅ 정답 확인)로만 채점(빈 칸 있으면 알려만 줌), `button.ca-reset`(🔀 다시 섞기) = 칸 비우고 이름표 순서 섞기.
+  다른 묶음 이름표는 놓이지 않음. 묶음 없는 01·04 는 예전 그대로(바로 채점, "두 칸/4칸 모두 정답") — 둘 다 눌러서 확인.
+- **파일 줄**(`.fx-row`: 파일 이름 + 확장자 칸 + 데이터 종류 칸) · **정리함 칸**(`.box-grid`, 700px 이하 1열) · 채점 버튼 `.ca-btn`(PDF 저장·인쇄에선 숨김).
+- **한 문항 고르기** `VQ`(긴 보기 카드, 누르면 바로 ✅/❌ + 이유) · **O/X 묶음** `OXQ`(고른 뒤 정답 확인, 틀린 문항만 "정답은 X — 이유", 다시 풀기).
+  오답 이유 문구는 PDF 내용을 근거로 새로 씀(components.md §2-8).
+
+### 통합 주의
+- 진행률 `_progressParts()` = 빈칸 9 + `.ca-slot.is-filled` 20 + 미니 퀴즈 1 + O/X 고른 문항 수 7 → 37. 다시 섞기·다시 풀기 하면 줄어듦.
+- 버튼 채점 묶음은 칸을 새로 놓으면 그 칸의 맞음/틀림 표시와 결과 문구를 지운다(옛 채점이 남지 않게).
+- 정답지: `answers.json` click 에 묶음별 이름표 → 칸 → 정답 확인, `#vq-norun`, `#oxq-N-O/X` → `#oxqCheck`. M2 3칸만 fill.
+
+## 데이터 과학 — PDF 학습지로 03 만들기 (lessons/data-analysis/03) — 2026-09-30
+
+`input/데이터분석/데이터 3차시 활동지.pdf`(학생 작성본 8쪽) → 02 복사본 위에 조립(절차: `.claude/skills/lesson-new/references/from-pdf.md`).
+
+### 새로 쓴 활동 요소 (원본 코드: `lessons/data-analysis/03/lesson.html`)
+- **과정 줄** `.st-row`(단계 이름 + 문장 속 글자 칸 `textarea.blank.blank--inline`, 칸 너비는 `style="width:…px"`, 700px 이하 위아래) — 정해진 낱말 빈칸을 PDF 처럼 글자로 쓰게 할 때.
+  `.st-mean` 은 콜아웃 안 문장 빈칸(정의·판단의 열쇠)에도 씀. PDF 저장에선 인라인 칸이 글자 길이만큼(최소 120px) 그려짐.
+- **사례 상자** `.case-box`(`.case-lbl--no` ❌ 직관 / `.case-lbl--ok` ✅ 데이터 / `.case-ar` → 결정 줄).
+- **둘 중 하나 고르기 여러 문항** `DQ` + `dqItems`(문항마다 "맞다/아니다", 누르면 바로 ✅/❌ + 이유) — 02 `VQ`(한 문항)의 여러 문항판.
+- `.miniflow` 는 700px 이하에서 세로로 쌓고 화살표를 ↓ 로 돌림(03 CSS 에만).
+- `<b>` 는 본문 글꼴(Maplestory)에서 굵게 안 보임 → 굵게 할 말은 `.case-lbl`(CookieRun 700) 로.
+
+### 통합 주의
+- 진행률 `_progressParts()` = 빈칸 28 + 사례 퀴즈 고른 문항 2 + O/X 고른 문항 5 → 35.
+- 정답지: `answers.json` fill 15칸(낱말 11 + 사례 이름 2 + 직업 2), 생각을 쓰는 13칸은 비움. click `#dq-1-Y`·`#dq-2-N`, `#oxq-N-O/X` → `#oxqCheck`.

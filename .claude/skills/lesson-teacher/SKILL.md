@@ -37,3 +37,5 @@ description: >
 
 PDF 는 활동지 안의 "PDF로 저장하기" 버튼을 그대로 눌러 만든다 — 학생이 받는 PDF 와 모양이 같다.
 그래서 이름 미입력·진행률 부족 가드가 있는 차시는 `name` 과 충분한 정답이 있어야 통과한다.
+서술형 정답이 없어 진행률이 모자란 차시(예: 01)는 활동지의 70% 확인을 `if (_pct <= 70 && !window.__MSI_ANSWER_SHEET)` 로
+바꿔 둔다 — `npm run teacher` 가 페이지를 열 때만 `window.__MSI_ANSWER_SHEET = true` 를 붙여서 학생 화면 규칙은 그대로다.

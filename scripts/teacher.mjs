@@ -38,6 +38,9 @@ try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, acceptDownloads: true });
     const alerts = [];
     page.on('dialog', (d) => { alerts.push(d.message()); d.accept(); });
+    // 정답지 모드 표시 — 서술형 정답이 없어 진행률이 낮은 차시도 PDF 를 받을 수 있게,
+    // 활동지의 "70% 넘어야 저장" 확인이 이 표시를 보면 건너뛴다(학생 화면에는 없음)
+    await page.addInitScript(() => { window.__MSI_ANSWER_SHEET = true; });
     await page.goto(pathToFileURL(tmp).href, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(1500);
     if (!(await page.locator('#pdfBtn').count())) {

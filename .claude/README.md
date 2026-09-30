@@ -63,5 +63,6 @@
 | `npm run teacher -- 06` | answers.json 으로 정답지 PDF |
 | `npm run new -- data-analysis/08 --from 07 --title "…"` | 새 차시 폴더 |
 | `npm run import -- <파일> data-analysis/06` | 완성된 한 파일짜리 HTML 을 차시 소스로 가져오기 (원본과 바이트 단위 동일 확인) |
+| `npm run portal-upgrade -- 06` | 4탭 차시 화면을 지금 규칙대로 — 제목줄 칩 탭 · 시간표 날짜 카드 · 급식 ◀ 날짜 ▶ · 급식 일간 가운데 (이미 적용된 건 건너뜀, `--dry`) |
 | `npm run neis` | `data/timetable.json`·`meal.json` → `data/neis-snapshot.json` (시간표·급식 탭 데이터) |
 | `npm run serve` | `dist/pages` 를 내 컴퓨터에서 열어 보기 |

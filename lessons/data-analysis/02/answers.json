@@ -1,0 +1,37 @@
+{
+  "_설명": "2차시 정답(선생님 확인 2026-09-30, PDF 답 그대로). 끌어 놓기는 묶음(m1a·m1b)별로 이름표 누르기 → 칸 누르기 → 정답 확인. 제미나이 답변 요약 6칸은 정해진 정답이 없어 비워 둔다.",
+  "name": "교사용 정답지",
+  "fill": {
+    "M2 스크린샷 확장자": "jpg, png",
+    "M2 화면 녹화 확장자": "mp4",
+    "M2 메모장 확장자": "txt"
+  },
+  "click": [
+    "[data-ca-group='m1a'] .ca-chip[data-v='.txt']:visible", "#m1a-1-ext:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='문자와 숫자 데이터']:visible", "#m1a-1-type:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='.mp4']:visible", "#m1a-2-ext:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='동영상 데이터']:visible", "#m1a-2-type:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='.mp3']:visible", "#m1a-3-ext:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='소리 데이터']:visible", "#m1a-3-type:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='.jpg']:visible", "#m1a-4-ext:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='이미지 데이터']:visible", "#m1a-4-type:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='.mov']:visible", "#m1a-5-ext:visible",
+    "[data-ca-group='m1a'] .ca-chip[data-v='동영상 데이터']:visible", "#m1a-5-type:visible",
+    "#m1aCheck:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='📄 문서함']:visible", "#m1b-txt:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='📄 문서함']:visible", "#m1b-pdf:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🖼 이미지함']:visible", "#m1b-jpg:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🖼 이미지함']:visible", "#m1b-png:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🖼 이미지함']:visible", "#m1b-gif:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🎵 음악함']:visible", "#m1b-mp3:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🎵 음악함']:visible", "#m1b-wav:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🎬 영상함']:visible", "#m1b-mp4:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🎬 영상함']:visible", "#m1b-avi:visible",
+    "[data-ca-group='m1b'] .ca-chip[data-v='🎬 영상함']:visible", "#m1b-mov:visible",
+    "#m1bCheck:visible",
+    "#vq-norun:visible",
+    "#oxq-1-O:visible", "#oxq-2-O:visible", "#oxq-3-X:visible", "#oxq-4-O:visible",
+    "#oxq-5-O:visible", "#oxq-6-X:visible", "#oxq-7-O:visible",
+    "#oxqCheck:visible"
+  ]
+}

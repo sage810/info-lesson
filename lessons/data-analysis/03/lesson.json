@@ -1,9 +1,9 @@
 {
   "unit": "data-analysis",
   "unitTitle": "데이터분석",
-  "no": "02",
-  "title": "파일과 확장자",
+  "no": "03",
+  "title": "데이터 과학",
   "shell": "portal",
   "status": "live",
-  "copiedFrom": "data-analysis/01"
+  "copiedFrom": "data-analysis/02"
 }
