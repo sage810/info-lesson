@@ -1,0 +1,35 @@
+{
+  "_설명": "4차시 정답(선생님 확인 2026-09-30). 개념 빈칸은 학습지 문맥·힌트 문장을 근거로 정하고 선생님이 확인했다. 표 문제(포켓몬·만화)는 표에서 바로 나오는 값. 그래프 붙여넣기 칸은 학생이 직접 하는 것이라 비운다. 순서 배열 4단계는 answers.md 에도 적혀 있다.",
+  "name": "교사용 정답지",
+  "fill": {
+    "문제 정의 빈칸": "무엇",
+    "확인 항목 1": "구체적인가?",
+    "확인 항목 2": "데이터로 답할 수 있는가?",
+    "확인 항목 3": "범위가 좁은가?",
+    "A2 프로그램 이름": "한셀, 엑셀, 구글 스프레드시트",
+    "속성 정의 빈칸": "특징",
+    "A4 (1) A2 셀의 데이터": "피카츄",
+    "A4 (2) 꼬부기 타입 셀 주소": "B4",
+    "A4 (3) 방어력이 가장 센 포켓몬": "꼬부기",
+    "A4 (4) 이상해씨 방어력 셀 주소": "E5",
+    "A5 속성 개수": "5개 (순위, 만화 제목, 연재 시작 시기, 판매 부수, 완결 여부)",
+    "A5 완결 여부 열의 데이터": "연재 중, 완결"
+  },
+  "click": [
+    ".seq-chip[data-answer-key='step1']:visible", "#seqSlotPrev1:visible",
+    ".seq-chip[data-answer-key='step2']:visible", "#seqSlotPrev2:visible",
+    ".seq-chip[data-answer-key='step3']:visible", "#seqSlotPrev3:visible",
+    ".seq-chip[data-answer-key='step4']:visible", "#seqSlotPrev4:visible",
+    { "near": "데이터 분석을 할 질문으로 가장 적절하지 않은 것은?", "text": "② 어떤 색깔이 가장 예쁜가?" },
+    { "near": "주황색으로 칠해진 줄은", "text": "행" },
+    { "near": "파란색으로 칠해진 줄은", "text": "열" },
+    { "near": "두 색이 겹쳐 보라색이 된 한 칸은", "text": "셀" },
+    ".ca-chip[data-v='열']:visible", "#caSlot1:visible",
+    ".ca-chip[data-v='행']:visible", "#caSlot2:visible",
+    { "near": "1. '어떤 음악이 가장 아름다운가?'는", "text": "X" },
+    { "near": "2. 데이터로 해결할 문제를 정할 때", "text": "X" },
+    { "near": "3. 표에서 가로줄은", "text": "O" },
+    { "near": "4. 표에서 세로줄은 숫자", "text": "X" },
+    { "near": "5. 행과 열이 만나는 하나의 칸을", "text": "O" }
+  ]
+}

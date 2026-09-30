@@ -32,10 +32,10 @@
 | `data-analysis/01` | 디지털 데이터 | portal (4탭) | `answers.json` (끌어 놓기·미니 퀴즈, 정답지 PDF 가능) |
 | `data-analysis/02` | 파일과 확장자 | portal (4탭) | `answers.json` (끌어 놓기·미니 퀴즈·O/X, 정답지 PDF 가능) |
 | `data-analysis/03` | 데이터 과학 | portal (4탭) | `answers.json` (빈칸·사례 고르기·O/X, 정답지 PDF 가능) |
-| `data-analysis/04` | 데이터로 문제 해결하기 — 4단계와 표 읽기 | portal (4탭) | `answers.md` (순서 배열) |
-| `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | — |
+| `data-analysis/04` | 데이터로 문제 해결하기 — 4단계와 표 읽기 | portal (4탭) | `answers.json` (빈칸·순서 배열·끌어 놓기·O/X, 정답지 PDF 가능) · `answers.md`(순서 배열 설명) |
+| `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | `answers.json` (빈칸·유형 고르기, 정답지 PDF 가능) |
 | `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | portal (4탭) | `answers.json` (정답지 PDF 가능) |
-| `data-analysis/07` | 신입 유튜버의 국내 TOP 100 채널 분석 | standalone | `answers.md` (채점 기준) |
+| `data-analysis/07` | 신입 유튜버의 국내 TOP 100 채널 분석 | standalone | `answers.json` (정답 대신 **채점 기준** PDF) · `answers.md`(채점 기준 원문) |
 
 ## 처음 한 번 (Windows)
 
@@ -51,6 +51,7 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 |---|---|---|
 | 활동지 고치기 | "06 이상치 카드 빈칸으로 만들어줘" | `lessons/…/lesson.html` 수정 → `npm run check -- 06` |
 | 새 차시 | "/lesson-new 08 …" | `npm run new -- data-analysis/08 --from 07 --title "…"` (새 단원: `ai/01` · `ethics/01`) |
+| 양식으로 새 차시 | `docs/templates/활동지 양식.docx` 를 채워서 "이 양식으로 08차시 만들어줘" | (Word · Google 문서 둘 다 됨) |
 | 수업 자료 올리기 | "이 PDF 수업 자료에 올려줘" | 파일을 `materials/` 에 넣기 → (제목·설명은 `materials.json`) → `npm run build` |
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |

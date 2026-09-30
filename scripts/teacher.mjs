@@ -78,8 +78,12 @@ try {
         while (walker.nextNode()) {
           const node = walker.currentNode;
           if (!node.nodeValue.includes(near)) continue;
+          // x-dc 가 화면 밖에 남기는 숨은 원본 복제본의 글자는 건너뛴다 —
+          // 그 글자에서 위로 올라가면 곧장 body 라, 문서 전체에서 맨 처음 나오는 버튼을 눌러 버린다(04 행·열·셀).
+          if (!node.parentElement || !node.parentElement.getClientRects().length) continue;
           let el = node.parentElement;
-          for (let hop = 0; el && hop < 5; hop++, el = el.parentElement) {
+          // body·html 까지 올라가면 그 "문서 전체에서 처음 찾기"가 되므로 그 앞에서 멈춘다
+          for (let hop = 0; el && el !== document.body && hop < 5; hop++, el = el.parentElement) {
             const hit = [...el.querySelectorAll('*')].find((x) => x.children.length === 0
               && x.textContent.trim() === text && x.getClientRects().length);
             if (hit) { if (!best || hop < best.hop) best = { hit, hop }; break; }

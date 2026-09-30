@@ -813,7 +813,7 @@
                 <div style="padding:14px 16px; border:3px solid #4b3b6b; borderRadius:12px; background:#fffdf7; display:flex; flexDirection:column; gap:10px; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
                   <div style="display:flex; alignItems:center; gap:10px; flexWrap:wrap">
                     <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; flex:none">프로그램 이름</span>
-                    <textarea class="blank" rows="1" placeholder="여기에 적어요" value="{{ prog2 }}" onChange="{{ setProg2 }}" style="flex:1; min-width:160px"></textarea>
+                    <textarea class="blank" rows="1" placeholder="여기에 적어요" value="{{ prog2 }}" onChange="{{ setProg2 }}" style="flex:1; min-width:160px" aria-label="A2 프로그램 이름"></textarea>
                   </div>
                   <div style="display:flex; alignItems:flex-start; gap:10px">
                     <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; flex:none">공통점</span>
@@ -983,19 +983,19 @@
                 <div style="display:flex; flexDirection:column; gap:10px">
                   <div style="display:flex; flexDirection:column; gap:4px">
                     <span style="fontSize:15px">(1) A2 셀에는 어떤 데이터가 들어있나요?</span>
-                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A4 (1) A2 셀의 데이터"></textarea>
                   </div>
                   <div style="display:flex; flexDirection:column; gap:4px">
                     <span style="fontSize:15px">(2) 꼬부기의 타입이 들어있는 셀의 주소는 무엇인가요?</span>
-                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A4 (2) 꼬부기 타입 셀 주소"></textarea>
                   </div>
                   <div style="display:flex; flexDirection:column; gap:4px">
                     <span style="fontSize:15px">(3) 방어력이 가장 센 포켓몬의 이름은 무엇인가요?</span>
-                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A4 (3) 방어력이 가장 센 포켓몬"></textarea>
                   </div>
                   <div style="display:flex; flexDirection:column; gap:4px">
                     <span style="fontSize:15px">(4) 이상해씨의 방어력을 알 수 있는 셀의 주소는 어디인가요?</span>
-                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                    <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A4 (4) 이상해씨 방어력 셀 주소"></textarea>
                   </div>
                   <div style="display:flex; flexDirection:column; gap:10px">
                     <div style="fontSize:13px; color:#8b7cb8">아래 카드를 빈칸으로 끌어다 놓아요. (누른 뒤 빈칸을 눌러도 돼요.)</div>
@@ -1056,11 +1056,11 @@
                 </div>
                 <div style="display:flex; flexDirection:column; gap:4px">
                   <span style="fontSize:15px">이 표에서 '속성'은 모두 몇 개인가요?</span>
-                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A5 속성 개수"></textarea>
                 </div>
                 <div style="display:flex; flexDirection:column; gap:4px">
                   <span style="fontSize:15px">'완결 여부'라는 속성의 열에는 어떤 데이터들이 있나요?</span>
-                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요"></textarea>
+                  <textarea class="blank" rows="1" placeholder="여기에 답을 적어요" aria-label="A5 완결 여부 열의 데이터"></textarea>
                 </div>
                 <div style="border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#f1fbf7; boxShadow:4px 4px 0 rgba(75,59,107,.18)">
                   <div style="padding:8px 14px; borderBottom:3px solid #4b3b6b; background:#bfe9dd; display:flex; alignItems:center; gap:8px">
