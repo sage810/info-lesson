@@ -11,7 +11,8 @@
     "new": "node scripts/new-lesson.mjs",
     "import": "node scripts/import.mjs",
     "neis": "node scripts/neis-snapshot.mjs",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "portal-upgrade": "node scripts/portal-upgrade.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.56.1"

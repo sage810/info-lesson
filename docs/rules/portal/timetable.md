@@ -83,9 +83,11 @@ const DAYS = ['월','화','수','목','금'];          // 주간/월간은 월~�
 
 ### 4.1 헤더 줄 (가운데 정렬)
 
-- `시간표` — `GangwonEdu 30px`
-- 오늘 날짜 배지 `{{ todayLabel }}` → `"2026년 9월 3일 (목)"` 형식. `border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; CookieRun 700 16px; boxShadow:3px 3px 0 …`
-- 픽셀 태그 `TIMETABLE` — `Silkscreen 11px; background:#c4d8f7; border:3px solid #4b3b6b; borderRadius:6px`
+- 첫 줄: `시간표`(`GangwonEdu 30px`) + 픽셀 태그 `TIMETABLE`(`Silkscreen 11px; background:#c4d8f7; border:3px solid #4b3b6b; borderRadius:6px`)
+- **다음 줄**(2026-09-30): 오늘 날짜 배지 `{{ todayLabel }}` → `"2026년 9월 3일 (목)"` 형식.
+  `border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; CookieRun 700 16px; boxShadow:3px 3px 0 …; alignSelf:center; marginTop:-8px`
+  (제목 줄 `div` 가 닫힌 **뒤**에 둔다. 옛 모양(제목 옆)은 `npm run portal-upgrade` 가 옮긴다)
+- 월간 보기의 `monthGrid(fn)` 는 달을 안 주면 예전처럼 2026년 9월이다(급식 월간만 `monthGrid(fn, 연, 월)` 로 달을 넘김 — lunch.md §5.5).
 
 ### 4.2 학년/반 선택 박스
 

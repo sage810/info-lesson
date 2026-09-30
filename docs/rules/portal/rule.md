@@ -22,17 +22,24 @@
 이 탭만이 아니라 4개 탭이 공유하는 껍데기. `docs/rules/design.md` §3.2 · §9 와 동일.
 
 - 바깥: `background:#fffdf7; border:4px solid #4b3b6b; borderRadius:16px; boxShadow:8px 8px 0 rgba(75,59,107,.22); overflow:hidden`
-- 타이틀바: `padding:14px 16px 0; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)`
+- 타이틀바(`#appTitlebar`): `display:flex; alignItems:center; flexWrap:wrap; gap:10px 14px; padding:14px 16px; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)`
   - 제목 `🏫 신현중학교 정보` — `fontFamily:'GangwonEdu'; fontSize:25px; letterSpacing:.5px`
-  - 창 버튼 3개 `_ □ X` — 각 `26×22px; border:3px solid #4b3b6b; borderRadius:5px; fontFamily:'Silkscreen'`, `X` 만 배경 `#f7a8c4`
-  - 탭 버튼 4개(순서 고정): `📜 이용 규칙` / `🕒 시간표` / `🍚 오늘의 급식` / `✏️ 수업 활동지`
-    - 스타일은 `tabStyle(active,color,cap)` (design.md §3.4). 탭별 `color`/`cap`:
-      | 탭 | color | cap |
-      |---|---|---|
-      | 이용 규칙 | `#fbe6a2` | `#f0c95c` |
-      | 시간표 | `#c4d8f7` | `#7fa9e8` |
-      | 오늘의 급식 | `#bfe9dd` | `#6fc9b0` |
-      | 수업 활동지 | `#f9cade` | `#ee9dbf` |
+  - 탭 버튼 4개(순서 고정): `📜 이용 규칙` / `🕒 시간표` / `🍚 오늘의 급식` / `✏️ 수업 활동지` — **칩 모양(2026-09-30)**
+    - 묶음: `<div role="tablist" style="marginLeft:auto; display:flex; gap:8px; flexWrap:wrap; alignItems:center">` → 제목줄 **오른쪽**
+    - 각 탭: `<div class="tab-chip" role="tab" aria-selected="{{ tabXxxSel }}" onClick="{{ goXxx }}" style="{{ tabXxx }}">`
+    - 스타일은 `tabChip(active, color)` — 첫 화면(index) 칩 버튼과 같은 모양(design.md §3.7):
+      안 고른 탭 = 흰 바탕 `#fffdf7`, `3px` 테두리, `borderRadius:9px`, `padding:7px 13px`, 그림자 `3px 3px 0 rgba(75,59,107,.25)`,
+      마우스를 올리면 떠오르기만(`.tab-chip[aria-selected="false"]:hover` — 색은 바꾸지 않음) /
+      고른 탭 = 아래 탭 색으로 채우고 눌린 모양(`translate(1px,1px)`, 그림자 `2px 2px 0 rgba(75,59,107,.35)`)
+      | 탭 | 고른 탭 색 |
+      |---|---|
+      | 이용 규칙 | `#fbe6a2` |
+      | 시간표 | `#c4d8f7` |
+      | 오늘의 급식 | `#bfe9dd` |
+      | 수업 활동지 | `#f9cade` |
+    - 좁은 화면(`max-width:560px`): 탭 4개는 아래 줄에 2×2, 창 버튼은 제목 옆(`order`)
+  - 창 버튼 3개 `_ □ X`(`.win-btns`) — 각 `26×22px; border:3px solid #4b3b6b; borderRadius:5px; fontFamily:'Silkscreen'`, `X` 만 배경 `#f7a8c4`
+  - 옛 모양(탭이 제목줄 아래에 걸린 `tabStyle(active,color,cap)`, design.md §3.4)은 `npm run portal-upgrade` 가 이 모양으로 바꾼다.
 - 창 본문 컨테이너: `padding:24px 22px 30px`
 - 전체 래퍼: `zoom:1.1`, 페이지 배경은 격자(`#e7e3f7` + `#d8d2ee` 1px 격자, `backgroundSize:28px 28px`), `maxWidth:1080px; margin:0 auto`
 - 하단 푸터: `@sage810` (GitHub 아이콘 + 텍스트, `Maplestory` 14px `#6b7fa8`)

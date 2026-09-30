@@ -14,6 +14,23 @@
 /* Silkscreen (라틴 전용) woff2 인라인 — 외부 폰트가 CSP로 막혀도 픽셀 라벨 유지 */
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;src:url(msi-asset:shared/fonts/Silkscreen-700.woff2) format('woff2');}
+  /* 제목줄 칩 탭 — 안 고른 탭 hover: 떠오르기만(색은 고른 탭 표시용이라 바꾸지 않음) */
+  .tab-chip[aria-selected="false"]:hover { transform:translate(-1px,-1px) !important; box-shadow:4px 4px 0 rgba(75,59,107,.35) !important; }
+  /* 좁은 화면: 창 버튼은 제목 옆으로, 탭 4개는 아래 줄에 2×2 */
+  @media (max-width: 560px) {
+    #appTitlebar [role="tablist"] { order: 2; width: 100%; margin-left: 0 !important; display: grid !important; grid-template-columns: 1fr 1fr; }
+    #appTitlebar .tab-chip { justify-content: center; }
+    #appTitlebar .win-btns { order: 1; margin-left: auto; }
+  }
+  .meal-date { display: flex; flex-wrap: wrap; justify-content: center; column-gap: .35em; }
+  .meal-date .md-part { white-space: nowrap; }
+  .meal-date .md-part:empty { display: none; }
+  /* 급식 ◀ 날짜 ▶ — 좁은 화면에서 창 안에 들어오게(인라인 스타일을 이기려고 !important) */
+  @media (max-width: 420px) {
+    .meal-nav { gap: 6px !important; }
+    .meal-nav-btn { padding: 6px 10px !important; }
+    .meal-date { padding: 5px 9px !important; font-size: 14px !important; white-space: normal !important; text-align: center; }
+  }
 </style>
 <!-- react@18.3.1 UMD production (unpkg 인라인) — loadReactUmd() 가 window.React 존재 시 fetch 스킵 -->
 <script data-msi-src="shared/vendor/react.production.min.js"></script>
@@ -408,16 +425,15 @@
 
     <div style="background:#fffdf7; border:4px solid #4b3b6b; borderRadius:16px; boxShadow:8px 8px 0 rgba(75,59,107,.22); overflow:hidden">
 
-      <div id="appTitlebar" style="display:flex; alignItems:flex-end; gap:14px; padding:14px 16px 0; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)">
-        <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:25px; letterSpacing:.5px; flex:none; whiteSpace:nowrap; paddingBottom:12px">🏫 신현중학교 정보</div>
-        <div style="flex:1"></div>
-        <div style="display:flex; gap:4px; alignItems:flex-end">
-          <div onClick="{{ goRules }}" style="{{ tabRules }}"><span>📜</span><span>이용 규칙</span></div>
-          <div onClick="{{ goTime }}" style="{{ tabTime }}"><span>🕒</span><span>시간표</span></div>
-          <div onClick="{{ goMeal }}" style="{{ tabMeal }}"><span>🍚</span><span>오늘의 급식</span></div>
-          <div onClick="{{ goSheet }}" style="{{ tabSheet }}"><span>✏️</span><span>수업 활동지</span></div>
+      <div id="appTitlebar" style="display:flex; alignItems:center; flexWrap:wrap; gap:10px 14px; padding:14px 16px; borderBottom:4px solid #4b3b6b; background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%)">
+        <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:25px; letterSpacing:.5px; flex:none; whiteSpace:nowrap">🏫 신현중학교 정보</div>
+        <div role="tablist" aria-label="화면 고르기" style="marginLeft:auto; display:flex; gap:8px; flexWrap:wrap; alignItems:center">
+          <div class="tab-chip" role="tab" aria-selected="{{ tabRulesSel }}" onClick="{{ goRules }}" style="{{ tabRules }}"><span>📜</span><span>이용 규칙</span></div>
+          <div class="tab-chip" role="tab" aria-selected="{{ tabTimeSel }}" onClick="{{ goTime }}" style="{{ tabTime }}"><span>🕒</span><span>시간표</span></div>
+          <div class="tab-chip" role="tab" aria-selected="{{ tabMealSel }}" onClick="{{ goMeal }}" style="{{ tabMeal }}"><span>🍚</span><span>오늘의 급식</span></div>
+          <div class="tab-chip" role="tab" aria-selected="{{ tabSheetSel }}" onClick="{{ goSheet }}" style="{{ tabSheet }}"><span>✏️</span><span>수업 활동지</span></div>
         </div>
-        <div style="display:flex; gap:6px; paddingBottom:12px">
+        <div class="win-btns" style="display:flex; gap:6px">
           <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">_</div>
           <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#fffdf7; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:9px">□</div>
           <div style="width:26px; height:22px; border:3px solid #4b3b6b; borderRadius:5px; background:#f7a8c4; display:flex; alignItems:center; justifyContent:center; fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">X</div>
@@ -518,10 +534,10 @@
           <div style="display:flex; flexDirection:column; gap:18px">
             <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
               <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">시간표</div>
-              <div style="border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; padding:5px 14px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; boxShadow:3px 3px 0 rgba(75,59,107,.18)">{{ todayLabel }}</div>
 <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:#c4d8f7; border:3px solid #4b3b6b; borderRadius:6px; padding:4px 8px">TIMETABLE</div>
               
             </div>
+            <div style="border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; padding:5px 14px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; boxShadow:3px 3px 0 rgba(75,59,107,.18); alignSelf:center; marginTop:-8px">{{ todayLabel }}</div>
 
             
 
@@ -655,6 +671,11 @@
                   <div onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</div>
                 </sc-for>
               </div>
+              <div class="meal-nav" style="display:flex; alignItems:center; justifyContent:center; gap:10px; marginTop:6px">
+                <div class="meal-nav-btn" role="button" aria-label="{{ mealPrevAria }}" title="{{ mealPrevAria }}" onClick="{{ mealPrev }}" style="{{ mealNavStyle }}">◀</div>
+                <div class="meal-date" style="border:3px solid #4b3b6b; borderRadius:10px; background:#fffdf7; padding:5px 14px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:16px; boxShadow:3px 3px 0 rgba(75,59,107,.18); whiteSpace:nowrap"><span class="md-part">{{ mealCardA }}</span><span class="md-part">{{ mealCardB }}</span></div>
+                <div class="meal-nav-btn" role="button" aria-label="{{ mealNextAria }}" title="{{ mealNextAria }}" onClick="{{ mealNext }}" style="{{ mealNavStyle }}">▶</div>
+              </div>
               
             </div>
 
@@ -662,7 +683,7 @@
               <div style="display:flex; gap:16px; flexWrap:wrap; alignItems:stretch; justifyContent:center">
                 <div style="width:100%; maxWidth:560px; border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:6px 6px 0 rgba(75,59,107,.2)">
                   <div style="padding:9px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between; alignItems:center">
-                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">TODAY_LUNCH</span>
+                    <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">{{ todayMeal.tag }}</span>
                     <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px">{{ todayMeal.date }}</span>
                   </div>
                   <div style="padding:18px; display:flex; flexDirection:column; gap:12px">
@@ -680,7 +701,7 @@
                     </sc-for>
                     <div style="display:flex; alignItems:center; justifyContent:center; gap:10px; padding:11px 14px; border:3px solid #4b3b6b; borderRadius:10px; background:#bfe9dd">
                       <span style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:10px; color:#3d7f6c">TOTAL</span>
-                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">오늘 전체 칼로리</span>
+                      <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:17px">{{ todayMeal.kcalLabel }}</span>
                       <span style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:20px">{{ todayMeal.kcal }} kcal</span>
                     </div>
                   </div>
@@ -1306,7 +1327,7 @@ class Component extends DCLogic {
     fq: [null, null, null],
     q1Pick: '', prog2: '', a3: [null, null, null], ox: [null, null, null, null, null], reflect: '', checks: [false, false, false, false],
     saved: false, savedName: '', sheetTick: 0,
-    tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', neisErr: ''
+    tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', mealDay: '', mealWeek: '', mealMonth: '', neisErr: ''
   };
 
   componentDidMount() {
@@ -1319,6 +1340,7 @@ class Component extends DCLogic {
     this.setState({ grade: pick.grade, cls: pick.cls, tt: seedTT, meal: this._snap.meal || {} });
     this.loadTimetable(pick.grade, pick.cls);
     this.loadMeal(new Date());
+    { const fri = mondayOf(new Date()); fri.setDate(fri.getDate() + 4); this.loadMeal(fri); }   // 이번 주가 두 달에 걸치면 다음 달 급식도
     // ACTIVITY_5 만화 판매량 표(#mangaTable): 복사/잘라내기/우클릭/드래그 차단.
     // 활동지 탭은 sc-if 로 늦게 마운트되므로 document 위임으로 그 표 안에서만 막는다.
     // (드래그 텍스트 선택 자체는 .no-copy user-select:none 으로 방지)
@@ -1510,22 +1532,24 @@ class Component extends DCLogic {
     const first = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth(), 1);
     const last = new Date(dateInMonth.getFullYear(), dateInMonth.getMonth() + 1, 0);
     const mk = ymd(first).slice(0, 7);
-    if (this._mealPending === mk) return;
+    this._mealMonths = this._mealMonths || {};
+    if (this._mealPending === mk || this._mealMonths[mk]) return;
     this._mealPending = mk;
     neisFetchAll('mealServiceDietInfo', {
       MLSV_FROM_YMD: ymdN(first), MLSV_TO_YMD: ymdN(last)
     }).then((rows) => {
       this._mealPending = '';
-      const meal = Object.assign({}, (this._snap && this._snap.meal) || {});
+      this._mealMonths[mk] = true;
+      const fresh = {};
       rows.forEach((r) => {
         const d = String(r.MLSV_YMD).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
         const lines = String(r.DDISH_NM || '').split(/<br\s*\/?>/i)
           .map((x) => x.trim()).filter(Boolean);
         const items = lines.map(parseDish);
         const kcal = Math.round(parseFloat(String(r.CAL_INFO || '').replace(/[^\d.]/g, '')) || 0);
-        meal[d] = { items: items, kcal: kcal, type: r.MMEAL_SC_NM || '중식' };
+        fresh[d] = { items: items, kcal: kcal, type: r.MMEAL_SC_NM || '중식' };
       });
-      if (Object.keys(meal).length) this.setState({ meal: meal, mealLoadedMonth: mk });
+      this.setState((st) => ({ meal: Object.assign({}, (this._snap && this._snap.meal) || {}, st.meal || {}, fresh), mealLoadedMonth: mk }));
     });
   }
 
@@ -1543,6 +1567,13 @@ class Component extends DCLogic {
     const bg = active ? (pal || '#f7a8c4') : '#fffdf7';
     return 'cursor:pointer; padding:8px 15px; border:3px solid #4b3b6b; borderRadius:9px; background:' + bg +
       '; fontFamily:\'CookieRun\', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; boxShadow:' + (active ? '2px 2px 0 rgba(75,59,107,.35)' : '3px 3px 0 rgba(75,59,107,.15)') +
+      '; transform:' + (active ? 'translate(1px,1px)' : 'none');
+  }
+
+  /* 제목줄 탭 — 첫 화면(index) 칩 버튼과 같은 모양. 고른 탭은 탭 색으로 채우고 눌린 모양(design.md §3.7 chip is-on) */
+  tabChip(active, color) {
+    return 'cursor:pointer; display:flex; alignItems:center; gap:6px; whiteSpace:nowrap; padding:7px 13px; border:3px solid #4b3b6b; borderRadius:9px; color:#4b3b6b; background:' + (active ? color : '#fffdf7') +
+      "; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:15px; boxShadow:" + (active ? '2px 2px 0 rgba(75,59,107,.35)' : '3px 3px 0 rgba(75,59,107,.25)') +
       '; transform:' + (active ? 'translate(1px,1px)' : 'none');
   }
 
@@ -1571,14 +1602,17 @@ class Component extends DCLogic {
 
   mealFor(n) { return MEAL_SETS[Math.abs(n) % MEAL_SETS.length]; }
 
-  monthGrid(fn) {
-    const first = new Date(2026, 8, 1);
+  monthGrid(fn, y, m) {
+    // y·m(0부터)을 주면 그 달 — 급식 월간 ◀ ▶. 안 주면 예전처럼 2026년 9월(시간표 월간)
+    const Y = y == null ? 2026 : y, M = m == null ? 8 : m;
+    const first = new Date(Y, M, 1);
     const pad = first.getDay();
-    const total = 30;
+    const total = new Date(Y, M + 1, 0).getDate();
     const nowD = this.state.now || new Date();
-    const nowInMonth = nowD.getFullYear() === 2026 && nowD.getMonth() === 8;
+    const nowInMonth = nowD.getFullYear() === Y && nowD.getMonth() === M;
     const out = [];
-    for (let i = 0; i < 35; i++) {
+    const cells = Math.ceil((pad + total) / 7) * 7;   // 5주 또는 6주
+    for (let i = 0; i < cells; i++) {
       const day = i - pad + 1;
       const inMonth = day >= 1 && day <= total;
       const dow = i % 7;
@@ -1746,13 +1780,46 @@ class Component extends DCLogic {
     });
 
     const dowEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-    const tMeal = (s.meal || {})[ymd(todayObj)];
+    // 오늘의 급식 · 일간 — 고른 날(mealDay, 비어 있으면 오늘). ◀ ▶ 는 하루씩 움직이되 토·일은 건너뛴다
+    //   (월요일에서 ◀ → 지난주 금요일, 금요일에서 ▶ → 다음 주 월요일). 다른 달로 넘어가면 그 달 급식을 받아 온다.
+    const todayYmd = ymd(todayObj);
+    const mealDayObj = s.mealDay ? new Date(+s.mealDay.slice(0, 4), +s.mealDay.slice(5, 7) - 1, +s.mealDay.slice(8, 10))
+      : new Date(todayObj.getFullYear(), todayObj.getMonth(), todayObj.getDate());
+    const mealIsToday = ymd(mealDayObj) === todayYmd;
+    const stepMealDay = (dir) => () => {
+      const d = new Date(mealDayObj); d.setDate(d.getDate() + dir);
+      while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + dir);
+      this.setState({ mealDay: ymd(d) === todayYmd ? '' : ymd(d) });
+      this.loadMeal(d);
+    };
+    const korDate = (d) => d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + ['일', '월', '화', '수', '목', '금', '토'][d.getDay()] + ')';
+    const korShort = (d) => (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + ['일', '월', '화', '수', '목', '금', '토'][d.getDay()] + ')';
+    // 주간 ◀ ▶ = 한 주씩(월~금), 월간 ◀ ▶ = 한 달씩. 비어 있으면 이번 주·이번 달. 필요한 달의 급식을 받아 온다
+    const pYmd = (k) => new Date(+k.slice(0, 4), +k.slice(5, 7) - 1, +k.slice(8, 10));
+    const thisMon = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate());
+    const mealWeekMon = s.mealWeek ? pYmd(s.mealWeek) : thisMon;
+    const mealWeekFri = new Date(mealWeekMon); mealWeekFri.setDate(mealWeekMon.getDate() + 4);
+    const stepMealWeek = (dir) => () => {
+      const d = new Date(mealWeekMon); d.setDate(d.getDate() + 7 * dir);
+      const fri = new Date(d); fri.setDate(d.getDate() + 4);
+      this.setState({ mealWeek: ymd(d) === ymd(thisMon) ? '' : ymd(d) });
+      this.loadMeal(d); this.loadMeal(fri);
+    };
+    const mealMonth0 = s.mealMonth ? pYmd(s.mealMonth + '-01') : new Date(todayObj.getFullYear(), todayObj.getMonth(), 1);
+    const stepMealMonth = (dir) => () => {
+      const d = new Date(mealMonth0.getFullYear(), mealMonth0.getMonth() + dir, 1);
+      this.setState({ mealMonth: ymd(d).slice(0, 7) === todayYmd.slice(0, 7) ? '' : ymd(d).slice(0, 7) });
+      this.loadMeal(d);
+    };
+    const tMeal = (s.meal || {})[ymd(mealDayObj)];
     const todayMeal = {
-      date: todayObj.getFullYear() + '.' + ('0' + (todayObj.getMonth() + 1)).slice(-2) + '.' +
-        ('0' + todayObj.getDate()).slice(-2) + ' ' + dowEn[todayObj.getDay()],
+      tag: mealIsToday ? 'TODAY_LUNCH' : 'LUNCH',
+      kcalLabel: mealIsToday ? '오늘 전체 칼로리' : '이 날 전체 칼로리',
+      date: mealDayObj.getFullYear() + '.' + ('0' + (mealDayObj.getMonth() + 1)).slice(-2) + '.' +
+        ('0' + mealDayObj.getDate()).slice(-2) + ' ' + dowEn[mealDayObj.getDay()],
       kcal: tMeal ? tMeal.kcal : 0,
       allergy: '',
-      items: (tMeal && tMeal.items.length ? tMeal.items : [{ name: '오늘은 급식 정보가 없어요', al: [] }]).map((it) => ({
+      items: (tMeal && tMeal.items.length ? tMeal.items : [{ name: mealIsToday ? '오늘은 급식 정보가 없어요' : '이 날은 급식 정보가 없어요', al: [] }]).map((it) => ({
         name: dishName(it.name),
         hasAl: it.al.length > 0,
         allergens: it.al.map((n) => {
@@ -1766,7 +1833,7 @@ class Component extends DCLogic {
     };
     const weekColors = ['#f9cade', '#c4d8f7', '#bfe9dd', '#fbe6a2', '#d6c4f5'];
     const weekMeals = DAYS.map((d, i) => {
-      const dt = new Date(monday); dt.setDate(monday.getDate() + i);
+      const dt = new Date(mealWeekMon); dt.setDate(mealWeekMon.getDate() + i);
       const mm = (s.meal || {})[ymd(dt)];
       return {
         day: d + '요일',
@@ -1777,9 +1844,9 @@ class Component extends DCLogic {
       };
     });
     const mealMonthCells = this.monthGrid((day) => {
-      const mm = (s.meal || {})[ymd(new Date(2026, 8, day))];
+      const mm = (s.meal || {})[ymd(new Date(mealMonth0.getFullYear(), mealMonth0.getMonth(), day))];
       return { icon: '', main: '', menu: mm ? mm.items.map((it) => dishName(it.name)).slice(0, 6) : [], chips: [] };
-    });
+    }, mealMonth0.getFullYear(), mealMonth0.getMonth());
 
     const stepLabels = ['1단계 · 문제 정하기', '2단계 · 데이터 수집 · 특성 파악', '3단계 · 데이터 분석하기', '4단계 · 결과 해석 · 공유'];
     const steps = stepLabels.map((l, i) => ({
@@ -1910,10 +1977,10 @@ class Component extends DCLogic {
       isRules: s.tab === 'rules', isTime: s.tab === 'time', isMeal: s.tab === 'meal', isSheet: s.tab === 'sheet',
       goRules: () => this.setState({ tab: 'rules' }), goTime: () => this.setState({ tab: 'time' }),
       goMeal: () => this.setState({ tab: 'meal' }), goSheet: () => this.setState({ tab: 'sheet' }),
-      tabRules: this.tabStyle(s.tab === 'rules', '#fbe6a2', '#f0c95c'),
-      tabTime: this.tabStyle(s.tab === 'time', '#c4d8f7', '#7fa9e8'),
-      tabMeal: this.tabStyle(s.tab === 'meal', '#bfe9dd', '#6fc9b0'),
-      tabSheet: this.tabStyle(s.tab === 'sheet', '#f9cade', '#ee9dbf'),
+      tabRules: this.tabChip(s.tab === 'rules', '#fbe6a2'), tabRulesSel: String(s.tab === 'rules'),
+      tabTime: this.tabChip(s.tab === 'time', '#c4d8f7'), tabTimeSel: String(s.tab === 'time'),
+      tabMeal: this.tabChip(s.tab === 'meal', '#bfe9dd'), tabMealSel: String(s.tab === 'meal'),
+      tabSheet: this.tabChip(s.tab === 'sheet', '#f9cade'), tabSheetSel: String(s.tab === 'sheet'),
       gradeOpts, classOpts, gradeVal: String(s.grade), classVal: String(s.cls),
       setGrade: (e) => {
         const g = Number(e.target.value);
@@ -1939,6 +2006,15 @@ class Component extends DCLogic {
       dayRows: dayRowsMerged, weekRows, weekHeads, monthCells,
       dowHeads: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
       todayMeal, weekMeals, mealMonthCells,
+      // 카드 문구는 두 조각(주간: '9월 28일 (월) ~' + '10월 2일 (금)') — 좁은 화면에서 날짜 중간이 아니라 조각 사이에서 줄바꿈
+      mealCardA: s.mealView === 'week' ? korShort(mealWeekMon) + ' ~'
+        : s.mealView === 'month' ? mealMonth0.getFullYear() + '년 ' + (mealMonth0.getMonth() + 1) + '월' : korDate(mealDayObj),
+      mealCardB: s.mealView === 'week' ? korShort(mealWeekFri) : '',
+      mealPrev: s.mealView === 'week' ? stepMealWeek(-1) : s.mealView === 'month' ? stepMealMonth(-1) : stepMealDay(-1),
+      mealNext: s.mealView === 'week' ? stepMealWeek(1) : s.mealView === 'month' ? stepMealMonth(1) : stepMealDay(1),
+      mealPrevAria: s.mealView === 'week' ? '지난주 급식' : s.mealView === 'month' ? '지난달 급식' : '이전 급식',
+      mealNextAria: s.mealView === 'week' ? '다음 주 급식' : s.mealView === 'month' ? '다음 달 급식' : '다음 급식',
+      mealNavStyle: this.chip(false, '#bfe9dd'),
       fGrade: s.fGrade, fClass: s.fClass, fNum: s.fNum, fName: s.fName, reflect: s.reflect,
       setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
       setReflect: set('reflect'),

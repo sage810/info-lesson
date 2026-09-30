@@ -208,6 +208,9 @@ LUNCH.EXE     LOADING   MESSAGE      NOTE          TOTAL   READ ME
 
 ### 3.4 탭 (활성 / 비활성)
 
+> **2026-09-30: 4탭 차시의 제목줄 탭은 칩 모양(§3.7)으로 바꿨다** — 규칙은 `docs/rules/portal/rule.md` §2(`tabChip(active,color)`),
+> 옛 차시·가져온 HTML 은 `npm run portal-upgrade`. 아래는 원본 디자인(`학교 웹앱.dc.html`)의 옛 탭 규칙으로 참고용.
+
 `학교 웹앱.dc.html` 의 `tabStyle(active,color,cap)` 규칙:
 
 - 공통: `font-family:'CookieRun'; font-weight:700; font-size:15px; border-radius:12px 12px 0 0; display:flex; align-items:center; gap:6px; margin-bottom:-4px; white-space:nowrap`. 좌·우·상 `3px solid var(--ink)`.

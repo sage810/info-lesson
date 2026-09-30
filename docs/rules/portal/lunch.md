@@ -4,8 +4,10 @@
 >
 > ✅ **필수 (2026-09-29): 일간 보기는 "메뉴 이름 가운데 → 알레르기 태그는 다음 줄 가운데"(§5.3).**
 > 모든 4탭 차시의 학생용·교사용·구글 사이트용이 이 모양이다(04·05·06 적용 완료).
-> 새 4탭 차시를 만들거나(`npm run new`) 밖에서 만든 HTML 을 가져오면(`npm run import`) `lesson.html` 에
-> `m.hasAl` 이 있는지 확인하고, 없으면 예전 모양(이름·태그가 한 줄)이니 §5.3 대로 고친다.
+> ✅ **필수 (2026-09-30): 보기 버튼 아래 `◀ 날짜 카드 ▶`(일간 하루·토일 건너뜀 / 주간 한 주 / 월간 한 달)** — §5.2.
+>
+> 새 4탭 차시를 만들거나(`npm run new`) 밖에서 만든 HTML 을 가져오면(`npm run import`) **`npm run portal-upgrade -- <차시>`** 를 돌린다.
+> 위 두 가지 + 제목줄 칩 탭(rule.md §2) + 시간표 날짜 카드 위치(timetable.md §4.1)를 한 번에 맞추고, 이미 적용된 건 건너뛴다.
 > 원본 디자인 파일(`input/design/project/학교 웹앱.dc.html`)과 밖에서 만든 HTML 은 예전 모양일 수 있다.
 
 
@@ -37,9 +39,11 @@
 ### 2.2 실시간 갱신
 
 `componentDidMount` → `loadMeal(new Date())` → `neisFetchAll('mealServiceDietInfo', { MLSV_FROM_YMD, MLSV_TO_YMD })`
-- 범위: **이번 달 1일 ~ 말일**.
+- 범위: 받는 날이 속한 **달의 1일 ~ 말일**. 처음 열 때 이번 달 + 이번 주 금요일이 속한 달(주가 두 달에 걸칠 때)을 받는다.
+- ◀ ▶ 로 다른 달로 가면 그 달을 받는다. 이미 받은 달(`this._mealMonths[mk]`)은 다시 받지 않는다.
 - 각 행(`r`): `DDISH_NM` 을 `<br/>` 로 나눠 각 줄을 `parseDish` → `{ name, al }`. `CAL_INFO` 에서 숫자만 뽑아 반올림 → `kcal`.
-- 스냅샷 `meal` 위에 날짜별로 덮어씀. 결과가 있으면 `setState({ meal })`.
+- 받은 결과(`fresh`)는 **스냅샷 + 지금까지 받은 급식 위에 합친다** — 함수형 `setState((st) => ({ meal: {…snap, …st.meal, …fresh} }))`
+  (두 달을 연달아 받아도 서로 덮어쓰지 않게).
 
 ---
 
@@ -114,7 +118,26 @@
 
 `mealViews` = `[['day','일간'],['week','주간'],['month','월간']]` → `chip(active, '#bfe9dd')`. 클릭 시 `setState({ mealView })`.
 
-### 5.3 일간 보기 (`mealIsDay`) — `todayMeal`
+**보기 버튼 아래 줄 = `◀ 날짜 카드 ▶`**(2026-09-30, 세 보기 모두):
+
+| 보기 | 카드 문구 | ◀ ▶ | 상태(빈 값 = 오늘·이번 주·이번 달) |
+|---|---|---|---|
+| 일간 | `2026년 9월 30일 (수)` | 하루씩, **토·일은 건너뜀**(월 ◀ → 지난주 금, 금 ▶ → 다음 주 월) | `mealDay` = `'YYYY-MM-DD'` |
+| 주간 | `9월 28일 (월) ~ 10월 2일 (금)` | 한 주씩 | `mealWeek` = 그 주 월요일 `'YYYY-MM-DD'` |
+| 월간 | `2026년 10월` | 한 달씩 | `mealMonth` = `'YYYY-MM'` |
+
+- 줄: `<div class="meal-nav" style="display:flex; alignItems:center; justifyContent:center; gap:10px; marginTop:6px">`
+- ◀ ▶: `<div class="meal-nav-btn" role="button" aria-label="{{ mealPrevAria }}" onClick="{{ mealPrev }}" style="{{ mealNavStyle }}">`
+  (`mealNavStyle = chip(false, '#bfe9dd')`, 이름: 이전/다음 급식 · 지난주/다음 주 급식 · 지난달/다음 달 급식)
+- 카드: 시간표 날짜 카드와 같은 모양(`border:3px; borderRadius:10px; CookieRun 700 16px; boxShadow:3px 3px 0 …`),
+  문구는 두 조각 `<span class="md-part">{{ mealCardA }}</span><span class="md-part">{{ mealCardB }}</span>`
+  (주간: `'9월 28일 (월) ~'` + `'10월 2일 (금)'`) — 좁은 화면에서 날짜 중간이 아니라 조각 사이에서 줄바꿈.
+- 좁은 화면(`max-width:420px`): 줄 간격·버튼 여백·카드 글자를 줄여 창 안에 들어오게.
+- 보기를 바꿔도 각 보기의 날짜·주·달은 유지된다.
+
+### 5.3 일간 보기 (`mealIsDay`) — `todayMeal`(= **고른 날**의 급식, 이름은 옛 그대로)
+
+- 카드 머리표 `{{ todayMeal.tag }}` = 오늘이면 `TODAY_LUNCH`, 다른 날이면 `LUNCH`. TOTAL 줄 문구 `{{ todayMeal.kcalLabel }}` = `오늘 전체 칼로리` / `이 날 전체 칼로리`.
 
 - 카드: `maxWidth:560px; border:3px solid #4b3b6b; borderRadius:12px; overflow:hidden; background:#fffdf7; boxShadow:6px 6px 0 …`
 - 헤더 스트립: `padding:9px 14px; borderBottom:3px solid #4b3b6b; background:#f9cade; display:flex; justifyContent:space-between`
@@ -125,12 +148,12 @@
     - 둘째 줄: 알레르기 태그들(§3.3) — `display:flex; gap:5px; flexWrap:wrap; justifyContent:center`.
       항목에 `hasAl: it.al.length > 0` 을 두고 `<sc-if value="{{ m.hasAl }}">` 로 감싸서, 태그 없는 메뉴는 둘째 줄을 그리지 않는다(2026-09-29)
   - 마지막 TOTAL 줄: `background:#bfe9dd; border:3px solid #4b3b6b; borderRadius:10px` — `TOTAL`(Silkscreen 10px `#3d7f6c`) · `오늘 전체 칼로리`(CookieRun 700 17px) · `{{ todayMeal.kcal }} kcal`(CookieRun 700 20px)
-- **데이터 없는 날**: `items` = `[{ name: '오늘은 급식 정보가 없어요', al: [] }]`, `kcal: 0`
+- **데이터 없는 날**: `items` = `[{ name: '오늘은 급식 정보가 없어요'(다른 날이면 '이 날은 급식 정보가 없어요'), al: [] }]`, `kcal: 0`
 
 ### 5.4 주간 보기 (`mealIsWeek`) — `weekMeals`
 
 - 그리드: `gridTemplateColumns:repeat(auto-fit, minmax(190px,1fr)); gap:14px`
-- 월~금 카드(`DAYS`). `weekMeals[i]`:
+- 고른 주(`mealWeekMon`, 기본 이번 주 월요일)의 월~금 카드(`DAYS`). `weekMeals[i]`:
   - `day` = `"월요일"` …, `date` = `"09.01"`, `color` = 요일별 `['#f9cade','#c4d8f7','#bfe9dd','#fbe6a2','#d6c4f5'][i]`
   - `items` = 그날 메뉴 이름 배열(`dishName` 적용). 급식 없으면 `['급식 없음']`
   - `kcal` = 숫자(없으면 0)
@@ -140,7 +163,8 @@
 
 ### 5.5 월간 보기 (`mealIsMonth`) — `mealMonthCells`
 
-- `monthGrid(fn)`(timetable.md §4.6 와 같은 **2026년 9월** 달력). 요일 헤더 배경 `#bfe9dd`.
+- `monthGrid(fn, 연, 월)` — **고른 달**(`mealMonth0`, 기본 이번 달) 달력. 날 수는 그 달 말일, 칸은 5주 또는 6주(`Math.ceil((pad + total) / 7) * 7`).
+  (`monthGrid(fn)` 처럼 달을 안 주면 예전처럼 2026년 9월 — 시간표 월간.) 요일 헤더 배경 `#bfe9dd`.
 - 각 날짜 칸: `fn(day)` 이 `menu` = 그날 메뉴 이름 배열 **최대 6개**(`dishName` 적용) 반환. 급식 없으면 빈 배열. 주말은 `휴무`.
 - 칸 안 메뉴: `display:flex; flexDirection:column; alignItems:center; gap:2px; fontSize:11px; lineHeight:1.4; color:#6b5b93; textAlign:center` — 한 줄에 하나씩.
 - 오늘 칸 강조/주말 배경은 `monthGrid` 규칙(timetable.md §4.6) 그대로.
@@ -150,7 +174,8 @@
 ## 6. 엣지 케이스
 
 - **급식 없는 날**(주말·공휴일·방학): 실시간/스냅샷 모두 그 날짜 키가 없음 → 일간 "오늘은 급식 정보가 없어요", 주간 "급식 없음", 월간 빈 칸.
-- **주간이 두 달 걸침**: `loadMeal` 은 오늘이 속한 달만 받으므로, 그 주에 지난달 날짜가 섞이면 그 칸은 "급식 없음" 이 될 수 있다(허용).
+- **주간이 두 달 걸침**: 처음 열 때와 주간 ◀ ▶ 때 그 주 월요일·금요일이 속한 달을 모두 받는다(2026-09-30 부터).
+- **토·일만 건너뛴다**: 공휴일(추석·대체공휴일 등) 평일은 그날로 가서 "이 날은 급식 정보가 없어요".
 - **kcal 파싱**: `CAL_INFO` 예 `"803.7 Kcal"` → 숫자만 추출 후 `Math.round` → `804`. 값 없으면 0.
 - **알레르기 없는 메뉴**: `al` 빈 배열 → 태그 없이 이름만.
 - **CORS/네트워크 실패**: 스냅샷만 표시(앱 계속 동작).
@@ -164,6 +189,8 @@
 - [ ] `dishName`: `(...)` 제거 → 첫 `.`/`-` 컷 → trim. §4 표의 원문→표시가 글자까지 일치
 - [ ] 알레르기: 원문 끝 `(숫자.숫자…)` 파싱 → `ALLERGENS` 표. **일간만** 태그 표시, **이름만(번호 X)**, 색 일치
 - [ ] 일간: TODAY_LUNCH 카드 + 메뉴별 칸(**이름 가운데 → 알레르기 태그 다음 줄 가운데, 태그 없으면 줄 생략** — §5.3, `m.hasAl`) + TOTAL kcal 줄. 없는 날 문구
-- [ ] 주간: 월~금 카드, 요일별 헤더색, `· 메뉴` 목록, `KCAL`
-- [ ] 월간: 9월 달력, 칸당 최대 6개 메뉴, 주말 `휴무`, 오늘 강조
+- [ ] 보기 버튼 아래 `◀ 카드 ▶` — 일간 `2026년 9월 30일 (수)`(토·일 건너뜀) / 주간 `9월 28일 (월) ~ 10월 2일 (금)` / 월간 `2026년 10월`
+- [ ] 주간: 고른 주의 월~금 카드, 요일별 헤더색, `· 메뉴` 목록, `KCAL`
+- [ ] 월간: 고른 달 달력(5~6주), 칸당 최대 6개 메뉴, 주말 `휴무`, 오늘 강조
+- [ ] 다른 달로 가면 그 달 급식을 받아 합침(앞 달이 사라지지 않음)
 - [ ] 중식만. 단일 라이트 테마, 하드 섀도우 blur 0
