@@ -55,6 +55,7 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 | 수업 자료 올리기 | "이 PDF 수업 자료에 올려줘" | 파일을 `materials/` 에 넣기 → (제목·설명은 `materials.json`) → `npm run build` |
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |
+| 수정 요청 메모 (선생님 전용) | **"03차시 메모 켜줘"** → 빌드·미리보기 서버·`?memo=1` 열기까지 한 번에. 고칠 글을 선택해 요청을 적고 "전체 복사" → Claude 에 붙여넣기 | `npm run memo -- 03` (끄려면 주소 끝 `?memo=0`. 학생 화면에는 안 보임, 메모는 그 브라우저에만 저장) |
 | 완성된 HTML 파일 들여오기 | "이 파일 06차시로 가져와줘" | `npm run import -- <파일> data-analysis/06` |
 | 4탭 화면을 지금 규칙대로 맞추기 (가져온 뒤·옛 차시) | "06 4탭 화면 최신으로" | `npm run portal-upgrade -- 06` (이미 적용된 건 건너뜀, `--dry` 로 미리 보기) |
 | 시간표·급식 데이터 갱신 | "NEIS 데이터 새로 받아서 반영" | `pwsh scripts/fetch-neis.ps1` → `npm run neis` → `npm run build` |

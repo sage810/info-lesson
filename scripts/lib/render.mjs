@@ -9,6 +9,7 @@ import {
 } from './common.mjs';
 
 const HOOK_PATH = 'shared/runtime/msi-hook.js';
+const MEMO_PATH = 'shared/runtime/msi-memo.js';   // 선생님 전용 수정 요청 메모(?memo=1 로 켬). pages 변형에만 붙는다
 
 // pages 변형에서 파일이 놓일 위치(dist/pages 기준 경로)
 function pagesTarget(markerPath, lesson) {
@@ -89,6 +90,11 @@ export function renderLesson(lesson, opts) {
       const hookFile = path.join(ROOT, HOOK_PATH);
       if (variant === 'embed') inject.push('<script>' + readText(hookFile) + '</script>');
       else { copies.set(HOOK_PATH, hookFile); inject.push(`<script src="${relFromPage(HOOK_PATH, lesson)}"></script>`); }
+    }
+    if (variant === 'pages') { // 켜지 않으면 아무것도 하지 않는 작은 스크립트 — 학생 화면은 그대로
+      const memoFile = path.join(ROOT, MEMO_PATH);
+      copies.set(MEMO_PATH, memoFile);
+      inject.push(`<script src="${relFromPage(MEMO_PATH, lesson)}"></script>`);
     }
     if (inject.length) {
       const block = '\n' + inject.join('\n') + '\n';
