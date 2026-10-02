@@ -3,6 +3,7 @@
 //   npm run memo              → 가장 최근에 고친 차시를 연다
 //   npm run memo -- 03        → 3차시를 연다 (data-analysis/03 처럼 써도 됨)
 // 하는 일: ① 빌드(최신 반영) ② 미리보기 서버(8080)가 꺼져 있으면 뒤에서 켬 ③ 주소 끝에 ?memo=1 을 붙여 브라우저로 연다.
+// 이 서버에서 연 메모 창은 "📤 보내기"로 요청을 .claude/feedback.md 에 바로 쌓는다(피드백 모드, scripts/serve.mjs).
 // 서버는 PC 를 끄거나 `Stop-Process`/작업 관리자에서 node 를 끝내면 꺼진다.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,6 +39,9 @@ if (!(await up())) {
 const url = `${base}/${lesson.unit}/${lesson.no}/?memo=1`;
 const page = await (await fetch(`${base}/${lesson.unit}/${lesson.no}/`)).text();
 if (!page.includes('msi-memo')) console.log('△ 이 주소의 서버가 메모 기능이 없는 옛 화면이에요. 8080 을 쓰는 다른 프로그램을 끄고 다시 해 보세요.');
+const fb = await fetch(base + '/__feedback').then((r) => r.ok).catch(() => false);
+if (!fb) console.log('△ 켜져 있는 미리보기 서버가 옛 버전이라 "보내기"가 안 돼요(복사 방식으로 동작). 서버(node)를 끄고 다시 `npm run memo` 하세요.');
 if (process.platform === 'win32') spawn('cmd', ['/c', 'start', '""', url], { detached: true, stdio: 'ignore', windowsHide: true }).unref();
 console.log(`✔ 메모 켰어요${started ? ' (미리보기 서버도 새로 켬)' : ''}: ${url}`);
-console.log('  글을 드래그 → 오른쪽 아래 📝 메모 → 목록에 담기 → 전체 복사 → Claude 에 붙여넣기');
+console.log(fb ? '  글을 드래그 → 오른쪽 아래 📝 메모 → 요청 적기 → 📤 보내기 (.claude/feedback.md 에 쌓임) → Claude 에 "피드백 처리해줘"'
+  : '  글을 드래그 → 오른쪽 아래 📝 메모 → 목록에 담기 → 전체 복사 → Claude 에 붙여넣기');

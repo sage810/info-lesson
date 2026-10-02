@@ -123,12 +123,13 @@ export async function launchBrowser() {
 }
 
 // dist/pages 를 잠깐 띄우는 정적 서버 (검사용)
-export async function serveStatic(dir, port = 0) {
+export async function serveStatic(dir, port = 0, handle = null) {   // handle(req, res) 가 true 를 돌려주면 파일 대신 그쪽이 응답
   const http = await import('node:http');
   const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css',
     '.json': 'application/json', '.txt': 'text/plain; charset=utf-8', '.csv': 'text/csv; charset=utf-8', '.pdf': 'application/pdf',
     ...MIME_BY_EXT };
   const server = http.createServer((req, res) => {
+    if (handle && handle(req, res)) return;
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
     const f = path.join(dir, p);

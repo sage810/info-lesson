@@ -2,7 +2,8 @@
  * 활동지 화면에서 글을 선택하고 요청을 적어 목록에 담은 뒤, "전체 복사"로 Claude 에게 붙여넣는다.
  * 켜기: 주소 끝에 ?memo=1 (그 브라우저에 기억됨) / 끄기: ?memo=0.  켜지 않으면 아무것도 하지 않는다 → 학생 화면에는 안 보임.
  * GitHub Pages 배포본(pages)에만 붙는다(render.mjs). 구글 사이트용(embed)·정답지 PDF 에는 들어가지 않는다.
- * 메모 목록은 이 브라우저(localStorage)에만 있고 서버로 가지 않는다. */
+ * 메모 목록은 이 브라우저(localStorage)에만 있고 서버로 가지 않는다.
+ * 단, 이 PC 미리보기(npm run serve/memo, 127.0.0.1)에서는 "📤 보내기"로 .claude/feedback.md 에 바로 쌓는다(피드백 모드, scripts/serve.mjs). */
 (function () {
   'use strict';
   var FLAG = 'msi-memo-on';
@@ -23,7 +24,17 @@
   try { items = JSON.parse(localStorage.getItem(STORE) || '[]') || []; } catch (e) { items = []; }
   function save() { try { localStorage.setItem(STORE, JSON.stringify(items)); } catch (e) {} }
 
-  var root, btn, panel, quoteBox, noteBox, listBox, toastEl, last = null;
+  var root, btn, panel, quoteBox, noteBox, listBox, toastEl, addB, row2, hint, last = null;
+
+  // ── 이 PC 미리보기면 서버(/__feedback)로 보낸다. GitHub Pages 에는 그 주소가 없어 복사 방식 그대로 ──
+  var server = false, sent = [];
+  function api(method, body) {
+    var get = method === 'GET';
+    return fetch('/__feedback' + (get ? '?lesson=' + encodeURIComponent(lessonId) : ''),
+      get ? {} : { method: method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || r.status); return j; }); });
+  }
+  function refresh() { return api('GET').then(function (j) { sent = j.entries || []; renderList(); }); }
 
   function visible(el) { return !!(el && el.getClientRects && el.getClientRects().length); }
   function clean(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
@@ -109,16 +120,19 @@
   }
   function renderList() {
     listBox.textContent = '';
-    items.forEach(function (it, i) {
+    var list = server ? sent : items;
+    list.forEach(function (it, i) {
       var li = el('li', 'mm-item');
       var del = el('button', 'mm-del', '✕'); del.type = 'button'; del.setAttribute('aria-label', (i + 1) + '번 메모 지우기');
-      del.onclick = function () { items.splice(i, 1); save(); renderList(); };
+      del.onclick = server
+        ? function () { api('DELETE', { key: it.key }).then(refresh, function (e) { toast(String(e.message || '지우지 못했어요')); refresh(); }); }
+        : function () { items.splice(i, 1); save(); renderList(); };
       li.appendChild(del);
       li.appendChild(el('div', '', (i + 1) + '. ' + it.note));
       if (it.text) li.appendChild(el('div', 'mm-w', '“' + (it.text.length > 70 ? it.text.slice(0, 70) + '…' : it.text) + '”'));
       listBox.appendChild(li);
     });
-    btn.textContent = '📝 메모' + (items.length ? ' (' + items.length + ')' : '');
+    btn.textContent = '📝 메모' + (list.length ? ' (' + list.length + ')' : '');
   }
   function toast(msg) {
     toastEl.firstChild.textContent = msg; toastEl.style.opacity = '1';
@@ -129,6 +143,13 @@
     if (!note) { toast('요청을 적어 주세요'); noteBox.focus(); return; }
     var it = { note: note, text: '', where: '', field: '' };
     if (last && last.text) { it.text = last.text; var w = locate(last.el); it.where = w.where; it.field = w.field; }
+    if (server) {
+      it.lesson = lessonId; it.title = lessonTitle; it.viewport = window.innerWidth + '×' + window.innerHeight;
+      api('POST', it).then(function () {
+        noteBox.value = ''; last = null; showQuote(); toast('보냈어요'); return refresh();
+      }, function () { toast('보내지 못했어요 — 미리보기 서버를 확인해 주세요'); });
+      return;
+    }
     items.push(it); save();
     noteBox.value = ''; last = null; showQuote(); renderList(); toast('목록에 담았어요');
   }
@@ -168,16 +189,16 @@
     noteBox = el('textarea'); noteBox.setAttribute('aria-label', '수정 요청 내용'); noteBox.placeholder = '어떻게 고치면 좋을지 적어요'; panel.appendChild(noteBox);
 
     var row1 = el('div', 'mm-row');
-    var addB = el('button', 'mm-btn', '➕ 목록에 담기'); addB.type = 'button'; addB.onclick = add; row1.appendChild(addB);
+    addB = el('button', 'mm-btn', '➕ 목록에 담기'); addB.type = 'button'; addB.onclick = add; row1.appendChild(addB);
     panel.appendChild(row1);
 
     listBox = el('ul', 'mm-list'); panel.appendChild(listBox);
-    var row2 = el('div', 'mm-row');
+    row2 = el('div', 'mm-row');
     var cpB = el('button', 'mm-btn', '📋 전체 복사'); cpB.type = 'button'; cpB.onclick = copy;
     var clB = el('button', 'mm-btn ghost', '🗑 모두 지우기'); clB.type = 'button';
     clB.onclick = function () { if (!items.length || confirm('담은 메모를 모두 지울까요?')) { items = []; save(); renderList(); } };
     row2.appendChild(cpB); row2.appendChild(clB); panel.appendChild(row2);
-    panel.appendChild(el('p', 'mm-hint', '복사한 글을 Claude 대화에 붙여넣으세요. 이 메모는 이 브라우저에만 있어요. 끄려면 주소 끝에 ?memo=0'));
+    hint = el('p', 'mm-hint', '복사한 글을 Claude 대화에 붙여넣으세요. 이 메모는 이 브라우저에만 있어요. 끄려면 주소 끝에 ?memo=0'); panel.appendChild(hint);
 
     btn = el('button', 'mm-fab', '📝 메모'); btn.type = 'button';
     btn.addEventListener('mousedown', function (e) { e.preventDefault(); });   // 데스크톱: 글 선택이 풀리지 않게
@@ -190,6 +211,14 @@
     root.appendChild(panel); root.appendChild(toastEl); root.appendChild(btn);
     document.body.appendChild(root);
     renderList(); showQuote();
+    if (/^(127.0.0.1|localhost)$/.test(location.hostname)) {
+      api('GET').then(function (j) {
+        server = true; sent = j.entries || [];
+        addB.textContent = '📤 보내기'; row2.style.display = 'none';
+        hint.textContent = '보낸 요청은 .claude/feedback.md 에 쌓여요. 위 목록은 이 차시에서 아직 처리 전인 것. Claude 에게 "피드백 처리해줘" 라고 하세요. 끄려면 주소 끝에 ?memo=0';
+        renderList();
+      }, function () {});
+    }
   }
   if (document.body) build(); else document.addEventListener('DOMContentLoaded', build);
 })();

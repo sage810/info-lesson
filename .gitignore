@@ -31,3 +31,6 @@ scripts/neis.local.ps1
 **/*.local.ps1
 **/neis.config.js
 secrets/
+
+# 피드백 모드(메모 📤 보내기)로 쌓이는 수정 요청 — 시험지 내용이 섞일 수 있어 올리지 않는다.
+.claude/feedback.md
