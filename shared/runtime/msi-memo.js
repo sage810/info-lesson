@@ -1,5 +1,5 @@
 /* 수정 요청 메모 — 선생님 전용 (A안: 저장소 없이 복사·붙여넣기).
- * 활동지 화면에서 글을 선택하고 요청을 적어 목록에 담은 뒤, "전체 복사"로 Claude 에게 붙여넣는다.
+ * 활동지 화면에서 글을 선택하거나 "🎯 요소 고르기"로 요소를 클릭하고, 요청을 적어 목록에 담은 뒤, "전체 복사"로 Claude 에게 붙여넣는다.
  * 켜기: 주소 끝에 ?memo=1 (그 브라우저에 기억됨) / 끄기: ?memo=0.  켜지 않으면 아무것도 하지 않는다 → 학생 화면에는 안 보임.
  * GitHub Pages 배포본(pages)에만 붙는다(render.mjs). 구글 사이트용(embed)·정답지 PDF 에는 들어가지 않는다.
  * 메모 목록은 이 브라우저(localStorage)에만 있고 서버로 가지 않는다.
@@ -24,7 +24,7 @@
   try { items = JSON.parse(localStorage.getItem(STORE) || '[]') || []; } catch (e) { items = []; }
   function save() { try { localStorage.setItem(STORE, JSON.stringify(items)); } catch (e) {} }
 
-  var root, btn, panel, quoteBox, noteBox, listBox, toastEl, addB, row2, hint, last = null;
+  var root, btn, panel, quoteBox, noteBox, listBox, toastEl, addB, pickB, row2, hint, hilite, last = null;
 
   // ── 이 PC 미리보기면 서버(/__feedback)로 보낸다. GitHub Pages 에는 그 주소가 없어 복사 방식 그대로 ──
   var server = false, sent = [];
@@ -59,6 +59,48 @@
   function remember() { var g = grab(); if (g) { last = g; if (panel && panel.style.display !== 'none') showQuote(); } }
   document.addEventListener('selectionchange', remember);
   document.addEventListener('select', remember, true);
+
+  // ── 요소 고르기(피드백 모드처럼): 켜면 마우스를 올린 요소에 테두리, 클릭하면 그 요소를 고른다. 그동안 활동지 버튼·탭은 반응하지 않는다. Esc 취소 ──
+  var picking = false;
+  function describe(e) {   // div.m-title 같은 짧은 이름. 클래스가 없으면 클래스 있는 가장 가까운 부모를 앞에 붙인다(button.tab-chip › span)
+    function one(x) {
+      var c = typeof x.className === 'string' ? x.className.trim().split(/\s+/).filter(Boolean).slice(0, 2) : [];
+      return x.tagName.toLowerCase() + (x.id ? '#' + x.id : '') + (c.length ? '.' + c.join('.') : '');
+    }
+    var s = one(e);
+    if (s.indexOf('.') < 0 && s.indexOf('#') < 0) {
+      var up = e.parentElement && e.parentElement.closest('[class], [id]');
+      if (up && up !== document.body) s = one(up) + ' › ' + s;
+    }
+    return s;
+  }
+  function textOf(e) {
+    var t = clean(e.innerText || e.value || e.getAttribute('placeholder') || e.getAttribute('aria-label') || e.getAttribute('alt') || '');
+    return t.length > 200 ? t.slice(0, 200) + '…' : t;
+  }
+  function setPicking(on) {
+    picking = on;
+    document.documentElement.classList.toggle('mm-picking', on);
+    pickB.textContent = on ? '🎯 고르는 중… (Esc 취소)' : '🎯 요소 고르기';
+    if (!on) hilite.style.display = 'none';
+  }
+  function outside(e) { return e && e.nodeType === 1 && !(root && root.contains(e)); }
+  document.addEventListener('mousemove', function (e) {
+    if (!picking || !outside(e.target)) return;
+    var r = e.target.getBoundingClientRect();
+    hilite.style.cssText = 'display:block;left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px';
+  }, true);
+  ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'touchstart', 'click'].forEach(function (type) {
+    document.addEventListener(type, function (e) {
+      if (!picking || !outside(e.target)) return;
+      if (type !== 'touchstart') e.preventDefault();
+      e.stopPropagation(); e.stopImmediatePropagation();
+      if (type !== 'click') return;
+      last = { text: textOf(e.target), el: e.target, element: describe(e.target) };
+      setPicking(false); panel.style.display = 'block'; showQuote(); noteBox.focus();
+    }, true);
+  });
+  document.addEventListener('keydown', function (e) { if (picking && e.key === 'Escape') { e.preventDefault(); setPicking(false); } }, true);
 
   // ── 위치 알아내기: 탭 › 앞쪽에서 가장 가까운 MISSION_n 같은 구역 표시 › 가장 가까운 소제목 · 칸 이름 ──
   var SEC_RE = /^(MISSION[_ ]?\d+|ACTIVITY[_ ]?\d+|WORKSHEET[_ ]?\d+|TODAY_TOPIC|TODAY_GOALS|MY_INFO|PREVIOUSLY|RECAP)\b/;
@@ -110,13 +152,19 @@
     '#msi-memo .mm-hint{margin:0;color:#8b7cb8;font-size:12px}' +
     '#msi-memo .mm-toast{position:absolute;left:0;right:0;bottom:48px;text-align:center;pointer-events:none;opacity:0;transition:opacity .2s}' +
     '#msi-memo .mm-toast span{display:inline-block;padding:5px 11px;border:3px solid #4b3b6b;border-radius:9px;background:#d8f0c4;font-family:"CookieRun","Maplestory",sans-serif;font-weight:700;font-size:13px}' +
+    '#msi-memo .mm-hilite{display:none;position:fixed;pointer-events:none;z-index:2147482999;border:3px dashed #ee9dbf;border-radius:6px;background:rgba(238,157,191,.12)}' +
+    'html.mm-picking,html.mm-picking *{cursor:crosshair!important}' +
+    'html.mm-picking #msi-memo,html.mm-picking #msi-memo *{cursor:default!important}' +
     '@media print{#msi-memo{display:none!important}}';
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
   function showQuote() {
-    if (last && last.text) { quoteBox.className = 'mm-quote'; quoteBox.textContent = '“' + (last.text.length > 160 ? last.text.slice(0, 160) + '…' : last.text) + '”'; }
-    else { quoteBox.className = 'mm-quote empty'; quoteBox.textContent = '고치고 싶은 글을 드래그해서 선택해 보세요. (선택 없이 적어도 돼요)'; }
+    if (last && (last.text || last.element)) {
+      quoteBox.className = 'mm-quote';
+      quoteBox.textContent = (last.element ? '🎯 ' + last.element + (last.text ? ' — ' : '') : '') + (last.text ? '“' + (last.text.length > 160 ? last.text.slice(0, 160) + '…' : last.text) + '”' : '');
+    }
+    else { quoteBox.className = 'mm-quote empty'; quoteBox.textContent = '고치고 싶은 글을 드래그하거나 "🎯 요소 고르기"로 클릭해 보세요. (고르지 않고 적어도 돼요)'; }
   }
   function renderList() {
     listBox.textContent = '';
@@ -141,8 +189,8 @@
   function add() {
     var note = noteBox.value.trim();
     if (!note) { toast('요청을 적어 주세요'); noteBox.focus(); return; }
-    var it = { note: note, text: '', where: '', field: '' };
-    if (last && last.text) { it.text = last.text; var w = locate(last.el); it.where = w.where; it.field = w.field; }
+    var it = { note: note, text: '', where: '', field: '', element: '' };
+    if (last && last.el) { it.text = last.text; it.element = last.element || ''; var w = locate(last.el); it.where = w.where; it.field = w.field; }
     if (server) {
       it.lesson = lessonId; it.title = lessonTitle; it.viewport = window.innerWidth + '×' + window.innerHeight;
       api('POST', it).then(function () {
@@ -159,6 +207,7 @@
       out.push((i + 1) + '. ' + it.note);
       if (it.where) out.push('   위치: ' + it.where + (it.field ? ' (칸: ' + it.field + ')' : ''));
       else if (it.field) out.push('   칸: ' + it.field);
+      if (it.element) out.push('   요소: ' + it.element);
       if (it.text) out.push('   선택한 글: “' + it.text + '”');
     });
     return out.join('\n');
@@ -189,7 +238,8 @@
     noteBox = el('textarea'); noteBox.setAttribute('aria-label', '수정 요청 내용'); noteBox.placeholder = '어떻게 고치면 좋을지 적어요'; panel.appendChild(noteBox);
 
     var row1 = el('div', 'mm-row');
-    addB = el('button', 'mm-btn', '➕ 목록에 담기'); addB.type = 'button'; addB.onclick = add; row1.appendChild(addB);
+    pickB = el('button', 'mm-btn ghost', '🎯 요소 고르기'); pickB.type = 'button'; pickB.onclick = function () { setPicking(!picking); if (picking) toast('고칠 곳을 클릭하세요'); };
+    addB = el('button', 'mm-btn', '➕ 목록에 담기'); addB.type = 'button'; addB.onclick = add; row1.appendChild(pickB); row1.appendChild(addB);
     panel.appendChild(row1);
 
     listBox = el('ul', 'mm-list'); panel.appendChild(listBox);
@@ -208,10 +258,11 @@
       if (open) { remember(); showQuote(); }
     };
     toastEl = el('div', 'mm-toast'); toastEl.appendChild(el('span', '', ''));
+    hilite = el('div', 'mm-hilite'); root.appendChild(hilite);
     root.appendChild(panel); root.appendChild(toastEl); root.appendChild(btn);
     document.body.appendChild(root);
     renderList(); showQuote();
-    if (/^(127.0.0.1|localhost)$/.test(location.hostname)) {
+    if (/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
       api('GET').then(function (j) {
         server = true; sent = j.entries || [];
         addB.textContent = '📤 보내기'; row2.style.display = 'none';

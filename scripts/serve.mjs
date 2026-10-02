@@ -3,7 +3,7 @@
 //   npm run build && npm run serve   → 브라우저에서 표시되는 주소를 연다 (끄려면 Ctrl + C)
 // 수정 요청 메모(?memo=1)의 "보내기"도 여기서 받아 .claude/feedback.md 에 쌓는다(피드백 모드). GitHub Pages 에는 이 주소가 없다.
 //   GET    /__feedback?lesson=data-analysis/03 → { ok, file, open, entries }  (그 차시의 처리 전 항목, 오래된 것부터)
-//   POST   /__feedback  { lesson, title, note, text, where, field, viewport } → 항목 추가
+//   POST   /__feedback  { lesson, title, note, text, element, where, field, viewport } → 항목 추가
 //   DELETE /__feedback  { key }  → 처리 전 항목 지우기 (key = 제목줄 "시각 · 차시 「제목」")
 import path from 'node:path';
 import fs from 'node:fs';
@@ -28,6 +28,7 @@ const read = () => (fs.existsSync(FILE) ? fs.readFileSync(FILE, 'utf8') : '');
 function format(f) {
   const when = new Date().toLocaleString('ko-KR', { hour12: false });
   const lines = [`## ${when} · ${oneLine(f.lesson) || '?'}${f.title ? ` 「${oneLine(f.title)}」` : ''}`, '- 종류: 메모'];
+  if (f.element) lines.push(`- 요소: ${oneLine(f.element)}`);
   if (f.where || f.field) lines.push(`- 위치: ${oneLine(f.where) || '?'}${f.field ? ` (칸: ${oneLine(f.field)})` : ''}`);
   if (f.text) lines.push(`- 선택한 글: "${oneLine(f.text)}"`);
   lines.push(`- 메모: ${oneLine(f.note)}`, `- 화면: 정보 수업 활동지 · ${oneLine(f.viewport)}`, '- 상태: [ ] 처리 전', '');
