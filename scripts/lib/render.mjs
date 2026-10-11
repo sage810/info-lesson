@@ -82,7 +82,7 @@ export function renderLesson(lesson, opts) {
         title: lesson.meta.title || '',
         teacher,
         apiUrl: cfg.apiUrl || '',
-        submit: !!cfg.submit && !teacher,
+        submit: (!!cfg.submit || !!lesson.meta.submit) && !teacher,   // lesson.json 의 "submit": true 면 그 차시만 켬(09 수행평가)
         neisProxy: !!cfg.neisProxy,
         token: cfg.submitToken || '',
       };

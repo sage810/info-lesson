@@ -13,7 +13,9 @@
     "neis": "node scripts/neis-snapshot.mjs",
     "serve": "node scripts/serve.mjs",
     "memo": "node scripts/memo.mjs",
-    "portal-upgrade": "node scripts/portal-upgrade.mjs"
+    "portal-upgrade": "node scripts/portal-upgrade.mjs",
+    "exam-key": "node scripts/exam-key.mjs",
+    "exam-pdf": "node scripts/exam-pdf.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.56.1"

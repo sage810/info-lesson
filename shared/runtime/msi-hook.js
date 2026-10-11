@@ -4,8 +4,9 @@
  *  → 지금까지의 활동지 동작은 그대로. Apps Script 를 배포하고 주소를 넣었을 때만 켜진다.
  *
  *  켜지면 하는 일
- *   1) 제출(submit: true): 학생이 "PDF로 저장하기"를 누르면, 내 컴퓨터에 PDF 가 저장되는 것과 동시에
- *      같은 PDF + 빈칸 답을 Apps Script 로 보내 선생님 드라이브/시트에 모은다. (교사용 페이지에서는 꺼짐)
+ *   1) 제출(submit: true — site.config.json 전체, 또는 lesson.json 의 "submit": true 인 차시만): 학생이 "PDF로 저장하기"를 누르면,
+ *      내 컴퓨터에 PDF 가 저장되는 것과 동시에 같은 PDF + 빈칸 답을 Apps Script 로 보내 선생님 드라이브/시트에 모은다. (교사용 페이지에서는 꺼짐)
+ *      활동지가 window.MSI_SUBMIT { collect(), onResult(state, retry) } 를 두면(수행평가 09) 그 기록과 화면을 쓴다.
  *   2) NEIS 프록시(neisProxy: true): 시간표·급식 실시간 조회를 Apps Script 경유로 바꿔,
  *      인증키를 브라우저에 두지 않고도 한 번에 전체 데이터를 받는다.
  */
@@ -71,11 +72,31 @@
               pdf: dataUri.slice(dataUri.indexOf(',') + 1),
               answers: collectAnswers(),
               page: location.href,
-              token: C.token || ''
+              token: C.token || '',
+              source: 'web'
             };
-            toast('선생님께 제출하는 중이에요…', true);
-            post(payload, 3).then(function () { toast('✓ 선생님께 제출됐어요', true); })
-              .catch(function () { toast('제출은 실패했어요. PDF 파일은 내 컴퓨터에 저장됐으니 선생님께 알려 주세요.', false); });
+            // 시험지처럼 window.MSI_SUBMIT 를 둔 활동지는 그 기록(학생 정보·칸별 답·저장 시각·그래프 사본)을 보내고,
+            // 결과도 그 화면이 보여 준다(onResult: 'sending' | 'ok' | 'fail', 실패 때는 다시 보내기 함수를 넘김).
+            var S = window.MSI_SUBMIT || {};
+            var report = typeof S.onResult === 'function' ? S.onResult : null;
+            var go = function () {
+              if (report) report('sending'); else toast('선생님께 제출하는 중이에요…', true);
+              post(payload, 3).then(function () { if (report) report('ok'); else toast('✓ 선생님께 제출됐어요', true); })
+                .catch(function () {
+                  if (report) report('fail', go);
+                  else toast('제출은 실패했어요. PDF 파일은 내 컴퓨터에 저장됐으니 선생님께 알려 주세요.', false);
+                });
+            };
+            if (typeof S.collect === 'function') {
+              Promise.resolve().then(function () { return S.collect(); }).then(function (d) {
+                if (d && d.record) {
+                  payload.answers = d.record.answers || {};
+                  payload.student = d.record.student || {};
+                  payload.savedAt = d.record.savedAt || '';
+                }
+                if (d && d.graphs) payload.graphs = d.graphs;
+              }).catch(function () { /* 기록을 못 만들어도 PDF 와 빈칸 답은 보낸다 */ }).then(go);
+            } else go();
           } catch (e) { /* PDF 저장 자체는 이미 끝났다 */ }
           return result;
         };

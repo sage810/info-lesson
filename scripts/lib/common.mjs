@@ -15,6 +15,7 @@ export const MIME_BY_EXT = {
   '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
   '.webp': 'image/webp', '.svg': 'image/svg+xml',
+  '.csv': 'text/csv;charset=utf-8',   // 데이터 내려받기 링크(09 수행평가)
 };
 export const EXT_BY_MIME = {
   'font/woff2': '.woff2', 'font/woff': '.woff', 'font/ttf': '.ttf', 'font/otf': '.otf',
