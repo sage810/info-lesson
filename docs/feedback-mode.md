@@ -62,7 +62,7 @@ GitHub Pages 주소에서 켜면 "📤 보내기" 대신 **➕ 목록에 담기 
 | 파일 | 역할 |
 |---|---|
 | `shared/runtime/msi-memo.js` | 화면 쪽. `?memo=1` 일 때만 켜짐. 요소 고르기·글 선택·위치 찾기·보내기/복사. GitHub Pages 배포본(pages)에만 붙고 구글 사이트용(embed)·정답지 PDF 에는 안 들어간다(`scripts/lib/render.mjs`) |
-| `scripts/serve.mjs` | 미리보기 서버. `/__feedback` — GET 처리 전 목록(`?lesson=` 차시별) · POST 추가 · DELETE 처리 전 항목 지우기 |
+| `scripts/serve.mjs` | 미리보기 서버. `/__feedback` — GET 처리 전 목록(`?lesson=` 차시별) · POST 추가 · DELETE 처리 전 항목 지우기. 다른 웹사이트가 글을 끼워 넣지 못하게 주소는 127.0.0.1·localhost 만, Origin 은 같은 곳만, 쓰기는 JSON 만 받는다(아니면 403·415) |
 | `scripts/memo.mjs` | `npm run memo` — 빌드·서버 켜기·브라우저 열기. 켜진 서버가 옛 버전이면 알림 |
 | `scripts/lib/common.mjs` | `serveStatic(dir, port, handle)` — `handle` 이 true 를 돌려주면 파일 대신 응답 |
 

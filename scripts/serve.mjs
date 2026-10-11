@@ -49,6 +49,13 @@ function feedback(req, res) {
   const url = new URL(req.url, 'http://x');
   if (url.pathname !== '/__feedback') return false;
   const json = (code, obj) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(obj)); };
+  // 다른 웹사이트가 이 PC 의 미리보기 서버로 글을 끼워 넣지 못하게 한다(feedback.md 는 Claude 가 수정 지시로 읽는다):
+  // 주소는 127.0.0.1·localhost 로만, Origin 이 붙으면 같은 곳만, 쓰기는 JSON 으로만(다른 사이트의 JSON 요청은 사전 확인에서 막힘).
+  const isLocal = (h) => h === '127.0.0.1' || h === 'localhost';
+  let sameOrigin = true;
+  if (req.headers.origin) { try { const o = new URL(req.headers.origin); sameOrigin = isLocal(o.hostname) && o.host === req.headers.host; } catch { sameOrigin = false; } }
+  if (!isLocal((req.headers.host || '').replace(/:\d+$/, '')) || !sameOrigin) { json(403, { ok: false, error: '이 PC 미리보기 화면에서만 쓸 수 있어요.' }); return true; }
+  if (req.method !== 'GET' && !/^application\/json\b/i.test(req.headers['content-type'] || '')) { json(415, { ok: false, error: 'JSON 으로만 보낼 수 있어요.' }); return true; }
   if (req.method === 'GET') {
     const text = read();
     json(200, { ok: true, file: '.claude/feedback.md', open: (text.match(/^- 상태: \[ \]/gm) ?? []).length, entries: entries(text, url.searchParams.get('lesson')) });
@@ -72,7 +79,7 @@ function feedback(req, res) {
       if (i < 0) return json(404, { ok: false, error: '항목을 찾을 수 없어요(이미 지워졌거나 파일이 바뀜).' });
       if (!/^- 상태: \[ \]/m.test(parts[i])) return json(409, { ok: false, error: '이미 처리된 항목은 지울 수 없어요.' });
       parts.splice(i, 1);
-      fs.writeFileSync(FILE, parts.join('\n'), 'utf8');
+      fs.writeFileSync(FILE, parts.join('\n').replace(/\n*$/, '\n\n'), 'utf8');   // 끝 항목을 지워도 다음 항목 앞 빈 줄 유지
       json(200, { ok: true });
     } catch (e) {
       json(400, { ok: false, error: String(e.message ?? e) });

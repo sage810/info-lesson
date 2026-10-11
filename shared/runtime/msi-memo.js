@@ -1,9 +1,9 @@
-/* 수정 요청 메모 — 선생님 전용 (A안: 저장소 없이 복사·붙여넣기).
- * 활동지 화면에서 글을 선택하거나 "🎯 요소 고르기"로 요소를 클릭하고, 요청을 적어 목록에 담은 뒤, "전체 복사"로 Claude 에게 붙여넣는다.
+/* 수정 요청 메모(피드백 모드) — 선생님 전용. 설명서: docs/feedback-mode.md
+ * 활동지 화면에서 글을 드래그하거나 "🎯 요소 고르기"로 요소를 클릭해 고르고, 요청을 적어 보낸다. 두 가지 방식:
+ *   - 이 PC 미리보기(npm run memo, 127.0.0.1): "📤 보내기" → scripts/serve.mjs 가 .claude/feedback.md 에 쌓는다.
+ *   - 그 밖(GitHub Pages): "목록에 담기" → "전체 복사" → Claude 대화에 붙여넣기. 목록은 이 브라우저(localStorage)에만 있다.
  * 켜기: 주소 끝에 ?memo=1 (그 브라우저에 기억됨) / 끄기: ?memo=0.  켜지 않으면 아무것도 하지 않는다 → 학생 화면에는 안 보임.
- * GitHub Pages 배포본(pages)에만 붙는다(render.mjs). 구글 사이트용(embed)·정답지 PDF 에는 들어가지 않는다.
- * 메모 목록은 이 브라우저(localStorage)에만 있고 서버로 가지 않는다.
- * 단, 이 PC 미리보기(npm run serve/memo, 127.0.0.1)에서는 "📤 보내기"로 .claude/feedback.md 에 바로 쌓는다(피드백 모드, scripts/serve.mjs). */
+ * GitHub Pages 배포본(pages)에만 붙는다(render.mjs). 구글 사이트용(embed)·정답지 PDF 에는 들어가지 않는다. */
 (function () {
   'use strict';
   var FLAG = 'msi-memo-on';
@@ -39,6 +39,7 @@
   function visible(el) { return !!(el && el.getClientRects && el.getClientRects().length); }
   function clean(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
   function plain(s) { return clean(s).replace(/^[^0-9A-Za-z가-힣]+/, ''); }   // 앞의 이모지·기호 떼기
+  function cut(s, n) { return s.length > n ? s.slice(0, n) + '…' : s; }
 
   // ── 선택한 글 붙잡기(칸 안 글·일반 글 모두). 폰에서는 버튼을 눌러도 선택이 풀릴 수 있어 마지막 선택을 기억한다 ──
   function grab() {
@@ -76,7 +77,7 @@
   }
   function textOf(e) {
     var t = clean(e.innerText || e.value || e.getAttribute('placeholder') || e.getAttribute('aria-label') || e.getAttribute('alt') || '');
-    return t.length > 200 ? t.slice(0, 200) + '…' : t;
+    return cut(t, 200);
   }
   function setPicking(on) {
     picking = on;
@@ -162,7 +163,7 @@
   function showQuote() {
     if (last && (last.text || last.element)) {
       quoteBox.className = 'mm-quote';
-      quoteBox.textContent = (last.element ? '🎯 ' + last.element + (last.text ? ' — ' : '') : '') + (last.text ? '“' + (last.text.length > 160 ? last.text.slice(0, 160) + '…' : last.text) + '”' : '');
+      quoteBox.textContent = (last.element ? '🎯 ' + last.element + (last.text ? ' — ' : '') : '') + (last.text ? '“' + cut(last.text, 160) + '”' : '');
     }
     else { quoteBox.className = 'mm-quote empty'; quoteBox.textContent = '고치고 싶은 글을 드래그하거나 "🎯 요소 고르기"로 클릭해 보세요. (고르지 않고 적어도 돼요)'; }
   }
@@ -177,7 +178,7 @@
         : function () { items.splice(i, 1); save(); renderList(); };
       li.appendChild(del);
       li.appendChild(el('div', '', (i + 1) + '. ' + it.note));
-      if (it.text) li.appendChild(el('div', 'mm-w', '“' + (it.text.length > 70 ? it.text.slice(0, 70) + '…' : it.text) + '”'));
+      if (it.text) li.appendChild(el('div', 'mm-w', '“' + cut(it.text, 70) + '”'));
       listBox.appendChild(li);
     });
     btn.textContent = '📝 메모' + (list.length ? ' (' + list.length + ')' : '');
