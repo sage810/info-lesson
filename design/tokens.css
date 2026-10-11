@@ -1,0 +1,136 @@
+/* 신현중 정보 수업 활동지 디자인 토큰 — 자동 생성(design/build.mjs). 직접 고치지 말고 tokens.json 을 고친다.
+   원본 규칙: docs/rules/design.md · 쓰는 법: design/README.md
+   폰트 경로는 이 파일 기준 fonts/ — 다른 곳에 두면 url() 을 맞춘다. */
+
+@font-face{font-family:'GangwonEdu';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/GangwonEdu-400.woff2') format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/CookieRun-400.woff2') format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/CookieRun-700.woff2') format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:300;font-display:swap;src:url('fonts/Maplestory-300.woff2') format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/Maplestory-700.woff2') format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F;src:url('fonts/Silkscreen-400.woff2') format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F;src:url('fonts/Silkscreen-700.woff2') format('woff2');}
+
+:root{
+  /* color */
+  --msi-ink: #4b3b6b;   /* 모든 테두리 · 본문 글자 */
+  --msi-paper: #fffdf7;   /* 카드 바탕(크림) */
+  --msi-paper-pink: #fdf6fa;   /* 입력칸 · 분홍빛 카드 바탕 */
+  --msi-page: #e7e3f7;   /* 페이지 배경 */
+  --msi-grid: #d8d2ee;   /* 배경 격자선 */
+  --msi-pink: #f9cade;
+  --msi-pink-strong: #f7a8c4;
+  --msi-pink-edge: #ee9dbf;   /* 포커스 테두리 */
+  --msi-purple: #d6c4f5;
+  --msi-purple-mut: #c9c2ea;
+  --msi-blue: #c4d8f7;
+  --msi-blue-strong: #9db2f2;   /* 주요 버튼 */
+  --msi-mint: #bfe9dd;
+  --msi-aqua: #a9dce4;
+  --msi-yellow: #fbe6a2;
+  --msi-yellow-cap: #f0c95c;
+  --msi-green: #d8f0c4;
+  --msi-green-mut: #c9e8b8;
+  --msi-apricot: #ffe0cc;
+  --msi-salmon: #f7bfb2;
+  --msi-sky: #cfeaf5;
+  --msi-lilac: #eec6ea;
+  --msi-beige: #e8d9b8;
+  --msi-olive: #e3e0b0;
+  --msi-sage: #c9e4dc;   /* 예비 파스텔 — 흐린 민트 */
+  --msi-sky-2: #b8d8e8;   /* 예비 파스텔 — 흐린 하늘 */
+  --msi-moss: #d4e0b0;   /* 예비 파스텔 — 흐린 연두 */
+  --msi-rose-dust: #e8c4c4;   /* 예비 파스텔 — 흐린 장미 */
+  --msi-peri: #c4cce8;   /* 예비 파스텔 — 흐린 보라-파랑 */
+  --msi-muted: #8b7cb8;   /* 캡션 — 크림 위 3.6:1 이라 작은 설명 글자에는 muted-2 를 권함 */
+  --msi-muted-2: #6b5b93;   /* 설명 글자 · 비활성 탭 (크림 위 5.8:1) */
+  --msi-muted-3: #a596cc;   /* 자리표시자 · 아주 흐린 보조 */
+  --msi-link: #c96a97;
+  --msi-link-hover: #8f6fd6;
+  --msi-footer: #6b7fa8;
+  --msi-button-ink: #26224a;   /* 주요 버튼(blue-strong) 위 글자 */
+  --msi-placeholder: #b3a8cc;
+  --msi-status-past-bg: #ece9f3;   /* 완료 — 색만으로 구분하지 말고 글자도 함께 */
+  --msi-status-past-ink: #8a82a6;
+  --msi-status-live-bg: #7b5cd6;   /* 진행 중 */
+  --msi-status-live-ink: #fffdf7;
+  --msi-status-upcoming-bg: #fffdf7;   /* 예정 — 점선 테두리 status-upcoming-line */
+  --msi-status-upcoming-ink: #7b6ba8;
+  --msi-status-upcoming-line: #cfc6e6;
+  --msi-accent-1: var(--msi-aqua);   /* 카드 accent 8색 순환(§4.1) — 8번 다음은 다시 1번 */
+  --msi-accent-2: var(--msi-blue);
+  --msi-accent-3: var(--msi-yellow);
+  --msi-accent-4: var(--msi-purple);
+  --msi-accent-5: var(--msi-mint);
+  --msi-accent-6: var(--msi-lilac);
+  --msi-accent-7: var(--msi-salmon);
+  --msi-accent-8: var(--msi-olive);
+  --msi-shadow-strong: rgba(75,59,107,.22);   /* 메인 창 그림자 색 */
+  --msi-shadow: rgba(75,59,107,.18);   /* 카드 */
+  --msi-shadow-soft: rgba(75,59,107,.15);   /* 작은 요소 */
+  --msi-shadow-press: rgba(75,59,107,.35);   /* 눌린 상태 */
+  --msi-divider: rgba(75,59,107,.25);   /* 점선 구분선 */
+  /* font */
+  --msi-font-display: 'GangwonEdu','Do Hyeon','Apple SD Gothic Neo','Malgun Gothic',sans-serif;   /* 페이지·섹션 큰 제목 */
+  --msi-font-round: 'CookieRun','Jua','Apple SD Gothic Neo','Malgun Gothic',sans-serif;   /* 소제목·버튼·칩·표 머리 (700) */
+  --msi-font-body: 'Maplestory','Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic',sans-serif;   /* 본문·입력 (300 / 700) */
+  --msi-font-pixel: 'Silkscreen',monospace;   /* 영문·숫자 전용 라벨 — 한글에 쓰지 않음 */
+  /* font-size */
+  --msi-fs-display-lg: 30px;   /* 페이지 제목 (30–36) */
+  --msi-fs-display-md: 25px;   /* 창 타이틀바 제목 */
+  --msi-fs-title: 20px;   /* 카드 제목 (round 700) */
+  --msi-fs-subtitle: 17px;
+  --msi-fs-button: 18px;
+  --msi-fs-input: 16px;
+  --msi-fs-body: 15px;
+  --msi-fs-small: 14px;   /* 설명·캡션 */
+  --msi-fs-pixel: 11px;   /* Silkscreen 라벨 */
+  --msi-fs-pixel-xs: 9px;
+  /* line-height */
+  --msi-lh-body: 1.7;
+  --msi-lh-tight: 1.3;
+  /* space */
+  --msi-space-page-y: 28px;
+  --msi-space-page-x: 20px;
+  --msi-space-page-bottom: 60px;
+  --msi-space-stack: 18px;   /* 창·카드 사이 세로 간격 */
+  --msi-space-inner: 12px;   /* 카드 안 간격 */
+  --msi-space-window-y: 24px;
+  --msi-space-window-x: 22px;
+  --msi-space-card-head-y: 8px;
+  --msi-space-card-head-x: 14px;
+  --msi-space-card-body-y: 18px;
+  --msi-space-card-body-x: 20px;
+  --msi-space-grid-cell: 28px;   /* 배경 격자 칸 */
+  /* size */
+  --msi-size-content-max: 1080px;
+  --msi-size-doc-max: 980px;   /* 문서형 화면 */
+  /* border-width */
+  --msi-bw-window: 4px;
+  --msi-bw-default: 3px;   /* 카드·칩·입력·버튼·태그 */
+  --msi-bw-divider: 2px;
+  /* radius */
+  --msi-radius-window: 16px;
+  --msi-radius-card: 14px;
+  --msi-radius-box: 11px;   /* 힌트 박스 */
+  --msi-radius-button: 10px;
+  --msi-radius-field: 9px;   /* 입력·칩 */
+  --msi-radius-tag: 6px;
+  --msi-radius-pill: 999px;
+  /* shadow */
+  --msi-shadow-window: 8px 8px 0 var(--msi-shadow-strong);   /* 그림자는 늘 블러 0(하드 섀도우) */
+  --msi-shadow-topic: 6px 6px 0 rgba(75,59,107,.2);
+  --msi-shadow-card: 5px 5px 0 var(--msi-shadow);
+  --msi-shadow-button: 4px 4px 0 rgba(75,59,107,.3);
+  --msi-shadow-chip: 3px 3px 0 var(--msi-shadow-soft);
+  --msi-shadow-press: 1px 1px 0 var(--msi-shadow-press);   /* 눌림 — 함께 translate(3px,3px) */
+  /* gradient */
+  --msi-gradient-titlebar: linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%);   /* 창 타이틀바(90도) */
+  --msi-gradient-topic: linear-gradient(90deg,#f9cade 0%,#d6c4f5 100%);
+  /* focus */
+  --msi-focus-width: 3px;   /* 색은 color.pink-edge — 포커스 표시는 지우지 않는다 */
+  --msi-focus-offset: 2px;
+  /* duration */
+  --msi-duration-floaty: 3s;   /* 떠다니는 아이콘 정도만 — 과한 움직임 금지, prefers-reduced-motion 존중 */
+}
+
+@keyframes msi-floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
