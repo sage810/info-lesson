@@ -33,7 +33,7 @@ git show f1049a7:"output/데이터분석/5차시/data5_1b.html" > data5_1b.html
 | `output/데이터분석/5차시/data5_1b.html` | — | 구버전: 위와 같은 5미션판의 다른 세션 발전본 | `c59c730f81` |
 | `output/데이터분석/5차시/data5.pdf` | — | 구버전 5미션판을 PDF 로 뽑은 것 | `2a81f8b18e` |
 | `output/데이터분석/6차시/data6.html` | `lessons/data-analysis/06` | **정본** — 그대로 가져옴(바이트 단위 동일) | `342df54465` |
-| `output/데이터분석/7차시/data7.html` | `lessons/data-analysis/07` | **정본** — 그대로 가져옴(바이트 단위 동일) | `03f5e930ff` |
+| `output/데이터분석/7차시/data7.html` | (옛 `lessons/data-analysis/07` — 2026-10-11 로블록스 활동지로 교체해 작업 폴더에서 삭제, git 이력에만 있음) | ~~정본~~ 그대로 가져왔던 것(바이트 단위 동일) | `03f5e930ff` |
 | `output/데이터분석/4차시/support.js` | `shared/vendor/dc-runtime.js` | 뷰어용 런타임 사본(인라인판과 같은 역할) | `951ae391b8` |
 | `output/데이터분석/5차시/support.js` | `shared/vendor/dc-runtime.js` | 〃 | `951ae391b8` |
 | `output/데이터분석/4차시/neis.config.example.js` | — | NEIS 키 설정 예시 — 이제 키는 Apps Script 의 스크립트 속성(NEIS_KEY)에 | `b6da6e8a92` |

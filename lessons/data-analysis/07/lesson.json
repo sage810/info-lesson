@@ -2,8 +2,8 @@
   "unit": "data-analysis",
   "unitTitle": "데이터분석",
   "no": "07",
-  "title": "신입 유튜버의 국내 TOP 100 채널 분석",
-  "shell": "standalone",
+  "title": "로블록스 데이터 분석하기",
+  "shell": "portal",
   "status": "live",
-  "importedFrom": "output/데이터분석/7차시/data7.html"
+  "copiedFrom": "data-analysis/06"
 }

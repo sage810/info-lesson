@@ -35,7 +35,7 @@
 | `data-analysis/04` | 데이터로 문제 해결하기 — 4단계와 표 읽기 | portal (4탭) | `answers.json` (빈칸·순서 배열·끌어 놓기·O/X, 정답지 PDF 가능) · `answers.md`(순서 배열 설명) |
 | `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | `answers.json` (빈칸·유형 고르기, 정답지 PDF 가능) |
 | `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | portal (4탭) | `answers.json` (정답지 PDF 가능) |
-| `data-analysis/07` | 신입 유튜버의 국내 TOP 100 채널 분석 | standalone | `answers.json` (정답 대신 **채점 기준** PDF) · `answers.md`(채점 기준 원문) |
+| `data-analysis/07` | 로블록스 데이터 분석하기 | portal (4탭) | `answers.json` (분석 유형 고르기 4칸, 정답지 PDF 가능) |
 
 ## 처음 한 번 (Windows)
 
