@@ -223,3 +223,36 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 확인(Playwright): 꺼짐 0개 · 켜짐/기억 · 일반 글·빈칸 안 글·선택 없는 메모 · 복사 글 모양 · 새로고침 후 목록 유지 · 끄기 · 폰 360px 가로 스크롤 없음.
 
 - **"메모 켜줘" 한 번에 켜기** — `scripts/memo.mjs`(`npm run memo -- <차시>`): 빌드 → 8080 서버가 꺼져 있으면 뒤에서 켜기 → `?memo=1` 주소를 브라우저로 열기. 차시를 안 주면 lesson.html 을 가장 최근에 고친 차시. 서버가 꺼진 상태에서도 되는지 확인함. 규칙은 `CLAUDE.md` "메모 켜줘" 절·메모리(feedback-memo-on-command).
+
+## 수행평가(시험지) 화면 — 09 데이터분석 수행평가 A형 — 2026-10-02
+
+「활동지 양식.docx」로 받은 문항을 **답이 없는 시험 화면**으로 만든 첫 사례. 저장소가 PUBLIC 이라 정답·문항 보관 방식이 핵심.
+- **보관**: `answers.json` 은 `.gitignore` 로 영구 비공개, 차시 폴더는 시험 날까지 `.gitignore`(공개 순서: 그 폴더 `spec.md`). README 차시 목록 줄도 공개할 때 추가.
+- **틀**: 한 화면(standalone, 07 바탕). 차분한 톤 = 같은 토큰에서 채도 낮은 예비 파스텔(--peri·--sage·--purple-mut·--sky-2), 그림자·테두리 한 단계 가볍게, 문항은 점선 구분, 고른 답은 연보라(#e6def7)+라디오·체크 표시만(맞음/틀림 색 없음).
+- **입력**: 하나 고르기 `.opt[data-group]`(aria-pressed) · 여럿 `[data-multi]` · 분석 유형 칩 `.chip` · 순서 `.os`/`.oc`(누른 차례대로 앞 칸부터, 칸 누르면 빠짐) · 글자 `textarea.blank` · 그래프 `.pz`(Ctrl+V·끌어 놓기·파일로 넣기, 그림만).
+- **시험 기능**: 답 글자 칸 붙여넣기·끌어 놓기 막기(paste·beforeinput·drop, 캡처 단계) · localStorage 보관(그래프는 JPEG 1600px 사본, 용량 넘으면 그래프만 빼고 안내) · 처음 열 때 "보관된 답을 불러왔어요" + **답 모두 지우기**(같은 컴퓨터 다음 학생 대비) · beforeunload 경고(답이 있고 마지막 변경 뒤 저장 안 했을 때. 크롬은 한 번도 누르지 않은 창에선 안 띄움).
+- **PDF**: 포털 savePdf 와 같은 html2canvas+jsPDF, 파일 이름 `학년반번호 이름 …`. 안 푼 문항 목록을 보여 주고 확인받음. 쪽은 `.q`·`.subq`·`.card` 경계에서 나눔(쪽 높이의 35% 넘는 경계 중 가장 아래). 저장하면 보관한 답 지움.
+- 답한 문항 위젯은 `.sheet-progress`(교사용 화면에서 자동 숨김), 640px 이하에선 답 칸을 가려 숨김.
+- `scripts/lib/common.mjs` MIME 에 `.csv` 추가(데이터 내려받기 링크를 `msi-asset:` 으로).
+
+## 피드백 모드 — 메모를 `.claude/feedback.md` 로 바로 보내기·요소 고르기 — 2026-10-02
+- 이 PC 미리보기(127.0.0.1)에서 `?memo=1` 메모 창이 **"📤 보내기"** 로 `.claude/feedback.md` 에 쌓는다(`scripts/serve.mjs` 의 `/__feedback`). GitHub Pages 에서는 예전처럼 복사·붙여넣기. **"피드백 모드"** 라고만 해도 `npm run memo` 로 켜고, **"피드백 처리해줘"** 로 처리(`/feedback_mode` + `lesson-edit` 규칙).
+- **🎯 요소 고르기**: 마우스 올린 요소에 점선 테두리, 클릭하면 요소 이름·글을 기록(그동안 활동지 버튼은 안 눌림, Esc 취소). 기록에 `요소` 줄.
+- **보안**(10-03 검수): 다른 웹사이트가 이 PC 서버로 글을 끼워 넣지 못하게 주소(127.0.0.1·localhost)·Origin·JSON 만 받는다(403·415). `feedback.md` 는 `.gitignore`.
+- 설명서 `docs/feedback-mode.md`.
+
+## 수행평가 자동 제출(A) + PDF 속 숨은 답(B) + 시트 채점 — 2026-10-04
+- 09 에서 만든 방식(10-02~04). 학생이 PDF 로 저장하면 **A** 답 기록·PDF·그래프 작은 사본이 Apps Script → 구글 시트로 자동 제출, **B** 같은 기록이 PDF 문서 정보에도 숨어 들어가 전송이 실패한 학생은 `npm run exam-pdf` 로 꺼내 같은 길로 보냄. 채점은 시트 한 곳(마지막 제출만·반별·문항 분석·반별 그래프 점수 도우미 페이지).
+- 정답은 공개 코드에 없고 `answers.json`(이 PC) → `npm run exam-key -- <차시> --send` 로만 시트 "정답" 탭에. 선생님 열쇠는 `apps-script/teacher.local.json`(gitignore) + 스크립트 속성 `TEACHER_KEY`.
+- 09 의 "답 모두 지우기" 버튼은 없앰 → **첫 입력부터 45분 지나면 열 때 지움**(공용 PC 다음 반 대비). `lesson.json` 의 `"submit": true` 로 그 차시만 제출을 켬(`render.mjs`).
+- 기준 문서 `docs/rules/exam.md`, 스킬 **`lesson-exam`**. 설정·사용: `apps-script/README.md`. 실제 Apps Script 는 이 PC 에서 시험할 수 없어 **새 버전 배포 + 리허설**이 시험 전 필수.
+
+## 다른 웹앱용 디자인 토큰 — `design/` — 2026-10-11
+- 활동지 디자인(`docs/rules/design.md`)을 다른 웹앱에서 쓰도록 `tokens.json`(원본, W3C 형식) → `node design/build.mjs` → `tokens.css`(변수 `--msi-…`) · `preview.html`. 부품 `components.css`(`.msi-…`), 서체 `fonts/`. 쓰는 법 `design/README.md`.
+- 작은 설명 글자는 `--msi-muted-2`(대비 5.8:1). 활동지 디자인 값을 바꾸면 `tokens.json` 도 맞춘다.
+
+## 로블록스 데이터 분석하기 — 07 (원래 07 교체) — 2026-10-11
+- 선생님이 「활동지 양식.docx」로 준 내용 + `roblox_popular_game.csv`(96개 게임)로 4탭 활동지. 06 을 바탕으로 **미션 4개**(구성·비교·분포·관계): ① 분석 유형 고르기(누르면 바로 채점 — 06 형성평가 `FQ` 재사용) ② CODAP 그래프 붙여넣기 ③ 해석 쓰기. 정답은 유형 4칸만.
+- **번호**: 양식 07 → 처음 지시 08 → 최종 "07 에 만들고 원래 07(신입 유튜버 TOP 100 분석)은 삭제". 옛 07 은 git 이력에만 있다(`git show 04449a1:lessons/data-analysis/07/lesson.html`).
+- 09 처럼 **왼쪽 HELP 카드**(진행률 위젯 아래): "📊 CODAP 들어가고, 데이터 올리는 법" · "📸 캡처해서 붙여넣기" → 누르면 맨 위 GUIDE 카드가 펼쳐지고 닫으면 제자리로. 820px 이하는 위젯과 함께 숨김. 데이터는 수업자료 폴더로 나눠 줌.
+- 미션 질문(제목)을 **색 라벨**(미션 색 스티커)로 강조 — 4가지 시안 비교 후 선택. 설계·검산은 `lessons/data-analysis/07/spec.md`.
