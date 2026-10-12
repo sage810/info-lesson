@@ -262,3 +262,9 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - **10 = 데이터분석 수행평가 B형**: 09 를 복사해 문항만 교체(공용 코드로 빼지 않음). A형과 번호·유형·배점(26점) 1:1, Q1↔Q3·Q6↔Q8 자리 바꿈. 폴더·`answers.json` 은 `.gitignore`(시험 날까지 이 PC 에만). 09·10 에서 "데이터 내려받기" 버튼은 뺌(안내 글만 남김).
 - 09 안에 대비 요약(A4 1쪽, PDF·docx)·수행평가 안내(docx)·07 교사용 해석 PDF 를 만들었지만 시험 자료라 모두 `.gitignore`.
 - `site.config.json` 의 `apiUrl` 을 새 Apps Script 배포 주소로 바꿈.
+
+## 구글 사이트 삽입 화면에서 "PDF로 저장하기"가 안 눌리는 문제 — 안내 띄우기 — 2026-10-12
+- 원인: 구글 사이트의 삽입(URL·코드)은 보호 상자(sandbox) iframe 이라 `allow-downloads` 가 없으면 PDF 다운로드가 막히고 안내 창(alert)도 안 떠서 "버튼이 안 눌리는" 것처럼 보임(Playwright 로 재현: "Download is disallowed… 'allow-downloads' is not set").
+- 해결: `shared/runtime/msi-frame.js` — **삽입 화면(iframe) 안에서만** 아래쪽에 작은 안내("새 탭에서 열기" 버튼 + 복사할 주소 + ×)를 띄운다. 일반 화면·교사용 화면에서는 아무것도 안 한다. 삽입 화면에서 푼 답은 새 탭으로 옮겨지지 않으므로 처음부터 새 탭에서 풀도록 안내한다.
+- `site.config.json` 에 `siteUrl`(= `https://sage810.github.io/info-lesson/`) 추가 → 새 탭 주소는 `siteUrl + <단원>/<차시>/`. `scripts/lib/render.mjs` 가 pages·embed 둘 다에 넣는다(교사용 제외).
+- PDF 버튼이 있는 모든 차시(01~07·09·10)에 적용. 구글 사이트가 실제로 쓰는 sandbox 설정은 확인하지 못했다 — 새 탭에서 열어도 막히면(allow-popups-to-escape-sandbox 없음) 주소를 복사해 새 탭에 붙여넣는다.

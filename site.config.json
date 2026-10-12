@@ -2,6 +2,6 @@
   "apiUrl": "https://script.google.com/macros/s/AKfycbxiyGRIHCU_XY2dcsExXua_68bAuXwLfwpiiAgABlpCwYW8s9qDUCAyquDq91d5dPmB/exec",
   "submit": false,
   "neisProxy": true,
-  "submitToken": ""
+  "submitToken": "",
+  "siteUrl": "https://sage810.github.io/info-lesson/"
 }
-
