@@ -50,3 +50,9 @@ apps-script/teacher.local.json
 lessons/data-analysis/07/interpretation/
 lessons/data-analysis/07/해석예시-교사용.pdf
 
+
+# 09 시험지 공개 때(2026-10-12) 올리지 않는 시험 자료 — 대비 요약·안내문은 학생에게 직접 나눠 줌
+lessons/data-analysis/09/summary/
+lessons/data-analysis/09/*.docx
+lessons/data-analysis/09/*.pdf
+lessons/data-analysis/09/~$*

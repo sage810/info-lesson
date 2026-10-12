@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이터분석 수행평가 A형</title>
+<!-- 수행평가(시험지). 원자료: input/데이터분석/데이터분석 수행평가 문항 a형.docx · 기획: spec.md
+     이 파일에는 어떤 답도 넣지 않는다(채점 표시 없음). -->
+<style>
+@font-face{font-family:'GangwonEdu';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/GangwonEdu-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-700.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:300;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-300.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-700.woff2) format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
+
+/* 차분한 시험지 톤 — design.md 토큰 그대로(잉크·크림 종이·격자), 채도 낮은 예비 파스텔(--peri·--sage·--purple-mut)만 쓰고
+   그림자·테두리를 한 단계 가볍게, 이모지는 최소로. 고른 답은 연보라로만 표시(맞음/틀림 색 없음). */
+:root{
+  --ink:#4b3b6b; --paper:#fffdf7; --page:#e7e3f7; --grid:#d8d2ee;
+  --peri:#c4cce8; --sage:#c9e4dc; --purple-mut:#c9c2ea; --sky-2:#b8d8e8;
+  --muted:#8b7cb8; --muted-2:#6b5b93; --line:#b9b0d3; --field:#fbfaff;
+  --pick:#e6def7; --focus:#8f6fd6;   /* --focus = design.md --link-hover */
+  --muted-3:#a596cc;
+  /* 09 차분한 톤 전용 옅은 색(design.md 밖) — 여기 한 곳에만 둔다 */
+  --title-09:#dcd8ee; --tint:#f1eff7; --tbl-line:#cfc8e2; --data-bg:#f4f8fb; --peri-hover:#b6c0e2; --ok-bg:#f6faf8; --img-line:#e3dcf2;
+  --sh:rgba(75,59,107,.14); --sh-soft:rgba(75,59,107,.10);
+  --r:'CookieRun','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;font-weight:300;line-height:1.7;
+  background:var(--page);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.page{max-width:920px;margin:auto;padding:28px 20px 70px}
+.window{background:var(--paper);border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--sh);overflow:hidden}
+.titlebar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:3px solid var(--ink);background:var(--title-09);font-family:var(--r);font-weight:700;font-size:18px}
+.tag{font-family:'Silkscreen',monospace;font-size:10px;font-weight:400;letter-spacing:.06em;border:2px solid var(--ink);border-radius:6px;padding:3px 7px;background:var(--paper)}
+.content{padding:22px 22px 26px;display:grid;gap:18px}
+
+.card{border:2.5px solid var(--ink);border-radius:13px;overflow:hidden;background:var(--paper);box-shadow:4px 4px 0 var(--sh-soft)}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;border-bottom:2.5px solid var(--ink);font-family:'Silkscreen',monospace;font-size:10.5px;letter-spacing:.05em}
+.bar .r{opacity:.7}
+.topic .bar{background:var(--purple-mut)}
+.topic .body{padding:18px 20px 20px;background:var(--field)}
+.topic h1{margin:0;font-family:'GangwonEdu',var(--r);font-weight:400;font-size:30px;line-height:1.3;letter-spacing:-.01em}
+.info .bar{background:var(--peri)}
+.info .body{padding:14px 16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.info label{display:grid;gap:4px;font-family:var(--r);font-weight:700;font-size:14px}
+.notice .bar{background:var(--sage)}
+
+.part .bar{background:var(--peri)}
+.part.p2 .bar{background:var(--sky-2)}
+.part-head{padding:16px 20px 4px}
+.part-head h2{margin:0;font-family:var(--r);font-weight:700;font-size:20px}
+.part-head p{margin:6px 0 0;font-size:15px}
+.part-head b{font-weight:700}
+.qs{padding:0 20px 8px}
+
+/* 문항 — 상자 대신 점선으로 나눠 차분하게 */
+.q{padding:18px 0 20px;display:grid;gap:11px}
+.q+.q{border-top:2px dashed rgba(75,59,107,.16)}
+.q-head{display:flex;gap:10px;align-items:flex-start}
+.q-no{flex:none;min-width:52px;text-align:center;margin-top:1px;padding:1px 10px;border:2px solid var(--ink);border-radius:999px;background:var(--peri);font-family:var(--r);font-weight:700;font-size:15px;line-height:1.5;white-space:nowrap}   /* 문항 번호 = Q 태그(보기 번호 동그라미와 구분) */
+.q-text{margin:0;font-size:16px;line-height:1.7;word-break:keep-all}
+.pt{white-space:nowrap;font-family:var(--r);font-weight:700;font-size:13px;color:var(--muted-2);margin-left:4px}
+.q-body{display:grid;gap:10px;padding-left:62px}
+.list{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:15px;word-break:keep-all}
+.list li{display:flex;gap:6px}
+.list .k{flex:none;font-family:var(--r);font-weight:700;color:var(--muted-2)}
+.subq{display:grid;gap:8px}
+.subq+.subq{margin-top:6px}
+.subq-text{margin:0;font-size:15px;word-break:keep-all}
+.how{margin:0;font-size:13px;color:var(--muted-2)}
+
+/* 고르기 — 하나·여럿 모두 번호 배지(아래). 고른 것은 연보라 줄 + 반전 배지, 맞음·틀림은 보여 주지 않는다 */
+.opts{display:grid;gap:7px}
+.opt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;cursor:pointer;padding:9px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:15px;line-height:1.6;word-break:keep-all}
+.opt:hover{border-color:var(--ink)}
+.opt .on{flex:none;font-family:var(--r);font-weight:700;color:var(--muted-2)}
+.opt.is-on{border-color:var(--ink);background:var(--pick);box-shadow:2px 2px 0 var(--sh)}
+/* 번호 배지 보기(2·3·6·7번) — 둥근 네모 번호가 고르는 표시. 줄 어디를 눌러도 고른다 */
+.opts.num .opt{align-items:center}
+.opts.num .on{width:30px;height:30px;border:2px solid var(--ink);border-radius:8px;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1}
+.opts.num .opt.is-on .on{background:var(--ink);color:#fff}
+.types{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;padding:6px 13px;border:2px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-family:var(--r);font-weight:700;font-size:14px}
+.chip:hover{border-color:var(--ink)}
+.chip.is-on{border-color:var(--ink);background:var(--ink);color:#fff;box-shadow:2px 2px 0 var(--sh)}
+.opt:focus-visible,.chip:focus-visible,.os:focus-visible,.oc:focus-visible,.pz:focus-visible,.btn:focus-visible,.link-btn:focus-visible,#pdfBtn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* 순서 — (a)~(d)를 차례로 누르면 앞 칸부터 채워진다 */
+.order{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.ans-k{font-family:var(--r);font-weight:700;font-size:14px;color:var(--muted-2);margin-right:2px}
+.os{min-width:58px;height:40px;padding:0 10px;border:2px dashed var(--line);border-radius:9px;background:var(--field);color:var(--ink);font-family:var(--r);font-weight:700;font-size:16px;cursor:pointer}
+.os.is-filled{border-style:solid;border-color:var(--ink);background:var(--pick)}
+.arr{color:var(--muted-2);font-weight:700}
+.ord-tray{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.oc{cursor:pointer;min-width:52px;padding:6px 12px;border:2px solid var(--ink);border-radius:9px;background:#fff;color:var(--ink);font-family:var(--r);font-weight:700;font-size:15px;box-shadow:2px 2px 0 var(--sh-soft)}
+.oc[disabled]{cursor:default;opacity:.35;box-shadow:none}
+
+/* 글자 칸 */
+.blank{display:block;width:100%;min-height:42px;padding:8px 11px;border:2px solid var(--ink);border-radius:9px;background:var(--field);color:var(--ink);font:inherit;font-size:15px;line-height:1.6;resize:none;overflow:hidden;white-space:pre-wrap;overflow-wrap:break-word}
+.blank:focus{outline:0;border-color:var(--focus);background:#fff;box-shadow:0 0 0 3px rgba(143,111,214,.18)}
+.blank::placeholder{color:var(--muted-3)}
+.ans-row{display:flex;align-items:center;gap:8px}
+.ans-row .blank{max-width:260px}
+
+/* 표(구글 시트 모양) */
+.tbl-scroll{overflow-x:auto}
+.sheet{border-collapse:collapse;min-width:520px;font-size:14px}
+.sheet th,.sheet td{border:1.5px solid var(--tbl-line);padding:6px 10px;text-align:center;white-space:nowrap}
+.sheet thead th{background:var(--tint);font-family:'Silkscreen',monospace;font-weight:400;font-size:11px;color:var(--muted-2)}
+.sheet tbody th{background:var(--tint);font-family:'Silkscreen',monospace;font-weight:400;font-size:11px;color:var(--muted-2);width:34px}
+.sheet tr.hd td{font-family:var(--r);font-weight:700;background:var(--field)}
+.sheet td.l{text-align:left}
+
+/* 그래프 붙여넣기 칸 */
+.pz{min-height:150px;border:2px dashed var(--line);border-radius:11px;background:var(--field);display:grid;place-items:center;text-align:center;padding:14px;color:var(--muted-2);font-size:14px;cursor:pointer}
+.pz:focus{outline:0;border-color:var(--focus);border-style:solid;background:#fff}
+/* 칸을 고르면 안내 글 앞에 깜박이는 커서 — 여기에 Ctrl + V 하면 된다는 표시(그림이 들어가면 없음) */
+.pz:focus:not(.is-filled)>span::before{content:'';display:inline-block;width:2px;height:1.15em;margin-right:6px;vertical-align:-.2em;background:var(--ink);animation:pz-caret 1s step-end infinite}
+@keyframes pz-caret{50%{opacity:0}}
+.pz.is-over{border-color:var(--focus);background:var(--pick)}
+.pz.is-filled{border-style:solid;border-color:var(--ink);background:#fff;padding:8px}
+.pz img{display:block;max-width:100%;max-height:520px}
+.pz small{font-size:12px}
+.pz-tools{display:flex;gap:8px;flex-wrap:wrap}
+.link-btn{cursor:pointer;padding:5px 11px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink);font-family:var(--r);font-weight:700;font-size:13px}
+.link-btn:hover{background:var(--tint)}
+
+.data-box{margin:4px 20px 0;padding:12px 14px;border:2px solid var(--ink);border-radius:11px;background:var(--data-bg);display:grid;gap:8px;font-size:14.5px}
+.data-box p{margin:0}
+.data-box ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.data-box li .btn{margin-left:8px}
+.btn{display:inline-block;text-decoration:none;padding:7px 13px;border:2px solid var(--ink);border-radius:9px;background:#fff;color:var(--ink);font-family:var(--r);font-weight:700;font-size:14px;box-shadow:2px 2px 0 var(--sh-soft)}
+.btn:hover{background:var(--tint)}
+
+.save-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding-top:4px}
+#pdfBtn{cursor:pointer;padding:10px 18px;border:3px solid var(--ink);border-radius:11px;background:var(--peri);color:var(--ink);font-family:var(--r);font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--sh)}
+#pdfBtn:hover{background:var(--peri-hover)}
+#pdfBtn[aria-busy="true"]{opacity:.6;pointer-events:none}
+.save-guide{flex-basis:100%;margin:0;text-align:center;font-size:14.5px}
+.save-status{flex-basis:100%;margin:0;font-size:14px}
+.save-status:empty{display:none}
+.save-status.ok{padding:10px 12px;border:2px solid var(--ink);border-radius:10px;background:var(--ok-bg)}
+.save-status.fail{padding:10px 12px;border:2px solid var(--ink);border-radius:10px;background:var(--pick)}
+.save-status .link-btn{margin:0 6px}
+
+/* 안내 버튼 카드(왼쪽) — 누르면 NOTICE 로 옮겨 가 그 안내를 펼친다 */
+.guide-card{position:fixed;top:110px;left:max(8px,calc((100vw - 920px)/2 - 176px));width:156px;display:grid;gap:8px;padding:10px;background:var(--paper);border:2.5px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--sh-soft)}
+.guide-btn{cursor:pointer;width:100%;padding:8px 9px;border:2px solid var(--ink);border-radius:9px;background:#fff;color:var(--ink);font-family:var(--r);font-weight:700;font-size:13px;line-height:1.35;text-align:left;word-break:keep-all;box-shadow:2px 2px 0 var(--sh-soft)}
+.guide-btn:hover{background:var(--tint)}
+.guide-btn[aria-expanded="true"]{background:var(--pick)}
+.guide-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+@media (max-width:1260px){.guide-card{top:auto;bottom:12px;left:12px;width:auto;grid-auto-flow:column;padding:6px}}
+.guide{margin:14px;padding:12px 14px;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.guide:focus{outline:0}
+.guide-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;font-family:var(--r);font-weight:700;font-size:15px}
+.guide ol{margin:0;padding-left:22px;font-size:14.5px;line-height:1.75}
+.guide p{margin:6px 0 0;font-size:14px;color:var(--muted-2)}
+.guide b{font-weight:700}
+/* CODAP 들어가는 법 — 05차시 MISSION 1 "CODAP에 데이터 올리기" 와 같은 내용 */
+.guide-sub{margin:2px 0 6px;font-family:var(--r);font-weight:700;font-size:15px}
+.guide ol li::marker{font-family:var(--r);font-weight:700;color:var(--muted-2)}
+.shot-ph{margin-top:10px;padding:10px;border:2px solid var(--ink);border-radius:10px;background:#fff;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
+.shot-ph img{max-width:100%;border-radius:6px;border:1px solid var(--img-line)}
+.shot-ph .cap{font-size:12px;color:var(--muted-2);line-height:1.5}
+.shot-grid{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.shot-grid .shot-ph{margin-top:0}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:calc(100vw - 32px);padding:9px 14px;border:2.5px solid var(--ink);border-radius:10px;background:#fff;box-shadow:3px 3px 0 var(--sh);font-family:var(--r);font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+@media (max-width:640px){
+  .page{padding:10px 8px 80px}
+  .content{padding:14px 11px 18px}
+  .info .body{grid-template-columns:1fr 1fr}
+  .topic h1{font-size:25px}
+  .qs,.part-head{padding-left:13px;padding-right:13px}
+  .data-box{margin-left:13px;margin-right:13px}
+  .q-body{padding-left:0}
+  .order{gap:6px 4px}
+  .order .ans-k{flex-basis:100%}
+  .os{min-width:46px;height:38px;padding:0 6px;font-size:15px}
+  .arr{font-size:13px}
+  .guide-card{display:none}   /* 폰: 답 칸을 가려서 숨김(design.md §10.2 — 진짜 좁은 화면에서만 생략) */
+}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}.pz:focus:not(.is-filled)>span::before{animation:none}}
+@media print{
+  body{background:#fff}
+  .page{padding:0}
+  .window{border:0;box-shadow:none}
+  .titlebar,.guide-card,.no-pdf,.toast{display:none!important}
+  .card{box-shadow:none;break-inside:auto}
+  .q{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<aside class="guide-card" aria-label="시험 도움말"><button type="button" class="guide-btn" data-guide="guide-codap" aria-controls="guide-codap" aria-expanded="false">📊 CODAP 들어가고, 데이터 올리는 법</button><button type="button" class="guide-btn" data-guide="guide-capture" aria-controls="guide-capture" aria-expanded="false">📸 캡처해서 붙여넣기</button></aside>
+<main class="page"><article class="window">
+<header class="titlebar"><span>🏫 신현중학교 정보</span><span class="tag">EXAM_A</span></header>
+<section class="content" id="sheetPrintArea">
+
+<section class="card topic"><header class="bar"><span>PERFORMANCE_TEST</span><span class="r">DATA_ANALYSIS · A</span></header>
+  <div class="body"><h1>데이터분석 수행평가 A형</h1></div></section>
+
+<section class="card info"><header class="bar"><span>MY_INFO</span></header><div class="body">
+  <label>학년<textarea class="blank" rows="1" aria-label="학년" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>반<textarea class="blank" rows="1" aria-label="반" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>번호<textarea class="blank" rows="1" aria-label="번호" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>이름<textarea class="blank" rows="1" aria-label="이름" placeholder="이름을 적어요" autocomplete="off" spellcheck="false"></textarea></label>
+</div></section>
+
+<section class="card notice no-pdf" hidden><header class="bar"><span>NOTICE</span><span class="r">도움말</span></header>
+  <div class="guide" id="guide-codap" tabindex="-1" hidden>
+    <div class="guide-hd"><span>📊 CODAP 들어가고, 데이터 올리는 법</span><button type="button" class="link-btn" data-guide-close>닫기 ✕</button></div>
+    <div class="guide-sub">🖥 CODAP에 데이터 올리기</div>
+    <ol>
+      <li>구글에 <b>'코답'</b> 이라고 검색해요.</li>
+      <li>검색 결과에서 <b>CODAP</b>(codap.concord.org) 사이트를 클릭해요.</li>
+      <li>오른쪽 맨 위에 있는 주황색 <b>Launch CODAP</b> 버튼을 눌러요.</li>
+      <li><b>새 문서</b>를 눌러요.</li>
+      <li>내려받은 파일을 CODAP의 흰 바탕 위로 끌어다 놓아요.</li>
+      <li>화면에 표가 생겼다면 완성! 표의 모서리를 끌어 크기를 키워 데이터가 다 보이게 해요.</li>
+    </ol>
+    <div class="shot-ph"><img src="msi-asset:./assets/img-584dadf0.jpg" alt="CODAP 실행 4단계: 구글에 코답 검색 → 검색 결과에서 CODAP 클릭 → 오른쪽 위 Launch CODAP 클릭 → 새 문서 클릭"><span class="cap">① 구글에 '코답' 검색 → ② 검색 결과에서 CODAP 클릭 → ③ Launch CODAP 클릭 → ④ '새 문서' 클릭</span></div>
+    <div class="shot-grid">
+      <div class="shot-ph"><img src="msi-asset:shared/images/스크린샷_2026-09-08_213939.png" alt=""><span class="cap">파일을 CODAP 흰 바탕으로 끌어다 놓기</span></div>
+      <div class="shot-ph"><img src="msi-asset:shared/images/스크린샷_2026-09-08_234642.png" alt=""><span class="cap">표 모서리를 끌어 데이터가 다 보이게 늘리기</span></div>
+    </div>
+  </div>
+  <div class="guide" id="guide-capture" tabindex="-1" hidden>
+    <div class="guide-hd"><span>📸 캡처해서 붙여넣기</span><button type="button" class="link-btn" data-guide-close>닫기 ✕</button></div>
+    <ol>
+      <li><b>Windows 키 + Shift + S</b> 를 눌러요.</li>
+      <li>그래프 부분을 드래그해 네모로 캡처해요.</li>
+      <li>시험지의 그래프 칸을 클릭해요.</li>
+      <li><b>Ctrl + V</b> 로 붙여넣어요.</li>
+    </ol>
+    <p>안 되면: 캡처한 그림을 파일로 저장하고, 그래프 칸 아래 <b>🖼 파일로 넣기</b>를 눌러요.</p>
+  </div>
+</section>
+
+<!-- ============ 미션 1 ============ -->
+<section class="card part p1"><header class="bar"><span>PART_1</span><span class="r">Q1 – Q8</span></header>
+  <div class="qs">
+
+    <div class="q" id="q1">
+      <div class="q-head"><span class="q-no">Q1</span><p class="q-text">데이터 분석으로 문제를 해결하는 과정에 맞게 (a) ~ (d)를 순서대로 나열하세요. <span class="pt">[1점]</span></p></div>
+      <div class="q-body">
+        <ul class="list">
+          <li><span class="k">(a)</span><span>구독자 수와 총 조회수로 그래프를 그려 관계를 살펴본다.</span></li>
+          <li><span class="k">(b)</span><span>알게 된 사실을 정리하고 친구들에게 발표한다.</span></li>
+          <li><span class="k">(c)</span><span>‘구독자 수가 많은 채널일수록 조회수도 많을까?’ 분석하고 싶은 문제를 정한다.</span></li>
+          <li><span class="k">(d)</span><span>국내 유튜브 인기 채널 100개의 구독자 수와 조회수를 모아 표로 정리한다.</span></li>
+        </ul>
+        <div class="order" data-unit="1" role="group" aria-label="1번 답 순서">
+          <span class="ans-k">답</span>
+          <button type="button" class="os" id="q1-s1" aria-label="첫 번째 자리"></button><span class="arr" aria-hidden="true">→</span>
+          <button type="button" class="os" id="q1-s2" aria-label="두 번째 자리"></button><span class="arr" aria-hidden="true">→</span>
+          <button type="button" class="os" id="q1-s3" aria-label="세 번째 자리"></button><span class="arr" aria-hidden="true">→</span>
+          <button type="button" class="os" id="q1-s4" aria-label="네 번째 자리"></button>
+        </div>
+        <div class="ord-tray no-pdf">
+          <button type="button" class="oc" id="q1-a" data-v="a">(a)</button>
+          <button type="button" class="oc" id="q1-b" data-v="b">(b)</button>
+          <button type="button" class="oc" id="q1-c" data-v="c">(c)</button>
+          <button type="button" class="oc" id="q1-d" data-v="d">(d)</button>
+          <button type="button" class="link-btn" data-order-reset>다시 고르기</button>
+        </div>
+        <p class="how no-pdf">(a)~(d)를 순서대로 누르면 앞 칸부터 채워져요. 잘못 넣은 칸은 그 칸을 누르면 빠져요.</p>
+      </div>
+    </div>
+
+    <div class="q" id="q2">
+      <div class="q-head"><span class="q-no">Q2</span><p class="q-text">데이터 분석을 할 질문으로 가장 적절하지 <b>않은</b> 것은? <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="opts num" data-unit="2" role="group" aria-label="2번 보기">
+        <button type="button" class="opt" id="q2-1" data-group="q2" data-v="1" aria-pressed="false"><span class="on">1</span><span>지난 1년 동안 우리 학교 매점에서 가장 많이 팔린 간식은 무엇일까?</span></button>
+        <button type="button" class="opt" id="q2-2" data-group="q2" data-v="2" aria-pressed="false"><span class="on">2</span><span>어떤 음악이 최고의 음악일까?</span></button>
+        <button type="button" class="opt" id="q2-3" data-group="q2" data-v="3" aria-pressed="false"><span class="on">3</span><span>지난 한 달 동안 우리 반에서 지각은 몇 번 발생했을까?</span></button>
+        <button type="button" class="opt" id="q2-4" data-group="q2" data-v="4" aria-pressed="false"><span class="on">4</span><span>비 오는 날 학교 앞 편의점에서 우산이 평소보다 몇 개나 더 팔릴까?</span></button>
+      </div></div>
+    </div>
+
+    <div class="q" id="q3">
+      <div class="q-head"><span class="q-no">Q3</span><p class="q-text">데이터 분석 시, 데이터 분석으로 해결할 수 있는 문제를 잘 선정하는 것이 중요하다. 이때, 데이터 분석으로 해결할 수 있는 문제를 선정하기 위한 기준 3가지를 모두 고르시오. <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="opts num" data-unit="3" role="group" aria-label="3번 보기 (여러 개 고르기)">
+        <button type="button" class="opt" id="q3-1" data-group="q3" data-multi="1" data-v="1" aria-pressed="false"><span class="on">1</span><span>무엇을 얼마나 알고 싶은지 드러나는 구체적인 질문인가?</span></button>
+        <button type="button" class="opt" id="q3-2" data-group="q3" data-multi="1" data-v="2" aria-pressed="false"><span class="on">2</span><span>더 많은 사실을 알 수 있도록 문제의 범위를 최대한 넓게 정했는가?</span></button>
+        <button type="button" class="opt" id="q3-3" data-group="q3" data-multi="1" data-v="3" aria-pressed="false"><span class="on">3</span><span>숫자나 기록 같은 데이터로 확인할 수 있는 질문인가?</span></button>
+        <button type="button" class="opt" id="q3-4" data-group="q3" data-multi="1" data-v="4" aria-pressed="false"><span class="on">4</span><span>문제를 정하기 전에 관련 데이터를 최대한 많이 모아 두었는가?</span></button>
+        <button type="button" class="opt" id="q3-5" data-group="q3" data-multi="1" data-v="5" aria-pressed="false"><span class="on">5</span><span>시간·비용·기술을 고려해 문제의 범위를 제한했는가?</span></button>
+        <button type="button" class="opt" id="q3-6" data-group="q3" data-multi="1" data-v="6" aria-pressed="false"><span class="on">6</span><span>경험과 직감으로 답을 미리 예상할 수 있는 질문인가?</span></button>
+      </div>
+      <p class="how">3개를 골라요 · 다시 누르면 취소돼요.</p></div>
+    </div>
+
+    <div class="q" id="q4">
+      <div class="q-head"><span class="q-no">Q4</span><p class="q-text">아래의 표는 구글 시트로 만들어진 ‘로블록스 최고 인기 TOP 100’에서 가져온 데이터이다. 물음에 답하시오.</p></div>
+      <div class="q-body">
+        <div class="tbl-scroll"><table class="sheet">
+          <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+          <tbody>
+            <tr class="hd"><th>1</th><td>국내 순위</td><td>게임 이름</td><td>장르</td><td>좋아요 (만 개)</td></tr>
+            <tr><th>2</th><td>1</td><td class="l">계란을 훔치다</td><td>시뮬레이션</td><td>304.33</td></tr>
+            <tr><th>3</th><td>2</td><td class="l">라이벌</td><td>슈팅</td><td>1067.85</td></tr>
+            <tr><th>4</th><td>3</td><td class="l">+1 스피드 키보드 탈출 | 캔디 &amp; 초콜릿</td><td>시뮬레이션</td><td>986.72</td></tr>
+            <tr><th>5</th><td>4</td><td class="l">한국 끝말잇기💬</td><td>퍼즐</td><td>4.89</td></tr>
+            <tr><th>6</th><td>5</td><td class="l">MONOCHROME👁️</td><td>퍼즐</td><td>7.2</td></tr>
+            <tr><th>7</th><td>6</td><td class="l">[🌋] 펫 타기</td><td>시뮬레이션</td><td>32.47</td></tr>
+            <tr><th>8</th><td>7</td><td class="l">[🏚️] Adopt Me!</td><td>롤플레이·아바타</td><td>945.85</td></tr>
+          </tbody>
+        </table></div>
+        <div class="subq"><p class="subq-text">(1) 이 표의 속성은 총 몇 개인가? <span class="pt">[1점]</span></p>
+          <label class="ans-row"><span class="ans-k">답</span><textarea class="blank" rows="1" aria-label="4-(1) 답" data-unit="4-(1)" autocomplete="off" spellcheck="false"></textarea></label></div>
+        <div class="subq"><p class="subq-text">(2) 게임 이름 ‘라이벌’의 장르가 들어 있는 셀의 주소는? <span class="pt">[1점]</span></p>
+          <label class="ans-row"><span class="ans-k">답</span><textarea class="blank" rows="1" aria-label="4-(2) 답" data-unit="4-(2)" autocomplete="off" spellcheck="false"></textarea></label></div>
+        <div class="subq"><p class="subq-text">(3) 국내 순위 6위 게임의 좋아요 수가 들어 있는 셀의 주소는? <span class="pt">[1점]</span></p>
+          <label class="ans-row"><span class="ans-k">답</span><textarea class="blank" rows="1" aria-label="4-(3) 답" data-unit="4-(3)" autocomplete="off" spellcheck="false"></textarea></label></div>
+      </div>
+    </div>
+
+    <div class="q" id="q5">
+      <div class="q-head"><span class="q-no">Q5</span><p class="q-text">각 질문에 알맞은 분석 유형을 고르세요.</p></div>
+      <div class="q-body">
+        <div class="subq"><p class="subq-text">(1) 2학년과 3학년 중 한 달 평균 독서량은 어느 학년이 더 많을까? <span class="pt">[1점]</span></p>
+          <div class="types" data-unit="5-(1)" role="group" aria-label="5-(1) 분석 유형">
+            <button type="button" class="chip" id="q5-1-comp" data-group="q5-1" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q5-1-cmpr" data-group="q5-1" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q5-1-dist" data-group="q5-1" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q5-1-rel" data-group="q5-1" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(2) 게임에 투자하는 시간이 많을수록 게임 실력은 올라갈까? <span class="pt">[1점]</span></p>
+          <div class="types" data-unit="5-(2)" role="group" aria-label="5-(2) 분석 유형">
+            <button type="button" class="chip" id="q5-2-comp" data-group="q5-2" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q5-2-cmpr" data-group="q5-2" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q5-2-dist" data-group="q5-2" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q5-2-rel" data-group="q5-2" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(3) 1년 동안 우리 학교 앞 편의점에서 팔린 우유 중, 딸기 우유는 몇 %를 차지할까? <span class="pt">[1점]</span></p>
+          <div class="types" data-unit="5-(3)" role="group" aria-label="5-(3) 분석 유형">
+            <button type="button" class="chip" id="q5-3-comp" data-group="q5-3" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q5-3-cmpr" data-group="q5-3" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q5-3-dist" data-group="q5-3" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q5-3-rel" data-group="q5-3" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(4) 우리 반 친구들의 한 달 용돈은 대부분 얼마쯤 될까? <span class="pt">[1점]</span></p>
+          <div class="types" data-unit="5-(4)" role="group" aria-label="5-(4) 분석 유형">
+            <button type="button" class="chip" id="q5-4-comp" data-group="q5-4" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q5-4-cmpr" data-group="q5-4" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q5-4-dist" data-group="q5-4" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q5-4-rel" data-group="q5-4" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(5) 프로야구 팀 중 홈런이 가장 많은 팀은 가장 적은 팀보다 몇 개 더 쳤을까? <span class="pt">[1점]</span></p>
+          <div class="types" data-unit="5-(5)" role="group" aria-label="5-(5) 분석 유형">
+            <button type="button" class="chip" id="q5-5-comp" data-group="q5-5" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q5-5-cmpr" data-group="q5-5" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q5-5-dist" data-group="q5-5" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q5-5-rel" data-group="q5-5" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+      </div>
+    </div>
+
+    <div class="q" id="q6">
+      <div class="q-head"><span class="q-no">Q6</span><p class="q-text">다음 중, 최소제곱선에 대한 설명으로 알맞은 것은? <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="opts num" data-unit="6" role="group" aria-label="6번 보기">
+        <button type="button" class="opt" id="q6-1" data-group="q6" data-v="1" aria-pressed="false"><span class="on">1</span><span>그래프의 모든 점을 차례대로 이은 선이다.</span></button>
+        <button type="button" class="opt" id="q6-2" data-group="q6" data-v="2" aria-pressed="false"><span class="on">2</span><span>가장 큰 값과 가장 작은 값을 이은 선이다.</span></button>
+        <button type="button" class="opt" id="q6-3" data-group="q6" data-v="3" aria-pressed="false"><span class="on">3</span><span>흩어져 있는 점들을 대표해 데이터의 흐름을 보여주는 선이다.</span></button>
+        <button type="button" class="opt" id="q6-4" data-group="q6" data-v="4" aria-pressed="false"><span class="on">4</span><span>항상 x축과 나란한 기준선이다.</span></button>
+      </div></div>
+    </div>
+
+    <div class="q" id="q7">
+      <div class="q-head"><span class="q-no">Q7</span><p class="q-text">CODAP에서 최소제곱선과 상관 계수를 그래프로 그렸더니 아래와 같은 r값이 나왔다. 이 중, ‘한 쪽이 커질 때 다른 쪽은 작아지는’ 관계가 가장 뚜렷한 것은? <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="opts num" data-unit="7" role="group" aria-label="7번 보기">
+        <button type="button" class="opt" id="q7-1" data-group="q7" data-v="1" aria-pressed="false"><span class="on">1</span><span>r = 0.51</span></button>
+        <button type="button" class="opt" id="q7-2" data-group="q7" data-v="2" aria-pressed="false"><span class="on">2</span><span>r = -0.13</span></button>
+        <button type="button" class="opt" id="q7-3" data-group="q7" data-v="3" aria-pressed="false"><span class="on">3</span><span>r = -0.86</span></button>
+        <button type="button" class="opt" id="q7-4" data-group="q7" data-v="4" aria-pressed="false"><span class="on">4</span><span>r = -0.50</span></button>
+        <button type="button" class="opt" id="q7-5" data-group="q7" data-v="5" aria-pressed="false"><span class="on">5</span><span>r = 0.92</span></button>
+      </div></div>
+    </div>
+
+    <div class="q" id="q8">
+      <div class="q-head"><span class="q-no">Q8</span><p class="q-text">포켓몬 데이터에서 포켓몬들의 체력이 60 ~ 94 사이에 모여 있는데, ‘럭키’만 체력이 260으로 혼자 멀리 떨어져 있다. 이러한 값을 무엇이라고 하는가? <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><label class="ans-row"><span class="ans-k">답</span><textarea class="blank" rows="1" aria-label="8번 답" data-unit="8" autocomplete="off" spellcheck="false"></textarea></label></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 미션 2 ============ -->
+<section class="card part p2"><header class="bar"><span>PART_2</span><span class="r">Q9 – Q10</span></header>
+  <div class="part-head"><p>다음은 <b>한국의 유명 유튜브 채널</b>에 대한 데이터를 분석하는 질문이다. 물음에 답하시오. <span class="pt">[각 2점]</span></p></div>
+  <div class="data-box no-pdf">
+    <p>문제를 풀기 위해 데이터를 시각화하는 활동이 필요합니다.</p>
+    <ol>
+      <li>CODAP 열기 <a class="btn" href="https://codap.concord.org/" target="_blank" rel="noopener">↗ CODAP 열기</a></li>
+      <li>데이터 내려받기</li>
+      <li>데이터를 CODAP에 올리기</li>
+    </ol>
+  </div>
+  <div class="qs">
+
+    <div class="q" id="q9">
+      <div class="q-head"><span class="q-no">Q9</span><p class="q-text">어떤 분야가 평균적으로 구독자 수가 가장 많을까?</p></div>
+      <div class="q-body">
+        <div class="subq"><p class="subq-text">(1) 이 질문은 어떤 분석에 해당할까?</p>
+          <div class="types" data-unit="9-(1)" role="group" aria-label="9-(1) 분석 유형">
+            <button type="button" class="chip" id="q9-1-comp" data-group="q9-1" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q9-1-cmpr" data-group="q9-1" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q9-1-dist" data-group="q9-1" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q9-1-rel" data-group="q9-1" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(2) CODAP으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</p>
+          <div class="pz" id="pz9" tabindex="0" role="button" data-unit="9-(2)" aria-label="9-(2) 그래프 붙여넣기 칸"></div>
+          <div class="pz-tools no-pdf"><button type="button" class="link-btn" data-pz-file="pz9">🖼 파일로 넣기</button><button type="button" class="link-btn" data-pz-clear="pz9">지우기</button><input type="file" accept="image/*" hidden data-pz-input="pz9"></div></div>
+        <div class="subq"><p class="subq-text">(3) 다음 중, 그래프를 해석한 결과로 올바른 것을 고르세요.</p>
+          <div class="opts num" data-unit="9-(3)" role="group" aria-label="9-(3) 보기">
+            <button type="button" class="opt" id="q9-3-1" data-group="q9-3" data-v="1" aria-pressed="false"><span class="on">1</span><span>게임 분야가 전체 채널의 78.7%를 차지하므로, 구독자 수가 가장 많은 분야도 게임이다.</span></button>
+            <button type="button" class="opt" id="q9-3-2" data-group="q9-3" data-v="2" aria-pressed="false"><span class="on">2</span><span>가장 높이 올라간 점이 게임 분야에 있으므로, 게임 분야가 1위이다.</span></button>
+            <button type="button" class="opt" id="q9-3-3" data-group="q9-3" data-v="3" aria-pressed="false"><span class="on">3</span><span>음악 분야가 1위이고, 2위는 게임/버라이어티 분야이며, 게임 분야는 영화 분야보다도 아래에 있다.</span></button>
+            <button type="button" class="opt" id="q9-3-4" data-group="q9-3" data-v="4" aria-pressed="false"><span class="on">4</span><span>음악 분야가 1위, 영화/드라마 분야가 2위이며, 채널 수가 가장 많은 게임 분야는 예능 분야보다 아래에 있다.</span></button>
+            <button type="button" class="opt" id="q9-3-5" data-group="q9-3" data-v="5" aria-pressed="false"><span class="on">5</span><span>총조회수 순위와 마찬가지로, 게임 분야가 예능 분야보다 위에 있다.</span></button>
+          </div></div>
+      </div>
+    </div>
+
+    <div class="q" id="q10">
+      <div class="q-head"><span class="q-no">Q10</span><p class="q-text">동영상 수가 많을수록 구독자 수도 높을까?</p></div>
+      <div class="q-body">
+        <div class="subq"><p class="subq-text">(1) 이 질문은 어떤 분석에 해당할까?</p>
+          <div class="types" data-unit="10-(1)" role="group" aria-label="10-(1) 분석 유형">
+            <button type="button" class="chip" id="q10-1-comp" data-group="q10-1" data-v="구성 분석" aria-pressed="false">구성 분석</button><button type="button" class="chip" id="q10-1-cmpr" data-group="q10-1" data-v="비교 분석" aria-pressed="false">비교 분석</button><button type="button" class="chip" id="q10-1-dist" data-group="q10-1" data-v="분포 분석" aria-pressed="false">분포 분석</button><button type="button" class="chip" id="q10-1-rel" data-group="q10-1" data-v="관계 분석" aria-pressed="false">관계 분석</button>
+          </div></div>
+        <div class="subq"><p class="subq-text">(2) CODAP으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</p>
+          <div class="pz" id="pz10" tabindex="0" role="button" data-unit="10-(2)" aria-label="10-(2) 그래프 붙여넣기 칸"></div>
+          <div class="pz-tools no-pdf"><button type="button" class="link-btn" data-pz-file="pz10">🖼 파일로 넣기</button><button type="button" class="link-btn" data-pz-clear="pz10">지우기</button><input type="file" accept="image/*" hidden data-pz-input="pz10"></div></div>
+        <div class="subq"><p class="subq-text">(3) 다음 중, 그래프를 해석한 결과로 올바른 것을 고르세요.</p>
+          <div class="opts num" data-unit="10-(3)" role="group" aria-label="10-(3) 보기">
+            <button type="button" class="opt" id="q10-3-1" data-group="q10-3" data-v="1" aria-pressed="false"><span class="on">1</span><span>평균 동영상 수가 가장 많은 기타 분야는 평균 구독자 수가 가장 적으므로, 동영상을 많이 올릴수록 구독자는 오히려 줄어든다.</span></button>
+            <button type="button" class="opt" id="q10-3-2" data-group="q10-3" data-v="2" aria-pressed="false"><span class="on">2</span><span>대부분 채널의 동영상 수가 약 1500~3800개 사이에 몰려 있으므로, 구독자를 모으려면 동영상을 이 정도 올리면 된다.</span></button>
+            <button type="button" class="opt" id="q10-3-3" data-group="q10-3" data-v="3" aria-pressed="false"><span class="on">3</span><span>구독자 수와 총조회수의 관계처럼, 동영상 수와 구독자 수도 r이 0.7 정도로 양의 관계가 뚜렷하다.</span></button>
+            <button type="button" class="opt" id="q10-3-4" data-group="q10-3" data-v="4" aria-pressed="false"><span class="on">4</span><span>동영상이 가장 많은 풍월량보다 동영상이 적은 King Gnu의 구독자가 훨씬 많으므로, 동영상이 적을수록 구독자가 많다.</span></button>
+            <button type="button" class="opt" id="q10-3-5" data-group="q10-3" data-v="5" aria-pressed="false"><span class="on">5</span><span>구독자 수 상위 채널에는 동영상이 백여 개인 채널부터 수천 개인 채널까지 섞여 있고, r도 0에 가까워 두 속성 사이에는 뚜렷한 관계가 거의 없다.</span></button>
+          </div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="save-row no-pdf">
+  <p class="save-guide">문항을 모두 푼 뒤 PDF로 저장해 선생님이 안내한 곳에 제출해요.</p>
+  <button type="button" id="pdfBtn">PDF로 저장하기</button>
+  <p id="saveStatus" class="save-status" role="status" aria-live="polite"></p>
+  <p id="submitStatus" class="save-status" role="status" aria-live="polite"></p>
+</div>
+
+</section></article></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script data-msi-src="shared/vendor/html2canvas.min.js"></script>
+<script data-msi-src="shared/vendor/jspdf.umd.min.js"></script>
+<script data-msi-src="shared/partials/autogrow.js"></script>
+<script>
+/* 수행평가 동작 — 고르기 · 순서 · 그래프 칸 · 답 보관 · 붙여넣기 막기 · 나가기 경고 · PDF 저장.
+   채점·맞음 표시는 하지 않는다. 이 스크립트에는 답이 들어 있지 않다. */
+(function () {
+  'use strict';
+  var KEY = 'msi-exam:data-analysis/09:A';
+  var KEEP_MS = 45 * 60 * 1000;   // 첫 입력부터 45분이 지나면 보관한 답을 지운다 — 공용 PC 의 다음 반 학생에게 앞 학생 답이 안 보이게(2026-10-03)
+  var startedAt = 0;              // 이 답을 처음 입력한 시각(보관 데이터의 t)
+  var root = document.getElementById('sheetPrintArea');
+  var $ = function (sel, el) { return (el || root).querySelector(sel); };
+  var $$ = function (sel, el) { return Array.prototype.slice.call((el || root).querySelectorAll(sel)); };
+  var EMPTY_PZ = '<span>이 칸을 클릭한 뒤 <b>Ctrl + V</b>로 캡처한 그래프를 붙여넣어요<br><small>그림 파일을 끌어다 놓거나 아래 ‘파일로 넣기’를 눌러도 돼요</small></span>';
+  var restoring = false, savedSinceChange = false, warnedBig = false;
+
+  var toastEl = document.getElementById('toast'), toastT;
+  function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2200); }
+
+  // ── 고르기 ──
+  function setOn(b, on) { b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  function pick(b) {
+    var g = b.getAttribute('data-group');
+    if (b.hasAttribute('data-multi')) setOn(b, !b.classList.contains('is-on'));
+    else $$('[data-group="' + g + '"]').forEach(function (x) { setOn(x, x === b); });
+    changed();
+  }
+
+  // ── 순서(1번) ──
+  var slots = $$('.os'), chipsO = $$('.oc');
+  function slotSet(s, v) {
+    s.setAttribute('data-v', v || '');
+    s.textContent = v ? '(' + v + ')' : '';
+    s.classList.toggle('is-filled', !!v);
+    chipsO.forEach(function (c) { c.disabled = slots.some(function (x) { return x.getAttribute('data-v') === c.getAttribute('data-v'); }); });
+  }
+  function orderPut(v) { var s = slots.filter(function (x) { return !x.getAttribute('data-v'); })[0]; if (s) { slotSet(s, v); changed(); } }
+
+  root.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : e.target.parentElement;
+    var b = t.closest('[data-group]'); if (b) { pick(b); return; }
+    var oc = t.closest('.oc'); if (oc) { if (!oc.disabled) orderPut(oc.getAttribute('data-v')); return; }
+    var os = t.closest('.os'); if (os) { if (os.getAttribute('data-v')) { slotSet(os, ''); changed(); } return; }
+    if (t.closest('[data-order-reset]')) { slots.forEach(function (s) { slotSet(s, ''); }); changed(); return; }
+    var f = t.closest('[data-pz-file]'); if (f) { $('[data-pz-input="' + f.getAttribute('data-pz-file') + '"]').click(); return; }
+    var c = t.closest('[data-pz-clear]'); if (c) { pzClear(document.getElementById(c.getAttribute('data-pz-clear'))); changed(); return; }
+  });
+
+  // ── 그래프 칸 ──
+  var zones = $$('.pz');
+  function pzClear(z) { z.innerHTML = EMPTY_PZ; z.classList.remove('is-filled'); z._img = null; z._keep = null; }
+  function shrink(url, cb, max) {      // 작은 사본(JPEG) — 보관용 가로 1600 이하(브라우저 보관 용량), 제출용은 900
+    var im = new Image();
+    im.onload = function () {
+      try {
+        var s = Math.min(1, (max || 1600) / (im.naturalWidth || 1)), cv = document.createElement('canvas');
+        cv.width = Math.max(1, Math.round(im.naturalWidth * s)); cv.height = Math.max(1, Math.round(im.naturalHeight * s));
+        var x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height); x.drawImage(im, 0, 0, cv.width, cv.height);
+        cb(cv.toDataURL('image/jpeg', 0.85));
+      } catch (err) { cb(null); }
+    };
+    im.onerror = function () { cb(null); };
+    im.src = url;
+  }
+  function pzFill(z, url, keep) {
+    z.innerHTML = '';
+    var im = document.createElement('img'); im.alt = '붙여넣은 그래프'; im.src = url; z.appendChild(im);
+    z.classList.add('is-filled'); z.classList.remove('is-over'); z._img = url; z._keep = keep || null;
+    if (!keep) shrink(url, function (k) { if (z._img === url) { z._keep = k; store(); } });
+  }
+  function readFile(file, z) {
+    if (!file || !/^image\//.test(file.type)) { toast('그림 파일만 넣을 수 있어요.'); return; }
+    var r = new FileReader(); r.onload = function () { pzFill(z, r.result); changed(); }; r.readAsDataURL(file);
+  }
+  zones.forEach(function (z) {
+    pzClear(z);
+    z.addEventListener('click', function () { z.focus(); });
+    z.addEventListener('keydown', function (e) { if ((e.key === 'Delete' || e.key === 'Backspace') && z._img) { e.preventDefault(); pzClear(z); changed(); } });
+    z.addEventListener('dragover', function (e) { e.preventDefault(); z.classList.add('is-over'); });
+    z.addEventListener('dragleave', function () { z.classList.remove('is-over'); });
+    z.addEventListener('drop', function (e) { e.preventDefault(); z.classList.remove('is-over'); var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; readFile(f, z); });
+  });
+  $$('[data-pz-input]').forEach(function (inp) {
+    inp.addEventListener('change', function () { readFile(inp.files && inp.files[0], document.getElementById(inp.getAttribute('data-pz-input'))); inp.value = ''; });
+  });
+
+  // ── 붙여넣기: 답 글자 칸은 막고, 그래프 칸은 그림만 ──
+  function isAnswerField(el) { return !!(el && el.closest && el.closest('.q') && el.matches && el.matches('textarea.blank')); }
+  document.addEventListener('paste', function (e) {
+    var t = e.target && e.target.nodeType === 1 ? e.target : document.activeElement;
+    if (isAnswerField(t)) { e.preventDefault(); toast('답 칸에는 붙여넣기를 할 수 없어요. 직접 입력해 주세요.'); return; }
+    var z = t && t.closest ? t.closest('.pz') : null;
+    if (!z) return;
+    e.preventDefault();
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    for (var i = 0; i < items.length; i++) if (items[i].type.indexOf('image/') === 0) { readFile(items[i].getAsFile(), z); return; }
+    toast('그래프 칸에는 캡처한 그림만 붙여넣을 수 있어요.');
+  }, true);
+  document.addEventListener('beforeinput', function (e) {
+    if (/^insertFrom(Paste|Drop|PasteAsQuotation)$/.test(e.inputType || '') && isAnswerField(e.target)) { e.preventDefault(); toast('답 칸에는 붙여넣기를 할 수 없어요. 직접 입력해 주세요.'); }
+  }, true);
+  document.addEventListener('drop', function (e) { if (isAnswerField(e.target)) { e.preventDefault(); toast('답 칸에는 끌어다 놓을 수 없어요. 직접 입력해 주세요.'); } }, true);
+
+  // ── 답한 문항 세기(맞았는지는 세지 않음) ──
+  var units = $$('[data-unit]');
+  function answered(u) {
+    if (u.matches('textarea')) return !!u.value.trim();
+    if (u.classList.contains('order')) return slots.every(function (s) { return !!s.getAttribute('data-v'); });
+    if (u.classList.contains('pz')) return !!u._img;
+    return !!u.querySelector('.is-on');
+  }
+  function anything() { return units.some(answered); }
+
+  // ── 이 컴퓨터에 답 보관(localStorage) ──
+  function collect(withImages) {
+    var d = { v: 1, t: startedAt, f: {}, p: {}, o: slots.map(function (s) { return s.getAttribute('data-v') || ''; }), z: {} };
+    $$('textarea.blank[aria-label]').forEach(function (t) { if (t.value) d.f[t.getAttribute('aria-label')] = t.value; });
+    $$('[data-group].is-on').forEach(function (b) { var g = b.getAttribute('data-group'); (d.p[g] = d.p[g] || []).push(b.getAttribute('data-v')); });
+    if (withImages) zones.forEach(function (z) { if (z._keep || z._img) d.z[z.id] = z._keep || z._img; });
+    return d;
+  }
+  function store() {
+    if (restoring) return;
+    if (!startedAt) startedAt = Date.now();
+    try { localStorage.setItem(KEY, JSON.stringify(collect(true))); }
+    catch (e) {
+      try { localStorage.setItem(KEY, JSON.stringify(collect(false))); } catch (e2) { return; }
+      if (!warnedBig) { warnedBig = true; toast('그래프는 용량이 커서 자동 보관하지 못했어요. 저장하기 전에 창을 닫지 마세요.'); }
+    }
+  }
+  function forget() { startedAt = 0; try { localStorage.removeItem(KEY); } catch (e) {} }
+  function restore() {
+    var d = null;
+    try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; }
+    if (!d || d.v !== 1) return false;
+    if (!d.t || Date.now() - d.t > KEEP_MS) { forget(); return false; }   // 45분 지난 답(또는 시각 없는 옛 형식)은 지우고 빈 시험지로
+    startedAt = d.t;
+    restoring = true;
+    $$('textarea.blank[aria-label]').forEach(function (t) { var v = d.f && d.f[t.getAttribute('aria-label')]; if (v != null) t.value = v; });
+    Object.keys(d.p || {}).forEach(function (g) { (d.p[g] || []).forEach(function (v) { var b = $('[data-group="' + g + '"][data-v="' + String(v).replace(/"/g, '') + '"]'); if (b) setOn(b, true); }); });
+    (d.o || []).forEach(function (v, i) { if (slots[i] && v) slotSet(slots[i], v); });
+    Object.keys(d.z || {}).forEach(function (id) { var z = document.getElementById(id); if (z && d.z[id]) pzFill(z, d.z[id], d.z[id]); });
+    restoring = false;
+    return anything();
+  }
+  function changed() { savedSinceChange = false; store(); }
+  root.addEventListener('input', function (e) { if (e.target.matches && e.target.matches('textarea.blank')) changed(); });
+
+  // ── 안내 버튼(왼쪽 카드) → NOTICE 카드를 보이고 그리로 옮겨 가 그 안내만 펼침(평소엔 카드 숨김) ──
+  //    닫으면 열기 전 스크롤 위치와 누른 버튼으로 돌아간다(시험 도중 위로 올라갔다 다시 내려가지 않게)
+  var guideCard = document.querySelector('.guide-card'), notice = $('.notice');
+  var guideBtns = Array.prototype.slice.call(guideCard.querySelectorAll('[data-guide]'));
+  var guideBack = null;   // { y: 열기 전 스크롤, btn: 누른 버튼 }
+  function guideOpen(id, btn) {
+    if (id && !guideBack) guideBack = { y: window.scrollY, btn: btn };
+    guideBtns.forEach(function (g) {
+      var on = g.getAttribute('data-guide') === id;
+      document.getElementById(g.getAttribute('data-guide')).hidden = !on; g.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    notice.hidden = !id;
+    if (!id) {
+      if (guideBack) { window.scrollTo(0, guideBack.y); if (guideBack.btn) guideBack.btn.focus({ preventScroll: true }); guideBack = null; }
+      return;
+    }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    notice.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    document.getElementById(id).focus({ preventScroll: true });
+  }
+  guideCard.addEventListener('click', function (e) {
+    var g = e.target.closest('[data-guide]');
+    if (g) guideOpen(g.getAttribute('aria-expanded') === 'true' ? '' : g.getAttribute('data-guide'), g);
+  });
+  notice.addEventListener('click', function (e) { if (e.target.closest('[data-guide-close]')) guideOpen(''); });
+
+  // 나가기 전 경고 — 답이 있고, 마지막으로 바꾼 뒤 PDF 로 저장하지 않았으면
+  var sending = false;   // 선생님께 보내는 중
+  window.addEventListener('beforeunload', function (e) { if ((anything() && !savedSinceChange) || sending) { e.preventDefault(); e.returnValue = ''; } });
+
+  // ── 채점용 답 기록 — 자동 제출(msi-hook, A)과 PDF 속 숨은 데이터(B)가 같은 기록을 쓴다(spec.md "채점 설계") ──
+  //    칸마다 data-unit 이름으로 답 하나: 고르기는 data-v(여러 개는 쉼표), 순서는 a,b,c,d, 글자는 그대로, 그래프는 넣었으면 '그래프'
+  function unitKind(u) {
+    if (u.matches('textarea')) return 'text';
+    if (u.classList.contains('order')) return 'order';
+    if (u.classList.contains('pz')) return 'graph';
+    return u.querySelector('[data-multi]') ? 'set' : 'one';
+  }
+  function unitValue(u) {
+    var k = unitKind(u);
+    if (k === 'text') return u.value.trim();
+    if (k === 'graph') return u._img ? '그래프' : '';
+    if (k === 'order') { var o = slots.map(function (x) { return x.getAttribute('data-v') || ''; }); return o.some(Boolean) ? o.join(',') : ''; }
+    return $$('[data-group].is-on', u).map(function (b) { return b.getAttribute('data-v'); }).join(',');
+  }
+  function record() {
+    var a = {};
+    units.forEach(function (u) { a[u.getAttribute('data-unit')] = unitValue(u); });
+    return { v: 1, lesson: 'data-analysis/09', savedAt: new Date().toISOString(),
+      student: { grade: info('학년'), cls: info('반'), no: info('번호'), name: info('이름') }, answers: a };
+  }
+  function submitOn() { return !!(window.MSI_CONFIG && window.MSI_CONFIG.submit); }   // 설정은 이 스크립트 뒤에 붙으므로 그때그때 본다
+  window.MSI_SUBMIT = {
+    lastRecord: null,   // PDF 에 넣은 기록 — 보내는 기록과 저장 시각까지 같게
+    collect: function () {
+      var rec = this.lastRecord || record();
+      return Promise.all(zones.map(function (z) { return z._img ? new Promise(function (r) { shrink(z._img, r, 900); }) : null; }))
+        .then(function (list) { var g = {}; zones.forEach(function (z, i) { if (list[i]) g[z.getAttribute('data-unit')] = list[i]; }); return { record: rec, graphs: g }; });
+    },
+    onResult: function (state, retry) {
+      var st = document.getElementById('submitStatus');
+      sending = state === 'sending';
+      st.textContent = '';
+      st.className = 'save-status' + (state === 'ok' ? ' ok' : state === 'fail' ? ' fail' : '');
+      if (state === 'sending') st.textContent = '⏳ 선생님께 보내는 중이에요… 창을 닫지 마세요.';
+      else if (state === 'ok') st.textContent = '✔ 선생님께 제출됐어요.';
+      else {
+        st.appendChild(document.createTextNode('선생님께 보내지 못했어요.'));
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'link-btn'; b.textContent = '다시 보내기';
+        b.addEventListener('click', function () { if (retry) retry(); });
+        st.appendChild(b);
+        st.appendChild(document.createTextNode('그래도 안 되면 저장된 PDF 파일을 USB로 선생님께 내 주세요.'));
+      }
+    },
+    describe: function () {   // 정답 표 만들 때(npm run exam-key)만 쓴다
+      return units.map(function (u) { return { unit: u.getAttribute('data-unit'), kind: unitKind(u), label: u.getAttribute('aria-label') || '' }; });
+    }
+  };
+
+  // ── PDF 저장 ──
+  var info = function (label) { var t = $('textarea[aria-label="' + label + '"]'); return t ? t.value.trim() : ''; };
+  function unitLabel(u) { var k = u.getAttribute('data-unit'); return /^\d+$/.test(k) ? k + '번' : k + (u.classList.contains('pz') ? ' 그래프' : ''); }
+  document.getElementById('pdfBtn').addEventListener('click', function () {
+    var name = info('이름');
+    if (!name) { window.alert('이름을 적어 주세요.'); $('textarea[aria-label="이름"]').focus(); return; }
+    var missInfo = ['학년', '반', '번호'].filter(function (k) { return !info(k); });
+    var left = units.filter(function (u) { return !answered(u); });
+    if ((left.length || missInfo.length) && !window.__MSI_ANSWER_SHEET) {
+      var msg = [];
+      if (missInfo.length) msg.push(missInfo.join('·') + ' 칸이 비어 있어요.');
+      if (left.length) msg.push('아직 답하지 않은 문항이 ' + left.length + '개 있어요.\n(' + left.map(unitLabel).join(', ') + ')');
+      if (!window.confirm(msg.join('\n') + '\n\n그래도 PDF로 저장할까요?')) {
+        var first = missInfo.length ? $('textarea[aria-label="' + missInfo[0] + '"]') : left[0];
+        if (first) { first.scrollIntoView({ block: 'center' }); if (first.focus) first.focus(); }
+        return;
+      }
+    }
+    var dig = function (v) { return String(v || '').replace(/[^0-9]/g, ''); };
+    var pad2 = function (v) { var d = dig(v); return d ? ('0' + d).slice(-Math.max(2, d.length)) : ''; };
+    var code = dig(info('학년')) + pad2(info('반')) + pad2(info('번호'));
+    var fname = ((code ? code + ' ' : '') + name + ' 데이터분석 수행평가 A형').trim();
+    makePdf(fname + '.pdf');
+  });
+
+  function finished(fname, how) {
+    forget(); savedSinceChange = true;
+    var st = document.getElementById('saveStatus');
+    st.className = 'save-status ok';
+    st.textContent = how === 'print'
+      ? '인쇄 창에서 ‘PDF로 저장’을 골라 저장해요. 파일 이름: ' + fname + ' · 이 컴퓨터에 보관한 답은 지웠어요.'
+      : '✔ ‘' + fname + '’ 파일로 저장했어요.' + (submitOn() ? '' : ' 이 파일을 제출하세요.') + ' (이 컴퓨터에 보관한 답은 지웠어요)';
+  }
+
+  function makePdf(fname) {
+    var H2C = window.html2canvas, JSPDF = window.jspdf && window.jspdf.jsPDF;
+    if (typeof H2C !== 'function' || typeof JSPDF !== 'function') {
+      var prev = document.title; document.title = fname.replace(/\.pdf$/i, '');
+      setTimeout(function () { window.print(); document.title = prev; finished(fname, 'print'); }, 60);
+      return;
+    }
+    var btn = document.getElementById('pdfBtn'), label = btn.textContent;
+    btn.textContent = '⏳ PDF 만드는 중…'; btn.setAttribute('aria-busy', 'true');
+
+    var holder = document.createElement('div');
+    holder.setAttribute('style', 'position:fixed;left:-10000px;top:0;width:820px;padding:24px;background:#ffffff;z-index:-1;');
+    var clone = root.cloneNode(true);
+    $$('.no-pdf', clone).forEach(function (el) { el.parentNode.removeChild(el); });
+    var live = $$('textarea.blank'), copies = $$('textarea.blank', clone), boxes = [];
+    copies.forEach(function (ta, i) {
+      var box = document.createElement('div');
+      box.textContent = live[i] ? live[i].value : '';
+      box.setAttribute('style', 'display:block;width:100%;min-height:40px;padding:8px 11px;border:2px solid #4b3b6b;border-radius:9px;background:#fff;color:#4b3b6b;box-sizing:border-box;'
+        + "font-family:'Maplestory','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word;");
+      ta.parentNode.replaceChild(box, ta); boxes.push(box);
+    });
+    $$('.pz', clone).forEach(function (z) { if (!z.querySelector('img')) z.innerHTML = '<span>(붙여넣은 그래프 없음)</span>'; z.style.minHeight = '70px'; });
+    $$('[id]', clone).forEach(function (el) { el.removeAttribute('id'); });
+    clone.removeAttribute('id');
+    holder.appendChild(clone); document.body.appendChild(holder);
+    boxes.forEach(function (b) { b.style.height = 'auto'; var h = b.scrollHeight; if (h > 0) b.style.height = (h + 4) + 'px'; });
+
+    // 쪽 나눔은 문항·카드 사이에서 — 한 문항이 두 쪽으로 잘리지 않게
+    var top0 = clone.getBoundingClientRect().top;
+    var cuts = $$('.q, .subq, .card, .part-head', clone).map(function (el) { return el.getBoundingClientRect().top - top0; });
+
+    var done = function () { if (holder.parentNode) holder.parentNode.removeChild(holder); btn.textContent = label; btn.removeAttribute('aria-busy'); };
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.race([fonts, new Promise(function (r) { setTimeout(r, 1500); })])
+      .then(function () { return new Promise(function (r) { setTimeout(r, 80); }); })
+      .then(function () { return H2C(clone, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false }); })
+      .then(function (canvas) {
+        var pdf = new JSPDF('p', 'pt', 'a4');
+        var pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight();
+        var k = canvas.width / clone.offsetWidth;
+        var breaks = cuts.map(function (y) { return Math.round(y * k); }).filter(function (y) { return y > 0; }).sort(function (a, b) { return a - b; });
+        var pageH = Math.floor(canvas.width * ph / pw), y = 0, page = 0;
+        while (y < canvas.height - 1) {
+          var end = Math.min(y + pageH, canvas.height);
+          if (end < canvas.height) {
+            var ok = breaks.filter(function (b) { return b > y + pageH * 0.35 && b <= end; });
+            if (ok.length) end = ok[ok.length - 1];
+          }
+          var part = document.createElement('canvas'); part.width = canvas.width; part.height = end - y;
+          var ctx = part.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, part.width, part.height);
+          ctx.drawImage(canvas, 0, y, canvas.width, end - y, 0, 0, canvas.width, end - y);
+          if (page > 0) pdf.addPage();
+          pdf.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pw, (end - y) * pw / canvas.width);
+          y = end; page++;
+        }
+        var rec = record();
+        window.MSI_SUBMIT.lastRecord = rec;
+        try { pdf.setProperties({ subject: 'msi-answers', keywords: 'msi-answers:v1:' + btoa(unescape(encodeURIComponent(JSON.stringify(rec)))) }); } catch (e) { /* 못 넣어도 PDF 는 저장 */ }
+        pdf.save(fname);
+        finished(fname, 'pdf');
+      })
+      .catch(function (err) { console.error('[savePdf]', err); window.alert('PDF를 만드는 중 문제가 생겼어요. 잠시 후 다시 눌러 주세요.'); })
+      .then(done, done);
+  }
+
+  // 시작 — 보관된 답이 있으면 불러온다
+  if (restore()) toast('이 컴퓨터에 보관된 답을 불러왔어요.');
+})();
+</script>
+</body>
+</html>
