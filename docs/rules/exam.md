@@ -118,7 +118,11 @@
 1. `.gitignore` 에서 차시 폴더 줄만 지운다(`answers.json` 줄은 남긴다).
 2. `lesson.json` 의 `status` 를 `live` 로. 3. `git status` 로 `answers.json` 이 안 잡히는지 확인 → commit · push.
 
-## 10. 알려진 한계
+## 10. 문항 양식 (새 시험지 받기)
+
+`docs/templates/수행평가 양식.docx` — 선생님이 문항·정답·배점·허용 답을 적어 오면 Claude 가 스킬 `lesson-exam` 으로 만든다. 표기 → 칸 종류 표는 스킬 "수행평가 양식". 채운 파일은 정답이 있으니 `input/` 에만(커밋 금지).
+
+## 11. 알려진 한계
 
 - 실제 Apps Script·드라이브·시트 동작은 이 PC 에서 시험할 수 없다 → 리허설이 꼭 필요.
 - Apps Script 동시 실행은 계정당 30건 — 수업 끝 몰림은 재시도·다시 보내기·USB 로 대비.

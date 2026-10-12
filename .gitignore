@@ -42,3 +42,9 @@ lessons/data-analysis/09/answers.json
 
 # 수행평가 채점 — 선생님 열쇠(TEACHER_KEY 와 같은 값). 저장소가 공개라 올리지 않는다.
 apps-script/teacher.local.json
+
+# 07 로블록스 — 미션별 그래프 해석 예시(교사용). 학생이 미리 보지 않게 이 PC 에만 둔다(2026-10-12).
+lessons/data-analysis/07/interpretation/
+lessons/data-analysis/07/해석예시-교사용.pdf
+lessons/data-analysis/10/
+lessons/data-analysis/10/answers.json
