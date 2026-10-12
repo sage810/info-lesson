@@ -245,10 +245,11 @@ function grade_(lesson) {
 
   const sh = tab_(ss, '채점 ' + lesson);
   sh.clear();
-  const head = ['학년', '반', '번호', '이름', '저장 시각', '출처', 'PDF']
+  // 총점은 이름 바로 옆(E열)에 — 칸별 ○/✕ 를 넘겨 보지 않아도 점수가 한눈에 보이게(2026-10-12)
+  const head = ['학년', '반', '번호', '이름', '총점', '저장 시각', '출처', 'PDF']
     .concat(keyRows.map((k) => k.kind === 'graph' ? k.unit + ' (직접)' : k.unit))
-    .concat(['자동 점수(' + g.autoMax + ')', '직접 점수', '총점', '확인', '학생 키']);
-  const nU = keyRows.length, cAuto = 8 + nU, cKey = cAuto + 4;
+    .concat(['자동 점수(' + g.autoMax + ')', '직접 점수', '확인', '학생 키']);
+  const nU = keyRows.length, cAuto = 9 + nU, cKey = cAuto + 3;
   const colA1 = (c) => { let s = ''; while (c > 0) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
   const rows = [], bgs = [];
   g.students.forEach((st, i) => {
@@ -256,26 +257,28 @@ function grade_(lesson) {
     const manualCells = [];
     const cells = st.marks.map((m, j) => {
       if (m.ok === null) {
-        manualCells.push(colA1(8 + j) + r);
+        manualCells.push(colA1(9 + j) + r);
         const gi = graphUnits.indexOf(m.unit);
         return '=IFERROR(INDEX(' + sName + '!' + colA1(6 + gi) + ':' + colA1(6 + gi) + ',MATCH($' + colA1(cKey) + r + ',' + sName + '!A:A,0)),"")';
       }
       return (m.ok ? '○ ' : '✕ ') + (m.value || '(안 씀)');
     });
     const pdf = s.pdf ? '=HYPERLINK("' + String(s.pdf).replace(/"/g, '') + '","PDF")' : '';
-    rows.push([s.grade, s.cls, s.no, s.name, s.savedAt || s.submittedAt, s.source || '웹', pdf].concat(cells).concat([
-      st.score, manualCells.length ? '=SUM(' + manualCells.join(',') + ')' : 0, '=' + colA1(cAuto) + r + '+N(' + colA1(cAuto + 1) + r + ')',
+    rows.push([s.grade, s.cls, s.no, s.name, '=' + colA1(cAuto) + r + '+N(' + colA1(cAuto + 1) + r + ')',
+      s.savedAt || s.submittedAt, s.source || '웹', pdf].concat(cells).concat([
+      st.score, manualCells.length ? '=SUM(' + manualCells.join(',') + ')' : 0,
       st.flags.join(', '), st.key]));
-    bgs.push(new Array(7).fill(st.flags.length ? '#fff4c2' : null)
+    bgs.push(new Array(8).fill(st.flags.length ? '#fff4c2' : null)
       .concat(st.marks.map((m) => m.ok === null ? '#eef0fb' : m.ok ? '#e3f4e1' : '#fbe3e3'))
-      .concat([null, null, null, st.flags.length ? '#fff4c2' : null, null]));
+      .concat([null, null, st.flags.length ? '#fff4c2' : null, null]));
   });
   sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight('bold');
   if (rows.length) {
     sh.getRange(2, 1, rows.length, head.length).setValues(rows);
     sh.getRange(2, 1, rows.length, head.length).setBackgrounds(bgs);
   }
-  sh.setFrozenRows(1); sh.setFrozenColumns(4);
+  if (rows.length) sh.getRange(2, 5, rows.length, 1).setFontWeight('bold');   // 총점
+  sh.setFrozenRows(1); sh.setFrozenColumns(5);
   sh.hideColumns(cKey);
 
   const an = tab_(ss, '문항 분석 ' + lesson);
