@@ -9,7 +9,6 @@ import {
 } from './common.mjs';
 
 const HOOK_PATH = 'shared/runtime/msi-hook.js';
-const FRAME_PATH = 'shared/runtime/msi-frame.js';   // 구글 사이트 같은 삽입 화면(iframe)에서만 "새 탭에서 열기" 안내를 띄움(PDF 저장이 막힐 수 있어서)
 const MEMO_PATH = 'shared/runtime/msi-memo.js';   // 선생님 전용 수정 요청 메모(?memo=1 로 켬). pages 변형에만 붙는다
 
 // pages 변형에서 파일이 놓일 위치(dist/pages 기준 경로)
@@ -91,13 +90,6 @@ export function renderLesson(lesson, opts) {
       const hookFile = path.join(ROOT, HOOK_PATH);
       if (variant === 'embed') inject.push('<script>' + readText(hookFile) + '</script>');
       else { copies.set(HOOK_PATH, hookFile); inject.push(`<script src="${relFromPage(HOOK_PATH, lesson)}"></script>`); }
-    }
-    if (!teacher && cfg.siteUrl) {   // 삽입 화면 안내 — 삽입이 아니면 아무것도 하지 않는다
-      const frameUrl = String(cfg.siteUrl).replace(/\/?$/, '/') + lesson.id + '/';
-      inject.push(`<script id="msi-frame-config">window.MSI_FRAME=${JSON.stringify({ url: frameUrl })};</script>`);
-      const frameFile = path.join(ROOT, FRAME_PATH);
-      if (variant === 'embed') inject.push('<script>' + readText(frameFile) + '</script>');
-      else { copies.set(FRAME_PATH, frameFile); inject.push(`<script src="${relFromPage(FRAME_PATH, lesson)}"></script>`); }
     }
     if (variant === 'pages') { // 켜지 않으면 아무것도 하지 않는 작은 스크립트 — 학생 화면은 그대로
       const memoFile = path.join(ROOT, MEMO_PATH);

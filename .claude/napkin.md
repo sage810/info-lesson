@@ -47,7 +47,3 @@
    Do instead: 판단·선택지·근거만 답하고, 파일을 만들거나 고치지 않는다.
 2. **[2026-09-24] 같은 활동지 파일을 계속 고친다**
    Do instead: `_v2`·새 파일을 만들지 말고 같은 `lesson.html` 을 최소 diff 로 수정. "새로 만들자"고 할 때만 `/lesson-new`.
-
-## 구글 사이트 삽입 (2026-10-12)
-- **구글 사이트 삽입(iframe)에서는 PDF 다운로드·alert 가 막혀 "PDF로 저장하기"가 안 눌리는 것처럼 보임**
-  Do instead: `shared/runtime/msi-frame.js` 가 삽입 화면에서만 "새 탭에서 열기" 안내를 띄운다(siteUrl 은 site.config.json). 새 PDF 버튼 차시도 render.mjs 가 자동으로 붙인다. 수행평가(09·10)는 삽입하지 않고 직접 주소로 연다.
