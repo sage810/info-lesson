@@ -34,7 +34,7 @@ secrets/
 
 # 수행평가 — 저장소가 공개라서 시험 날까지 이 PC 에만 둔다(선생님 결정 2026-10-02).
 # 시험 날 공개할 때 첫 줄(폴더)만 지운다. 정답 파일(answers.json)은 공개 뒤에도 계속 올리지 않는다.
-
+lessons/data-analysis/09/
 lessons/data-analysis/09/answers.json
 lessons/data-analysis/10/
 lessons/data-analysis/10/answers.json
@@ -49,10 +49,3 @@ apps-script/teacher.local.json
 # 07 로블록스 — 미션별 그래프 해석 예시(교사용). 학생이 미리 보지 않게 이 PC 에만 둔다(2026-10-12).
 lessons/data-analysis/07/interpretation/
 lessons/data-analysis/07/해석예시-교사용.pdf
-
-
-# 09 시험지 공개 때(2026-10-12) 올리지 않는 시험 자료 — 대비 요약·안내문은 학생에게 직접 나눠 줌
-lessons/data-analysis/09/summary/
-lessons/data-analysis/09/*.docx
-lessons/data-analysis/09/*.pdf
-lessons/data-analysis/09/~$*

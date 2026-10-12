@@ -36,7 +36,6 @@
 | `data-analysis/05` | 데이터 시각화 ① 구성·비교 분석 | portal (4탭) | `answers.json` (빈칸·유형 고르기, 정답지 PDF 가능) |
 | `data-analysis/06` | 데이터 시각화 ② 분포·관계 분석 | portal (4탭) | `answers.json` (정답지 PDF 가능) |
 | `data-analysis/07` | 로블록스 데이터 분석하기 | portal (4탭) | `answers.json` (분석 유형 고르기 4칸, 정답지 PDF 가능) |
-| `data-analysis/09` | 데이터분석 수행평가 A형 | standalone (한 화면) | `answers.json` 은 **저장소에 올리지 않음**(이 PC에만) · 자동 제출·채점은 `docs/rules/exam.md` |
 
 ## 처음 한 번 (Windows)
 
