@@ -178,6 +178,7 @@ function pickLatest_(subs) {
 /** 채점 표 만들기 — keyRows: [{unit,kind,answer,accept,points,label}], subs: pickLatest_ 결과 */
 function buildGrade_(keyRows, subs) {
   const sorted = subs.slice().sort((a, b) =>
+    (Number(digits_(a.grade)) || 999) - (Number(digits_(b.grade)) || 999) ||   // 학년 → 반 → 번호 → 이름 순
     (Number(digits_(a.cls)) || 999) - (Number(digits_(b.cls)) || 999) ||
     (Number(digits_(a.no)) || 999) - (Number(digits_(b.no)) || 999) ||
     String(a.name).localeCompare(String(b.name), 'ko'));
