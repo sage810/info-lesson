@@ -428,6 +428,35 @@
   .pz-controls button { cursor: pointer; padding: 6px 12px; border: 2px solid #4b3b6b; border-radius: 8px; background: #fffdf7;
     font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 12px; color: #4b3b6b; }
   .pz-controls button:active { transform: translate(1px,1px); }
+  /* [07] "그래프 시각화하기" 도움말 상자(2026-10-13 시안 C, 실선) — 누르면 펼쳐져 CODAP 화면 그림과 ①②③ 단계가 보임. PDF 에는 안 나옴(.no-pdf) */
+  .gv-help { margin: 2px 0 4px; border: 2px solid #4b3b6b; border-radius: 12px; background: #faf8ff; }
+  .gv-help[open] { background: #fff; }
+  .gv-help summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: #4b3b6b;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 15px; }
+  .gv-help summary::-webkit-details-marker { display: none; }
+  .gv-help summary:focus-visible { outline: 3px solid #ee9dbf; outline-offset: 2px; border-radius: 10px; }
+  .gv-help .gv-tx { flex: 1; min-width: 0; word-break: keep-all; line-height: 1.5; }   /* 좁은 화면: 제목은 한 줄, 설명은 다음 줄로 */
+  .gv-help .gv-t { white-space: nowrap; margin-right: 4px; }
+  .gv-help .gv-sub { font-family: 'Maplestory', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 300; font-size: 13px; color: #8b7cb8; }
+  .gv-help .gv-pm { margin-left: auto; flex: none; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;
+    border: 2px solid #4b3b6b; border-radius: 6px; background: #fff; font: 700 16px/1 sans-serif; }
+  .gv-help .gv-pm::before { content: '+'; }
+  .gv-help[open] .gv-pm::before { content: '−'; }
+  .gv-help .gv-in { padding: 0 12px 12px; }
+  .gv-img { display: block; max-width: 100%; height: auto; margin: 0 auto; border-radius: 8px; border: 2px solid #d8d2ee; background: #fff; }
+  .gv-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; color: #4b3b6b; word-break: keep-all; }
+  .gv-steps b { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin-right: 5px; border-radius: 50%;
+    background: #e8473f; color: #fff; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; }
+  .gv-img--next { margin-top: 14px; }
+  /* 그림 크기 — 처음 넣었을 때 화면 크기의 1/2(2026-10-13 선생님 요청). 폰처럼 좁으면 칸 너비에 맞춤(max-width: 100%) */
+  .gv-img--r1 { width: 316px; }
+  .gv-img--r2 { width: 422px; }
+  .gv-img--r3 { width: 478px; }
+  .gv-img--r4 { width: 455px; }
+  .gv-img--r5 { width: 455px; }   /* MISSION 3 그림과 같은 폭으로 맞춤 */
+  .gv-note { margin: 8px 0 0; text-align: center; font-size: 14px; color: #4b3b6b; word-break: keep-all; }
+  @media (max-width: 560px) { .gv-help .gv-sub { display: block; } .gv-help .gv-dash { display: none; } }
+  @media print { .gv-help { display: none !important; } }
   .pz-controls button:disabled { opacity: .6; cursor: default; transform: none; }
 
   .ans-row { display: flex; flex-direction: column; gap: 5px; }
@@ -945,6 +974,13 @@
                 </sc-for>
 
                 <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
+                <details class="gv-help no-pdf">
+                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
+                  <div class="gv-in">
+                    <img class="gv-img gv-img--r1" src="msi-asset:./assets/roblox1.png" alt="CODAP 화면: ① 아래쪽 축에 장르를 넣고 ② Measure 를 눌러 ③ 백분율을 체크한 그래프">
+                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '장르' 넣기</li><li><b>2</b>Measure 누르기</li><li><b>3</b>'백분율' 체크</li></ol>
+                  </div>
+                </details>
                 <div class="paste-zone" data-zone="m1-graph" role="button" tabindex="0" aria-label="MISSION 1 구성 분석 그래프 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
@@ -984,6 +1020,15 @@
                 </sc-for>
 
                 <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
+                <details class="gv-help no-pdf">
+                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
+                  <div class="gv-in">
+                    <img class="gv-img gv-img--r2" src="msi-asset:./assets/roblox2.png" alt="CODAP 화면: ① 아래쪽 축에 장르, ② 왼쪽 축에 현재접속자(명)를 넣고 ③ Measure 를 눌러 ④ 측정 레이블 보이기와 ⑤ Mean 을 체크한 그래프">
+                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '장르' 넣기</li><li><b>2</b>왼쪽 축에 '현재접속자(명)' 넣기</li><li><b>3</b>Measure 누르기</li><li><b>4</b>'측정 레이블 보이기' 체크</li><li><b>5</b>'Mean' 체크</li></ol>
+                    <img class="gv-img gv-img--next gv-img--r3" src="msi-asset:./assets/roblox3.png" alt="장르별 평균이 그래프 위에 보이는 화면. 그래프 오른쪽 아래 모서리를 끌어 옆으로 길게 늘린 모습">
+                    <p class="gv-note">평균 글자가 겹쳐 안 보이면 그래프 <b>오른쪽 아래 모서리</b>를 끌어 옆으로 길게 늘려요.</p>
+                  </div>
+                </details>
                 <div class="paste-zone" data-zone="m2-graph" role="button" tabindex="0" aria-label="MISSION 2 비교 분석 그래프 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
@@ -1023,6 +1068,13 @@
                 </sc-for>
 
                 <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
+                <details class="gv-help no-pdf">
+                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
+                  <div class="gv-in">
+                    <img class="gv-img gv-img--r4" src="msi-asset:./assets/roblox4.png" alt="CODAP 화면: ① 아래쪽 축에 좋아요(만)를 넣고 ② Measure 를 눌러 ③ 그림 상자와 정규 곡선을 펼친 뒤 ④ Box Plot 을 체크한 그래프">
+                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '좋아요(만)' 넣기</li><li><b>2</b>Measure 누르기</li><li><b>3</b>'그림 상자와 정규 곡선' 펼치기</li><li><b>4</b>'Box Plot' 체크</li></ol>
+                  </div>
+                </details>
                 <div class="paste-zone" data-zone="m3-graph" role="button" tabindex="0" aria-label="MISSION 3 분포 분석 그래프 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
@@ -1062,6 +1114,13 @@
                 </sc-for>
 
                 <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
+                <details class="gv-help no-pdf">
+                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
+                  <div class="gv-in">
+                    <img class="gv-img gv-img--r5" src="msi-asset:./assets/roblox5.png" alt="CODAP 화면: ① 아래쪽 축에 좋아요(만), ② 왼쪽 축에 싫어요(만)를 넣고 ③ Measure 를 눌러 ④ 최소제곱선과 ⑤ Show r 을 체크한 그래프">
+                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '좋아요(만)' 넣기</li><li><b>2</b>왼쪽 축에 '싫어요(만)' 넣기</li><li><b>3</b>Measure 누르기</li><li><b>4</b>'최소제곱선' 체크</li><li><b>5</b>'Show r' 체크</li></ol>
+                  </div>
+                </details>
                 <div class="paste-zone" data-zone="m4-graph" role="button" tabindex="0" aria-label="MISSION 4 관계 분석 그래프 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
