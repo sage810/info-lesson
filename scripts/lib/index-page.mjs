@@ -3,7 +3,7 @@
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ACCENTS = ['#a9dce4', '#c4d8f7', '#fbe6a2', '#d6c4f5', '#bfe9dd', '#eec6ea', '#f7bfb2', '#e3e0b0'];
 // 이 확장자는 새 탭에서 열고, 나머지(pptx·hwp·zip …)는 내려받는다
-const OPENS_IN_TAB = new Set(['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'txt']);
+const OPENS_IN_TAB = new Set(['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg']);   // txt 는 내려받기(포켓몬 데이터, 2026-10-13)
 const fileSize = (n) => (n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)}MB` : `${Math.max(1, Math.round(n / 1024))}KB`);
 
 export function renderIndex(lessons, units = [], materials = []) {
