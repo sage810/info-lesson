@@ -73,8 +73,8 @@ export function renderLesson(lesson, opts) {
     const cfg = loadConfig();
     const inject = [];
     if (teacher) {
-      inject.push('<style id="msi-teacher">/* 교사용: 옆 고정 "활동 진행률" 위젯 숨김 */'
-        + '.sheet-progress{display:none!important}</style>');
+      inject.push('<style id="msi-teacher">/* 교사용: 옆 고정 "활동 진행률" 위젯·07 의 왼쪽 고정 묶음(.sheet-side: 진행률+도움말) 숨김 */'
+        + '.sheet-progress,.sheet-side{display:none!important}</style>');
     }
     if (hook && cfg.apiUrl) { // Apps Script 주소가 없으면 아무것도 덧붙이지 않는다 → 예전 배포본과 똑같음
       const runtime = {
