@@ -68,11 +68,16 @@ async function inspect(browser, url, { teacher, origin }) {
       leak: (document.body.innerText.match(/\{\{[^}]{0,40}\}\}/) || [null])[0],
       blanks: document.querySelectorAll('textarea.blank').length,
       progressVisible: vis(document.querySelector('.sheet-progress')),
+      leftFixed: [...document.querySelectorAll('body *')].filter((e) => {   // 화면 왼쪽에 붙은 고정 덩어리(교사용에는 없어야 함)
+        const cs = getComputedStyle(e); if (cs.position !== 'fixed' || !vis(e)) return false;
+        const r = e.getBoundingClientRect(); return r.height >= 40 && r.left < innerWidth * 0.25 && r.width < innerWidth * 0.4;
+      }).map((e) => e.tagName.toLowerCase() + (e.className && typeof e.className === 'string' ? '.' + e.className.trim().split(/s+/).join('.') : '')),
       hasPdfBtn: !!document.querySelector('#pdfBtn'),
     };
   });
   if (info.leak) fails.push(`화면에 템플릿 표식이 그대로 보여요: ${info.leak}`);
   if (teacher && info.progressVisible) fails.push('교사용인데 진행률 위젯이 보여요');
+  if (teacher && info.leftFixed.length) fails.push('교사용인데 왼쪽 고정바가 보여요(docs/rules/teacher.md): ' + info.leftFixed.join(', '));
   return { page, fails, notes, info };
 }
 

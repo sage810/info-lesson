@@ -13,6 +13,7 @@ description: >
 - GitHub Pages: `…/<단원>/<차시>/teacher.html`
 - 구글 사이트 붙여넣기용: `dist/embed/<단원>-<차시>.teacher.html`
 교사용 화면에서는 "제출"이 선생님 드라이브로 가지 않는다.
+**왼쪽 고정바는 절대 없다**(진행률·도움말 카드 등, 2026-10-13) — 빌드가 자동으로 숨기고 `npm run check` 가 확인한다. 규칙·새 고정바 추가법: `docs/rules/teacher.md`.
 
 ## 정답지 PDF
 

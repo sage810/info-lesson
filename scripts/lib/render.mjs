@@ -73,8 +73,18 @@ export function renderLesson(lesson, opts) {
     const cfg = loadConfig();
     const inject = [];
     if (teacher) {
-      inject.push('<style id="msi-teacher">/* 교사용: 옆 고정 "활동 진행률" 위젯·07 의 왼쪽 고정 묶음(.sheet-side: 진행률+도움말) 숨김 */'
-        + '.sheet-progress,.sheet-side{display:none!important}</style>');
+      // 교사용 규칙(2026-10-13 선생님 지시): 왼쪽 고정바는 절대 없다 — docs/rules/teacher.md
+      //   알려진 것: 진행률 위젯(.sheet-progress) · 07 묶음(.sheet-side) · 09·10 도움말 카드(.guide-card)
+      //   이름을 모르는 새 고정바도 아래 스크립트가 숨긴다(화면 왼쪽에 붙은 position:fixed 덩어리). npm run check 가 다시 확인한다.
+      inject.push('<style id="msi-teacher">.sheet-progress,.sheet-side,.guide-card{display:none!important}</style>');
+      inject.push('<script id="msi-teacher-nofix">(function(){'
+        + 'function sweep(){var vw=window.innerWidth||1;document.querySelectorAll("body *").forEach(function(e){'
+        + 'if(e.id==="toast"||e.closest("[data-msi-memo]"))return;var cs=getComputedStyle(e);if(cs.position!=="fixed"||cs.display==="none")return;'
+        + 'var r=e.getBoundingClientRect();if(r.height>=40&&r.left<vw*0.25&&r.width<vw*0.4)e.style.setProperty("display","none","important");});}'
+        + 'var t;function later(){clearTimeout(t);t=setTimeout(sweep,60);}'
+        + 'window.addEventListener("load",sweep);window.addEventListener("resize",later);'
+        + 'if(window.MutationObserver)new MutationObserver(later).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:["style","class"]});'
+        + 'sweep();})();</script>');
     }
     if (hook && cfg.apiUrl) { // Apps Script 주소가 없으면 아무것도 덧붙이지 않는다 → 예전 배포본과 똑같음
       const runtime = {

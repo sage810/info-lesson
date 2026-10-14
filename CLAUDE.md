@@ -12,7 +12,7 @@
 - **고치는 곳**: `lessons/<단원>/<차시>/lesson.html` (작은 소스) · `assets/` · `answers.json` · `spec.md` · `lesson.json`
 - **공용**: `shared/` (폰트·라이브러리·여러 차시가 같이 쓰는 그림·동작 스크립트) — 바꾸면 모든 차시에 영향
 - **배포본**: `dist/` — `npm run build` 결과. **손으로 고치지 않는다**(git 에도 안 올라감)
-- **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드·수행평가 `exam.md`) · 이력: `docs/log/`
+- **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드·수행평가 `exam.md`·교사용 `teacher.md` — 교사용엔 왼쪽 고정바 절대 없음) · 이력: `docs/log/`
 - **다른 웹앱용 디자인 토큰**: `design/` (`tokens.json` 원본 → `node design/build.mjs` → `tokens.css`·`preview.html`, 부품 `components.css`, 이름은 모두 `msi-`). 활동지 디자인 값을 바꾸면 여기도 맞춘다.
 - **스킬 목록·사용법**: `.claude/README.md`(우리 스킬) · `.claude/external-skills.md`(가져온 외부 스킬) · 사람용 안내: `README.md`
 
