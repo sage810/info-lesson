@@ -1,0 +1,2960 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T06:20:01.191Z",
+  "title": "Design System: 신현중학교 정보 수업 활동지",
+  "extensions": {
+    "colorMeta": {
+      "night-sky-ink": {
+        "role": "primary",
+        "displayName": "밤하늘 잉크 Night-Sky Ink",
+        "canonical": "oklch(39.2% 0.081 297.9)",
+        "tonalRamp": [
+          "#150928",
+          "#32264a",
+          "#52446f",
+          "#746596",
+          "#9888bc",
+          "#bcaee0",
+          "#dccfff",
+          "#f3efff"
+        ]
+      },
+      "button-ink": {
+        "role": "neutral",
+        "displayName": "버튼 잉크",
+        "canonical": "oklch(27.9% 0.072 285.3)",
+        "tonalRamp": [
+          "#100d28",
+          "#2b294a",
+          "#4a486f",
+          "#6a6996",
+          "#8e8dbb",
+          "#b3b2df",
+          "#d3d3fe",
+          "#f0f0fe"
+        ]
+      },
+      "muted-violet": {
+        "role": "neutral",
+        "displayName": "보라 회색 글자",
+        "canonical": "oklch(51.0% 0.088 296.3)",
+        "tonalRamp": [
+          "#15082b",
+          "#32254e",
+          "#514373",
+          "#73649b",
+          "#9787c1",
+          "#bcade5",
+          "#dbcfff",
+          "#f3efff"
+        ]
+      },
+      "placeholder-haze": {
+        "role": "neutral",
+        "displayName": "안개 보라",
+        "canonical": "oklch(75.3% 0.052 299.1)",
+        "tonalRamp": [
+          "#140d20",
+          "#312940",
+          "#504863",
+          "#726888",
+          "#968cad",
+          "#bbb1d2",
+          "#dbd2f1",
+          "#f3effe"
+        ]
+      },
+      "cream-paper": {
+        "role": "neutral",
+        "displayName": "크림 종이",
+        "canonical": "oklch(99.4% 0.008 91.5)",
+        "tonalRamp": [
+          "#13120f",
+          "#2f2e2a",
+          "#4e4d49",
+          "#706f6a",
+          "#94928d",
+          "#b9b7b2",
+          "#d9d7d2",
+          "#f3f2ed"
+        ]
+      },
+      "blush-paper": {
+        "role": "neutral",
+        "displayName": "분홍 종이",
+        "canonical": "oklch(98.0% 0.009 341.8)",
+        "tonalRamp": [
+          "#141012",
+          "#312c2f",
+          "#504b4e",
+          "#726d70",
+          "#969094",
+          "#bbb5b9",
+          "#dbd6d9",
+          "#f5f0f3"
+        ]
+      },
+      "lavender-desk": {
+        "role": "neutral",
+        "displayName": "라벤더 책상",
+        "canonical": "oklch(92.5% 0.027 295.0)",
+        "tonalRamp": [
+          "#12101a",
+          "#2e2c38",
+          "#4e4b59",
+          "#6f6c7d",
+          "#938fa1",
+          "#b8b5c6",
+          "#d8d5e5",
+          "#f2f0fe"
+        ]
+      },
+      "grid-line": {
+        "role": "neutral",
+        "displayName": "모눈 선",
+        "canonical": "oklch(87.7% 0.039 295.4)",
+        "tonalRamp": [
+          "#130f1d",
+          "#2f2b3c",
+          "#4e495e",
+          "#706b83",
+          "#948ea7",
+          "#b9b3cc",
+          "#d9d4eb",
+          "#f2effe"
+        ]
+      },
+      "lavender": {
+        "role": "secondary",
+        "displayName": "라벤더",
+        "canonical": "oklch(85.1% 0.070 301.7)",
+        "tonalRamp": [
+          "#160b24",
+          "#332646",
+          "#53456a",
+          "#766590",
+          "#9989b5",
+          "#beafd9",
+          "#decff8",
+          "#f4effe"
+        ]
+      },
+      "periwinkle": {
+        "role": "secondary",
+        "displayName": "페리윙클",
+        "canonical": "oklch(87.7% 0.048 259.1)",
+        "tonalRamp": [
+          "#081221",
+          "#222e42",
+          "#3f4e65",
+          "#5f708a",
+          "#8193af",
+          "#a7b9d3",
+          "#c8d9f3",
+          "#ebf2fe"
+        ]
+      },
+      "periwinkle-strong": {
+        "role": "secondary",
+        "displayName": "진한 페리윙클",
+        "canonical": "oklch(77.1% 0.095 270.1)",
+        "tonalRamp": [
+          "#070d30",
+          "#1f2a54",
+          "#3b4a7b",
+          "#5a6ba4",
+          "#7c8fcb",
+          "#a2b5ee",
+          "#c9d6fe",
+          "#edf2ff"
+        ]
+      },
+      "cotton-pink": {
+        "role": "tertiary",
+        "displayName": "솜사탕 분홍",
+        "canonical": "oklch(88.5% 0.059 350.9)",
+        "tonalRamp": [
+          "#1f0814",
+          "#402331",
+          "#634151",
+          "#896173",
+          "#ae8496",
+          "#d3aabb",
+          "#f2cbdb",
+          "#feecf4"
+        ]
+      },
+      "mint": {
+        "role": "tertiary",
+        "displayName": "민트",
+        "canonical": "oklch(90.1% 0.047 176.0)",
+        "tonalRamp": [
+          "#001611",
+          "#17342d",
+          "#34554c",
+          "#52786e",
+          "#759c91",
+          "#9cc1b6",
+          "#bee0d6",
+          "#d9faf1"
+        ]
+      },
+      "butter": {
+        "role": "tertiary",
+        "displayName": "버터",
+        "canonical": "oklch(92.6% 0.089 92.9)",
+        "tonalRamp": [
+          "#171100",
+          "#382d01",
+          "#5c4b0d",
+          "#806d2e",
+          "#a49152",
+          "#c9b77c",
+          "#e8d7a0",
+          "#fff2c6"
+        ]
+      },
+      "sprout": {
+        "role": "tertiary",
+        "displayName": "새싹",
+        "canonical": "oklch(92.6% 0.064 130.9)",
+        "tonalRamp": [
+          "#0a1600",
+          "#243316",
+          "#425432",
+          "#627651",
+          "#859a73",
+          "#abbf9a",
+          "#cbdfbb",
+          "#e6f9d7"
+        ]
+      },
+      "apricot": {
+        "role": "tertiary",
+        "displayName": "살구",
+        "canonical": "oklch(92.7% 0.044 54.9)",
+        "tonalRamp": [
+          "#1d0d04",
+          "#3c291c",
+          "#5e4839",
+          "#826958",
+          "#a78c7a",
+          "#ccb1a0",
+          "#ebd2c1",
+          "#feeee4"
+        ]
+      },
+      "salmon": {
+        "role": "tertiary",
+        "displayName": "연어",
+        "canonical": "oklch(85.2% 0.067 33.4)",
+        "tonalRamp": [
+          "#230703",
+          "#45231b",
+          "#6a4137",
+          "#906156",
+          "#b68478",
+          "#dbaa9f",
+          "#facbc0",
+          "#feeeea"
+        ]
+      },
+      "lilac": {
+        "role": "tertiary",
+        "displayName": "라일락",
+        "canonical": "oklch(87.2% 0.065 329.4)",
+        "tonalRamp": [
+          "#1d081c",
+          "#3d243b",
+          "#5f415d",
+          "#846281",
+          "#a985a5",
+          "#cdabca",
+          "#edcbe9",
+          "#feebfc"
+        ]
+      },
+      "sage": {
+        "role": "tertiary",
+        "displayName": "세이지",
+        "canonical": "oklch(89.7% 0.031 175.9)",
+        "tonalRamp": [
+          "#061511",
+          "#20322d",
+          "#3e524c",
+          "#5d756e",
+          "#809891",
+          "#a6bdb7",
+          "#c7ddd7",
+          "#e2f7f1"
+        ]
+      },
+      "rose-dust": {
+        "role": "tertiary",
+        "displayName": "로즈 더스트",
+        "canonical": "oklch(85.1% 0.041 18.0)",
+        "tonalRamp": [
+          "#1d0c0c",
+          "#3d2727",
+          "#604545",
+          "#846666",
+          "#a98989",
+          "#ceafaf",
+          "#edcfcf",
+          "#feeded"
+        ]
+      },
+      "sand": {
+        "role": "tertiary",
+        "displayName": "모래",
+        "canonical": "oklch(88.9% 0.047 86.5)",
+        "tonalRamp": [
+          "#181001",
+          "#362d16",
+          "#574c32",
+          "#7a6d51",
+          "#9e9173",
+          "#c3b69a",
+          "#e3d6bb",
+          "#fdf1d7"
+        ]
+      },
+      "sky": {
+        "role": "tertiary",
+        "displayName": "하늘",
+        "canonical": "oklch(92.1% 0.032 224.2)",
+        "tonalRamp": [
+          "#051419",
+          "#1f3138",
+          "#3c5159",
+          "#5c737c",
+          "#7e97a1",
+          "#a5bcc5",
+          "#c6dce5",
+          "#e1f6ff"
+        ]
+      },
+      "aurora-pink": {
+        "role": "tertiary",
+        "displayName": "오로라 분홍",
+        "canonical": "oklch(84.0% 0.090 347.0)",
+        "tonalRamp": [
+          "#250217",
+          "#471c35",
+          "#6c3a56",
+          "#935978",
+          "#ba7c9d",
+          "#dea3c1",
+          "#fec4e1",
+          "#feecf5"
+        ]
+      },
+      "aurora-sky": {
+        "role": "tertiary",
+        "displayName": "오로라 하늘",
+        "canonical": "oklch(84.3% 0.074 239.0)",
+        "tonalRamp": [
+          "#001422",
+          "#083149",
+          "#27526d",
+          "#457494",
+          "#6999b9",
+          "#91bedd",
+          "#b3defc",
+          "#e6f4fe"
+        ]
+      },
+      "aurora-lavender": {
+        "role": "tertiary",
+        "displayName": "오로라 라벤더",
+        "canonical": "oklch(80.3% 0.098 296.1)",
+        "tonalRamp": [
+          "#16072d",
+          "#322351",
+          "#524277",
+          "#74639f",
+          "#9786c6",
+          "#bcace9",
+          "#dbcfff",
+          "#f3efff"
+        ]
+      },
+      "live-violet": {
+        "role": "tertiary",
+        "displayName": "진행 보라",
+        "canonical": "oklch(56.8% 0.179 291.3)",
+        "tonalRamp": [
+          "#150039",
+          "#33106f",
+          "#52339b",
+          "#7355c9",
+          "#957af2",
+          "#b8a9fe",
+          "#d7d1ff",
+          "#f1f0fe"
+        ]
+      },
+      "link-berry": {
+        "role": "tertiary",
+        "displayName": "베리 링크",
+        "canonical": "oklch(64.7% 0.131 351.6)",
+        "tonalRamp": [
+          "#280015",
+          "#520d34",
+          "#7a2d54",
+          "#a44c77",
+          "#cc709b",
+          "#f198c0",
+          "#fec4dd",
+          "#ffecf3"
+        ]
+      },
+      "role-tab-rules-1": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-rules-1",
+        "canonical": "oklch(97.2% 0.043 94.1)",
+        "tonalRamp": [
+          "#161102",
+          "#342e19",
+          "#544d35",
+          "#766f53",
+          "#9a9276",
+          "#bfb79c",
+          "#dfd8be",
+          "#f9f2d9"
+        ]
+      },
+      "role-tab-rules-2": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-rules-2",
+        "canonical": "oklch(93.7% 0.049 73.1)",
+        "tonalRamp": [
+          "#1b0f01",
+          "#3a2b16",
+          "#5c4932",
+          "#806b50",
+          "#a48e73",
+          "#c9b499",
+          "#e8d4bb",
+          "#ffefdc"
+        ]
+      },
+      "role-tab-rules-3": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-rules-3",
+        "canonical": "oklch(91.1% 0.046 18.0)",
+        "tonalRamp": [
+          "#1f0b0c",
+          "#3f2627",
+          "#624445",
+          "#876565",
+          "#ac8888",
+          "#d1adad",
+          "#f0cece",
+          "#feeded"
+        ]
+      },
+      "role-tab-time-1": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-time-1",
+        "canonical": "oklch(95.8% 0.023 236.0)",
+        "tonalRamp": [
+          "#0a1318",
+          "#252f36",
+          "#434f57",
+          "#63717a",
+          "#86959e",
+          "#abbac3",
+          "#ccdae3",
+          "#e7f4fd"
+        ]
+      },
+      "role-tab-time-2": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-time-2",
+        "canonical": "oklch(91.5% 0.041 271.9)",
+        "tonalRamp": [
+          "#0d111f",
+          "#282d3f",
+          "#464c61",
+          "#666e86",
+          "#8991ab",
+          "#afb7cf",
+          "#cfd7ef",
+          "#edf1fe"
+        ]
+      },
+      "role-tab-time-3": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-time-3",
+        "canonical": "oklch(90.7% 0.053 300.9)",
+        "tonalRamp": [
+          "#150d20",
+          "#312940",
+          "#514763",
+          "#736888",
+          "#978bad",
+          "#bcb1d2",
+          "#dcd1f1",
+          "#f4efff"
+        ]
+      },
+      "role-tab-meal-1": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-meal-1",
+        "canonical": "oklch(96.9% 0.031 146.8)",
+        "tonalRamp": [
+          "#0b140b",
+          "#263126",
+          "#435144",
+          "#647465",
+          "#879788",
+          "#acbcad",
+          "#cddcce",
+          "#e8f7e8"
+        ]
+      },
+      "role-tab-meal-2": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-meal-2",
+        "canonical": "oklch(94.2% 0.035 178.8)",
+        "tonalRamp": [
+          "#041512",
+          "#1d332e",
+          "#3a534d",
+          "#5a756f",
+          "#7d9992",
+          "#a3beb8",
+          "#c4ded8",
+          "#dff8f2"
+        ]
+      },
+      "role-tab-meal-3": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-meal-3",
+        "canonical": "oklch(93.3% 0.035 244.2)",
+        "tonalRamp": [
+          "#07131c",
+          "#21303b",
+          "#3f4f5d",
+          "#5f7181",
+          "#8195a6",
+          "#a7baca",
+          "#c8daea",
+          "#e7f4fe"
+        ]
+      },
+      "role-tab-sheet-1": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-sheet-1",
+        "canonical": "oklch(93.8% 0.039 339.1)",
+        "tonalRamp": [
+          "#1a0c16",
+          "#392833",
+          "#5a4653",
+          "#7e6776",
+          "#a28a9a",
+          "#c7afbf",
+          "#e7d0de",
+          "#ffebf8"
+        ]
+      },
+      "role-tab-sheet-2": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-sheet-2",
+        "canonical": "oklch(91.4% 0.049 299.8)",
+        "tonalRamp": [
+          "#140e1f",
+          "#31293f",
+          "#504862",
+          "#726986",
+          "#968cab",
+          "#bbb2d0",
+          "#dbd2ef",
+          "#f4efff"
+        ]
+      },
+      "role-tab-sheet-3": {
+        "role": "tertiary",
+        "displayName": "역할 · tab-sheet-3",
+        "canonical": "oklch(94.3% 0.034 230.2)",
+        "tonalRamp": [
+          "#05141b",
+          "#1f3139",
+          "#3c505b",
+          "#5b737e",
+          "#7e96a3",
+          "#a4bbc7",
+          "#c5dbe7",
+          "#e3f5fe"
+        ]
+      },
+      "role-topic-body": {
+        "role": "tertiary",
+        "displayName": "역할 · topic-body",
+        "canonical": "oklch(97.9% 0.007 268.5)",
+        "tonalRamp": [
+          "#111214",
+          "#2d2e31",
+          "#4c4d51",
+          "#6d6f73",
+          "#909296",
+          "#b6b7bb",
+          "#d6d7db",
+          "#f0f2f6"
+        ]
+      },
+      "role-goals-body": {
+        "role": "tertiary",
+        "displayName": "역할 · goals-body",
+        "canonical": "oklch(97.6% 0.008 17.3)",
+        "tonalRamp": [
+          "#141111",
+          "#312d2d",
+          "#514c4c",
+          "#736d6d",
+          "#979090",
+          "#bcb6b6",
+          "#dbd6d6",
+          "#f6f0f0"
+        ]
+      },
+      "role-goals-coin-1": {
+        "role": "tertiary",
+        "displayName": "역할 · goals-coin-1",
+        "canonical": "oklch(93.9% 0.020 17.5)",
+        "tonalRamp": [
+          "#180f0f",
+          "#362b2b",
+          "#564949",
+          "#796a6b",
+          "#9e8e8e",
+          "#c2b3b3",
+          "#e2d3d3",
+          "#fceeee"
+        ]
+      },
+      "role-warmup-body": {
+        "role": "tertiary",
+        "displayName": "역할 · warmup-body",
+        "canonical": "oklch(97.9% 0.008 168.8)",
+        "tonalRamp": [
+          "#0f1211",
+          "#2b2f2d",
+          "#494e4c",
+          "#6a706e",
+          "#8e9491",
+          "#b3b9b6",
+          "#d3d9d6",
+          "#eef3f1"
+        ]
+      },
+      "role-intro-body": {
+        "role": "tertiary",
+        "displayName": "역할 · intro-body",
+        "canonical": "oklch(98.5% 0.014 128.6)",
+        "tonalRamp": [
+          "#10130e",
+          "#2c2f29",
+          "#4b4e47",
+          "#6c7068",
+          "#90948b",
+          "#b5b9b1",
+          "#d5d9d1",
+          "#eff3ec"
+        ]
+      },
+      "role-act1-body": {
+        "role": "tertiary",
+        "displayName": "역할 · act1-body",
+        "canonical": "oklch(97.8% 0.009 258.3)",
+        "tonalRamp": [
+          "#101215",
+          "#2c2e32",
+          "#4a4d52",
+          "#6c6f74",
+          "#8f9298",
+          "#b4b8bd",
+          "#d4d8dc",
+          "#eff2f7"
+        ]
+      },
+      "role-act2-body": {
+        "role": "tertiary",
+        "displayName": "역할 · act2-body",
+        "canonical": "oklch(98.0% 0.012 170.3)",
+        "tonalRamp": [
+          "#0e1311",
+          "#292f2d",
+          "#484f4c",
+          "#69716e",
+          "#8c9591",
+          "#b1bab6",
+          "#d2dad6",
+          "#ecf4f1"
+        ]
+      },
+      "role-act3-head-1": {
+        "role": "tertiary",
+        "displayName": "역할 · act3-head-1",
+        "canonical": "oklch(95.9% 0.082 113.0)",
+        "tonalRamp": [
+          "#121300",
+          "#2e3101",
+          "#4d511d",
+          "#6f743b",
+          "#92985e",
+          "#b7bd86",
+          "#d7dda9",
+          "#f1f7c6"
+        ]
+      },
+      "role-act3-head-2": {
+        "role": "tertiary",
+        "displayName": "역할 · act3-head-2",
+        "canonical": "oklch(91.9% 0.097 124.4)",
+        "tonalRamp": [
+          "#0d1500",
+          "#263401",
+          "#435519",
+          "#637837",
+          "#869c5b",
+          "#abc184",
+          "#cce1a7",
+          "#e6fbc3"
+        ]
+      },
+      "role-act3-body": {
+        "role": "tertiary",
+        "displayName": "역할 · act3-body",
+        "canonical": "oklch(98.9% 0.017 113.8)",
+        "tonalRamp": [
+          "#11120c",
+          "#2e2f27",
+          "#4d4e45",
+          "#6e7065",
+          "#929388",
+          "#b7b9ae",
+          "#d7d9ce",
+          "#f1f3e9"
+        ]
+      },
+      "role-act4-body": {
+        "role": "tertiary",
+        "displayName": "역할 · act4-body",
+        "canonical": "oklch(97.3% 0.014 304.1)",
+        "tonalRamp": [
+          "#131015",
+          "#2f2c33",
+          "#4e4b53",
+          "#706d75",
+          "#949099",
+          "#b9b6be",
+          "#d9d6de",
+          "#f3f0f8"
+        ]
+      },
+      "role-summary-body": {
+        "role": "tertiary",
+        "displayName": "역할 · summary-body",
+        "canonical": "oklch(97.5% 0.013 35.7)",
+        "tonalRamp": [
+          "#15100f",
+          "#332c2a",
+          "#534b49",
+          "#756c6a",
+          "#99908d",
+          "#beb5b2",
+          "#ded5d3",
+          "#f8f0ed"
+        ]
+      },
+      "role-checkup-body": {
+        "role": "tertiary",
+        "displayName": "역할 · checkup-body",
+        "canonical": "oklch(97.8% 0.013 329.6)",
+        "tonalRamp": [
+          "#141014",
+          "#312c30",
+          "#514b50",
+          "#736c72",
+          "#979096",
+          "#bcb5bb",
+          "#dcd5db",
+          "#f6eff5"
+        ]
+      },
+      "role-checkup-coin-1": {
+        "role": "tertiary",
+        "displayName": "역할 · checkup-coin-1",
+        "canonical": "oklch(93.9% 0.035 330.2)",
+        "tonalRamp": [
+          "#180d17",
+          "#362935",
+          "#574755",
+          "#7a6878",
+          "#9f8b9c",
+          "#c3b1c1",
+          "#e3d1e1",
+          "#fdecfb"
+        ]
+      },
+      "role-pdf-done-1": {
+        "role": "tertiary",
+        "displayName": "역할 · pdf-done-1",
+        "canonical": "oklch(87.7% 0.071 169.7)",
+        "tonalRamp": [
+          "#00160f",
+          "#023729",
+          "#245848",
+          "#437c68",
+          "#67a08c",
+          "#8fc5b1",
+          "#b2e5d1",
+          "#ceffec"
+        ]
+      },
+      "role-pdf-done-2": {
+        "role": "tertiary",
+        "displayName": "역할 · pdf-done-2",
+        "canonical": "oklch(81.5% 0.091 175.9)",
+        "tonalRamp": [
+          "#001611",
+          "#00372d",
+          "#055a4b",
+          "#277f6d",
+          "#50a490",
+          "#7dc9b5",
+          "#a2e8d5",
+          "#ccfff0"
+        ]
+      },
+      "role-pdf-error-1": {
+        "role": "tertiary",
+        "displayName": "역할 · pdf-error-1",
+        "canonical": "oklch(84.1% 0.089 10.5)",
+        "tonalRamp": [
+          "#28020a",
+          "#4c1b25",
+          "#723943",
+          "#9a5963",
+          "#c07c86",
+          "#e5a3ab",
+          "#ffc7cd",
+          "#ffedee"
+        ]
+      },
+      "role-pdf-error-2": {
+        "role": "tertiary",
+        "displayName": "역할 · pdf-error-2",
+        "canonical": "oklch(75.3% 0.131 10.5)",
+        "tonalRamp": [
+          "#29000a",
+          "#570a21",
+          "#802b3e",
+          "#aa4b5d",
+          "#d36f80",
+          "#f897a6",
+          "#ffc7cd",
+          "#feedef"
+        ]
+      },
+      "role-rule1-head-1": {
+        "role": "tertiary",
+        "displayName": "역할 · rule1-head-1",
+        "canonical": "oklch(93.4% 0.040 56.3)",
+        "tonalRamp": [
+          "#1c0e05",
+          "#3b2a1e",
+          "#5d483a",
+          "#816959",
+          "#a58d7c",
+          "#cab2a2",
+          "#e9d2c3",
+          "#ffeee3"
+        ]
+      },
+      "role-rule1-head-2": {
+        "role": "tertiary",
+        "displayName": "역할 · rule1-head-2",
+        "canonical": "oklch(89.5% 0.056 34.7)",
+        "tonalRamp": [
+          "#210a05",
+          "#42251e",
+          "#65433b",
+          "#8b645a",
+          "#b1877c",
+          "#d5ada2",
+          "#f4cdc3",
+          "#ffede9"
+        ]
+      },
+      "role-rule1-body": {
+        "role": "tertiary",
+        "displayName": "역할 · rule1-body",
+        "canonical": "oklch(98.3% 0.009 52.1)",
+        "tonalRamp": [
+          "#14110f",
+          "#312d2a",
+          "#514c49",
+          "#736d6a",
+          "#97918d",
+          "#bcb6b3",
+          "#dcd6d3",
+          "#f6f0ed"
+        ]
+      },
+      "role-rule3-body": {
+        "role": "tertiary",
+        "displayName": "역할 · rule3-body",
+        "canonical": "oklch(98.0% 0.011 167.8)",
+        "tonalRamp": [
+          "#0e1311",
+          "#2a2f2d",
+          "#484f4c",
+          "#69716d",
+          "#8c9491",
+          "#b2b9b6",
+          "#d2d9d6",
+          "#edf4f1"
+        ]
+      },
+      "role-view-day-1": {
+        "role": "tertiary",
+        "displayName": "역할 · view-day-1",
+        "canonical": "oklch(95.8% 0.042 92.2)",
+        "tonalRamp": [
+          "#161102",
+          "#342d19",
+          "#544d35",
+          "#776e54",
+          "#9b9276",
+          "#c0b79d",
+          "#dfd7be",
+          "#f9f2da"
+        ]
+      },
+      "role-view-day-2": {
+        "role": "tertiary",
+        "displayName": "역할 · view-day-2",
+        "canonical": "oklch(90.8% 0.057 87.1)",
+        "tonalRamp": [
+          "#181000",
+          "#382c0f",
+          "#594b2b",
+          "#7c6d49",
+          "#a1916b",
+          "#c5b693",
+          "#e5d6b5",
+          "#fff1d0"
+        ]
+      },
+      "role-view-week-1": {
+        "role": "tertiary",
+        "displayName": "역할 · view-week-1",
+        "canonical": "oklch(94.7% 0.020 138.4)",
+        "tonalRamp": [
+          "#0e130d",
+          "#2a3028",
+          "#485046",
+          "#697267",
+          "#8c958a",
+          "#b2baaf",
+          "#d2dad0",
+          "#edf5ea"
+        ]
+      },
+      "role-view-week-2": {
+        "role": "tertiary",
+        "displayName": "역할 · view-week-2",
+        "canonical": "oklch(90.1% 0.039 138.2)",
+        "tonalRamp": [
+          "#0b1508",
+          "#263222",
+          "#44523f",
+          "#64745f",
+          "#879882",
+          "#adbda8",
+          "#cdddc8",
+          "#e8f7e3"
+        ]
+      },
+      "role-view-month-1": {
+        "role": "tertiary",
+        "displayName": "역할 · view-month-1",
+        "canonical": "oklch(92.8% 0.024 1.4)",
+        "tonalRamp": [
+          "#180e11",
+          "#372a2d",
+          "#58484c",
+          "#7b696e",
+          "#9f8d91",
+          "#c4b2b6",
+          "#e4d2d6",
+          "#feedf1"
+        ]
+      },
+      "role-view-month-2": {
+        "role": "tertiary",
+        "displayName": "역할 · view-month-2",
+        "canonical": "oklch(86.7% 0.036 357.8)",
+        "tonalRamp": [
+          "#1b0c12",
+          "#3a282e",
+          "#5c464d",
+          "#80676f",
+          "#a58a92",
+          "#c9afb7",
+          "#e9d0d7",
+          "#feedf2"
+        ]
+      },
+      "role-tt-time-col": {
+        "role": "tertiary",
+        "displayName": "역할 · tt-time-col",
+        "canonical": "oklch(97.2% 0.012 301.3)",
+        "tonalRamp": [
+          "#121115",
+          "#2f2d32",
+          "#4e4c52",
+          "#706d75",
+          "#939198",
+          "#b8b6bd",
+          "#d8d6dd",
+          "#f3f0f7"
+        ]
+      },
+      "role-lunch-mon-1": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-mon-1",
+        "canonical": "oklch(88.1% 0.063 30.4)",
+        "tonalRamp": [
+          "#230805",
+          "#44231e",
+          "#69413a",
+          "#8f6159",
+          "#b5857c",
+          "#d9aba2",
+          "#f8cbc3",
+          "#ffedea"
+        ]
+      },
+      "role-lunch-mon-2": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-mon-2",
+        "canonical": "oklch(83.6% 0.091 29.1)",
+        "tonalRamp": [
+          "#290201",
+          "#4d1c17",
+          "#733a33",
+          "#9b5a51",
+          "#c27d73",
+          "#e7a499",
+          "#ffc8c0",
+          "#ffedea"
+        ]
+      },
+      "role-lunch-tue-1": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-tue-1",
+        "canonical": "oklch(92.6% 0.087 88.0)",
+        "tonalRamp": [
+          "#181000",
+          "#3b2b00",
+          "#5f4a10",
+          "#836c2f",
+          "#a88f53",
+          "#ccb57d",
+          "#ecd5a1",
+          "#fff1cf"
+        ]
+      },
+      "role-lunch-tue-2": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-tue-2",
+        "canonical": "oklch(89.4% 0.110 83.5)",
+        "tonalRamp": [
+          "#191000",
+          "#3d2a00",
+          "#634801",
+          "#8c6810",
+          "#b18c3e",
+          "#d5b26c",
+          "#f5d391",
+          "#fff0d4"
+        ]
+      },
+      "role-lunch-wed-1": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-wed-1",
+        "canonical": "oklch(92.8% 0.085 125.9)",
+        "tonalRamp": [
+          "#0d1500",
+          "#253406",
+          "#435423",
+          "#637741",
+          "#869c64",
+          "#abc18b",
+          "#cce1ae",
+          "#e7fbca"
+        ]
+      },
+      "role-lunch-wed-2": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-wed-2",
+        "canonical": "oklch(88.5% 0.110 129.5)",
+        "tonalRamp": [
+          "#0a1500",
+          "#203500",
+          "#3b5714",
+          "#5b7a33",
+          "#7d9f57",
+          "#a3c481",
+          "#c4e4a4",
+          "#dffec1"
+        ]
+      },
+      "role-lunch-thu-1": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-thu-1",
+        "canonical": "oklch(89.5% 0.053 190.3)",
+        "tonalRamp": [
+          "#001615",
+          "#0e3533",
+          "#2c5553",
+          "#4a7875",
+          "#6e9d99",
+          "#95c1be",
+          "#b8e1de",
+          "#d3fbf8"
+        ]
+      },
+      "role-lunch-thu-2": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-thu-2",
+        "canonical": "oklch(84.6% 0.067 190.0)",
+        "tonalRamp": [
+          "#011614",
+          "#013633",
+          "#1d5754",
+          "#3d7b77",
+          "#619f9b",
+          "#8bc4c0",
+          "#aee4e0",
+          "#cafefa"
+        ]
+      },
+      "role-lunch-fri-1": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-fri-1",
+        "canonical": "oklch(85.5% 0.061 283.0)",
+        "tonalRamp": [
+          "#0f0e25",
+          "#2a2a46",
+          "#49496a",
+          "#696b90",
+          "#8d8eb6",
+          "#b2b4da",
+          "#d2d4f9",
+          "#f0f1fe"
+        ]
+      },
+      "role-lunch-fri-2": {
+        "role": "tertiary",
+        "displayName": "역할 · lunch-fri-2",
+        "canonical": "oklch(79.4% 0.081 282.0)",
+        "tonalRamp": [
+          "#0f0c2b",
+          "#29294e",
+          "#474873",
+          "#67699b",
+          "#8a8dc1",
+          "#afb2e5",
+          "#d1d3fe",
+          "#eff1ff"
+        ]
+      },
+      "role-subj-korean-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-korean-1",
+        "canonical": "oklch(84.6% 0.077 0.4)",
+        "tonalRamp": [
+          "#240410",
+          "#471f2c",
+          "#6c3c4b",
+          "#935c6d",
+          "#b97f90",
+          "#dda5b5",
+          "#fdc7d5",
+          "#ffecf1"
+        ]
+      },
+      "role-subj-korean-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-korean-2",
+        "canonical": "oklch(81.1% 0.110 0.2)",
+        "tonalRamp": [
+          "#280010",
+          "#4f152c",
+          "#76334b",
+          "#9f526c",
+          "#c7768f",
+          "#ec9db4",
+          "#fec6d5",
+          "#feedf1"
+        ]
+      },
+      "role-subj-english-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-english-1",
+        "canonical": "oklch(91.1% 0.048 0.1)",
+        "tonalRamp": [
+          "#1e0a11",
+          "#3e252d",
+          "#61434c",
+          "#86646d",
+          "#ab8791",
+          "#d0adb6",
+          "#efcdd6",
+          "#feedf1"
+        ]
+      },
+      "role-subj-english-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-english-2",
+        "canonical": "oklch(87.6% 0.072 360.0)",
+        "tonalRamp": [
+          "#230511",
+          "#45202d",
+          "#6a3e4c",
+          "#905e6d",
+          "#b68190",
+          "#dba7b6",
+          "#fac8d6",
+          "#feecf1"
+        ]
+      },
+      "role-subj-hanmun-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-hanmun-1",
+        "canonical": "oklch(96.6% 0.030 325.8)",
+        "tonalRamp": [
+          "#170e17",
+          "#352a35",
+          "#554855",
+          "#786978",
+          "#9c8c9c",
+          "#c1b2c1",
+          "#e1d2e1",
+          "#fbedfb"
+        ]
+      },
+      "role-subj-hanmun-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-hanmun-2",
+        "canonical": "oklch(93.0% 0.058 326.0)",
+        "tonalRamp": [
+          "#1b0a1c",
+          "#3a253b",
+          "#5c435c",
+          "#806380",
+          "#a587a5",
+          "#c9acc9",
+          "#e9cde9",
+          "#feeafe"
+        ]
+      },
+      "role-subj-chinese-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-chinese-1",
+        "canonical": "oklch(97.0% 0.013 23.2)",
+        "tonalRamp": [
+          "#161010",
+          "#332c2b",
+          "#534b4a",
+          "#766c6b",
+          "#9a8f8e",
+          "#bfb5b4",
+          "#dfd5d4",
+          "#f9efee"
+        ]
+      },
+      "role-subj-chinese-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-chinese-2",
+        "canonical": "oklch(94.0% 0.030 25.3)",
+        "tonalRamp": [
+          "#1b0e0c",
+          "#392927",
+          "#5b4846",
+          "#7f6866",
+          "#a38c89",
+          "#c8b1af",
+          "#e8d2cf",
+          "#ffedeb"
+        ]
+      },
+      "role-subj-social-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-social-1",
+        "canonical": "oklch(84.5% 0.076 60.0)",
+        "tonalRamp": [
+          "#1f0c00",
+          "#442507",
+          "#684424",
+          "#8e6441",
+          "#b48864",
+          "#d9ae8c",
+          "#f8ceae",
+          "#ffeee2"
+        ]
+      },
+      "role-subj-social-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-social-2",
+        "canonical": "oklch(81.0% 0.110 60.4)",
+        "tonalRamp": [
+          "#1f0c00",
+          "#462400",
+          "#733e00",
+          "#9b5e25",
+          "#c1824b",
+          "#e6a976",
+          "#ffcca3",
+          "#ffefe2"
+        ]
+      },
+      "role-subj-history-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-history-1",
+        "canonical": "oklch(91.1% 0.051 52.6)",
+        "tonalRamp": [
+          "#1e0c02",
+          "#3e281a",
+          "#614636",
+          "#866754",
+          "#ab8a77",
+          "#d0b09d",
+          "#efd0be",
+          "#feeee5"
+        ]
+      },
+      "role-subj-history-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-history-2",
+        "canonical": "oklch(87.5% 0.073 51.8)",
+        "tonalRamp": [
+          "#210a00",
+          "#45240e",
+          "#69422a",
+          "#906348",
+          "#b6866a",
+          "#daac91",
+          "#f9cdb3",
+          "#feeee5"
+        ]
+      },
+      "role-subj-ethics-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-ethics-1",
+        "canonical": "oklch(97.0% 0.032 85.5)",
+        "tonalRamp": [
+          "#161105",
+          "#342d1e",
+          "#544c3b",
+          "#776e5a",
+          "#9b917d",
+          "#c0b6a3",
+          "#e0d7c4",
+          "#faf1df"
+        ]
+      },
+      "role-subj-ethics-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-ethics-2",
+        "canonical": "oklch(94.0% 0.060 86.0)",
+        "tonalRamp": [
+          "#191000",
+          "#392c0d",
+          "#5a4b2a",
+          "#7e6d47",
+          "#a2906a",
+          "#c7b691",
+          "#e6d6b3",
+          "#fff0d2"
+        ]
+      },
+      "role-subj-pe-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-pe-1",
+        "canonical": "oklch(84.7% 0.077 120.0)",
+        "tonalRamp": [
+          "#0f1400",
+          "#2a3207",
+          "#485325",
+          "#697542",
+          "#8c9965",
+          "#b1be8d",
+          "#d2deaf",
+          "#ecf9cb"
+        ]
+      },
+      "role-subj-pe-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-pe-2",
+        "canonical": "oklch(81.1% 0.110 120.0)",
+        "tonalRamp": [
+          "#0f1400",
+          "#2a3201",
+          "#475403",
+          "#677728",
+          "#8a9c4d",
+          "#afc178",
+          "#cfe19c",
+          "#eafbba"
+        ]
+      },
+      "role-subj-art-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-art-1",
+        "canonical": "oklch(91.0% 0.063 103.6)",
+        "tonalRamp": [
+          "#141200",
+          "#322f0c",
+          "#524f29",
+          "#757146",
+          "#989469",
+          "#bdba90",
+          "#dddab2",
+          "#f7f4ce"
+        ]
+      },
+      "role-subj-art-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-art-2",
+        "canonical": "oklch(87.5% 0.090 103.2)",
+        "tonalRamp": [
+          "#151200",
+          "#342f01",
+          "#554f10",
+          "#78712f",
+          "#9c9554",
+          "#c0ba7d",
+          "#e0daa1",
+          "#faf5be"
+        ]
+      },
+      "role-subj-music-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-music-1",
+        "canonical": "oklch(96.9% 0.041 146.4)",
+        "tonalRamp": [
+          "#081509",
+          "#233224",
+          "#405341",
+          "#607561",
+          "#839984",
+          "#a9beaa",
+          "#cadeca",
+          "#e5f8e5"
+        ]
+      },
+      "role-subj-music-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-music-2",
+        "canonical": "oklch(94.0% 0.060 146.5)",
+        "tonalRamp": [
+          "#031705",
+          "#1c341f",
+          "#39553b",
+          "#58785b",
+          "#7b9c7d",
+          "#a2c1a3",
+          "#c3e1c4",
+          "#defbe0"
+        ]
+      },
+      "role-subj-math-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-math-1",
+        "canonical": "oklch(84.5% 0.077 180.2)",
+        "tonalRamp": [
+          "#011612",
+          "#02362f",
+          "#14594f",
+          "#367d70",
+          "#5ba194",
+          "#86c6b9",
+          "#a9e6d9",
+          "#cafff3"
+        ]
+      },
+      "role-subj-math-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-math-2",
+        "canonical": "oklch(81.0% 0.110 180.5)",
+        "tonalRamp": [
+          "#001612",
+          "#01362f",
+          "#005a4f",
+          "#008171",
+          "#31a795",
+          "#68ccba",
+          "#91ecda",
+          "#cafff3"
+        ]
+      },
+      "role-subj-science-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-science-1",
+        "canonical": "oklch(91.0% 0.062 154.3)",
+        "tonalRamp": [
+          "#001708",
+          "#173522",
+          "#34563f",
+          "#53795f",
+          "#769d82",
+          "#9cc2a8",
+          "#bee2c8",
+          "#dafce3"
+        ]
+      },
+      "role-subj-science-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-science-2",
+        "canonical": "oklch(87.5% 0.090 154.0)",
+        "tonalRamp": [
+          "#001708",
+          "#02381c",
+          "#235a38",
+          "#427d57",
+          "#66a27a",
+          "#8fc7a0",
+          "#b1e7c1",
+          "#d2ffdf"
+        ]
+      },
+      "role-subj-info-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-info-1",
+        "canonical": "oklch(97.0% 0.027 205.1)",
+        "tonalRamp": [
+          "#061416",
+          "#203133",
+          "#3e5153",
+          "#5d7376",
+          "#80979a",
+          "#a6bcbf",
+          "#c7dcdf",
+          "#e2f6f9"
+        ]
+      },
+      "role-subj-info-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-info-2",
+        "canonical": "oklch(93.9% 0.059 206.7)",
+        "tonalRamp": [
+          "#001518",
+          "#04353a",
+          "#25555c",
+          "#44787f",
+          "#679da4",
+          "#90c2c8",
+          "#b2e1e8",
+          "#d5faff"
+        ]
+      },
+      "role-subj-tech-home-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-tech-home-1",
+        "canonical": "oklch(91.0% 0.063 206.0)",
+        "tonalRamp": [
+          "#001518",
+          "#02353a",
+          "#21565c",
+          "#407980",
+          "#649da5",
+          "#8dc2c9",
+          "#b0e2e9",
+          "#d4faff"
+        ]
+      },
+      "role-subj-tech-home-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-tech-home-2",
+        "canonical": "oklch(87.4% 0.090 206.3)",
+        "tonalRamp": [
+          "#001518",
+          "#02353a",
+          "#055860",
+          "#187d88",
+          "#47a1ac",
+          "#76c6d1",
+          "#9be6f0",
+          "#d5faff"
+        ]
+      },
+      "role-subj-club-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-club-1",
+        "canonical": "oklch(84.7% 0.077 300.0)",
+        "tonalRamp": [
+          "#160a27",
+          "#332648",
+          "#53446d",
+          "#756593",
+          "#9988b9",
+          "#beaedd",
+          "#decffc",
+          "#f4efff"
+        ]
+      },
+      "role-subj-club-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-club-2",
+        "canonical": "oklch(81.1% 0.110 300.1)",
+        "tonalRamp": [
+          "#18042f",
+          "#352053",
+          "#563f7a",
+          "#785fa3",
+          "#9c83ca",
+          "#c1a9ed",
+          "#decefe",
+          "#f4effe"
+        ]
+      },
+      "role-subj-autonomy-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-autonomy-1",
+        "canonical": "oklch(84.4% 0.074 240.2)",
+        "tonalRamp": [
+          "#001322",
+          "#093149",
+          "#28526e",
+          "#467494",
+          "#6998ba",
+          "#91bede",
+          "#b3defd",
+          "#e6f4fe"
+        ]
+      },
+      "role-subj-autonomy-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-autonomy-2",
+        "canonical": "oklch(81.0% 0.107 240.3)",
+        "tonalRamp": [
+          "#001322",
+          "#02314c",
+          "#03527b",
+          "#2b76a4",
+          "#529acb",
+          "#7dc0ee",
+          "#b2deff",
+          "#e7f4fe"
+        ]
+      },
+      "role-subj-career-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-career-1",
+        "canonical": "oklch(91.0% 0.057 308.3)",
+        "tonalRamp": [
+          "#170c20",
+          "#342740",
+          "#554662",
+          "#786687",
+          "#9c8aac",
+          "#c0afd1",
+          "#e0d0f0",
+          "#f6eeff"
+        ]
+      },
+      "role-subj-career-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-career-2",
+        "canonical": "oklch(87.5% 0.081 308.6)",
+        "tonalRamp": [
+          "#190825",
+          "#372447",
+          "#58426b",
+          "#7c6291",
+          "#a085b7",
+          "#c5abdb",
+          "#e4ccfa",
+          "#f6eefe"
+        ]
+      },
+      "role-subj-self-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-self-1",
+        "canonical": "oklch(91.0% 0.042 257.1)",
+        "tonalRamp": [
+          "#08121f",
+          "#232e3f",
+          "#404e62",
+          "#607087",
+          "#8394ac",
+          "#a8b9d0",
+          "#c9d9ef",
+          "#ebf2fe"
+        ]
+      },
+      "role-subj-self-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-self-2",
+        "canonical": "oklch(87.5% 0.060 256.9)",
+        "tonalRamp": [
+          "#041125",
+          "#1d2e46",
+          "#3a4e6a",
+          "#597091",
+          "#7c94b6",
+          "#a2b9da",
+          "#c3d9f9",
+          "#ebf3fe"
+        ]
+      },
+      "role-subj-volunteer-1": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-volunteer-1",
+        "canonical": "oklch(97.0% 0.013 266.7)",
+        "tonalRamp": [
+          "#101216",
+          "#2b2e33",
+          "#4a4d54",
+          "#6b6f76",
+          "#8f929a",
+          "#b4b7bf",
+          "#d4d7df",
+          "#eff2f9"
+        ]
+      },
+      "role-subj-volunteer-2": {
+        "role": "tertiary",
+        "displayName": "역할 · subj-volunteer-2",
+        "canonical": "oklch(93.9% 0.029 266.4)",
+        "tonalRamp": [
+          "#0d111b",
+          "#282e3a",
+          "#474d5c",
+          "#676f7f",
+          "#8a92a4",
+          "#b0b7c8",
+          "#d0d8e8",
+          "#ecf2ff"
+        ]
+      },
+      "role-allergen-1": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-1",
+        "canonical": "oklch(90.1% 0.052 15.2)",
+        "tonalRamp": [
+          "#20090c",
+          "#412527",
+          "#644345",
+          "#896365",
+          "#af8688",
+          "#d3acae",
+          "#f3cdce",
+          "#feedee"
+        ]
+      },
+      "role-allergen-10": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-10",
+        "canonical": "oklch(90.1% 0.047 268.4)",
+        "tonalRamp": [
+          "#0b1121",
+          "#252d42",
+          "#434c65",
+          "#636e8a",
+          "#8692af",
+          "#acb7d3",
+          "#ccd7f2",
+          "#edf2fe"
+        ]
+      },
+      "role-allergen-11": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-11",
+        "canonical": "oklch(89.9% 0.050 289.1)",
+        "tonalRamp": [
+          "#110e21",
+          "#2d2a41",
+          "#4c4964",
+          "#6d6a8a",
+          "#918eaf",
+          "#b6b3d3",
+          "#d6d4f2",
+          "#f1f0ff"
+        ]
+      },
+      "role-allergen-12": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-12",
+        "canonical": "oklch(89.9% 0.064 308.6)",
+        "tonalRamp": [
+          "#180b21",
+          "#352642",
+          "#564465",
+          "#79658a",
+          "#9d88b0",
+          "#c2aed4",
+          "#e2cff3",
+          "#f6eeff"
+        ]
+      },
+      "role-allergen-13": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-13",
+        "canonical": "oklch(89.9% 0.080 321.5)",
+        "tonalRamp": [
+          "#1d0721",
+          "#3d2241",
+          "#5f4064",
+          "#84608a",
+          "#a883af",
+          "#cda9d3",
+          "#eccaf2",
+          "#fcecfe"
+        ]
+      },
+      "role-allergen-14": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-14",
+        "canonical": "oklch(89.9% 0.056 357.2)",
+        "tonalRamp": [
+          "#200912",
+          "#40242e",
+          "#64424d",
+          "#89626f",
+          "#ae8592",
+          "#d3abb8",
+          "#f2cbd8",
+          "#feedf2"
+        ]
+      },
+      "role-allergen-15": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-15",
+        "canonical": "oklch(90.0% 0.050 24.2)",
+        "tonalRamp": [
+          "#200a09",
+          "#402524",
+          "#634441",
+          "#896461",
+          "#ae8784",
+          "#d3ada9",
+          "#f2ceca",
+          "#ffedeb"
+        ]
+      },
+      "role-allergen-16": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-16",
+        "canonical": "oklch(90.1% 0.054 39.7)",
+        "tonalRamp": [
+          "#200a04",
+          "#41261d",
+          "#644439",
+          "#8a6558",
+          "#af887b",
+          "#d4aea1",
+          "#f3cec2",
+          "#ffeee8"
+        ]
+      },
+      "role-allergen-17": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-17",
+        "canonical": "oklch(90.0% 0.090 186.1)",
+        "tonalRamp": [
+          "#001614",
+          "#013632",
+          "#035a53",
+          "#1c7f76",
+          "#4aa49a",
+          "#78c9bf",
+          "#9de8df",
+          "#c7fff7"
+        ]
+      },
+      "role-allergen-18": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-18",
+        "canonical": "oklch(90.1% 0.048 272.5)",
+        "tonalRamp": [
+          "#0c1021",
+          "#272d42",
+          "#454c65",
+          "#656d8a",
+          "#8891af",
+          "#aeb6d4",
+          "#ced6f3",
+          "#edf1fe"
+        ]
+      },
+      "role-allergen-19": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-19",
+        "canonical": "oklch(90.1% 0.091 89.5)",
+        "tonalRamp": [
+          "#181100",
+          "#3a2c01",
+          "#5f4a0a",
+          "#836c2c",
+          "#a79050",
+          "#ccb57b",
+          "#ebd69e",
+          "#fff1cd"
+        ]
+      },
+      "role-allergen-2": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-2",
+        "canonical": "oklch(90.0% 0.056 49.2)",
+        "tonalRamp": [
+          "#200b02",
+          "#402718",
+          "#644535",
+          "#896653",
+          "#ae8975",
+          "#d3af9c",
+          "#f2cfbd",
+          "#ffeee5"
+        ]
+      },
+      "role-allergen-3": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-3",
+        "canonical": "oklch(89.9% 0.090 80.5)",
+        "tonalRamp": [
+          "#1a0f00",
+          "#3e2a00",
+          "#64480d",
+          "#89692e",
+          "#ae8d52",
+          "#d2b27c",
+          "#f1d3a0",
+          "#fff0d7"
+        ]
+      },
+      "role-allergen-4": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-4",
+        "canonical": "oklch(89.9% 0.090 100.4)",
+        "tonalRamp": [
+          "#151200",
+          "#352e01",
+          "#574e0e",
+          "#7a702f",
+          "#9e9453",
+          "#c3b97d",
+          "#e2d9a0",
+          "#fcf4bd"
+        ]
+      },
+      "role-allergen-5": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-5",
+        "canonical": "oklch(90.1% 0.090 127.1)",
+        "tonalRamp": [
+          "#0c1500",
+          "#243403",
+          "#415521",
+          "#61783e",
+          "#849c61",
+          "#a9c189",
+          "#cae1ac",
+          "#e5fbc8"
+        ]
+      },
+      "role-allergen-6": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-6",
+        "canonical": "oklch(89.9% 0.090 144.8)",
+        "tonalRamp": [
+          "#001802",
+          "#113714",
+          "#2f5830",
+          "#4d7c4e",
+          "#70a071",
+          "#98c598",
+          "#bae5b9",
+          "#d6ffd6"
+        ]
+      },
+      "role-allergen-7": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-7",
+        "canonical": "oklch(90.0% 0.090 174.6)",
+        "tonalRamp": [
+          "#001611",
+          "#01372c",
+          "#035b4a",
+          "#297f6b",
+          "#52a48f",
+          "#7ec9b4",
+          "#a3e8d4",
+          "#cbffef"
+        ]
+      },
+      "role-allergen-8": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-8",
+        "canonical": "oklch(90.0% 0.086 210.6)",
+        "tonalRamp": [
+          "#011519",
+          "#03343c",
+          "#015763",
+          "#237b8a",
+          "#4ea0af",
+          "#7bc5d3",
+          "#a0e5f2",
+          "#d9f8fe"
+        ]
+      },
+      "role-allergen-9": {
+        "role": "tertiary",
+        "displayName": "역할 · allergen-9",
+        "canonical": "oklch(90.0% 0.050 251.1)",
+        "tonalRamp": [
+          "#051222",
+          "#1e2f42",
+          "#3b4f65",
+          "#5a718a",
+          "#7d95b0",
+          "#a3bad4",
+          "#c4daf3",
+          "#e9f3ff"
+        ]
+      },
+      "role-base-white": {
+        "role": "tertiary",
+        "displayName": "역할 · base-white",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#121212",
+          "#2e2e2e",
+          "#4d4d4d",
+          "#6f6f6f",
+          "#929292",
+          "#b7b7b7",
+          "#d7d7d7",
+          "#f2f2f2"
+        ]
+      },
+      "role-ui-aqua": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-aqua",
+        "canonical": "oklch(86.2% 0.054 208.1)",
+        "tonalRamp": [
+          "#001518",
+          "#0c3439",
+          "#2b545b",
+          "#49777e",
+          "#6c9ba3",
+          "#94c0c7",
+          "#b6e0e7",
+          "#d7f9ff"
+        ]
+      },
+      "role-ui-busy-a": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-busy-a",
+        "canonical": "oklch(84.8% 0.040 272.9)",
+        "tonalRamp": [
+          "#0d111f",
+          "#282d3e",
+          "#464c61",
+          "#676e86",
+          "#8a91aa",
+          "#afb6cf",
+          "#d0d7ee",
+          "#eef1fe"
+        ]
+      },
+      "role-ui-busy-b": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-busy-b",
+        "canonical": "oklch(89.7% 0.032 274.1)",
+        "tonalRamp": [
+          "#0e111c",
+          "#2a2d3b",
+          "#484c5d",
+          "#696e81",
+          "#8c91a6",
+          "#b1b6ca",
+          "#d2d7ea",
+          "#eef1fe"
+        ]
+      },
+      "role-ui-callout-ask": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-callout-ask",
+        "canonical": "oklch(97.6% 0.023 82.1)",
+        "tonalRamp": [
+          "#151109",
+          "#332d23",
+          "#534c40",
+          "#756e60",
+          "#999183",
+          "#beb6a9",
+          "#ded7ca",
+          "#f8f1e4"
+        ]
+      },
+      "role-ui-callout-reason": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-callout-reason",
+        "canonical": "oklch(97.2% 0.014 162.5)",
+        "tonalRamp": [
+          "#0e1310",
+          "#29302c",
+          "#474f4b",
+          "#68716c",
+          "#8b9590",
+          "#b1bab5",
+          "#d1dad5",
+          "#ecf4f0"
+        ]
+      },
+      "role-ui-callout-tip": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-callout-tip",
+        "canonical": "oklch(95.8% 0.022 300.2)",
+        "tonalRamp": [
+          "#131018",
+          "#2f2c36",
+          "#4f4b56",
+          "#706c79",
+          "#948f9e",
+          "#b9b5c2",
+          "#d9d5e2",
+          "#f3effc"
+        ]
+      },
+      "role-ui-callout-warn": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-callout-warn",
+        "canonical": "oklch(96.5% 0.014 28.0)",
+        "tonalRamp": [
+          "#16100f",
+          "#342c2a",
+          "#544b49",
+          "#776c6a",
+          "#9b8f8d",
+          "#bfb4b3",
+          "#dfd5d3",
+          "#f9efee"
+        ]
+      },
+      "role-ui-date-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-date-ink",
+        "canonical": "oklch(45.3% 0.097 294.5)",
+        "tonalRamp": [
+          "#15072d",
+          "#312451",
+          "#504377",
+          "#72639f",
+          "#9687c6",
+          "#baade9",
+          "#dad0fe",
+          "#f2f0fe"
+        ]
+      },
+      "role-ui-deep-violet": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-deep-violet",
+        "canonical": "oklch(50.3% 0.110 296.7)",
+        "tonalRamp": [
+          "#170430",
+          "#332155",
+          "#53407c",
+          "#7560a5",
+          "#9984cb",
+          "#bdaaef",
+          "#dbcffe",
+          "#f3effe"
+        ]
+      },
+      "role-ui-empty-cell": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-empty-cell",
+        "canonical": "oklch(95.3% 0.017 301.2)",
+        "tonalRamp": [
+          "#121016",
+          "#2f2c34",
+          "#4e4b54",
+          "#706d77",
+          "#94909b",
+          "#b9b5c0",
+          "#d9d5df",
+          "#f3f0f9"
+        ]
+      },
+      "role-ui-empty-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-empty-ink",
+        "canonical": "oklch(77.5% 0.064 296.1)",
+        "tonalRamp": [
+          "#140c24",
+          "#302845",
+          "#504769",
+          "#72678f",
+          "#958bb4",
+          "#bab0d9",
+          "#dad1f8",
+          "#f3effe"
+        ]
+      },
+      "role-ui-feedback-no-bg": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-feedback-no-bg",
+        "canonical": "oklch(97.1% 0.012 37.4)",
+        "tonalRamp": [
+          "#15100f",
+          "#322c2a",
+          "#524b49",
+          "#756d6a",
+          "#99908d",
+          "#beb5b3",
+          "#ded5d3",
+          "#f8f0ed"
+        ]
+      },
+      "role-ui-feedback-no-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-feedback-no-ink",
+        "canonical": "oklch(57.0% 0.113 345.5)",
+        "tonalRamp": [
+          "#270019",
+          "#4c1538",
+          "#733359",
+          "#9b537d",
+          "#c276a1",
+          "#e79dc6",
+          "#fec3e3",
+          "#feecf5"
+        ]
+      },
+      "role-ui-feedback-ok-bg": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-feedback-ok-bg",
+        "canonical": "oklch(96.7% 0.017 168.5)",
+        "tonalRamp": [
+          "#0c1311",
+          "#27302c",
+          "#46504c",
+          "#66726d",
+          "#899690",
+          "#afbbb6",
+          "#cfdbd6",
+          "#eaf5f0"
+        ]
+      },
+      "role-ui-feedback-ok-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-feedback-ok-ink",
+        "canonical": "oklch(54.7% 0.074 172.3)",
+        "tonalRamp": [
+          "#011610",
+          "#01372b",
+          "#1e5949",
+          "#3d7c6a",
+          "#62a18d",
+          "#8bc6b3",
+          "#aee5d3",
+          "#ccffee"
+        ]
+      },
+      "role-ui-focus-pink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-focus-pink",
+        "canonical": "oklch(78.6% 0.105 353.0)",
+        "tonalRamp": [
+          "#270014",
+          "#4c1731",
+          "#733551",
+          "#9b5474",
+          "#c27898",
+          "#e79fbd",
+          "#fec5db",
+          "#ffecf3"
+        ]
+      },
+      "role-ui-footer-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-footer-ink",
+        "canonical": "oklch(50.4% 0.056 265.5)",
+        "tonalRamp": [
+          "#091124",
+          "#232d45",
+          "#404d69",
+          "#606e8f",
+          "#8292b4",
+          "#a8b7d8",
+          "#c9d8f7",
+          "#ecf2fe"
+        ]
+      },
+      "role-ui-ghost-hover": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-ghost-hover",
+        "canonical": "oklch(96.8% 0.016 32.0)",
+        "tonalRamp": [
+          "#16100e",
+          "#342c2a",
+          "#544a48",
+          "#776c69",
+          "#9b8f8c",
+          "#c0b4b2",
+          "#e0d5d2",
+          "#faefed"
+        ]
+      },
+      "role-ui-green-mut": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-green-mut",
+        "canonical": "oklch(89.6% 0.072 134.6)",
+        "tonalRamp": [
+          "#071600",
+          "#213414",
+          "#3e5530",
+          "#5d784e",
+          "#809c71",
+          "#a6c198",
+          "#c7e1b9",
+          "#e2fbd5"
+        ]
+      },
+      "role-ui-guide-body": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-guide-body",
+        "canonical": "oklch(97.4% 0.012 190.4)",
+        "tonalRamp": [
+          "#0d1312",
+          "#292f2f",
+          "#474f4e",
+          "#687170",
+          "#8b9494",
+          "#b0bab9",
+          "#d1dad9",
+          "#ebf4f3"
+        ]
+      },
+      "role-ui-health-pink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-health-pink",
+        "canonical": "oklch(84.1% 0.075 0.7)",
+        "tonalRamp": [
+          "#240510",
+          "#461f2c",
+          "#6b3d4b",
+          "#925d6c",
+          "#b88090",
+          "#dca6b5",
+          "#fcc7d5",
+          "#ffecf1"
+        ]
+      },
+      "role-ui-help-box": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-help-box",
+        "canonical": "oklch(98.3% 0.009 299.2)",
+        "tonalRamp": [
+          "#121114",
+          "#2e2d31",
+          "#4e4c51",
+          "#6f6e73",
+          "#939197",
+          "#b8b6bc",
+          "#d8d6dc",
+          "#f2f1f6"
+        ]
+      },
+      "role-ui-help-btn-hover": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-help-btn-hover",
+        "canonical": "oklch(95.6% 0.011 297.6)",
+        "tonalRamp": [
+          "#121115",
+          "#2e2d32",
+          "#4d4c52",
+          "#6f6d74",
+          "#939198",
+          "#b8b6bd",
+          "#d8d6dd",
+          "#f2f1f7"
+        ]
+      },
+      "role-ui-help-btn-open": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-help-btn-open",
+        "canonical": "oklch(91.4% 0.035 300.3)",
+        "tonalRamp": [
+          "#130f1b",
+          "#302b3a",
+          "#50495c",
+          "#716b80",
+          "#958ea4",
+          "#bab3c9",
+          "#dad4e8",
+          "#f4effe"
+        ]
+      },
+      "role-ui-hl-lilac": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-hl-lilac",
+        "canonical": "oklch(90.5% 0.054 331.8)",
+        "tonalRamp": [
+          "#1c0a1a",
+          "#3b2538",
+          "#5d4359",
+          "#81647c",
+          "#a687a1",
+          "#cbadc5",
+          "#eacde5",
+          "#ffebfb"
+        ]
+      },
+      "role-ui-link-hover": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-link-hover",
+        "canonical": "oklch(45.9% 0.109 296.1)",
+        "tonalRamp": [
+          "#160530",
+          "#332255",
+          "#52407b",
+          "#7461a4",
+          "#9884cb",
+          "#bdabef",
+          "#dbcffe",
+          "#f3efff"
+        ]
+      },
+      "role-ui-live-row": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-live-row",
+        "canonical": "oklch(96.8% 0.018 300.1)",
+        "tonalRamp": [
+          "#121017",
+          "#2f2c34",
+          "#4e4b55",
+          "#706d77",
+          "#94909b",
+          "#b9b5c0",
+          "#d9d5e0",
+          "#f3f0fa"
+        ]
+      },
+      "role-ui-note-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-note-ink",
+        "canonical": "oklch(51.0% 0.078 87.5)",
+        "tonalRamp": [
+          "#181000",
+          "#3b2b01",
+          "#5d4a1a",
+          "#816c38",
+          "#a6905b",
+          "#cab584",
+          "#ead6a7",
+          "#fff1d0"
+        ]
+      },
+      "role-ui-olive": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-olive",
+        "canonical": "oklch(89.7% 0.063 104.6)",
+        "tonalRamp": [
+          "#141200",
+          "#322f0d",
+          "#524f29",
+          "#747147",
+          "#989569",
+          "#bcba90",
+          "#dcdab2",
+          "#f6f4ce"
+        ]
+      },
+      "role-ui-pale-violet": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-pale-violet",
+        "canonical": "oklch(98.1% 0.011 303.1)",
+        "tonalRamp": [
+          "#121115",
+          "#2f2d32",
+          "#4e4c52",
+          "#706d74",
+          "#939198",
+          "#b8b6bd",
+          "#d8d6dd",
+          "#f3f0f7"
+        ]
+      },
+      "role-ui-periwinkle-press": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-periwinkle-press",
+        "canonical": "oklch(68.8% 0.112 271.7)",
+        "tonalRamp": [
+          "#070a35",
+          "#1e285b",
+          "#3a4883",
+          "#596aad",
+          "#7b8ed4",
+          "#a0b4f8",
+          "#cad6fe",
+          "#edf1fe"
+        ]
+      },
+      "role-ui-pink-strong": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-pink-strong",
+        "canonical": "oklch(81.6% 0.099 356.6)",
+        "tonalRamp": [
+          "#280012",
+          "#4c192f",
+          "#72374e",
+          "#9a5670",
+          "#c17993",
+          "#e6a0b8",
+          "#ffc5d8",
+          "#ffecf2"
+        ]
+      },
+      "role-ui-purple-mut": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-purple-mut",
+        "canonical": "oklch(83.3% 0.056 293.2)",
+        "tonalRamp": [
+          "#130d22",
+          "#2f2943",
+          "#4e4866",
+          "#70698c",
+          "#938cb1",
+          "#b8b2d5",
+          "#d8d2f4",
+          "#f2f0fe"
+        ]
+      },
+      "role-ui-status-past-bg": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-status-past-bg",
+        "canonical": "oklch(93.9% 0.014 299.8)",
+        "tonalRamp": [
+          "#121116",
+          "#2f2d33",
+          "#4e4c53",
+          "#706d75",
+          "#939099",
+          "#b8b6be",
+          "#d8d6de",
+          "#f3f0f8"
+        ]
+      },
+      "role-ui-status-upcoming-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-status-upcoming-ink",
+        "canonical": "oklch(56.8% 0.094 295.3)",
+        "tonalRamp": [
+          "#15082c",
+          "#312450",
+          "#514376",
+          "#73639e",
+          "#9687c4",
+          "#bbade8",
+          "#dad0fe",
+          "#f2effe"
+        ]
+      },
+      "role-ui-status-upcoming-line": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-status-upcoming-line",
+        "canonical": "oklch(84.4% 0.045 298.3)",
+        "tonalRamp": [
+          "#130e1e",
+          "#302a3e",
+          "#504860",
+          "#726a85",
+          "#958daa",
+          "#bab2ce",
+          "#dad3ee",
+          "#f3efff"
+        ]
+      },
+      "role-ui-step-red": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-step-red",
+        "canonical": "oklch(54.3% 0.174 29.7)",
+        "tonalRamp": [
+          "#2a0000",
+          "#5c0200",
+          "#8f170e",
+          "#bc3b2d",
+          "#e76251",
+          "#fe9787",
+          "#fec9bf",
+          "#feeeeb"
+        ]
+      },
+      "role-ui-stripe-cream": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-stripe-cream",
+        "canonical": "oklch(96.0% 0.021 85.9)",
+        "tonalRamp": [
+          "#151109",
+          "#322d24",
+          "#524d42",
+          "#746e61",
+          "#989284",
+          "#bdb7aa",
+          "#ddd7cb",
+          "#f7f1e6"
+        ]
+      },
+      "role-ui-stripe-violet-a": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-stripe-violet-a",
+        "canonical": "oklch(98.3% 0.010 305.4)",
+        "tonalRamp": [
+          "#121114",
+          "#2f2d31",
+          "#4e4c51",
+          "#706d73",
+          "#939197",
+          "#b8b6bc",
+          "#d9d6dc",
+          "#f3f1f6"
+        ]
+      },
+      "role-ui-stripe-violet-b": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-stripe-violet-b",
+        "canonical": "oklch(95.1% 0.021 301.1)",
+        "tonalRamp": [
+          "#131017",
+          "#2f2c35",
+          "#4f4b56",
+          "#706c79",
+          "#94909d",
+          "#b9b5c2",
+          "#d9d5e1",
+          "#f3effb"
+        ]
+      },
+      "role-ui-summary-th": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-summary-th",
+        "canonical": "oklch(93.8% 0.017 17.5)",
+        "tonalRamp": [
+          "#170f0f",
+          "#352b2b",
+          "#554a4a",
+          "#786b6b",
+          "#9c8e8e",
+          "#c1b4b4",
+          "#e1d4d4",
+          "#fbeeee"
+        ]
+      },
+      "role-ui-today-cell": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-today-cell",
+        "canonical": "oklch(95.5% 0.024 347.2)",
+        "tonalRamp": [
+          "#180e13",
+          "#352a30",
+          "#56494f",
+          "#796a71",
+          "#9d8d95",
+          "#c2b2ba",
+          "#e2d3da",
+          "#fcedf4"
+        ]
+      },
+      "role-ui-total-ink": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-total-ink",
+        "canonical": "oklch(49.1% 0.088 43.3)",
+        "tonalRamp": [
+          "#240700",
+          "#4b200c",
+          "#703e28",
+          "#985e45",
+          "#bf8168",
+          "#e3a88f",
+          "#ffcab4",
+          "#ffeee7"
+        ]
+      },
+      "role-ui-placeholder": {
+        "role": "tertiary",
+        "displayName": "역할 · ui-placeholder",
+        "canonical": "oklch(55.0% 0.038 298.5)",
+        "tonalRamp": [
+          "#130f1c",
+          "#302b3b",
+          "#4f495d",
+          "#716a81",
+          "#958ea6",
+          "#bab3cb",
+          "#dad3ea",
+          "#f3efff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display — 강원교육모두",
+        "purpose": "탭 큰 제목 · 학습 주제 제목."
+      },
+      "headline": {
+        "displayName": "Headline — 강원교육모두",
+        "purpose": "제목줄의 학교 이름."
+      },
+      "title": {
+        "displayName": "Title — 쿠키런 700",
+        "purpose": "카드 제목 · 미션 질문 스티커 · 단원 이름."
+      },
+      "subtitle": {
+        "displayName": "Subtitle — 쿠키런 700",
+        "purpose": "버튼 · 칩 · 표 머리 · 소제목."
+      },
+      "body": {
+        "displayName": "Body — 메이플스토리 300",
+        "purpose": "설명 · 입력칸 글자."
+      },
+      "small": {
+        "displayName": "Small — 메이플스토리 300",
+        "purpose": "작은 설명 · 캡션."
+      },
+      "label": {
+        "displayName": "Label — Silkscreen",
+        "purpose": "카드 머리 영문 픽셀 이름 · 태그. 한글 금지."
+      }
+    },
+    "shadows": [
+      {
+        "name": "window",
+        "value": "8px 8px 0 rgba(75,59,107,.22)",
+        "purpose": "메인 창."
+      },
+      {
+        "name": "topic",
+        "value": "6px 6px 0 rgba(75,59,107,.2)",
+        "purpose": "TODAY_TOPIC 같은 무게 있는 카드."
+      },
+      {
+        "name": "card",
+        "value": "5px 5px 0 rgba(75,59,107,.18)",
+        "purpose": "일반 카드."
+      },
+      {
+        "name": "button",
+        "value": "4px 4px 0 rgba(75,59,107,.3)",
+        "purpose": "버튼 · 큰 칩."
+      },
+      {
+        "name": "chip",
+        "value": "3px 3px 0 rgba(75,59,107,.15)",
+        "purpose": "작은 요소."
+      },
+      {
+        "name": "press",
+        "value": "1px 1px 0 rgba(75,59,107,.35)",
+        "purpose": "누르는 순간(translate 3px,3px 와 함께)."
+      },
+      {
+        "name": "glass-head",
+        "value": "inset 0 2px 0 rgba(255,255,255,.95), inset 0 -8px 12px -8px rgba(255,255,255,.95)",
+        "purpose": "유리 머리 빛띠 — 머리·탭·보기 버튼."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "transform .08s ease, box-shadow .08s ease",
+        "purpose": "종이 버튼 떠오름·꾹."
+      },
+      {
+        "name": "glass-sheen",
+        "value": "background-position 1.2s cubic-bezier(.2,0,0,1)",
+        "purpose": "유리 머리·PDF 버튼 위를 지나가는 빛."
+      },
+      {
+        "name": "droplet",
+        "value": "transform .45s cubic-bezier(.34,1.56,.64,1)",
+        "purpose": "PDF 버튼 물방울 꾹."
+      },
+      {
+        "name": "aurora-drift",
+        "value": "12–16s ease-in-out infinite alternate",
+        "purpose": "오로라 빛이 천천히 떠다님(움직임 줄이기면 멈춤)."
+      },
+      {
+        "name": "focus-blink",
+        "value": "1s steps(2) × 3",
+        "purpose": "키보드 포커스 ▶ 깜박임."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "420px"
+      },
+      {
+        "name": "narrow",
+        "value": "560px"
+      },
+      {
+        "name": "side-cards-hidden",
+        "value": "820px"
+      },
+      {
+        "name": "side-cards-gutter",
+        "value": "1439px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "종이 버튼(주요)",
+      "kind": "button",
+      "refersTo": "button-paper",
+      "description": "누르고 싶은 스티커 — 올리면 1px 떠오르고 누르면 3px 꾹, 키보드 포커스는 ▶ 깜박임.",
+      "html": "<button class=\"ds-btn-paper\" type=\"button\">확인하기</button>",
+      "css": ".ds-btn-paper{position:relative;padding:12px 24px;border:3px solid #4b3b6b;border-radius:10px;background:#9db2f2;color:#26224a;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:18px;box-shadow:4px 4px 0 rgba(75,59,107,.3);cursor:pointer;transition:transform .08s ease,box-shadow .08s ease}.ds-btn-paper:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 rgba(75,59,107,.35)}.ds-btn-paper:active{transform:translate(3px,3px);box-shadow:1px 1px 0 rgba(75,59,107,.35)}.ds-btn-paper:focus-visible{outline:none;box-shadow:4px 4px 0 #4b3b6b}.ds-btn-paper:focus-visible::before{content:'▶';position:absolute;left:-17px;top:50%;transform:translateY(-50%);font-size:12px;color:#4b3b6b;animation:ds-blink 1s steps(2) 3}@keyframes ds-blink{50%{opacity:0}}"
+    },
+    {
+      "name": "보조 버튼",
+      "kind": "button",
+      "refersTo": "button-paper-secondary",
+      "description": "크림 바탕 종이 버튼 — 같은 테두리·그림자.",
+      "html": "<button class=\"ds-btn-paper2\" type=\"button\">🗑 지우기</button>",
+      "css": ".ds-btn-paper2{padding:8px 16px;border:3px solid #4b3b6b;border-radius:10px;background:#fffdf7;color:#4b3b6b;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:15px;box-shadow:3px 3px 0 rgba(75,59,107,.25);cursor:pointer;transition:transform .08s ease,box-shadow .08s ease,background-color .12s ease}.ds-btn-paper2:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(75,59,107,.35);background:#fff1ee}.ds-btn-paper2:active{transform:translate(2px,2px);box-shadow:none}.ds-btn-paper2:focus-visible{outline:none;box-shadow:3px 3px 0 #4b3b6b}"
+    },
+    {
+      "name": "PDF 저장 버튼(오로라 유리)",
+      "kind": "custom",
+      "refersTo": "button-paper",
+      "description": "잉크 테두리 + 어긋난 그림자는 그대로, 속은 오로라 유리 알약. 올리면 빛 쓱, 누르면 물방울 꾹.",
+      "html": "<div class=\"ds-pdf-wrap\"><i></i><i></i><i></i><button class=\"ds-pdf\" type=\"button\">📄 PDF로 저장하기</button></div>",
+      "css": ".ds-pdf-wrap{position:relative;isolation:isolate;display:inline-grid;place-items:center;padding:18px 44px}.ds-pdf-wrap i{position:absolute;z-index:-1;border-radius:50%;filter:blur(26px);opacity:.7;width:120px;height:80px}.ds-pdf-wrap i:nth-child(1){left:4%;top:10%;background:#f7b3d6}.ds-pdf-wrap i:nth-child(2){right:4%;bottom:6%;background:#9fd3f7}.ds-pdf-wrap i:nth-child(3){left:36%;top:0;width:80px;background:#c4b2f7}.ds-pdf{width:236px;height:58px;border:3px solid #4b3b6b;border-radius:999px;color:#26224a;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:18px;cursor:pointer;background:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%),linear-gradient(100deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 58%),linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.14) 55%,rgba(255,255,255,.42)),linear-gradient(120deg,rgba(253,225,243,.75),rgba(231,220,255,.75) 50%,rgba(214,241,255,.75));background-size:100% 100%,300% 100%,100% 100%,100% 100%;background-position:0 0,100% 0,0 0,0 0;background-repeat:no-repeat;backdrop-filter:blur(14px) saturate(170%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -10px 18px -12px rgba(255,255,255,.9),4px 4px 0 rgba(75,59,107,.3);transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .3s cubic-bezier(.2,0,0,1),background-position 1s cubic-bezier(.2,0,0,1)}.ds-pdf:hover{background-position:0 0,0% 0,0 0,0 0;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -10px 18px -12px rgba(255,255,255,.9),6px 6px 0 rgba(75,59,107,.3)}.ds-pdf:active{transform:scale(1.03,.92)}.ds-pdf:focus-visible{outline:none;box-shadow:4px 4px 0 #4b3b6b}"
+    },
+    {
+      "name": "활동 카드(유리 머리)",
+      "kind": "card",
+      "refersTo": "card-body",
+      "description": "머리·몸통 한 벌 색 + 단계 이름표 + 픽셀 이름. 카드에 올리면 머리에 빛 쓱.",
+      "html": "<section class=\"ds-card\"><div class=\"ds-card-head\"><span class=\"ds-phase\">전개</span>ACTIVITY_2</div><div class=\"ds-card-body\"><div class=\"ds-q\">평균적으로 접속자가 가장 많은 장르는?</div><p>CODAP 으로 그래프를 그려 붙여넣으세요.</p></div></section>",
+      "css": ".ds-card{width:360px;border:3px solid #4b3b6b;border-radius:14px;overflow:hidden;background:#f1fbf7;box-shadow:5px 5px 0 rgba(75,59,107,.18);color:#4b3b6b;font-family:'Maplestory','Gowun Dodum','Malgun Gothic',sans-serif}.ds-card-head{position:relative;isolation:isolate;display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:3px solid #4b3b6b;background:#bfe9dd;font-family:'Silkscreen',monospace;font-size:11px}.ds-card-head::after{content:\"\";position:absolute;inset:0;z-index:-1;box-shadow:inset 0 2px 0 rgba(255,255,255,.95),inset 0 -8px 12px -8px rgba(255,255,255,.95);background:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.7),rgba(255,255,255,0) 62%),linear-gradient(100deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 58%);background-size:100% 100%,300% 100%;background-position:0 0,100% 0;background-repeat:no-repeat;transition:background-position 1.2s cubic-bezier(.2,0,0,1)}.ds-card:hover .ds-card-head::after{background-position:0 0,0% 0}.ds-phase{padding:1px 8px;border:2px solid #4b3b6b;border-radius:7px;background:#fffdf7;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:12px}.ds-card-body{padding:18px 20px;display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.7}.ds-q{align-self:flex-start;padding:8px 14px;border:3px solid #4b3b6b;border-radius:10px;background:#bfe9dd;box-shadow:4px 4px 0 rgba(75,59,107,.18);font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:19px;line-height:1.5}.ds-card-body p{margin:0}"
+    },
+    {
+      "name": "고르기 칩",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "분석 유형 같은 고르기 칩 — 크림 종이 스티커.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" type=\"button\">구성 분석</button><button class=\"ds-chip\" type=\"button\">비교 분석</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{padding:4px 11px;border:2px solid #4b3b6b;border-radius:8px;background:#fffdf7;color:#4b3b6b;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:transform .08s ease,box-shadow .08s ease}.ds-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(75,59,107,.3)}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip:focus-visible{outline:none;box-shadow:3px 3px 0 #4b3b6b}"
+    },
+    {
+      "name": "입력칸",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "분홍 종이 입력칸 — 포커스는 분홍 테두리 + 흰 바탕.",
+      "html": "<label class=\"ds-field\">이름<input placeholder=\"이름을 적어요\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:6px;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:15px;color:#4b3b6b}.ds-field input{padding:9px 11px;border:3px solid #4b3b6b;border-radius:9px;background:#fdf6fa;color:#4b3b6b;font-family:'Maplestory','Gowun Dodum','Malgun Gothic',sans-serif;font-size:16px;outline:none}.ds-field input::placeholder{color:#b3a8cc}.ds-field input:focus{border-color:#ee9dbf;background:#fff}"
+    },
+    {
+      "name": "메뉴 탭",
+      "kind": "nav",
+      "refersTo": "chip",
+      "description": "제목줄 탭 — 고르면 탭 색 그라데이션 + 아래 잉크 띠.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab\" type=\"button\">🕒 시간표</button><button class=\"ds-tab is-on\" type=\"button\" aria-current=\"page\">✏️ 수업 활동지</button></nav>",
+      "css": ".ds-tabs{display:flex;gap:8px;padding:12px;background:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%);border:3px solid #4b3b6b;border-radius:12px}.ds-tab{padding:6px 12px;border:3px solid #4b3b6b;border-radius:10px;background:#fffdf7;color:#4b3b6b;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:15px;box-shadow:3px 3px 0 rgba(75,59,107,.25);cursor:pointer;transition:transform .08s ease}.ds-tab:hover{transform:translate(-1px,-1px)}.ds-tab.is-on{background:linear-gradient(135deg,#fde1f3 0%,#e7dcff 50%,#d6f1ff 100%);box-shadow:inset 0 -4px 0 #4b3b6b,3px 3px 0 rgba(75,59,107,.25)}.ds-tab:focus-visible{outline:none;box-shadow:3px 3px 0 #4b3b6b}"
+    },
+    {
+      "name": "픽셀 태그 · 번호 동전",
+      "kind": "chip",
+      "refersTo": "pixel-tag",
+      "description": "LESSON_07 같은 영문 픽셀 태그와 목표 번호 동전.",
+      "html": "<div class=\"ds-row\"><span class=\"ds-tag\">LESSON_07</span><span class=\"ds-coin\">1</span><span class=\"ds-coin ds-coin--lilac\">2</span></div>",
+      "css": ".ds-row{display:flex;align-items:center;gap:10px}.ds-tag{padding:2px 8px;border:3px solid #4b3b6b;border-radius:6px;background:#d6c4f5;color:#4b3b6b;font-family:'Silkscreen',monospace;font-size:10px;letter-spacing:.5px}.ds-coin{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:2px solid #4b3b6b;border-radius:50%;background:linear-gradient(135deg,#f8e6e6,#e8c4c4);color:#4b3b6b;font-family:'CookieRun','Jua','Malgun Gothic',sans-serif;font-weight:700;font-size:15px;box-shadow:2px 2px 0 rgba(75,59,107,.25)}.ds-coin--lilac{background:linear-gradient(135deg,#f9e3f6,#eec6ea)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "파스텔 레트로 OS",
+    "overview": "화면 전체가 하나의 옛 컴퓨터 프로그램 창이다. 제목줄(학교 이름 · 메뉴 탭 · `_ □ X`), 영문 픽셀 라벨(`TODAY_TOPIC.txt`, `MY_INFO`), 모눈 깔린 바탕화면 같은\n레트로 OS 의 문법을 그대로 쓰되, 색은 모두 파스텔로 다시 칠했다. 그 위에 오로라 빛이 은은하게 비치는 서리 유리 층이 얹혀, 장난감 같은 종이 창이 반짝이는 순간을 만든다.\n\n분위기는 **귀엽고 말랑하며, 레트로 놀이 같고, 유리처럼 반짝인다.** 모든 카드·버튼·칩은 굵은 밤하늘 잉크 선과 흐림 없는 어긋난 그림자를 가진 \"누르고 싶은 스티커\"다.\n밀도는 수업 도구답게 넉넉하다 — 카드 한 장에 질문 하나, 큰 글자, 넓은 손가락 자리. 노트북·크롬북·태블릿의 작은 화면에서도 같은 창이 한 줄로 접힌다.\n\n거부하는 것(선생님 확인): **너무 화려한 네온**(짙은 형광·강한 대비로 눈이 피곤한 화면)과 **어두운 테마**(검은 배경 위주). 밝은 파스텔 테마 하나뿐이다.",
+    "keyCharacteristics": [
+      "굵은 밤하늘 잉크 테두리(창 4px · 나머지 3px) + 흐림 0 의 어긋난 그림자.",
+      "파스텔 역할 색 — 카드는 머리·몸통 한 벌로 색을 받는다(`docs/rules/color-map.md`).",
+      "오로라 빛(분홍·하늘·라벤더) + 서리 유리 — 깊이를 더하는 층, 종이 스티커를 대신하지 않는다.",
+      "네 글꼴의 역할 분담: 손글씨 제목 · 둥근 게임 소제목 · 메이플 본문 · 영문 픽셀 라벨.",
+      "게임 메뉴 같은 손맛: 누르면 꾹, 키보드 포커스는 깜박이는 ▶."
+    ],
+    "rules": [
+      {
+        "name": "The Ink Outline Rule",
+        "body": "테두리와 글자는 밤하늘 잉크 하나로만 그린다. 회색 선이나 검정 글자는 이 창에 들어오지 않는다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Role Token Rule",
+        "body": "색은 이름(역할)으로만 쓴다 — `var(--msi-role-…)`. 새 화면에 색 글자(#hex)를 바로 쓰지 않고, 새 자리가 생기면 역할 토큰부터 더한다.",
+        "section": "colors"
+      },
+      {
+        "name": "The Head-and-Body Rule",
+        "body": "카드는 머리(진한 파스텔) · 몸통(아주 옅은 같은 계열) · 질문 스티커 · 아이콘 칸이 한 벌로 같은 색을 받는다. 하나만 바꾸지 않는다.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Neon Rule",
+        "body": "형광처럼 짙은 색과 어두운 바탕은 쓰지 않는다. 진한 색이 필요하면 밤하늘 잉크로, 밝기가 필요하면 파스텔로.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pixel-Is-English Rule",
+        "body": "Silkscreen 픽셀 라벨에는 한글을 넣지 않는다. 한글 라벨은 CookieRun 으로.",
+        "section": "typography"
+      },
+      {
+        "name": "The Four Voices Rule",
+        "body": "글꼴은 네 개뿐이고 역할을 바꾸지 않는다 — 제목에 본문 글꼴, 버튼에 픽셀 글꼴을 쓰지 않는다.",
+        "section": "typography"
+      },
+      {
+        "name": "The Zero-Blur Rule",
+        "body": "바깥 그림자는 언제나 흐림 0 이다. 퍼지는 그림자는 유리 빛(inset·오로라)에만 쓴다.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glass-Adds-Light Rule",
+        "body": "유리는 빛을 더할 뿐이다 — 굵은 잉크 테두리와 어긋난 그림자를 지우고 유리만 남기지 않는다.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** 버튼은 모두 오로라 유리 알약으로 만든다 — 일반 버튼 `glass-pill`, 고르기 버튼 `glass-chip`(높이 44px↑, 2px 잉크 테두리, 3px 어긋난 그림자).",
+      "**Do** 색을 역할 토큰으로 쓴다 — `var(--msi-role-act2-head)` 처럼. 바꿀 땐 `design/tokens.json` 의 `role` 만 고치고 `node design/build.mjs`.",
+      "**Do** 새 차시는 틀 `lessons/_templates/order` 에서 출발한다.",
+      "**Do** 테두리 3px(창 4px) 밤하늘 잉크 + 흐림 0 어긋난 그림자를 모든 상자에 쓴다.",
+      "**Do** 상태는 색과 글을 함께 바꾼다(완료/진행 중/예정, 저장했어요/다시 눌러 주세요).",
+      "**Do** 움직임은 짧고 한 번 — 오로라 빛은 천천히 떠다니고, \"움직임 줄이기\" 설정이면 모두 멈춘다.",
+      "**Do** 새 색을 고를 땐 전체 톤에 맞는 파스텔 그라데이션으로, 이미 화면에 있는 색과 겹치지 않게 시안을 보여 드린 뒤 정한다."
+    ],
+    "donts": [
+      "**Don't** 너무 화려한 네온(짙은 형광 · 강한 대비)을 쓰지 않는다.",
+      "**Don't** 어두운 테마(검은 배경 위주)를 만들지 않는다.",
+      "**Don't** 퍼지는(블러) 바깥 그림자를 쓰지 않는다 — 흐림은 유리 빛에만.",
+      "**Don't** Silkscreen 픽셀 라벨에 한글을 넣지 않는다.",
+      "**Don't** 카드 머리 오른쪽에 작은 설명 글자(GOAL · COMPOSE 등)를 넣지 않는다.",
+      "**Don't** 키보드 포커스에 분홍 고리를 쓰지 않는다 — ▶ 깜박임으로.",
+      "**Don't** 교사용 화면에 왼쪽 고정 카드를 두지 않는다.",
+      "**Don't** `color-mix()` · `color()` 같은 새 색 함수를 PDF 로 저장되는 영역에 쓰지 않는다 — PDF 캡처(html2canvas 1.4.1)가 못 읽어 저장이 실패한다. 투명도는 rgba 토큰으로. 요소 자체의 `inset` 속광도 PDF 에서 흰 판이 되니 `::after` 에 두거나 PDF 복제본(`.msi-pdf-clone`)에서 끈다.",
+      "**Don't** 손가락으로 누르는 칩·버튼을 44px 보다 작게 만들지 않는다(학생 기기는 태블릿·크롬북)."
+    ]
+  }
+}

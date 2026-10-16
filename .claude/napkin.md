@@ -41,6 +41,13 @@
    급식은 한 달치씩 덮어쓰므로 새 달이 시작된 뒤에 받는다. 근본 해결은 Apps Script 프록시(`neisProxy`).
 6. **[2026-09-30] SVG 그림에 width·height 가 없으면 "PDF로 저장하기"(html2canvas)에서 빈 칸**
    Do instead: `<svg width="96" height="96" viewBox="0 0 96 96">` 처럼 크기를 적고, 정답지 PDF 를 쪽 그림으로 뽑아 확인.
+7. **[2026-10-16] PDF 영역에 `color-mix()`·`color()` 가 있으면 "PDF로 저장하기"가 통째로 실패(html2canvas 1.4.1 이 못 읽음)**
+   요소 자체의 `inset` box-shadow 도 그 요소를 통째로 흰색으로 칠함(TODAY_TOPIC 머리).
+   Do instead: 투명도는 rgba 역할 토큰(`aurora-pink-a60` 등), 유리 속광은 `::after` 에 두거나 `.msi-pdf-clone` 규칙으로 PDF 복제본에서 끈다. 색을 바꾼 뒤엔 이름 칸을 채우고 `window.__MSI_ANSWER_SHEET=true` 로 진행률 확인을 넘겨 실제 저장까지 시험한다.
+8. **[2026-10-16] 4탭 활동지는 다른 탭을 누르면 `sc-if` 로 활동지가 통째로 빠져서 state 밖 칸(해석 textarea·붙여넣은 그래프)이 사라짐**
+   Do instead: 틀(`_templates/order`)의 자동 보관(`this._keep…`, 메모리 + localStorage 3시간, PDF 저장하면 지움)을 쓴다. 리허설은 "적기 → 다른 탭 → 돌아오기 → 새로고침" 까지.
+9. **[2026-10-16] 색은 역할 토큰으로만 — 07·틀은 색 글자 대신 `var(--msi-role-…)` (흰 PDF 바탕·canvas fillStyle 만 예외)**
+   Do instead: 값은 `design/tokens.json` role → `node design/build.mjs`(표식 있는 lesson.html 블록 자동 갱신). 공용 글꼴을 바꾸거나 새 데이터를 넣으면 `python scripts/font-subset.py` 다시(원본 design/fonts).
 
 ## User Directives
 1. **[2026-09-24] "고민만", "가능 여부만" 이라고 하면 만들지 않는다**

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // 새 차시 폴더 만들기 — 비슷한 기존 차시를 복사해서 출발한다(틀·디자인·PDF 버튼이 그대로 따라옴).
 //
-//   npm run new -- data-analysis/08 --from 07 --title "새 차시 제목"
+//   npm run new -- data-analysis/08 --title "새 차시 제목"            ← 기본: 새 차시 틀 _templates/order 그대로(2026-10-16~)
+//   npm run new -- data-analysis/08 --from 07 --title "…"             ← 예전 차시를 복사할 때만
 //
 // 만들어지는 것: lessons/<단원>/<차시>/ lesson.html(복사본) · assets/(복사본) · lesson.json(status: draft) · spec.md(빈 틀)
 // 그다음: Claude 에게 "/lesson-new 08" 로 기획부터, 또는 "/lesson-edit 08 …" 로 내용 교체를 부탁하면 된다.
@@ -23,7 +24,14 @@ try {
   if (fs.existsSync(path.join(dir, 'lesson.json'))) throw new Error(`${target} 는 이미 있어요.`);
   const all = listLessons();
   if (!all.length) throw new Error('복사해 올 차시가 하나도 없어요.');
-  const from = opt.from ? pickLessons([opt.from])[0] : all[all.length - 1];
+  // 기본 = 새 차시 틀 _templates/order(도입·전개·정리 순서 · 역할 토큰 색 · 유리 알약 버튼 · 자동 보관 — 선생님 결정 2026-10-16).
+  // 예전 차시를 복사하고 싶을 때만 --from <차시>.
+  if (!opt.from) opt.from = '_templates/order';
+  const tpl = typeof opt.from === 'string' && opt.from.startsWith('_templates/') ? path.join(LESSONS_DIR, ...opt.from.split('/')) : null;
+  if (tpl && !fs.existsSync(path.join(tpl, 'lesson.html'))) throw new Error(`틀이 없어요: lessons/${opt.from}`);
+  const from = tpl
+    ? { id: opt.from, dir: tpl, src: path.join(tpl, 'lesson.html'), meta: JSON.parse(fs.readFileSync(path.join(tpl, 'lesson.json'), 'utf8')) }
+    : opt.from ? pickLessons([opt.from])[0] : all[all.length - 1];
 
   fs.mkdirSync(dir, { recursive: true });
   fs.copyFileSync(from.src, path.join(dir, 'lesson.html'));

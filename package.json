@@ -14,6 +14,7 @@
     "serve": "node scripts/serve.mjs",
     "memo": "node scripts/memo.mjs",
     "portal-upgrade": "node scripts/portal-upgrade.mjs",
+    "template-preview": "node scripts/template-preview.mjs",
     "exam-key": "node scripts/exam-key.mjs",
     "exam-pdf": "node scripts/exam-pdf.mjs"
   },

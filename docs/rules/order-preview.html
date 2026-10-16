@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>활동지 순서 시안</title>
+<link rel="stylesheet" href="../../design/tokens.css">
+<link rel="stylesheet" href="../../design/components.css">
+<style>
+/* ── 비교 화면 틀 ── */
+.cmp-h{margin:0 0 4px;font-family:var(--msi-font-round);font-weight:700;font-size:24px}
+.cmp-lead{margin:0 0 6px;font-size:15px;color:var(--msi-muted-2)}
+.cmp-order{margin:0 0 18px;font-size:14px;color:var(--msi-muted-2)}
+.cmp-order b{color:var(--msi-ink)}
+.cmp-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;position:sticky;top:0;z-index:5;padding:8px 0;background:var(--msi-page)}
+.cmp-tabs a{padding:8px 14px;border:3px solid var(--msi-ink);border-radius:10px;background:var(--msi-paper);color:var(--msi-ink);text-decoration:none;
+  font-family:var(--msi-font-round);font-weight:700;box-shadow:3px 3px 0 var(--msi-shadow)}
+.cmp-var{margin:0 0 40px}
+.cmp-var > h2{margin:0 0 4px;font-family:var(--msi-font-round);font-weight:700;font-size:20px}
+.cmp-var > p{margin:0 0 12px;font-size:14px;color:var(--msi-muted-2)}
+.cmp-cols{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.cmp-wide{flex:1 1 640px;min-width:0;max-width:880px}
+.cmp-phone{flex:none;width:360px}
+.cmp-cap{display:block;margin:0 0 6px;font-family:var(--msi-font-pixel);font-size:10px;color:var(--msi-muted-2)}
+
+/* ── 활동지 공통(시안 안) ── */
+.ws{display:flex;flex-direction:column;gap:16px}
+.ws .msi-window{box-shadow:6px 6px 0 var(--msi-shadow-strong)}
+.ws .msi-win-body{padding:18px;gap:14px}
+.topic-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lesson-no{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:3px solid var(--msi-ink);border-radius:999px;background:var(--msi-yellow);
+  font-family:var(--msi-font-round);font-weight:700;font-size:14px;white-space:nowrap}
+.ws .msi-h1{font-size:30px}
+.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.info-grid label{display:flex;flex-direction:column;gap:4px;font-family:var(--msi-font-round);font-weight:700;font-size:14px}
+.info-grid span.box{height:38px;border:3px solid var(--msi-ink);border-radius:9px;background:#fff}
+.goal{display:flex;gap:10px;align-items:center;padding:9px 12px;border:3px solid var(--msi-ink);border-radius:10px;background:#fff;font-size:15px}
+.goal b{color:#c96a97;font-family:var(--msi-font-round)}
+.sub{font-family:var(--msi-font-round);font-weight:700;font-size:16px;margin:0}
+.ph{border:2px dashed #b3a8cc;border-radius:10px;padding:12px;font-size:13px;color:var(--msi-muted-2);background:var(--msi-paper-pink);text-align:center}
+.ph-lg{min-height:70px;display:flex;align-items:center;justify-content:center}
+.ox{display:flex;gap:8px;flex-wrap:wrap}
+.ox span{padding:4px 12px;border:3px solid var(--msi-ink);border-radius:8px;background:#fff;font-family:var(--msi-font-round);font-weight:700;font-size:14px}
+.pdf{align-self:center;padding:10px 22px;border:3px solid var(--msi-ink);border-radius:10px;background:var(--msi-blue-strong);
+  font-family:var(--msi-font-round);font-weight:700;color:var(--msi-button-ink);box-shadow:4px 4px 0 rgba(75,59,107,.3)}
+.cmp-phone .info-grid{grid-template-columns:1fr 1fr}
+.cmp-phone .ws .msi-h1{font-size:24px}
+
+/* ── A · 단계 띠 ── */
+.vA .band{display:flex;align-items:center;gap:12px;margin:8px 0 -2px}
+.vA .band .k{flex:none;padding:6px 14px;border:3px solid var(--msi-ink);border-radius:10px;background:var(--b);
+  font-family:var(--msi-font-round);font-weight:700;font-size:18px;box-shadow:3px 3px 0 var(--msi-shadow)}
+.vA .band .en{font-family:var(--msi-font-pixel);font-size:10px;color:var(--msi-muted-2)}
+.vA .band::after{content:'';flex:1;border-top:3px solid var(--msi-ink);opacity:.35}
+
+/* ── B · 왼쪽 타임라인 ── */
+.vB .tl{position:relative;padding-left:62px;display:flex;flex-direction:column;gap:14px}
+.vB .tl::before{content:'';position:absolute;left:23px;top:8px;bottom:8px;border-left:4px dotted var(--msi-ink);opacity:.4}
+.vB .stage{position:relative;display:flex;flex-direction:column;gap:14px}
+.vB .node{position:absolute;left:-62px;top:0;width:50px;height:50px;border:3px solid var(--msi-ink);border-radius:50%;background:var(--b);
+  display:flex;align-items:center;justify-content:center;font-family:var(--msi-font-round);font-weight:700;font-size:15px;box-shadow:3px 3px 0 var(--msi-shadow)}
+.cmp-phone .vB .tl{padding-left:44px}
+.cmp-phone .vB .tl::before{left:16px}
+.cmp-phone .vB .node{left:-44px;width:36px;height:36px;font-size:12px}
+
+/* ── C · 진행 지도 + 카드 머리 단계 표시 ── */
+.vC .road{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;border:3px solid var(--msi-ink);border-radius:12px;background:#fff}
+.vC .road .st{display:flex;align-items:center;gap:6px;padding:5px 12px;border:3px solid var(--msi-ink);border-radius:999px;background:var(--b);
+  font-family:var(--msi-font-round);font-weight:700;font-size:14px}
+.vC .road .st small{font-family:var(--msi-font-body);font-weight:300;font-size:12px}
+.vC .road .ar{font-weight:700}
+.vC .ph-tag{display:inline-block;margin-right:8px;padding:1px 8px;border:2px solid var(--msi-ink);border-radius:6px;background:#fff;
+  font-family:var(--msi-font-round);font-weight:700;font-size:12px;letter-spacing:0}
+
+:root{--c-in:#fbe6a2;--c-dev:#c4d8f7;--c-end:#bfe9dd}
+</style>
+</head>
+<body class="msi-page">
+<div style="max-width:1320px;margin:0 auto">
+  <h1 class="cmp-h">활동지 순서 — 확정안 C (2026-10-15)</h1>
+  <p class="cmp-lead">새 활동지는 이 순서·모양으로 만들어요(docs/rules/order.md). 내용은 07 로블록스 예시예요. 왼쪽은 컴퓨터 폭, 오른쪽은 폰 폭(360px)이에요.</p>
+  <p class="cmp-order">순서: <b>학습 주제·차시</b> → <b>학년·반·번호·이름</b> → <b>학습 목표</b> → <b>도입</b>(동기유발 · 학습주제 제시) → <b>전개</b>(활동 1, 2, … 개수는 매번 다름) → <b>정리</b>(핵심 요약 · 형성평가)</p>
+  
+  <div id="slots"></div>
+</div>
+
+<template id="tpl-head">
+  <div class="msi-topic"><div class="msi-topic-bar">TODAY_TOPIC</div>
+    <div class="msi-topic-in"><div class="topic-row"><span class="lesson-no">📘 7차시</span><span class="msi-small">데이터 분석</span></div>
+      <h2 class="msi-h1">로블록스 데이터 분석하기</h2></div></div>
+  <div class="msi-card" style="--accent:var(--msi-blue)"><div class="msi-card-head">MY_INFO</div>
+    <div class="msi-card-body"><div class="info-grid"><label>학년<span class="box"></span></label><label>반<span class="box"></span></label><label>번호<span class="box"></span></label><label>이름<span class="box"></span></label></div></div></div>
+  <div class="msi-card" style="--accent:var(--msi-pink)"><div class="msi-card-head">TODAY_GOALS<span class="r" style="color:#a65a86;opacity:1">GOAL</span></div>
+    <div class="msi-card-body"><div class="msi-act-line"><div class="msi-num" style="background:#f9cade;font-size:15px">🎯</div><div style="font-family:var(--msi-font-round);font-weight:700;font-size:20px">오늘의 목표</div></div>
+      <div class="goal"><b>1</b>질문을 읽고 알맞은 분석 유형(구성·비교·분포·관계)을 고를 수 있어요.</div><div class="goal"><b>2</b>로블록스 데이터를 CODAP으로 시각화하고 그래프를 해석할 수 있어요.</div></div></div>
+</template>
+
+<template id="tpl-intro">
+  <div class="msi-card" style="--accent:var(--c-in)"><div class="msi-card-head"><span>{TAG}WARM_UP</span><span class="r">동기유발</span></div>
+    <div class="msi-card-body"><p class="sub">🎮 로블록스에서 요즘 제일 인기 있는 게임은?</p><div class="ph">그림·영상·질문 · 짧은 생각 적기 칸</div></div></div>
+  <div class="msi-card" style="--accent:var(--c-in)"><div class="msi-card-head"><span>{TAG}TODAY_TOPIC</span><span class="r">학습주제 제시</span></div>
+    <div class="msi-card-body"><p class="sub">오늘은 인기 게임 96개의 데이터를 CODAP 으로 분석해 볼 거예요.</p></div></div>
+</template>
+
+<template id="tpl-dev">
+  <div class="msi-card" style="--accent:var(--c-dev)"><div class="msi-card-head"><span>{TAG}ACTIVITY_1</span><span class="r">구성 분석</span></div>
+    <div class="msi-card-body"><p class="sub">활동 1 · 장르별로 각각 몇 %를 차지할까?</p><div class="ph ph-lg">활동 내용 (고르기 · 그래프 붙여넣기 · 해석 적기)</div></div></div>
+  <div class="msi-card" style="--accent:var(--c-dev)"><div class="msi-card-head"><span>{TAG}ACTIVITY_2</span><span class="r">비교 분석</span></div>
+    <div class="msi-card-body"><p class="sub">활동 2 · 평균 접속자 수가 가장 많은 장르는?</p><div class="ph ph-lg">활동 내용</div></div></div>
+  <div class="msi-card" style="--accent:var(--c-dev)"><div class="msi-card-head"><span>{TAG}ACTIVITY_3</span><span class="r">…활동 개수는 매번 다름</span></div>
+    <div class="msi-card-body"><p class="sub">활동 3 · …</p><div class="ph">활동 내용</div></div></div>
+</template>
+
+<template id="tpl-end">
+  <div class="msi-card" style="--accent:var(--c-end)"><div class="msi-card-head"><span>{TAG}KEY_SUMMARY</span><span class="r">핵심 요약</span></div>
+    <div class="msi-card-body"><p class="sub">📝 오늘 배운 것</p><div class="ph">핵심 개념 빈칸 채우기 · 요약 표</div></div></div>
+  <div class="msi-card" style="--accent:var(--c-end)"><div class="msi-card-head"><span>{TAG}CHECK_UP</span><span class="r">형성평가</span></div>
+    <div class="msi-card-body"><p class="sub">✅ 형성평가</p><div class="ox"><span>1. O / X</span><span>2. O / X</span><span>3. O / X</span></div></div></div>
+  <div class="pdf">📄 PDF로 저장하기</div>
+</template>
+
+<script>
+(function () {
+  var T = function (id, tag) { return document.getElementById(id).innerHTML.split('{TAG}').join(tag || ''); };
+  var win = function (inner) {
+    return '<div class="msi-window"><div class="msi-titlebar"><span class="msi-win-title">🏫 신현중학교 정보</span><span class="msi-spacer"></span><span class="msi-win-btns"><span>_</span><span>□</span><span class="x">×</span></span></div>'
+      + '<div class="msi-win-body">' + inner + '</div></div>';
+  };
+  var V = {
+    A: function () {
+      var band = function (k, en, c) { return '<div class="band" style="--b:' + c + '"><span class="k">' + k + '</span><span class="en">' + en + '</span></div>'; };
+      return '<div class="ws vA">' + win(T('tpl-head')
+        + band('도입', 'INTRO', 'var(--c-in)') + T('tpl-intro')
+        + band('전개', 'ACTIVITY', 'var(--c-dev)') + T('tpl-dev')
+        + band('정리', 'WRAP_UP', 'var(--c-end)') + T('tpl-end')) + '</div>';
+    },
+    B: function () {
+      var st = function (k, c, body) { return '<div class="stage"><div class="node" style="--b:' + c + '">' + k + '</div>' + body + '</div>'; };
+      return '<div class="ws vB">' + win(T('tpl-head')
+        + '<div class="tl">' + st('도입', 'var(--c-in)', T('tpl-intro')) + st('전개', 'var(--c-dev)', T('tpl-dev')) + st('정리', 'var(--c-end)', T('tpl-end')) + '</div>') + '</div>';
+    },
+    C: function () {
+      var road = '<div class="road"><span class="st" style="--b:var(--c-in)">도입 <small>동기유발·주제</small></span><span class="ar">→</span>'
+        + '<span class="st" style="--b:var(--c-dev)">전개 <small>활동 1·2·3</small></span><span class="ar">→</span>'
+        + '<span class="st" style="--b:var(--c-end)">정리 <small>요약·형성평가</small></span></div>';
+      var tag = function (k) { return '<span class="ph-tag">' + k + '</span>'; };
+      return '<div class="ws vC">' + win(T('tpl-head') + road + T('tpl-intro', tag('도입')) + T('tpl-dev', tag('전개')) + T('tpl-end', tag('정리'))) + '</div>';
+    },
+  };
+  var info = {
+    A: ['A · 단계 띠', '“도입 · 전개 · 정리” 큰 이름표 띠로 구역을 나눠요. 지금 활동지와 가장 비슷하고, 활동이 늘어도 전개 띠 아래에 카드만 더 붙으면 돼요.'],
+    B: ['B · 왼쪽 타임라인', '왼쪽 점선 줄을 따라 도입 → 전개 → 정리 동그라미가 이어져요. 수업 흐름이 한눈에 보이지만, 폰에서는 카드 폭이 조금 좁아져요.'],
+    C: ['C · 진행 지도 + 카드 표시', '목표 아래에 “도입 → 전개 → 정리” 지도를 한 번 보여 주고, 카드마다 머리에 단계 이름표를 달아요. 구역 띠가 없어 가장 차분해요.'],
+  };
+  var slots = document.getElementById('slots');
+  ['C'].forEach(function (k) {
+    var sec = document.createElement('section'); sec.className = 'cmp-var'; sec.id = k;
+    sec.innerHTML = '<h2>' + info[k][0] + '</h2><p>' + info[k][1] + '</p><div class="cmp-cols"><div class="cmp-wide"><span class="cmp-cap">DESKTOP</span>' + V[k]() + '</div><div class="cmp-phone"><span class="cmp-cap">PHONE 360</span>' + V[k]() + '</div></div>';
+    slots.appendChild(sec);
+  });
+})();
+</script>
+</body>
+</html>

@@ -74,4 +74,9 @@ import '../design/components.css';
 값은 **`tokens.json` 만** 고치고 `node design/build.mjs` → `tokens.css`·`preview.html` 이 다시 만들어집니다.
 부품 모양은 `components.css` 를 고칩니다. 활동지 쪽(`docs/rules/design.md`)과 값이 달라지지 않게, 바꿀 땐 그 문서도 같이 봅니다.
 
+**역할 색(`role`, 2026-10-16~)** — 카드 머리·몸통, 고른 탭, 보기 버튼, 급식 요일, 과목 19색처럼 "어디에 어떤 색"을 이름으로 묶은 토큰(`--msi-role-…`).
+`node design/build.mjs` 가 같이 만드는 것: 표 `docs/rules/color-map.md`, 그리고 `<style id="msi-role-tokens">` 표식이 있는 활동지
+(새 차시 틀 `lessons/_templates/order` 와 거기서 만든 차시)의 색 블록 — 활동지는 한 파일로 돌아가야 해서 tokens.css 를 불러오지 않고 값을 직접 넣습니다.
+같은 블록에 **유리(`glass` → `--msi-glass-*`) · 움직임(`motion` → `--msi-motion-*`) · 크기(`size`, 손가락 최소 44px `--msi-size-touch-min`)**도 함께 들어갑니다(2026-10-16).
+
 서체 파일은 이 저장소 `shared/fonts/` 와 같은 것입니다. 다른 곳에 배포할 때는 각 서체의 배포처 라이선스를 확인하세요.

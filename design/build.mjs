@@ -10,6 +10,8 @@ const tokens = JSON.parse(fs.readFileSync(path.join(dir, 'tokens.json'), 'utf8')
 const PREFIX = {
   color: '', font: 'font-', 'font-size': 'fs-', 'line-height': 'lh-', space: 'space-', size: 'size-',
   'border-width': 'bw-', radius: 'radius-', shadow: 'shadow-', gradient: 'gradient-', focus: 'focus-', duration: 'duration-',
+  role: 'role-',   // 역할 → 색(카드 머리·몸통·탭·과목…) — 새 차시 틀이 씀. 아래 "역할 색" 참고
+  glass: 'glass-', motion: 'motion-',   // 유리 층·움직임(2026-10-16) — 활동지 블록에도 들어감
 };
 const varName = (group, name) => `--msi-${PREFIX[group]}${name}`;
 const alias = (v) => String(v).replace(/\{([\w-]+)\.([\w-]+)\}/g, (_, g, n) => `var(${varName(g, n)})`);
@@ -128,3 +130,65 @@ ${sizes}
 `;
 fs.writeFileSync(path.join(dir, 'preview.html'), preview);
 console.log('✔ design/preview.html');
+
+// ── 역할 색(role) — 활동지 안에 직접 넣는 블록 + 표 문서 ──
+//   활동지는 한 파일로 따로 돌아가야 해서 tokens.css 를 불러오지 않고, lesson.html 안의
+//   <style id="msi-role-tokens">…</style> 를 이 스크립트가 tokens.json 값으로 다시 채운다(그 표식이 있는 차시·틀만).
+const ROOT = path.join(dir, '..');
+const roles = Object.entries(tokens.role).filter(([n]) => !n.startsWith('$'));
+const LESSON_GROUPS = ['glass', 'motion', 'size'];   // 활동지 블록에 role 과 함께 넣는 묶음(유리 층·움직임·손가락 크기, 2026-10-16)
+const extra = LESSON_GROUPS.flatMap((g) => Object.entries(tokens[g]).filter(([n]) => !n.startsWith('$')).map(([n, v]) => [g, n, v]));
+const roleBlock = `<style id="msi-role-tokens">/* 자동 생성 — design/tokens.json 의 role 을 고치고 node design/build.mjs (docs/rules/color-map.md) */
+:root{
+${roles.map(([n, t]) => `  ${varName('role', n)}: ${t.$value};`).join('\n')}
+${extra.map(([g, n, t]) => `  ${varName(g, n)}: ${t.$value};`).join('\n')}
+}
+</style>`;
+const ROLE_RE = /<style id="msi-role-tokens">[\s\S]*?<\/style>/;
+const synced = [];
+(function walk(d) {
+  for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    const p = path.join(d, e.name);
+    if (e.isDirectory()) walk(p);
+    else if (e.name === 'lesson.html') {
+      const src = fs.readFileSync(p, 'utf8');
+      if (!ROLE_RE.test(src)) continue;
+      const nl = src.includes('\r\n') ? '\r\n' : '\n';
+      const out = src.replace(ROLE_RE, roleBlock.replace(/\n/g, nl));
+      if (out !== src) fs.writeFileSync(p, out);
+      synced.push(path.relative(ROOT, p).replace(/\\/g, '/'));
+    }
+  }
+})(path.join(ROOT, 'lessons'));
+console.log(`✔ 역할 색 ${roles.length}개 → ${synced.length ? synced.join(', ') : '(표식 있는 차시 없음)'}`);
+
+const GROUPS = [
+  ['창·배경', /^(page|aurora|window|titlebar)/], ['메뉴 탭(고른 탭)', /^tab-/],
+  ['수업 활동지 카드', /^(topic|myinfo|goals|warmup|intro|act\d|summary|checkup)/], ['왼쪽 고정 카드', /^(progress|help)/],
+  ['PDF 버튼', /^pdf/], ['고르기 칩(분석 유형)', /^chip-/], ['이용 규칙 탭', /^(howto|rule\d|message|loading)/], ['보기 버튼(시간표·급식)', /^view-/],
+  ['시간표 탭', /^tt-/], ['오늘의 급식 탭', /^lunch/], ['과목 색(시간표 19과목)', /^subj-/],
+  ['급식 알레르기 19가지', /^allergen-/], ['기본 색(DESIGN.md 팔레트)', /^base-/], ['4탭 공통 화면(상태·칸·안내 상자 등)', /^ui-/],
+];
+const mdEsc = (s) => String(s).replace(/\|/g, '\\|');
+const md = [`# 역할 → 색 표 (자동 생성)
+
+> **직접 고치지 않는다.** \`design/tokens.json\` 의 \`role\` 을 고치고 \`node design/build.mjs\` 를 돌리면
+> 이 표와 \`design/tokens.css\`, 그리고 \`<style id="msi-role-tokens">\` 표식이 있는 활동지(새 차시 틀 \`lessons/_templates/order\`)가 함께 바뀐다.
+> 색을 왜 그렇게 정했는지(선생님 피드백 이력)는 \`docs/rules/order.md\`.
+
+- 활동지에서는 \`var(--msi-role-이름)\` 으로 쓴다(예: \`background:var(--msi-role-progress-head)\`).
+- 카드는 **머리(-head) · 몸통(-body)** 를 한 벌로 쓴다. 활동이 5개 이상이면 act1~act4 를 차례로 돌려 쓴다.
+- 오로라 빛처럼 투명도가 필요한 곳은 \`color-mix(in srgb, var(--msi-role-aurora-pink) 60%, transparent)\`.
+`];
+for (const [title, re] of GROUPS) {
+  const rows = roles.filter(([n]) => re.test(n));
+  if (!rows.length) continue;
+  md.push(`\n## ${title}\n\n| 역할 | 토큰 | 값 |\n|---|---|---|`);
+  for (const [n, t] of rows) md.push(`| ${mdEsc(t.$description || n)} | \`${varName('role', n)}\` | \`${mdEsc(t.$value)}\` |`);
+}
+const left = roles.filter(([n]) => !GROUPS.some(([, re]) => re.test(n)));
+if (left.length) throw new Error('표 묶음에 없는 역할: ' + left.map(([n]) => n).join(', '));
+md.push(`\n## 유리 · 움직임 · 손가락 크기 (색이 아닌 토큰 — 활동지 블록에 함께 들어감)\n\n| 쓰임 | 토큰 | 값 |\n|---|---|---|`);
+for (const [g, n, t] of extra) md.push(`| ${mdEsc(t.$description || n)} | \`${varName(g, n)}\` | \`${mdEsc(t.$value)}\` |`);
+fs.writeFileSync(path.join(ROOT, 'docs/rules/color-map.md'), md.join('\n') + '\n');
+console.log('✔ docs/rules/color-map.md');
