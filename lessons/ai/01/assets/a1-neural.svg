@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="300" viewBox="0 0 680 300" font-family="Malgun Gothic, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+  <!-- 활동 1 그림: 왼쪽 뇌 속 신경 세포(뉴런)들이 신호를 주고받는 모습 / 오른쪽 그것을 흉내 낸 구조(인공 뉴런 여러 층).
+       빈칸 정답(인공 신경망 · 인공지능 모델)은 글자로 쓰지 않는다. -->
+  <rect x="0" y="0" width="680" height="300" fill="#fffdf7"/>
+
+  <!-- 왼쪽 판: 사람의 뇌 -->
+  <rect x="12" y="12" width="262" height="276" rx="14" fill="#fff4f1" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="143" y="42" text-anchor="middle" font-size="17" font-weight="700" fill="#4b3b6b">사람의 뇌</text>
+  <g stroke="#4b3b6b" stroke-width="3" stroke-linecap="round" fill="none">
+    <!-- 뉴런 사이 연결(축삭·가지) -->
+    <path d="M70 110 C 100 120, 120 150, 145 160"/>
+    <path d="M70 110 C 60 140, 70 190, 90 215"/>
+    <path d="M145 160 C 175 140, 195 120, 220 105"/>
+    <path d="M145 160 C 160 190, 185 210, 210 225"/>
+    <path d="M90 215 C 115 230, 160 235, 210 225"/>
+    <!-- 가지 돌기 -->
+    <path d="M70 110 l-18 -14 M70 110 l-20 6 M70 110 l-4 -22"/>
+    <path d="M220 105 l18 -12 M220 105 l20 8 M220 105 l2 -22"/>
+    <path d="M90 215 l-20 6 M90 215 l-12 18"/>
+    <path d="M210 225 l20 4 M210 225 l10 18"/>
+    <path d="M145 160 l-6 -22"/>
+  </g>
+  <g stroke="#4b3b6b" stroke-width="3" fill="#f7bfb2">
+    <circle cx="70" cy="110" r="15"/>
+    <circle cx="145" cy="160" r="17"/>
+    <circle cx="220" cy="105" r="15"/>
+    <circle cx="90" cy="215" r="14"/>
+    <circle cx="210" cy="225" r="15"/>
+  </g>
+  <!-- 신호 반짝임 -->
+  <g fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2">
+    <path d="M108 128 l5 -9 l5 9 l-5 9 z"/>
+    <path d="M185 130 l5 -9 l5 9 l-5 9 z"/>
+    <path d="M150 230 l5 -9 l5 9 l-5 9 z"/>
+  </g>
+  <text x="143" y="275" text-anchor="middle" font-size="14" fill="#4b3b6b">신경 세포(뉴런)가 신호를 주고받아요</text>
+
+  <!-- 가운데 화살표 -->
+  <g>
+    <path d="M286 150 L 334 150" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round"/>
+    <path d="M330 140 L 344 150 L 330 160 Z" fill="#4b3b6b"/>
+    <text x="314" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5b93">흉내 내기</text>
+  </g>
+
+  <!-- 오른쪽 판: 컴퓨터 속 구조 -->
+  <rect x="352" y="12" width="316" height="276" rx="14" fill="#f1f6fe" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="510" y="42" text-anchor="middle" font-size="17" font-weight="700" fill="#4b3b6b">컴퓨터 속 구조</text>
+
+  <!-- 입력: 고양이 낙서 -->
+  <rect x="364" y="112" width="64" height="64" rx="8" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <g stroke="#4b3b6b" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M380 136 L 384 120 L 392 131"/>
+    <path d="M404 131 L 412 120 L 414 136"/>
+    <circle cx="396" cy="148" r="17"/>
+    <path d="M378 150 l-9 -2 M378 155 l-9 2 M414 150 l9 -2 M414 155 l9 2"/>
+  </g>
+  <circle cx="390" cy="145" r="2" fill="#4b3b6b"/><circle cx="402" cy="145" r="2" fill="#4b3b6b"/>
+  <path d="M393 153 q3 3 6 0" stroke="#4b3b6b" stroke-width="2" fill="none"/>
+  <text x="396" y="196" text-anchor="middle" font-size="13" fill="#4b3b6b">입력</text>
+
+  <!-- 층 사이 연결선 -->
+  <g stroke="#9b8fc4" stroke-width="1.6">
+    <!-- 입력층(3) → 1층(4) -->
+    <path d="M454 105 L 506 85 M454 105 L 506 125 M454 105 L 506 165 M454 105 L 506 205"/>
+    <path d="M454 145 L 506 85 M454 145 L 506 125 M454 145 L 506 165 M454 145 L 506 205"/>
+    <path d="M454 185 L 506 85 M454 185 L 506 125 M454 185 L 506 165 M454 185 L 506 205"/>
+    <!-- 1층(4) → 2층(3) -->
+    <path d="M506 85 L 558 105 M506 85 L 558 145 M506 85 L 558 185"/>
+    <path d="M506 125 L 558 105 M506 125 L 558 145 M506 125 L 558 185"/>
+    <path d="M506 165 L 558 105 M506 165 L 558 145 M506 165 L 558 185"/>
+    <path d="M506 205 L 558 105 M506 205 L 558 145 M506 205 L 558 185"/>
+    <!-- 2층(3) → 출력(1) -->
+    <path d="M558 105 L 598 145 M558 145 L 598 145 M558 185 L 598 145"/>
+  </g>
+  <path d="M430 145 L 444 145" stroke="#4b3b6b" stroke-width="2.5" stroke-linecap="round"/>
+  <g stroke="#4b3b6b" stroke-width="2.5" fill="#c4d8f7">
+    <circle cx="454" cy="105" r="10"/><circle cx="454" cy="145" r="10"/><circle cx="454" cy="185" r="10"/>
+    <circle cx="506" cy="85" r="10"/><circle cx="506" cy="125" r="10"/><circle cx="506" cy="165" r="10"/><circle cx="506" cy="205" r="10"/>
+    <circle cx="558" cy="105" r="10"/><circle cx="558" cy="145" r="10"/><circle cx="558" cy="185" r="10"/>
+  </g>
+  <circle cx="598" cy="145" r="11" fill="#bfe9dd" stroke="#4b3b6b" stroke-width="2.5"/>
+
+  <!-- 출력 -->
+
+  <rect x="604" y="214" width="58" height="44" rx="8" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="633" y="233" text-anchor="middle" font-size="12" font-weight="700" fill="#4b3b6b">고양이</text>
+  <text x="633" y="250" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">90%</text>
+  <path d="M598 158 C 600 185, 618 195, 628 210" stroke="#4b3b6b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M621 206 L 630 214 L 633 202 Z" fill="#4b3b6b"/>
+  <text x="633" y="278" text-anchor="middle" font-size="13" fill="#4b3b6b">출력</text>
+
+  <!-- 범례 -->
+  <circle cx="380" cy="268" r="7" fill="#c4d8f7" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="393" y="273" font-size="13" fill="#4b3b6b">인공 뉴런</text>
+</svg>

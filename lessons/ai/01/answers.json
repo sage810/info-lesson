@@ -1,0 +1,64 @@
+{
+  "_설명": "인공지능 1차시 정답(선생님 양식 2026-10-17). 글자 빈칸은 학생 화면에서 채점하지 않고 정답지에만 — 허용 답은 괄호로 함께(양식 [메모]). 정답 없는 칸(동기유발 2칸·활동3 쓰레기 수 2칸·활동3 한 줄·붙여넣기)은 비워 둔다. 순서 배열·이름표 4묶음은 카드/이름표 누르기 → 칸 누르기 → 확인, 하나 고르기 3·O/X 6은 묶음 aria-label 로 단추를 고른다.",
+  "name": "교사용 정답지",
+  "fill": {
+    "활동1 빈칸 1": "인공지능",
+    "활동1 빈칸 2": "인공 신경망 (인공신경망도 정답)",
+    "활동1 빈칸 3": "인공지능 모델 (인공지능모델도 정답)",
+    "핵심정리 빈칸 1": "뉴런 (신경 세포도 정답)",
+    "핵심정리 빈칸 2": "학습",
+    "핵심정리 빈칸 3": "정답",
+    "핵심정리 빈칸 4": "새로운 (새·처음 보는도 정답)",
+    "핵심정리 빈칸 5": "학습",
+    "핵심정리 빈칸 6": "규칙",
+    "핵심정리 빈칸 7": "양",
+    "핵심정리 빈칸 8": "질"
+  },
+  "click": [
+    "#a1Seq .seq-chip[data-answer-key='a1s1']:visible", "#a1SeqSlot1:visible",
+    "#a1Seq .seq-chip[data-answer-key='a1s2']:visible", "#a1SeqSlot2:visible",
+    "#a1Seq .seq-chip[data-answer-key='a1s3']:visible", "#a1SeqSlot3:visible",
+    "#a1Seq .seq-chip[data-answer-key='a1s4']:visible", "#a1SeqSlot4:visible",
+    "#a1SeqCheck:visible",
+
+    "[data-ca-group='a1ca'] .ca-chip[data-v='인공 신경망']:visible", "#a1ca-1:visible",
+    "[data-ca-group='a1ca'] .ca-chip[data-v='학습']:visible", "#a1ca-2:visible",
+    "[data-ca-group='a1ca'] .ca-chip[data-v='인공지능 모델']:visible", "#a1ca-3:visible",
+    "#a1caCheck:visible",
+
+    "[data-ca-group='a2ca'] .ca-chip[data-v='인공지능']:visible", "#a2ca-1:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='인공지능']:visible", "#a2ca-2:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='일반 소프트웨어']:visible", "#a2ca-3:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='일반 소프트웨어']:visible", "#a2ca-4:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='인공지능']:visible", "#a2ca-5:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='일반 소프트웨어']:visible", "#a2ca-6:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='인공지능']:visible", "#a2ca-7:visible",
+    "[data-ca-group='a2ca'] .ca-chip[data-v='일반 소프트웨어']:visible", "#a2ca-8:visible",
+    "#a2caCheck:visible",
+
+    "[aria-label='활동2 몬스터 문제 보기'] button.glass-chip:has-text('일반 소프트웨어'):visible",
+    "[aria-label='활동3 바다 생물 문제 보기'] button.glass-chip:has-text('배운 적이 없어서'):visible",
+
+    "[data-ca-group='a4ca1'] .ca-chip[data-v='레이블']:visible", "#a4ca1-1:visible",
+    "[data-ca-group='a4ca1'] .ca-chip[data-v='학습 데이터']:visible", "#a4ca1-2:visible",
+    "[data-ca-group='a4ca1'] .ca-chip[data-v='테스트 데이터']:visible", "#a4ca1-3:visible",
+    "#a4ca1Check:visible",
+
+    "[aria-label='활동4 영상 추천 문제 보기'] button.glass-chip:has-text('학습에 쓰지 않은 새 영상들'):visible",
+
+    "[data-ca-group='a4ca2'] .ca-chip[data-v='데이터 양이 부족해요']:visible", "#a4ca2-1:visible",
+    "[data-ca-group='a4ca2'] .ca-chip[data-v='데이터 질이 나빠요']:visible", "#a4ca2-2:visible",
+    "[data-ca-group='a4ca2'] .ca-chip[data-v='데이터 질이 나빠요']:visible", "#a4ca2-3:visible",
+    "[data-ca-group='a4ca2'] .ca-chip[data-v='데이터 양이 부족해요']:visible", "#a4ca2-4:visible",
+    "[data-ca-group='a4ca2'] .ca-chip[data-v='데이터 질이 나빠요']:visible", "#a4ca2-5:visible",
+    "#a4ca2Check:visible",
+
+    "[aria-label='1번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='2번 문장 O 또는 X 고르기'] button:text-is('X'):visible",
+    "[aria-label='3번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='4번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='5번 문장 O 또는 X 고르기'] button:text-is('X'):visible",
+    "[aria-label='6번 문장 O 또는 X 고르기'] button:text-is('X'):visible",
+    "#oxCheck:visible"
+  ]
+}

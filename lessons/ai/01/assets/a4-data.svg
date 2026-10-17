@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="300" viewBox="0 0 680 300" font-family="Malgun Gothic, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+  <!-- 활동 4 그림: 레이블 붙은 사진 묶음(학습 데이터) → 학습 → 인공지능 모델 ← 처음 보는 사진(테스트 데이터) → 예측 -->
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L 10 5 L 0 10 Z" fill="#4b3b6b"/>
+    </marker>
+    <!-- 고양이 얼굴(가운데 0,0 · 지름 약 44) -->
+    <g id="cat" stroke="#4b3b6b" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-16 -8 L -13 -26 L -4 -15"/>
+      <path d="M4 -15 L 13 -26 L 16 -8"/>
+      <circle cx="0" cy="2" r="17" fill="#ffffff"/>
+      <circle cx="-6" cy="-1" r="1.8" fill="#4b3b6b" stroke="none"/>
+      <circle cx="6" cy="-1" r="1.8" fill="#4b3b6b" stroke="none"/>
+      <path d="M-3 7 q3 3 6 0" stroke-width="2"/>
+      <path d="M-18 4 l-10 -2 M-18 9 l-10 2 M18 4 l10 -2 M18 9 l10 2" stroke-width="2"/>
+    </g>
+    <!-- 강아지 얼굴 -->
+    <g id="dog" stroke="#4b3b6b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="-16" cy="-4" rx="7" ry="14" fill="#f7bfb2" transform="rotate(18 -16 -4)"/>
+      <ellipse cx="16" cy="-4" rx="7" ry="14" fill="#f7bfb2" transform="rotate(-18 16 -4)"/>
+      <circle cx="0" cy="2" r="16" fill="#ffffff"/>
+      <circle cx="-6" cy="-2" r="1.8" fill="#4b3b6b" stroke="none"/>
+      <circle cx="6" cy="-2" r="1.8" fill="#4b3b6b" stroke="none"/>
+      <ellipse cx="0" cy="6" rx="3.5" ry="2.6" fill="#4b3b6b" stroke="none"/>
+      <path d="M0 9 v3 M-4 12 q4 3 8 0" fill="none" stroke-width="2"/>
+    </g>
+  </defs>
+  <rect x="0" y="0" width="680" height="300" fill="#fffdf7"/>
+
+  <!-- 학습 데이터 -->
+  <rect x="12" y="12" width="300" height="276" rx="14" fill="#f8f4fe" stroke="#4b3b6b" stroke-width="3"/>
+  <rect x="24" y="24" width="112" height="28" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="80" y="43" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">학습 데이터</text>
+  <g>
+    <rect x="30" y="70" width="80" height="76" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+    <use href="#cat" x="70" y="112"/>
+    <rect x="34" y="154" width="72" height="26" rx="13" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+    <text x="70" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">고양이</text>
+
+    <rect x="122" y="70" width="80" height="76" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+    <use href="#dog" x="162" y="112"/>
+    <rect x="126" y="154" width="72" height="26" rx="13" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+    <text x="162" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">강아지</text>
+
+    <rect x="214" y="70" width="80" height="76" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+    <use href="#cat" x="254" y="112"/>
+    <rect x="218" y="154" width="72" height="26" rx="13" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+    <text x="254" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">고양이</text>
+  </g>
+  <!-- 레이블 말풍선 -->
+  <path d="M162 214 L 162 188" stroke="#4b3b6b" stroke-width="2.5" marker-end="url(#ar)"/>
+  <rect x="72" y="216" width="180" height="56" rx="12" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="162" y="240" text-anchor="middle" font-size="14" font-weight="700" fill="#a65a86">레이블</text>
+  <text x="162" y="260" text-anchor="middle" font-size="12.5" fill="#4b3b6b">사진마다 붙인 정답 이름표</text>
+
+  <!-- 학습 → 모델 -->
+  <path d="M316 108 L 382 108" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="322" y="84" width="50" height="22" rx="11" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="347" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="#4b3b6b">학습</text>
+  <rect x="390" y="80" width="140" height="56" rx="12" fill="#bfe9dd" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="460" y="113" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">인공지능 모델</text>
+
+  <!-- 테스트 데이터 -->
+  <rect x="390" y="176" width="140" height="112" rx="14" fill="#f6f8fd" stroke="#4b3b6b" stroke-width="3"/>
+  <rect x="400" y="186" width="120" height="26" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="460" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">테스트 데이터</text>
+  <rect x="424" y="218" width="72" height="62" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <g transform="translate(460 252) scale(.85)"><use href="#cat"/></g>
+  <text x="602" y="250" text-anchor="middle" font-size="12" fill="#6b5b93">처음 보는 사진</text>
+  <text x="602" y="266" text-anchor="middle" font-size="12" fill="#6b5b93">(이름표 없음)</text>
+  <path d="M460 174 L 460 142" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+
+  <!-- 예측 -->
+  <path d="M532 108 L 572 108" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="578" y="80" width="90" height="56" rx="12" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="623" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">예측</text>
+  <text x="623" y="123" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">고양이!</text>
+</svg>

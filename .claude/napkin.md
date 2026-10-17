@@ -15,6 +15,12 @@
    Do instead: `npm run import -- <파일> <단원>/<차시>` — 원본과 바이트 단위로 같은지 스스로 확인한다.
 4. **[2026-09-30] 4탭 차시를 Playwright 로 재면 좌표가 어긋남(x-dc 숨은 복제본 + `zoom`)**
    Do instead: 선택자에 `:visible` 을 붙이고, 넘침·정렬은 `getBoundingClientRect` 대신 요소 캡처로 눈 확인.
+5. **[2026-10-17] file:// 로 연 활동지에서 PDF 저장이 "Tainted canvas" 로 실패(그림이 다른 출처로 취급됨)**
+   Do instead: PDF·자동 보관 리허설은 `node scripts/serve.mjs` 를 켜고 `http://127.0.0.1:8080/<단원>/<차시>/` 로 한다.
+6. **[2026-10-17] 자동 보관은 0.3초 미뤄 저장 — 리허설에서 쉬지 않고 누르다 탭을 바꾸면 "안 되살아남"처럼 보임**
+   Do instead: 틀·07·ai/01 은 고침(탭 누를 때·pagehide 에 바로 보관 + `_keepClear` 가 미뤄 둔 보관을 취소 — 적고 곧바로 PDF 를 누르면 다음 사람에게 답이 되살아났음). 틀 밖 예전 차시를 복사해 쓰면 이 두 군데를 확인.
+7. **[2026-10-17] 정답지 `{ near, text }` 누르기는 안에 요소가 없는 단추만 찾음 → `glass-chip`(안에 `.gc-ic`)은 못 누름**
+   Do instead: 묶음 aria-label 로 선택자를 쓴다: `"[aria-label='…'] button.glass-chip:has-text('정답 보기'):visible"`, O/X 는 `button:text-is('O')`.
 
 ## Shell & Command Reliability
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**
@@ -25,6 +31,9 @@
    Do instead: 파일 가공은 Node 스크립트(`scripts/`)로 한다. NEIS 받기(`fetch-neis.ps1`)만 pwsh 7.
 4. **[2026-09-30] Read 도구로 PDF 가 안 열림(pdftoppm 없음), Python 도 없음**
    Do instead: `.claude/skills/lesson-new/references/pdf-pages.mjs`(pdf.js 를 scratchpad 에 설치)로 쪽 그림을 뽑아 Read.
+5. **[2026-10-17] docx 양식을 눈으로 확인할 도구가 없음(soffice·pdftoppm 없음) + Word COM 스크립트가 숨은 WINWORD 를 남김**
+   (`$W` 가 `$w` 를 덮음 — PowerShell 변수는 대소문자 무시 / `| Select-Object -First` 가 스크립트를 중간에 멈춤)
+   Do instead: `references/docx-render.ps1`(Word 쪽 EMF → PNG, `$word` 로 Quit). 남았으면 창 없고 방금 시작된 WINWORD 만 끈다 — 선생님 Word 창은 절대 건드리지 않는다.
 
 ## Domain Behavior Guardrails
 1. **[2026-09-24] x-dc 는 화면에 안 보이는 원본 템플릿 복제본을 남김 → 전역 querySelector 가 엉뚱한 요소를 잡음**

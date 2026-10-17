@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="330" viewBox="0 0 680 330" font-family="Malgun Gothic, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+  <!-- 활동 2 그림: 위 = 일반 소프트웨어(사람이 정한 규칙대로) / 아래 = 인공지능 소프트웨어(데이터로 학습한 모델이 예측) -->
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L 10 5 L 0 10 Z" fill="#4b3b6b"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="680" height="330" fill="#fffdf7"/>
+
+  <!-- ── 위: 일반 소프트웨어 ── -->
+  <rect x="10" y="10" width="660" height="128" rx="14" fill="#f6f8fd" stroke="#4b3b6b" stroke-width="3"/>
+  <rect x="22" y="22" width="150" height="28" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="97" y="41" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">일반 소프트웨어</text>
+
+  <rect x="30" y="62" width="128" height="30" rx="8" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="94" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">사람이 정한 규칙</text>
+  <rect x="30" y="98" width="128" height="30" rx="8" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="94" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">입력</text>
+  <text x="172" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#4b3b6b">+</text>
+
+  <path d="M186 95 L 252 95" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="260" y="70" width="170" height="50" rx="10" fill="#c4d8f7" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="345" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">일반 소프트웨어</text>
+  <path d="M432 95 L 498 95" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="506" y="70" width="150" height="50" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="581" y="93" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">늘 같은 결과</text>
+  <text x="581" y="111" text-anchor="middle" font-size="12" fill="#6b5b93">같은 입력 → 같은 답</text>
+
+  <!-- ── 아래: 인공지능 소프트웨어 ── -->
+  <rect x="10" y="150" width="660" height="170" rx="14" fill="#f1fbf7" stroke="#4b3b6b" stroke-width="3"/>
+  <rect x="22" y="162" width="170" height="28" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="107" y="181" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">인공지능 소프트웨어</text>
+
+  <!-- 데이터 → 학습 → 인공지능 모델 -->
+  <rect x="30" y="204" width="128" height="50" rx="10" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="94" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">데이터</text>
+  <text x="94" y="244" text-anchor="middle" font-size="12" fill="#6b5b93">정답 이름표와 함께</text>
+  <path d="M160 229 L 252 229" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="180" y="208" width="54" height="22" rx="11" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
+  <text x="207" y="223" text-anchor="middle" font-size="12" font-weight="700" fill="#4b3b6b">학습</text>
+  <rect x="260" y="204" width="170" height="50" rx="10" fill="#bfe9dd" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="345" y="234" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">인공지능 모델</text>
+
+  <!-- 새 입력 → 모델 → 예측 -->
+  <rect x="290" y="276" width="110" height="32" rx="8" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="345" y="297" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">새 입력</text>
+  <path d="M345 275 L 345 264" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M432 229 L 498 229" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <rect x="506" y="204" width="150" height="50" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="581" y="227" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">예측</text>
+  <text x="581" y="245" text-anchor="middle" font-size="12" fill="#6b5b93">처음 보는 것도 판단</text>
+</svg>

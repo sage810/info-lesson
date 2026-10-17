@@ -11,6 +11,7 @@
 //   tab-chips     제목줄 탭 = 첫 화면 칩 버튼 모양, 오른쪽 정렬, 좁은 화면 2×2                (rule.md §2)
 //   time-date     시간표: 날짜 카드를 "시간표 TIMETABLE" 제목 아래 줄로                      (timetable.md)
 //   meal-nav      오늘의 급식: 보기 버튼 아래 날짜 카드 + ◀ ▶ (일간 하루·토일 건너뜀 / 주간 한 주 / 월간 한 달) (lunch.md §5.2)
+//   rule-text     이용 규칙: 규칙 8줄을 짧은 문구로(손 씻고 오기 · 내 자리 앉기 …)                (rule.md)
 // 앵커 문자열은 "정확히 1번" 찾혀야 한다. 하나라도 어긋나면 그 차시는 파일을 건드리지 않고 ✖ 로 알린다.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -209,6 +210,20 @@ export function upgrade(src) {
       '    .meal-date { padding: 5px 9px !important; font-size: 14px !important; white-space: normal !important; text-align: center; }',
       '  }', ''));
     done.push('meal-nav');
+  }
+
+  // ── rule-text ────────────────────────────────────────────────────────────────
+  // 이용 규칙 탭 문구를 짧게(선생님 피드백 2026-10-17)
+  if (s.includes('<div>• 손을 씻고 들어와요.</div>')) {
+    [['손을 씻고 들어와요.', '손 씻고 오기'],
+     ['내 자리 번호를 확인하고 앉아요.', '내 자리 앉기'],
+     ['수업을 위해 로그인을 먼저 하고, 타자 연습을 해요.', '수업 전 로그인 먼저, 타자연습 하기'],
+     ['수업 할 때는 수업과 관련되지 않은 걸 하지 않아요.', '수업 중에는 수업과 관련되지 않은 것은 X'],
+     ['친구 노트북을 함부로 만지지 않아요.', '친구 노트북을 함부로 건드리지 X'],
+     ['궁금한 건 손을 들고 물어봐요.', '질문은 손을 들고 물어보기'],
+     ['노트북 모니터를 닫지 않아요.', '노트북 모니터 닫지 않기'],
+     ['의자를 제자리에 넣어요.', '의자를 제자리에 넣기']].forEach(([a, b]) => rep(`<div>• ${a}</div>`, `<div>• ${b}</div>`));
+    done.push('rule-text');
   }
   return { s, done };
 }

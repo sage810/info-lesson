@@ -1021,26 +1021,26 @@
                 <div class="gh" style="padding:8px 12px; borderBottom:3px solid var(--msi-role-base-night-sky-ink); background:var(--msi-role-rule1-head); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_01.txt</div>
                 <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
                   <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px; textAlign:center">들어올 때</div>
-                  <div>• 손을 씻고 들어와요.</div>
-                  <div>• 내 자리 번호를 확인하고 앉아요.</div>
-                  <div>• 수업을 위해 로그인을 먼저 하고, 타자 연습을 해요.</div>
+                  <div>• 손 씻고 오기</div>
+                  <div>• 내 자리 앉기</div>
+                  <div>• 수업 전 로그인 먼저, 타자연습 하기</div>
                 </div>
               </div>
               <div style="border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:12px; background:var(--msi-role-rule2-body); boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
                 <div class="gh" style="padding:8px 12px; borderBottom:3px solid var(--msi-role-base-night-sky-ink); background:var(--msi-role-rule2-head); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_02.txt</div>
                 <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
                   <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px; textAlign:center">사용할 때</div>
-                  <div>• 수업 할 때는 수업과 관련되지 않은 걸 하지 않아요.</div>
-                  <div>• 친구 노트북을 함부로 만지지 않아요.</div>
-                  <div>• 궁금한 건 손을 들고 물어봐요.</div>
+                  <div>• 수업 중에는 수업과 관련되지 않은 것은 X</div>
+                  <div>• 친구 노트북을 함부로 건드리지 X</div>
+                  <div>• 질문은 손을 들고 물어보기</div>
                 </div>
               </div>
               <div style="border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:12px; background:var(--msi-role-rule3-body); boxShadow:5px 5px 0 rgba(75,59,107,.18); overflow:hidden">
                 <div class="gh" style="padding:8px 12px; borderBottom:3px solid var(--msi-role-base-night-sky-ink); background:var(--msi-role-rule3-head); fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px">RULE_03.txt</div>
                 <div style="padding:14px 16px; display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
                   <div style="fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:19px; textAlign:center">나갈 때</div>
-                  <div>• 노트북 모니터를 닫지 않아요.</div>
-                  <div>• 의자를 제자리에 넣어요.</div>
+                  <div>• 노트북 모니터 닫지 않기</div>
+                  <div>• 의자를 제자리에 넣기</div>
                 </div>
               </div>
             </div>
@@ -1353,7 +1353,7 @@
                   <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:10px; background:var(--msi-role-base-cream-paper)">
                     <span class="num-coin">2</span>
                     <span>로블록스 데이터를 CODAP으로 시각화하고 그래프를 해석할 수 있어요.</span>
-                  </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1907,9 +1907,17 @@ class Component extends DCLogic {
       if (sig === this._keepSig) return;   // 바뀐 게 없으면 저장 안 함(PDF 저장 뒤 지운 것을 되살리지 않게)
       this._keepSig = sig; d.t = this._keep.t || Date.now(); this._keep = d; writeLocal(d);
     };
-    this._keepClear = () => { try { localStorage.removeItem(this._keepKey); } catch (e) {} this._keep = Object.assign({}, this._keep, { t: this._keep.t }); };
+    this._keepClear = () => {
+      // 미뤄 둔 보관(0.3초)이 지운 뒤에 다시 쓰지 않게 — 이름 적고 곧바로 PDF 를 누르면 다음 사람에게 답이 되살아났음(2026-10-17 재현)
+      clearTimeout(this._keepT);
+      const area = visibleArea(); if (area) this._keepSig = JSON.stringify(collect(area));
+      try { localStorage.removeItem(this._keepKey); } catch (e) {} this._keep = Object.assign({}, this._keep, { t: this._keep.t });
+    };
     const keepSched = () => { clearTimeout(this._keepT); this._keepT = setTimeout(() => this._keepTick(), 300); };
     ['input', 'click', 'paste', 'drop', 'keyup'].forEach((ev) => document.addEventListener(ev, keepSched, true));
+    // 탭을 누르는 순간·페이지를 떠날 때는 기다리지 않고 바로 보관 — 0.3초 안에 탭을 바꾸면 마지막 입력이 빠졌음(2026-10-17)
+    document.addEventListener('click', (e) => { if (e.target && e.target.closest && e.target.closest('.tab-chip')) { clearTimeout(this._keepT); this._keepTick(); } }, true);
+    window.addEventListener('pagehide', () => { clearTimeout(this._keepT); this._keepTick(); });
     if (typeof MutationObserver === 'function') { this._keepMo = new MutationObserver(keepSched); this._keepMo.observe(document.body, { subtree: true, childList: true }); }
     // ── 태블릿(820px 이하): 떠 있는 도움말 버튼 → 진행률·도움말 카드 펼침 ──
     const setSide = (open) => { document.body.classList.toggle('side-open', open); document.querySelectorAll('.side-fab').forEach((b) => b.setAttribute('aria-expanded', String(open))); };

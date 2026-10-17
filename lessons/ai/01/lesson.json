@@ -1,0 +1,9 @@
+{
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "01",
+  "title": "인공지능이란?",
+  "shell": "portal",
+  "status": "live",
+  "copiedFrom": "_templates/order"
+}

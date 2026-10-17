@@ -26,11 +26,19 @@
   var selected = null;  // 터치/키보드로 선택된 칩
   var dragChip = null;  // 마우스 드래그 중인 칩
 
+  // 여러 차시가 쓰도록(2026-10-17, ai/01): 04 의 고정 id·문구가 없으면 활동 안 표식에서 읽는다.
+  //   트레이 .seq-tray · 결과 .seq-result · 정답 순서 = 칸(.seq-slot)의 data-answer 차례 · 카드 글 = 카드 글자
+  //   피드백 = .seq-activity 의 data-fb-all / -partial / -none / -incomplete · 버튼 = [data-seq-check] / [data-seq-reset] 도 됨
   function inSeq(e, sel) { return (e.target && e.target.closest) ? e.target.closest(sel) : null; }
-  function trayOf(act) { return act.querySelector('#seqTrayPrev'); }
+  function trayOf(act) { return act.querySelector('#seqTrayPrev') || act.querySelector('.seq-tray'); }
   function slotsOf(act) { return Array.prototype.slice.call(act.querySelectorAll('.seq-slot')); }
   function chipsOf(act) { return Array.prototype.slice.call(act.querySelectorAll('.seq-chip')); }
-  function resultOf(act) { return act.querySelector('#seqResultPrev'); }
+  function resultOf(act) { return act.querySelector('#seqResultPrev') || act.querySelector('.seq-result'); }
+  function answerOf(act) {
+    var a = slotsOf(act).map(function (s) { return s.getAttribute('data-answer'); });
+    return a.length ? a : ANSWER;
+  }
+  function fbOf(act, key) { return act.getAttribute('data-fb-' + (key === 'allCorrect' ? 'all' : key)) || FEEDBACK[key]; }
 
   function clearSelection() {
     if (selected) { selected.classList.remove('is-on'); selected.setAttribute('aria-pressed', 'false'); }
@@ -55,9 +63,10 @@
   function slotAria(slot) {
     var id = slot.getAttribute('data-slot');
     var chip = slot.querySelector('.seq-chip');
+    var base = SLOT_BASE_LABEL[id] || slot.getAttribute('data-label') || '';
     slot.setAttribute('aria-label', chip
-      ? SLOT_NUM[id] + ' 자리: ' + STEP_TEXT[chip.getAttribute('data-answer-key')]
-      : SLOT_BASE_LABEL[id]);
+      ? (SLOT_NUM[id] ? SLOT_NUM[id] + ' 자리' : base) + ': ' + (STEP_TEXT[chip.getAttribute('data-answer-key')] || (chip.textContent || '').trim())
+      : base);
   }
 
   function placeChip(act, slot, chip) {
@@ -102,9 +111,9 @@
     }
     return a;
   }
-  function shuffledOrder() {
-    var o;
-    do { o = fisherYates(ANSWER); } while (o.join(',') === ANSWER.join(','));
+  function shuffledOrder(act) {
+    var ans = answerOf(act), o;
+    do { o = fisherYates(ans); } while (ans.length > 1 && o.join(',') === ans.join(','));
     return o;
   }
 
@@ -118,8 +127,9 @@
     var tray = trayOf(act);
     var byKey = {};
     chipsOf(act).forEach(function (c) { byKey[c.getAttribute('data-answer-key')] = c; });
-    shuffledOrder().forEach(function (key) {
+    shuffledOrder(act).forEach(function (key) {
       var c = byKey[key];
+      if (!c) return;
       c.classList.remove('is-on', 'is-dragging');
       c.setAttribute('aria-pressed', 'false');
       tray.appendChild(c);
@@ -130,10 +140,11 @@
   function grade(act) {
     var slots = slotsOf(act);
     var res = resultOf(act);
+    var total = slots.length;
     var filled = slots.filter(function (s) { return s.querySelector('.seq-chip'); });
-    if (filled.length < 4) {
+    if (filled.length < total) {
       clearGrading(act);
-      res.textContent = FEEDBACK.incomplete;
+      res.textContent = fbOf(act, 'incomplete');
       return;
     }
     var n = 0;
@@ -150,15 +161,18 @@
       else { slot.classList.add('is-wrong'); mark.textContent = '✗'; }
       slot.insertBefore(mark, slot.firstChild);
     });
-    if (n === 4) res.textContent = '4칸 모두 정답! ' + FEEDBACK.allCorrect;
-    else if (n === 0) res.textContent = '4칸 중 0칸 정답. ' + FEEDBACK.none;
-    else res.textContent = '4칸 중 ' + n + '칸 정답. ' + FEEDBACK.partial.replace('{n}', n);
+    if (n === total) res.textContent = total + '칸 모두 정답! ' + fbOf(act, 'allCorrect');
+    else if (n === 0) res.textContent = total + '칸 중 0칸 정답. ' + fbOf(act, 'none');
+    else res.textContent = total + '칸 중 ' + n + '칸 정답. ' + fbOf(act, 'partial').replace('{n}', n);
   }
 
   function initActivity(act) {
     if (act.getAttribute('data-seq-init') === '1') return;
     act.setAttribute('data-seq-init', '1');
-    slotsOf(act).forEach(slotAria);
+    slotsOf(act).forEach(function (s) {   // 처음 aria-label 을 빈 칸 이름으로 기억(04 는 SLOT_BASE_LABEL 이 먼저)
+      if (!s.hasAttribute('data-label')) s.setAttribute('data-label', s.getAttribute('aria-label') || '');
+      slotAria(s);
+    });
     refreshTrayEmpty(act);
   }
   function scan() {
@@ -170,8 +184,8 @@
     var act = inSeq(e, '.seq-activity');
     if (!act) { clearSelection(); return; }
 
-    if (inSeq(e, '.seq-check-btn')) { grade(act); return; }
-    if (inSeq(e, '.seq-reset-btn')) { reshuffle(act); return; }
+    if (inSeq(e, '.seq-check-btn, [data-seq-check]')) { grade(act); return; }
+    if (inSeq(e, '.seq-reset-btn, [data-seq-reset]')) { reshuffle(act); return; }
 
     var chip = inSeq(e, '.seq-chip');
     if (chip) {
