@@ -16,6 +16,7 @@ export const MIME_BY_EXT = {
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
   '.webp': 'image/webp', '.svg': 'image/svg+xml',
   '.csv': 'text/csv;charset=utf-8',   // 데이터 내려받기 링크(09 수행평가)
+  '.mp4': 'video/mp4',                 // 그림을 누르면 재생하는 짧은 영상(ai/01)
 };
 export const EXT_BY_MIME = {
   'font/woff2': '.woff2', 'font/woff': '.woff', 'font/ttf': '.ttf', 'font/otf': '.otf',

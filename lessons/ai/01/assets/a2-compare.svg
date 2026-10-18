@@ -1,52 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="330" viewBox="0 0 680 330" font-family="Malgun Gothic, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
-  <!-- 활동 2 그림: 위 = 일반 소프트웨어(사람이 정한 규칙대로) / 아래 = 인공지능 소프트웨어(데이터로 학습한 모델이 예측) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="380" viewBox="0 0 680 380" font-family="CookieRunSvg, Malgun Gothic, Apple SD Gothic Neo, sans-serif" font-weight="700">
+  <style id="svg-font">@font-face{font-family:'CookieRunSvg';font-weight:100 900;src:url(data:font/woff2;base64,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) format('woff2')}</style>
+  <!-- 활동 2 그림(2026-10-18 다시 그림): 왼쪽 일반 소프트웨어 | 오른쪽 인공지능 소프트웨어 — 같은 줄끼리 비교
+       만드는 재료 → 만들어진 것 → 결과. 화살표 이름은 화살표 옆(겹치지 않게). -->
   <defs>
-    <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
-      <path d="M0 0 L 10 5 L 0 10 Z" fill="#4b3b6b"/>
+    <marker id="ar" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L 12 6 L 0 12 Z" fill="#4b3b6b"/>
     </marker>
   </defs>
-  <rect x="0" y="0" width="680" height="330" fill="#fffdf7"/>
+  <rect x="0" y="0" width="680" height="380" fill="#fffdf7"/>
 
-  <!-- ── 위: 일반 소프트웨어 ── -->
-  <rect x="10" y="10" width="660" height="128" rx="14" fill="#f6f8fd" stroke="#4b3b6b" stroke-width="3"/>
-  <rect x="22" y="22" width="150" height="28" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
-  <text x="97" y="41" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">일반 소프트웨어</text>
+  <!-- ── 왼쪽: 일반 소프트웨어 ── -->
+  <rect x="12" y="12" width="322" height="356" rx="16" fill="#f6f8fd" stroke="#4b3b6b" stroke-width="3"/>
+  <path d="M12 60 V 28 a16 16 0 0 1 16 -16 H 318 a16 16 0 0 1 16 16 V 60 Z" fill="#c4d8f7" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="173" y="44" text-anchor="middle" font-size="21" fill="#4b3b6b">일반 소프트웨어</text>
 
-  <rect x="30" y="62" width="128" height="30" rx="8" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
-  <text x="94" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">사람이 정한 규칙</text>
-  <rect x="30" y="98" width="128" height="30" rx="8" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
-  <text x="94" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">입력</text>
-  <text x="172" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#4b3b6b">+</text>
+  <rect x="48" y="78" width="250" height="62" rx="12" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="173" y="104" text-anchor="middle" font-size="16" fill="#4b3b6b">사람이 정한 규칙</text>
+  <text x="173" y="126" text-anchor="middle" font-size="12.5" fill="#6b5b93">예) 세 칸 안에 오면 공격!</text>
 
-  <path d="M186 95 L 252 95" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
-  <rect x="260" y="70" width="170" height="50" rx="10" fill="#c4d8f7" stroke="#4b3b6b" stroke-width="3"/>
-  <text x="345" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">일반 소프트웨어</text>
-  <path d="M432 95 L 498 95" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
-  <rect x="506" y="70" width="150" height="50" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
-  <text x="581" y="93" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">늘 같은 결과</text>
-  <text x="581" y="111" text-anchor="middle" font-size="12" fill="#6b5b93">같은 입력 → 같은 답</text>
+  <path d="M173 142 L 173 182" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <text x="186" y="168" font-size="13" fill="#6b5b93">사람이 코드로 입력</text>
 
-  <!-- ── 아래: 인공지능 소프트웨어 ── -->
-  <rect x="10" y="150" width="660" height="170" rx="14" fill="#f1fbf7" stroke="#4b3b6b" stroke-width="3"/>
-  <rect x="22" y="162" width="170" height="28" rx="6" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
-  <text x="107" y="181" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">인공지능 소프트웨어</text>
+  <rect x="48" y="188" width="250" height="56" rx="12" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="173" y="222" text-anchor="middle" font-size="15.5" fill="#4b3b6b">규칙대로만 움직이는 프로그램</text>
 
-  <!-- 데이터 → 학습 → 인공지능 모델 -->
-  <rect x="30" y="204" width="128" height="50" rx="10" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
-  <text x="94" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">데이터</text>
-  <text x="94" y="244" text-anchor="middle" font-size="12" fill="#6b5b93">정답 이름표와 함께</text>
-  <path d="M160 229 L 252 229" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
-  <rect x="180" y="208" width="54" height="22" rx="11" fill="#ffffff" stroke="#4b3b6b" stroke-width="2"/>
-  <text x="207" y="223" text-anchor="middle" font-size="12" font-weight="700" fill="#4b3b6b">학습</text>
-  <rect x="260" y="204" width="170" height="50" rx="10" fill="#bfe9dd" stroke="#4b3b6b" stroke-width="3"/>
-  <text x="345" y="234" text-anchor="middle" font-size="15" font-weight="700" fill="#4b3b6b">인공지능 모델</text>
+  <path d="M173 246 L 173 286" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <text x="186" y="272" font-size="13" fill="#6b5b93">입력이 들어오면</text>
 
-  <!-- 새 입력 → 모델 → 예측 -->
-  <rect x="290" y="276" width="110" height="32" rx="8" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
-  <text x="345" y="297" text-anchor="middle" font-size="13" font-weight="700" fill="#4b3b6b">새 입력</text>
-  <path d="M345 275 L 345 264" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M432 229 L 498 229" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
-  <rect x="506" y="204" width="150" height="50" rx="10" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
-  <text x="581" y="227" text-anchor="middle" font-size="14" font-weight="700" fill="#4b3b6b">예측</text>
-  <text x="581" y="245" text-anchor="middle" font-size="12" fill="#6b5b93">처음 보는 것도 판단</text>
+  <rect x="48" y="292" width="250" height="62" rx="12" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="173" y="318" text-anchor="middle" font-size="16" fill="#4b3b6b">늘 같은 결과</text>
+  <text x="173" y="340" text-anchor="middle" font-size="12" fill="#6b5b93">같은 입력이면 같은 답 · 스스로 배우지 않아요</text>
+
+  <!-- ── 오른쪽: 인공지능 소프트웨어 ── -->
+  <rect x="346" y="12" width="322" height="356" rx="16" fill="#f1fbf7" stroke="#4b3b6b" stroke-width="3"/>
+  <path d="M346 60 V 28 a16 16 0 0 1 16 -16 H 652 a16 16 0 0 1 16 16 V 60 Z" fill="#bfe9dd" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="507" y="44" text-anchor="middle" font-size="21" fill="#4b3b6b">인공지능 소프트웨어</text>
+
+  <rect x="382" y="78" width="250" height="62" rx="12" fill="#fbe6a2" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="507" y="104" text-anchor="middle" font-size="16" fill="#4b3b6b">데이터 + 정답 이름표</text>
+  <text x="507" y="126" text-anchor="middle" font-size="12.5" fill="#6b5b93">예) 고양이·강아지 사진 수천 장</text>
+
+  <path d="M507 142 L 507 182" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <text x="520" y="168" font-size="13" fill="#a65a86">스스로 학습</text>
+
+  <rect x="382" y="188" width="250" height="56" rx="12" fill="#ffffff" stroke="#4b3b6b" stroke-width="3"/>
+  <text x="507" y="222" text-anchor="middle" font-size="16" fill="#4b3b6b">인공지능 모델</text>
+
+  <path d="M507 246 L 507 286" stroke="#4b3b6b" stroke-width="3" marker-end="url(#ar)"/>
+  <text x="520" y="272" font-size="13" fill="#6b5b93">새 입력이 들어오면</text>
+
+  <rect x="382" y="292" width="250" height="62" rx="12" fill="#ffffff" stroke="#4b3b6b" stroke-width="2.5"/>
+  <text x="507" y="318" text-anchor="middle" font-size="16" fill="#4b3b6b">예측</text>
+  <text x="507" y="340" text-anchor="middle" font-size="12" fill="#6b5b93">처음 보는 것도 배운 대로 판단해요</text>
 </svg>

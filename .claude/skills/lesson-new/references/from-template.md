@@ -53,15 +53,17 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 | 워드 표(`[표]`) | `.type-scroll > table.type-table`(핵심 정리 표는 틀의 `table.ord-sum`), 칸 안 `[[…]]` 은 `textarea.blank` |
 | `[하나 고르기]` | 문항 1개 `VQ`(02) · 여러 개 `DQ`/`FQ`(03·06·07 분석 유형 = `glass-chip`). `(정답)` 보기, `이유:` 는 오답 피드백(없으면 새로 씀) |
 | `[모두 고르기]` | `MQ` + 정답 확인(01) |
-| `[O/X]` (`→ O` / `-> X`) | `OXQ` + 정답 확인 · 다시 풀기(02·03). `(이유: …)` 는 틀렸을 때 문구. 형성평가면 CHECK_UP 모양(`order.md` §2-0-5) |
+| `[O/X]` (`→ O` / `-> X`) | 틀(ai/01)의 O/X — **누르면 바로 채점, 맞아도 틀려도 이유**(`(이유: …)` 를 둘 다에 씀, 없으면 새로 씀). 형성평가 CHECK_UP 모양(`order.md` §2-0-5, `parts.md` §3) |
 | `[이름표 끌어 놓기]` (`칸 → 정답`) | 공용 `chip-slot`, 여러 개면 `data-ca-group` + 버튼 채점(02) |
 | `[순서 배열]` | `seq-order` — 새 차시는 ai/01 표식: `.seq-activity#id` + `data-fb-all/-partial/-none/-incomplete`, 칸 `data-answer` 차례가 정답, 버튼 `[data-seq-check]`·`[data-seq-reset]`(04 는 고정 id 그대로) |
-| `[그림]` | 새 SVG(`from-pdf.md` §6) 또는 받은 파일 |
+| `[그림]` | 새 SVG(`from-pdf.md` §6) — 글자는 CookieRun Bold(`references/svg-font.mjs`), 비교는 두 칸·화살표 이름은 옆(`parts.md` §4). 받은 파일·영상(mp4)이면 「그림을 누르면 영상」 `.ai-vid` |
 | `[붙여넣기 칸]` | `paste-zone`(06·07) |
 | `[링크]` | 새 탭 버튼(`.gm-btn` 모양) |
 | `[메모]` | 만드는 방법 부탁 — 활동지에 넣지 않는다 |
 
 버튼은 모두 유리 알약(`glass-pill` · `glass-chip`) — `lesson-new` SKILL §3.
+
+부품 모양(가운데 정렬 · 이름표 2열 · 개념 표/카드 · 핵심 정리 이름표 등)은 **`docs/rules/parts.md`** 를 따른다.
 
 ## 4. 만들 때 부탁 (모두 선택)
 

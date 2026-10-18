@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 새 차시 폴더 만들기 — 비슷한 기존 차시를 복사해서 출발한다(틀·디자인·PDF 버튼이 그대로 따라옴).
 //
-//   npm run new -- data-analysis/08 --title "새 차시 제목"            ← 기본: 새 차시 틀 _templates/order 그대로(2026-10-16~)
+//   npm run new -- data-analysis/08 --title "새 차시 제목"            ← 기본: 새 차시 틀 _templates/order(= ai/01, 부품 규칙 docs/rules/parts.md) 그대로
 //   npm run new -- data-analysis/08 --from 07 --title "…"             ← 예전 차시를 복사할 때만
 //
 // 만들어지는 것: lessons/<단원>/<차시>/ lesson.html(복사본) · assets/(복사본) · lesson.json(status: draft) · spec.md(빈 틀)

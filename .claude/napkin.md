@@ -19,6 +19,8 @@
    Do instead: PDF·자동 보관 리허설은 `node scripts/serve.mjs` 를 켜고 `http://127.0.0.1:8080/<단원>/<차시>/` 로 한다.
 6. **[2026-10-17] 자동 보관은 0.3초 미뤄 저장 — 리허설에서 쉬지 않고 누르다 탭을 바꾸면 "안 되살아남"처럼 보임**
    Do instead: 틀·07·ai/01 은 고침(탭 누를 때·pagehide 에 바로 보관 + `_keepClear` 가 미뤄 둔 보관을 취소 — 적고 곧바로 PDF 를 누르면 다음 사람에게 답이 되살아났음). 틀 밖 예전 차시를 복사해 쓰면 이 두 군데를 확인.
+8. **[2026-10-18] `<img>` 로 넣은 SVG 는 페이지 글꼴(CookieRun 등)을 못 씀 + 이 PC 엔 Python 이 없어 font-subset.py 불가**
+   Do instead: `.claude/skills/lesson-new/references/svg-font.mjs`(scratchpad 에 `npm i subset-font`) — 그림 글자만 남긴 woff2 를 SVG 안에 넣음(약 5KB). 그림 글자를 고치면 다시 돌린다.
 7. **[2026-10-17] 정답지 `{ near, text }` 누르기는 안에 요소가 없는 단추만 찾음 → `glass-chip`(안에 `.gc-ic`)은 못 누름**
    Do instead: 묶음 aria-label 로 선택자를 쓴다: `"[aria-label='…'] button.glass-chip:has-text('정답 보기'):visible"`, O/X 는 `button:text-is('O')`.
 

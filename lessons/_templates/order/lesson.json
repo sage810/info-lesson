@@ -1,9 +1,9 @@
 {
-  "unit": "data-analysis",
-  "unitTitle": "데이터분석",
-  "no": "07",
-  "title": "새 차시 틀 — 도입·전개·정리 순서(07 로블록스 예시 내용)",
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "01",
+  "title": "새 차시 틀 — ai/01 「인공지능이란?」 모양(부품 규칙 docs/rules/parts.md)",
   "shell": "portal",
   "status": "draft",
-  "copiedFrom": "data-analysis/06"
+  "copiedFrom": "ai/01"
 }

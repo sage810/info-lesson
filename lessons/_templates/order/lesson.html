@@ -704,6 +704,80 @@
   }
   .ord-ox .q b.ox { flex: none; padding: 2px 12px; border: 2px solid var(--msi-role-base-night-sky-ink); border-radius: 8px; background: var(--msi-role-base-cream-paper); font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; }
   .ord-ex { font-size: 12px; color: var(--msi-role-base-muted-violet); }
+  /* ── [ai/01] 인공지능이란? — 이 차시 부품(2026-10-17). 색은 역할 토큰만 ── */
+  .ai-fill { margin: 0; font-size: 15px; line-height: 2.1; word-break: keep-all; }
+  .ai-fill textarea.blank.blank--inline { margin: 0 3px; }
+  .ai-fig { display: block; width: 100%; max-width: 680px; height: auto; margin: 4px auto 0; border-radius: 12px; outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px; }
+  .ai-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; }
+  .ai-links .glass-pill { white-space: normal; text-align: center; line-height: 1.4; padding-top: 6px; padding-bottom: 6px; }
+  .ai-match { display: flex; flex-direction: column; gap: 8px; }
+  .ai-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 10px 14px; padding: 8px 12px; border: 2px solid var(--msi-role-base-night-sky-ink); border-radius: 10px;
+    background: var(--msi-role-base-white); font-size: 14.5px; line-height: 1.6; word-break: keep-all; }
+  .ai-row .ai-desc { text-align: center; }   /* 가로를 절반씩 2열, 각각 가운데(피드백) */
+  .ai-row .ca-slot { justify-self: center; min-width: 176px; height: auto; min-height: var(--msi-size-touch-min); box-sizing: border-box; }
+  .ai-ctl { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; }
+  .ai-match .ca-tray, .seq-activity .seq-controls { justify-content: center; }
+  .ai-pick.ai-pick--row { flex-direction: row; flex-wrap: wrap; }
+  .ai-def td { vertical-align: middle; }
+  .ai-def th, .ai-def td:first-child { text-align: center; }
+  .ai-pick.ai-pick--row { justify-content: center; }
+  .ai-center { text-align: center; }
+  /* 활동1 그림을 누르면 영상(neural-motion.mp4) — 그림은 그대로 두고 그 위에 영상, PDF 에는 그림만(no-pdf) */
+  .ai-vid { position: relative; width: 100%; max-width: 680px; margin: 4px auto 0; }
+  .ai-vid .ai-fig { margin: 0; cursor: pointer; }
+  .ai-vid__v { display: none; position: absolute; top: 0; left: 0; width: 100%; height: auto; aspect-ratio: 680 / 300; object-fit: contain; border-radius: 12px; background: var(--msi-role-base-white); }
+  .ai-vid.is-playing .ai-vid__v { display: block; }
+  .ai-vid__btn { display: flex; width: fit-content; margin: 10px auto 0; }   /* 그림 아래에 따로(겹치지 않게, 피드백 2026-10-18) */
+  .ai-vid.is-playing .ai-vid__btn { display: none; }
+  .ai-sum .ca-slot { margin: 2px 3px; }
+  .ai-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+  .ai-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 3px solid var(--msi-role-base-night-sky-ink); border-radius: 12px;
+    background: var(--msi-role-base-white); box-shadow: 3px 3px 0 rgba(75,59,107,.14); text-align: center; word-break: keep-all; }
+  .ai-card__ic { font-size: 26px; line-height: 1.1; }
+  .ai-card__t { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 17px; }
+  .ai-card p { margin: 0; font-size: 14px; line-height: 1.7; }
+  .ai-card p.ai-card__ex { margin-top: auto; padding: 6px 8px; border-radius: 8px; background: var(--msi-role-ui-callout-reason); font-size: 13.5px; }
+  @media (max-width: 700px) { .ai-cards { grid-template-columns: 1fr; } }
+  /* 누를 수 있는 이름표·순서 카드도 오로라 유리 알약(DESIGN.md The Aurora Pill Rule) — 고르면 라벤더 + 아래 잉크 띠 */
+  .ca-chip, .seq-chip { display: inline-flex; align-items: center; min-height: var(--msi-size-touch-min); box-sizing: border-box; border: 2px solid var(--msi-role-base-night-sky-ink);
+    border-radius: 999px; padding: 8px 18px; line-height: 1.45; text-align: left; color: var(--msi-role-base-button-ink);
+    background: var(--msi-glass-top), var(--msi-glass-sheen), var(--msi-glass-white), var(--msi-role-chip-glass); background-size: 100% 100%, 300% 100%, 100% 100%, 100% 100%;
+    background-position: 0 0, 100% 0, 0 0, 0 0; background-repeat: no-repeat; box-shadow: var(--msi-glass-inset), 3px 3px 0 rgba(75,59,107,.28);
+    transition: transform .45s var(--msi-motion-ease-spring), box-shadow .25s var(--msi-motion-ease-out), background-position 1s var(--msi-motion-ease-out); }
+  .seq-chip { border-radius: 22px; }
+  .ca-chip:hover, .seq-chip:hover { background-position: 0 0, 0% 0, 0 0, 0 0; }
+  .ca-chip.is-on, .seq-chip.is-on { background: var(--msi-glass-top), var(--msi-glass-white), var(--msi-role-base-lavender); background-size: 100% 100%; transform: none;
+    box-shadow: var(--msi-glass-inset), inset 0 -4px 0 var(--msi-role-base-night-sky-ink), 2px 2px 0 rgba(75,59,107,.35); }
+  .seq-slot.is-filled .seq-chip { flex: 1; }
+  .msi-pdf-clone .ca-chip, .msi-pdf-clone .seq-chip { background: var(--msi-role-base-cream-paper) !important; box-shadow: none !important; }   /* PDF 캡처: 겹 배경·inset 은 흰 판이 됨 */
+  @media (prefers-reduced-motion: reduce) { .ca-chip, .seq-chip { transition: none; } }
+  /* 하나 고르기(긴 보기) · O/X 고르기 칩 */
+  .ai-pick { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .ai-pick .glass-chip, .ai-ox .glass-chip { border: 2px solid var(--msi-role-base-night-sky-ink); cursor: pointer;
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14.5px; }
+  .ai-pick .glass-chip { justify-content: flex-start; text-align: left; line-height: 1.5; padding: 8px 18px !important; border-radius: 22px !important; word-break: keep-all; }
+  .glass-chip[data-s="on"] { --gc-tint: var(--msi-role-base-lavender); box-shadow: var(--msi-glass-inset), inset 0 -4px 0 var(--msi-role-base-night-sky-ink), 3px 3px 0 rgba(75,59,107,.28); }
+  .msi-pdf-clone .glass-chip[data-s="on"] { background: var(--msi-role-base-lavender) !important; }
+  .glass-chip:focus-visible, .ca-chip:focus-visible, .seq-chip:focus-visible { outline: 3px solid var(--msi-role-base-night-sky-ink); outline-offset: 3px; }
+  .ai-fb { padding: 9px 12px; border: 3px solid var(--msi-role-base-night-sky-ink); border-radius: 10px; font-size: 13.5px; line-height: 1.7; word-break: keep-all; }
+  .ai-fb[data-s="ok"] { background: var(--msi-role-ui-feedback-ok-bg); }
+  .ai-fb[data-s="no"] { background: var(--msi-role-ui-feedback-no-bg); }
+  .ai-ox .q .oxb { display: inline-flex; gap: 8px; flex: none; }
+  .ai-ox .q .oxb .glass-chip { min-width: 56px; padding: 0 14px !important; font-size: 16px; }
+  .ai-ox .q .why { flex-basis: 100%; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 13px; line-height: 1.6; word-break: keep-all; }
+  .ai-ox .q .why[data-s="ok"] { color: var(--msi-role-ui-feedback-ok-ink); }
+  .ai-ox .q .why[data-s="no"] { color: var(--msi-role-ui-feedback-no-ink); }
+  .ai-sum td:first-child { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; white-space: nowrap; }
+  .ai-sum td { line-height: 1.9; word-break: keep-all; }
+  @media (max-width: 560px) {
+    .ai-row { grid-template-columns: minmax(0,1fr); }
+    .ai-row .ai-desc { flex: none; }   /* 세로로 쌓으면 260px 기준 너비가 높이가 되어 칸이 길어졌음 */
+    .ai-row .ca-slot { width: 100%; }
+    .seq-slot { padding: 4px 6px; }
+    .seq-chip { font-size: 14px; padding: 8px 12px; }
+    .ord-ox.ai-ox .q .oxb { grid-column: 2; justify-self: start; }
+    .ord-ox.ai-ox .q .why { grid-column: 1 / -1; }
+  }
   .sg-btn, .gd-close { transition: transform .08s ease, box-shadow .08s ease, background-color .12s ease; }
   .sg-btn { border-radius: 4px; }
   .sg-btn:hover, .gd-close:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 rgba(75,59,107,.35); }
@@ -1300,7 +1374,7 @@
           <div id="sheetPrintArea" style="display:flex; flexDirection:column; gap:18px">
             <div style="display:flex; alignItems:center; justifyContent:center; gap:12px; flexWrap:wrap">
               <h1 style="margin:0; fontWeight:400; fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:30px">수업 활동지</h1>
-              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:var(--msi-role-base-lavender); border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:6px; padding:4px 8px">LESSON_07</div>
+              <div style="fontFamily:'Silkscreen', Apple SD Gothic Neo, Malgun Gothic, monospace; fontSize:11px; background:var(--msi-role-base-lavender); border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:6px; padding:4px 8px">LESSON_01</div>
             </div>
 
             <div class="tg-card" style="border:4px solid var(--msi-role-base-night-sky-ink); borderRadius:14px; overflow:hidden; background:var(--msi-role-topic-body); boxShadow:6px 6px 0 rgba(75,59,107,.2)">
@@ -1308,8 +1382,8 @@
               <div class="tg-bd" style="padding:20px 22px; display:flex; flexDirection:column; gap:8px">
                 <div class="tg-glow no-pdf" aria-hidden="true"><i></i><i></i><i></i></div><span class="tg-veil no-pdf" aria-hidden="true"></span>
 
-                <div class="unit-head"><span class="unit">데이터 분석</span><span class="no">· 7차시</span></div>
-                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:32px; lineHeight:1.3; textWrap:pretty; textAlign:center">로블록스 데이터 분석하기</div>
+                <div class="unit-head"><span class="unit">인공지능</span><span class="no">· 1차시</span></div>
+                <div style="fontFamily:'GangwonEdu', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontSize:32px; lineHeight:1.3; textWrap:pretty; textAlign:center">인공지능이란?</div>
 
               </div>
             </div>
@@ -1348,26 +1422,29 @@
                 <div style="display:flex; flexDirection:column; gap:8px; fontSize:15px; lineHeight:1.7">
                   <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:10px; background:var(--msi-role-base-cream-paper)">
                     <span class="num-coin">1</span>
-                    <span>질문을 읽고 알맞은 분석 유형(구성·비교·분포·관계)을 고를 수 있어요.</span>
+                    <span>인공지능과 인공지능 모델이 무엇인지 설명할 수 있어요.</span>
                   </div>
                   <div style="display:flex; gap:10px; padding:11px 13px; border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:10px; background:var(--msi-role-base-cream-paper)">
                     <span class="num-coin">2</span>
-                    <span>로블록스 데이터를 CODAP으로 시각화하고 그래프를 해석할 수 있어요.</span>
+                    <span>인공지능 소프트웨어와 일반 소프트웨어를 구분할 수 있어요.</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- ============ 도입 · 동기유발 (예시 문구) ============ -->
+            <!-- ============ 도입 · 동기유발 ============ -->
             <div class="m-card" style="background:var(--msi-role-warmup-body)">
               <div class="m-head" style="background:var(--msi-role-warmup-head)">
                 <span class="mono"><span class="ph-tag">도입</span>WARM_UP</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-warmup-head)">🎮</div><div class="m-title" role="heading" aria-level="2">로블록스에서 요즘 가장 인기 있는 게임은 어떤 장르일까?</div></div>
-                <p class="ord-p">내가 해 본 로블록스 게임과 그 장르를 떠올려 적어 보세요. 친구들도 비슷할까요?</p>
-                <textarea class="blank" rows="2" placeholder="예: 펫 타기(시뮬레이션), 라이벌(슈팅)…" aria-label="동기유발 내가 해 본 게임"></textarea>
-                <span class="ord-ex">※ 순서 예시를 위해 새로 넣은 칸이에요(문구는 바꿀 수 있어요).</span>
+                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-warmup-head)">🎨</div><div class="m-title" role="heading" aria-level="2">내 낙서, AI가 몇 개나 알아맞힐까?</div></div>
+                <p class="ord-p">Quick, Draw!는 제시어를 20초 안에 그리면 AI가 무엇을 그렸는지 알아맞히는 게임이에요. 제시어 6개를 그려보고, AI가 몇 개를 맞혔는지 선생님께 이야기해주세요!</p>
+                <div class="ai-links"><a class="glass-pill" href="https://quickdraw.withgoogle.com" target="_blank" rel="noopener">↗ Quick, Draw! 열기</a></div>
+                <div class="m-hd2">1. 「시작하기」를 누르고 제시어 6개를 그려요. AI가 몇 개를 맞혔는지 적어요.</div>
+                <p class="ai-fill">내 그림: <textarea class="blank blank--inline" rows="1" style="width:70px" aria-label="동기유발 AI가 맞힌 개수"></textarea>개 맞힘</p>
+                <div class="m-hd2">2. 컴퓨터는 어떻게 내 그림을 알아맞혔을까요? 내 생각을 적어 봐요.</div>
+                <textarea class="blank" rows="2" placeholder="내 생각을 적어요" aria-label="동기유발 내 생각"></textarea>
               </div>
             </div>
 
@@ -1377,283 +1454,298 @@
                 <span class="mono"><span class="ph-tag">도입</span>TODAY_TOPIC</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-intro-head)">🔎</div><div class="m-title" role="heading" aria-level="2">오늘은 데이터로 질문 4가지를 풀어요</div></div>
-                <p class="ord-p">로블록스 인기 게임 96개의 데이터로 질문 4가지를 풀어요. 어떤 분석인지 고르고, CODAP으로 그래프를 그려 해석해 봐요.</p>
+                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-intro-head)">🔎</div><div class="m-title" role="heading" aria-level="2">오늘은 인공지능의 정체를 밝혀요</div></div>
+                <p class="ord-p">유튜브·틱톡 추천과 인스타 필터 속 인공지능은 어떻게 똑똑해질까요? 인공지능과 인공지능 모델이 무엇인지 알아보고, 인공지능인 것과 아닌 것을 가려내요.</p>
               </div>
             </div>
 
-            <!-- ============ GUIDE · 도움말 (평소엔 숨김 — 왼쪽 도움말 버튼을 누르면 여기로 이동해 펼침, 닫으면 원래 자리로. PDF 에는 안 넣음) ============ -->
-            <sc-if value="{{ guideOpen }}" hint-placeholder-val="{{ false }}">
-              <div id="guidePanel" class="m-card no-pdf" tabindex="-1" style="background:var(--msi-role-ui-guide-body)">
-                <div class="m-head" style="background:var(--msi-role-ui-aqua)">
-                  <span class="mono">GUIDE</span>
-                  <span class="mono r">HELP</span>
-                </div>
-                <div class="m-body">
-                  <div class="m-title-row">
-                    <div class="m-title" role="heading" aria-level="2">{{ guideTitle }}</div>
-                    <button type="button" class="glass-pill" onClick="{{ closeGuide }}" style="marginLeft:auto">닫기 ✕</button>
-                  </div>
-
-                  <sc-if value="{{ guideCodap }}" hint-placeholder-val="{{ false }}">
-                    <div style="display:flex; flexDirection:column; gap:12px">
-                      <p class="m-sub">질문 4가지를 풀려면 로블록스 인기 게임 데이터를 그래프로 그려 봐야 해요. 아래 순서대로 준비해요.</p>
-                      <ol class="step-list">
-                        <li>CODAP 열기 <a class="gm-btn" href="https://codap.concord.org/" target="_blank" rel="noopener">↗ CODAP 열기</a></li>
-                        <li>수업자료 폴더에서 <b>로블록스</b> 파일(<b>roblox_popular_game.csv</b>) 찾기</li>
-                        <li>그 파일을 CODAP에 올리기 — 방법은 바로 아래 <b>CODAP에 데이터 올리기</b>를 봐요.</li>
-                      </ol>
-                      <div class="m-hd2">🖥 CODAP에 데이터 올리기</div>
-                      <ol class="step-list">
-                        <li>구글에 <b>'코답'</b> 이라고 검색해요.</li>
-                        <li>검색 결과에서 <b>CODAP</b>(codap.concord.org) 사이트를 클릭해요.</li>
-                        <li>오른쪽 맨 위에 있는 주황색 <b>Launch CODAP</b> 버튼을 눌러요.</li>
-                        <li><b>새 문서</b>를 눌러요.</li>
-                        <li>수업자료 폴더에 있는 <b>로블록스</b> 파일(roblox_popular_game.csv)을 CODAP의 흰 바탕 위로 끌어다 놓아요.</li>
-                        <li>화면에 표가 생겼다면 완성! 표의 모서리를 끌어 크기를 키워 데이터가 다 보이게 하고, 친구를 도와주세요.<br>표에는 게임 96개의 순위·한글게임명·현재접속자(명)·좋아요(만)·싫어요(만)·장르·연령등급이 들어 있어요.</li>
-                      </ol>
-                      <div class="shot-grid">
-                        <div class="shot-ph" data-shot="codap-1"><img src="msi-asset:./assets/코답1.png" alt=""><span class="cap">① 구글에 '코답' 이라고 검색</span></div>
-                        <div class="shot-ph" data-shot="codap-2"><img src="msi-asset:./assets/코답2.png" alt=""><span class="cap">② 검색 결과에서 CODAP(codap.concord.org) 클릭</span></div>
-                        <div class="shot-ph" data-shot="codap-3"><img src="msi-asset:./assets/코답3.png" alt=""><span class="cap">③ 오른쪽 위 주황색 Launch CODAP 클릭</span></div>
-                        <div class="shot-ph" data-shot="codap-4"><img src="msi-asset:./assets/코답4.png" alt=""><span class="cap">④ '어떤 작업을 할까요?'에서 '새 문서' 클릭</span></div>
-                        <div class="shot-ph" data-shot="m1-drop"><img src="msi-asset:shared/images/스크린샷_2026-09-08_213939.png" alt=""><span class="cap">⑤ 로블록스 파일을 CODAP 흰 바탕으로 끌어다 놓기 (그림 속 파일 이름은 달라도 괜찮아요)</span></div>
-                        <div class="shot-ph" data-shot="m1-resize"><img src="msi-asset:shared/images/스크린샷_2026-09-08_234642.png" alt=""><span class="cap">⑥ 표 모서리를 끌어 데이터가 다 보이게 늘리기</span></div>
-                      </div>
-                    </div>
-                  </sc-if>
-
-                  <sc-if value="{{ guideCapture }}" hint-placeholder-val="{{ false }}">
-                    <div class="cap-guide">
-                      <div class="cap-guide__shot"><img src="msi-asset:./assets/img-2116ea43.jpg" alt="키보드에서 윈도우키, Shift, S 키의 위치를 빨간 칸으로 표시한 사진"><div class="cg-cap">WIN + SHIFT + S</div></div>
-                      <div class="cap-guide__steps">
-                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">1</span><span>위 사진처럼 키보드에서 <b>윈도우키 ⌂ + Shift + S</b> 를 함께 눌러요.</span></div>
-                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">2</span><span>붙여넣고 싶은 부분을 마우스로 드래그해서 캡처해요.</span></div>
-                        <div class="cap-guide__step"><span class="cap-guide__n" aria-hidden="true">3</span><span>그래프 붙여넣기 칸을 한 번 누른 뒤 <b>Ctrl + V</b> 를 눌러 캡처한 스샷을 붙여넣어요.</span></div>
-                      </div>
-                    </div>
-                  </sc-if>
-                </div>
-              </div>
-            </sc-if>
-
-            <!-- ============ MISSION 1 · 구성 분석 ============ -->
+            <!-- ============ 전개 · 활동 1 — 인공 신경망과 인공지능 모델 ============ -->
             <div class="m-card ms-1" style="background:var(--msi-role-act1-body)">
               <div class="m-head" style="background:var(--msi-role-act1-head)">
                 <span class="mono"><span class="ph-tag">전개</span>ACTIVITY_1</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row m-title-row--q">
-                  <div class="m-badge" style="background:var(--msi-role-act1-head)">🥧</div>
-                  <div class="m-title m-title--q" role="heading" aria-level="2">로블록스 인기 게임들은 장르별로 각각 몇 %를 차지하고 있을까?</div>
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:var(--msi-role-act1-head)">🧠</div>
+                  <div class="m-title" role="heading" aria-level="2">인공지능은 어떻게 내 낙서를 알아봤을까?</div>
                 </div>
 
-                <div class="m-hd2">1. 이 질문은 어떤 분석에 해당할까?</div>
-                <sc-for list="{{ fqM1 }}" as="q" hint-placeholder-count="1">
-                  <div style="display:flex; flexDirection:column; gap:8px">
-                    <span style="display:flex; gap:6px; flexWrap:wrap">
-                      <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
-                        <span class="glass-chip" data-s="{{ o.state }}" onClick="{{ o.pick }}" aria-pressed="{{ o.pressed }}" style="{{ o.style }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</span>
-                      </sc-for>
-                    </span>
-                    <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
-                      <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
-                    </sc-if>
+                <div class="m-hd2">1. 인공지능이란?</div>
+                <p class="m-sub">빈칸에 알맞은 낱말을 적어요.</p>
+                <div style="overflowX:auto">
+                <table class="ord-sum ai-sum ai-def">
+                  <thead><tr><th>낱말</th><th>뜻</th><th>Quick, Draw!에서는</th></tr></thead>
+                  <tbody>
+                    <tr><td>인공지능</td><td>사람의 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 1"></textarea>·<textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 2"></textarea>·<textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 3"></textarea> 같은 지적 능력을 흉내 내어 소프트웨어로 만든 것</td><td>내 낙서를 알아맞히는 AI</td></tr>
+                    <tr><td><textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동1 빈칸 2"></textarea></td><td>사람 뇌의 신경 세포(뉴런)가 신호를 주고받는 모습을 흉내 내어 만든 구조</td><td>낙서를 보며 <textarea class="blank blank--inline" rows="1" style="width:70px" aria-label="활동1 Quick Draw 빈칸"></textarea>을 배우는 구조</td></tr>
+                    <tr><td>학습</td><td>많은 데이터를 보면서 스스로 패턴을 찾아 배우는 과정</td><td>낙서 5천만 개에서 「고양이는 뾰족한 귀와 수염」 같은 패턴 찾기</td></tr>
+                    <tr><td>인공지능 모델</td><td><textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 모델 빈칸 1"></textarea>을 마치고 만들어진 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="활동1 모델 빈칸 2"></textarea> — 처음 보는 데이터도 분류하거나 예측해요</td><td>새로 그린 낙서를 보고 「고양이 90%」라고 예측</td></tr>
+                  </tbody>
+                </table>
+                </div>
+                <div class="ai-vid">
+                  <img class="ai-fig ai-vid__img" role="button" tabindex="0" title="누르면 움직이는 모습을 보여 줘요" src="msi-asset:./assets/a1-neural.svg" width="680" height="300" alt="왼쪽은 사람의 뇌 속 신경 세포(뉴런)들이 선으로 이어져 신호를 주고받는 모습, 오른쪽은 그것을 흉내 내어 동그라미(인공 뉴런)를 여러 층으로 이은 컴퓨터 속 구조. 입력에 고양이 낙서를 넣으면 출력에 고양이 90%가 나온다.">
+                  <video class="ai-vid__v no-pdf" src="msi-asset:./assets/neural-motion.mp4" preload="none" playsinline controls aria-label="인공 신경망이 낙서를 알아보는 움직이는 그림"></video>
+                  <button type="button" class="glass-pill ai-vid__btn no-pdf">▶ 움직이는 모습 보기</button>
+                </div>
+
+                <div class="m-hd2">2. Quick, Draw!의 AI가 내 낙서를 알아맞히기까지 — 순서대로 놓아요.</div>
+                <div class="seq-activity" id="a1Seq"
+                  data-fb-all="데이터를 모으고 → 학습하고 → 모델이 만들어진 뒤 → 새 낙서를 예측해요."
+                  data-fb-partial="학습하려면 먼저 데이터가 있어야 하고, 예측은 모델이 다 만들어진 뒤에 해요. 빨간 칸을 다시 옮겨 봐요."
+                  data-fb-none="무엇부터 해야 할까요? 데이터가 있어야 학습할 수 있고, 학습이 끝나야 모델이 생겨요."
+                  data-fb-incomplete="빈 칸이 있어요. 4칸을 모두 채운 뒤 '순서 확인'을 눌러요.">
+                  <p class="m-sub">카드를 끌어다 ①~④ 자리에 놓아요. (카드를 누른 뒤 자리를 눌러도 돼요)</p>
+                  <div class="seq-tray" aria-label="순서 카드 모음 (뒤섞인 4장)">
+                    <button type="button" class="seq-chip" data-value="a1s3" data-answer-key="a1s3" draggable="true" aria-pressed="false" aria-label="순서 카드: 모델이 만들어져요">학습 결과로 「낙서 알아맞히기」 인공지능 모델이 만들어져요.</button>
+                    <button type="button" class="seq-chip" data-value="a1s1" data-answer-key="a1s1" draggable="true" aria-pressed="false" aria-label="순서 카드: 낙서를 모아요">전 세계 사람들이 Quick, Draw!에서 그린 낙서 5천만 개를 모아요.</button>
+                    <button type="button" class="seq-chip" data-value="a1s4" data-answer-key="a1s4" draggable="true" aria-pressed="false" aria-label="순서 카드: 새 낙서를 예측해요">내가 새로 그린 낙서를 모델이 보고 무엇인지 예측해요.</button>
+                    <button type="button" class="seq-chip" data-value="a1s2" data-answer-key="a1s2" draggable="true" aria-pressed="false" aria-label="순서 카드: 패턴을 학습해요">인공 신경망이 낙서를 보며 「고양이는 뾰족한 귀와 수염」 같은 패턴을 학습해요.</button>
                   </div>
-                </sc-for>
-
-                <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
-                <details class="gv-help no-pdf">
-                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
-                  <div class="gv-in">
-                    <img class="gv-img gv-img--r1" src="msi-asset:./assets/roblox1.png" alt="CODAP 화면: ① 아래쪽 축에 장르를 넣고 ② Measure 를 눌러 ③ 백분율을 체크한 그래프">
-                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '장르' 넣기</li><li><b>2</b>Measure 누르기</li><li><b>3</b>'백분율' 체크</li></ol>
+                  <div class="seq-rows">
+                    <div class="seq-row"><div class="seq-num">①</div><div class="seq-slot" id="a1SeqSlot1" data-slot="a1SeqSlot1" data-answer="a1s1" role="button" tabindex="0" aria-label="순서 1번 자리 (가장 먼저)"></div></div>
+                    <div class="seq-row"><div class="seq-num">②</div><div class="seq-slot" id="a1SeqSlot2" data-slot="a1SeqSlot2" data-answer="a1s2" role="button" tabindex="0" aria-label="순서 2번 자리"></div></div>
+                    <div class="seq-row"><div class="seq-num">③</div><div class="seq-slot" id="a1SeqSlot3" data-slot="a1SeqSlot3" data-answer="a1s3" role="button" tabindex="0" aria-label="순서 3번 자리"></div></div>
+                    <div class="seq-row"><div class="seq-num">④</div><div class="seq-slot" id="a1SeqSlot4" data-slot="a1SeqSlot4" data-answer="a1s4" role="button" tabindex="0" aria-label="순서 4번 자리 (가장 마지막)"></div></div>
                   </div>
-                </details>
-                <div class="paste-zone" data-zone="m1-graph" role="button" tabindex="0" aria-label="MISSION 1 구성 분석 그래프 붙여넣기 칸">
-                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
-                </div>
-                <div class="pz-controls">
-                  <button type="button" class="pz-clear">🗑 지우기</button>
+                  <div class="seq-controls">
+                    <button type="button" class="glass-pill" id="a1SeqCheck" data-seq-check="1">✅ 순서 확인</button>
+                    <button type="button" class="glass-pill" data-seq-reset="1">🔀 다시 섞기</button>
+                    <span class="seq-result" role="status" aria-live="polite"></span>
+                  </div>
                 </div>
 
-                <div class="m-hd2">3. 그래프를 해석한 결과를 적어주세요.</div>
-                <textarea class="blank" rows="3" placeholder="예: ○○ 장르가 약 ○○%로 가장 많아요." aria-label="M1 그래프 해석"></textarea>
+                <div class="m-hd2">3. 학습, 인공지능 모델, 인공 신경망을 게임 실력에 비유하면 무엇일까요? 알맞은 이름표를 끌어다 놓아요.</div>
+                <div class="ai-match" data-ca-group="a1ca" data-ca-check="button">
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="학습" role="button" tabindex="0" aria-pressed="false">학습</span>
+                    <span class="ca-chip" draggable="true" data-v="인공지능 모델" role="button" tabindex="0" aria-pressed="false">인공지능 모델</span>
+                    <span class="ca-chip" draggable="true" data-v="인공 신경망" role="button" tabindex="0" aria-pressed="false">인공 신경망</span>
+                  </div>
+                  <div class="ai-row"><span class="ai-desc">뇌처럼 서로 연결되어 있어서, 연습하면 배울 수 있는 머리</span><span class="ca-slot" id="a1ca-1" data-answer="인공 신경망" role="button" tabindex="0" aria-label="게임 비유 1 칸 — 연습하면 배울 수 있는 머리"></span></div>
+                  <div class="ai-row"><span class="ai-desc">수백 판을 하면서 「이럴 땐 이렇게!」를 몸에 익히는 연습</span><span class="ca-slot" id="a1ca-2" data-answer="학습" role="button" tabindex="0" aria-label="게임 비유 2 칸 — 몸에 익히는 연습"></span></div>
+                  <div class="ai-row"><span class="ai-desc">연습을 마치고 처음 만나는 상대와의 실전에서 발휘하는 실력</span><span class="ca-slot" id="a1ca-3" data-answer="인공지능 모델" role="button" tabindex="0" aria-label="게임 비유 3 칸 — 실전에서 발휘하는 실력"></span></div>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="a1caCheck">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- ============ MISSION 2 · 비교 분석 ============ -->
+            <!-- ============ 전개 · 활동 2 — 인공지능일까, 아닐까? ============ -->
             <div class="m-card ms-2" style="background:var(--msi-role-act2-body)">
               <div class="m-head" style="background:var(--msi-role-act2-head)">
                 <span class="mono"><span class="ph-tag">전개</span>ACTIVITY_2</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row m-title-row--q">
-                  <div class="m-badge" style="background:var(--msi-role-act2-head)">⚖️</div>
-                  <div class="m-title m-title--q" role="heading" aria-level="2">평균적으로 현재 접속자 수가 가장 많은 장르는 어떤 장르일까?</div>
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:var(--msi-role-act2-head)">🤖</div>
+                  <div class="m-title" role="heading" aria-level="2">인공지능일까, 아닐까?</div>
                 </div>
 
-                <div class="m-hd2">1. 이 질문은 어떤 분석에 해당할까?</div>
-                <sc-for list="{{ fqM2 }}" as="q" hint-placeholder-count="1">
-                  <div style="display:flex; flexDirection:column; gap:8px">
-                    <span style="display:flex; gap:6px; flexWrap:wrap">
-                      <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
-                        <span class="glass-chip" data-s="{{ o.state }}" onClick="{{ o.pick }}" aria-pressed="{{ o.pressed }}" style="{{ o.style }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</span>
-                      </sc-for>
-                    </span>
-                    <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
-                      <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
-                    </sc-if>
+                <div class="m-hd2">1. 인공지능을 구분하는 기준</div>
+                <img class="ai-fig" src="msi-asset:./assets/a2-compare.svg" width="680" height="380" alt="두 줄 비교 그림. 위 줄: 사람이 정한 규칙과 입력이 일반 소프트웨어로 들어가 늘 같은 결과가 나온다. 아래 줄: 데이터로 학습해 인공지능 모델이 만들어지고, 새 입력을 모델에 넣으면 예측이 나온다.">
+                <div class="callout callout--tip"><span class="c-lbl">📌 기준은 「학습했나?」 하나예요</span>인공지능 소프트웨어는 데이터로 학습한 인공지능 모델을 써서 스스로 판단해요. 일반 소프트웨어는 사람이 미리 정해 둔 규칙과 순서대로만 움직여요.</div>
+
+                <div class="m-hd2">2. 내 핸드폰 속 이 기능은 인공지능일까? 아닐까? 기능을 나눠 봐요.</div>
+                <div class="ai-match" data-ca-group="a2ca" data-ca-check="button">
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="인공지능 소프트웨어" role="button" tabindex="0" aria-pressed="false">인공지능 소프트웨어</span>
+                    <span class="ca-chip" draggable="true" data-v="일반 소프트웨어" role="button" tabindex="0" aria-pressed="false">일반 소프트웨어</span>
                   </div>
-                </sc-for>
-
-                <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
-                <details class="gv-help no-pdf">
-                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
-                  <div class="gv-in">
-                    <img class="gv-img gv-img--r2" src="msi-asset:./assets/roblox2.png" alt="CODAP 화면: ① 아래쪽 축에 장르, ② 왼쪽 축에 현재접속자(명)를 넣고 ③ Measure 를 눌러 ④ 측정 레이블 보이기와 ⑤ Mean 을 체크한 그래프">
-                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '장르' 넣기</li><li><b>2</b>왼쪽 축에 '현재접속자(명)' 넣기</li><li><b>3</b>Measure 누르기</li><li><b>4</b>'측정 레이블 보이기' 체크</li><li><b>5</b>'Mean' 체크</li></ol>
-                    <img class="gv-img gv-img--next gv-img--r3" src="msi-asset:./assets/roblox3.png" alt="장르별 평균이 그래프 위에 보이는 화면. 그래프 오른쪽 아래 모서리를 끌어 옆으로 길게 늘린 모습">
-                    <p class="gv-note">평균 글자가 겹쳐 안 보이면 그래프 <b>오른쪽 아래 모서리</b>를 끌어 옆으로 길게 늘려요.</p>
+                  <div class="ai-row"><span class="ai-desc">내가 끝까지 본 영상과 「좋아요」를 보고 다음 영상을 골라 주는 틱톡 추천 피드</span><span class="ca-slot" id="a2ca-1" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="틱톡 추천 피드 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">얼굴을 찾아 강아지 귀와 코를 씌워 주는 인스타그램 필터</span><span class="ca-slot" id="a2ca-2" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="인스타그램 필터 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">사귄 날짜를 넣으면 100일·200일을 계산해 주는 디데이 앱</span><span class="ca-slot" id="a2ca-3" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="디데이 앱 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">놀러 가서 쓴 돈을 사람 수로 똑같이 나눠 주는 1/N 정산 기능</span><span class="ca-slot" id="a2ca-4" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="1/N 정산 기능 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">유튜브 영상 속 말소리를 알아듣고 글자로 바꿔 주는 자동 생성 자막</span><span class="ca-slot" id="a2ca-5" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="자동 생성 자막 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">매일 아침 7시에 울리도록 맞춰 둔 알람</span><span class="ca-slot" id="a2ca-6" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="알람 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">사진첩에서 「바다」를 검색하면 바다 사진만 찾아 주는 기능</span><span class="ca-slot" id="a2ca-7" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="사진첩 바다 검색 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">이름 획수를 정해진 공식으로 더해 점수를 내는 이름 궁합 테스트</span><span class="ca-slot" id="a2ca-8" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="이름 궁합 테스트 칸"></span></div>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="a2caCheck">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
                   </div>
-                </details>
-                <div class="paste-zone" data-zone="m2-graph" role="button" tabindex="0" aria-label="MISSION 2 비교 분석 그래프 붙여넣기 칸">
-                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
-                </div>
-                <div class="pz-controls">
-                  <button type="button" class="pz-clear">🗑 지우기</button>
                 </div>
 
-                <div class="m-hd2">3. 그래프를 해석한 결과를 적어주세요.</div>
-                <textarea class="blank" rows="3" placeholder="예: 평균 접속자 수가 가장 많은 장르는 ○○이고, 약 ○○명이에요." aria-label="M2 그래프 해석"></textarea>
+                <div class="m-hd2">3. 어떤 게임의 몬스터는 「AI」라고 불리지만, 개발자가 정해 둔 「플레이어가 세 칸 안에 오면 공격한다」 규칙대로만 움직여요. 이 몬스터를 움직이는 것은 인공지능 소프트웨어일까, 일반 소프트웨어일까?</div>
+                <div class="ai-pick ai-pick--row" role="group" aria-label="활동2 몬스터 문제 보기">
+                  <sc-for list="{{ fqA2 }}" as="o" hint-placeholder-count="2">
+                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ fbA2 }}" hint-placeholder-val="{{ false }}">
+                  <div class="ai-fb" data-s="{{ fbA2s }}">{{ fbA2 }}</div>
+                </sc-if>
               </div>
             </div>
 
-            <!-- ============ MISSION 3 · 분포 분석 ============ -->
+            <!-- ============ 전개 · 활동 3 — AI for Oceans ============ -->
             <div class="m-card ms-3" style="background:var(--msi-role-act3-body)">
               <div class="m-head" style="background:var(--msi-role-act3-head)">
                 <span class="mono"><span class="ph-tag">전개</span>ACTIVITY_3</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row m-title-row--q">
-                  <div class="m-badge" style="background:var(--msi-role-act3-head)">📊</div>
-                  <div class="m-title m-title--q" role="heading" aria-level="2">로블록스 인기 게임들의 좋아요 숫자는 주로 어느 구간에 몰려 있을까?</div>
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:var(--msi-role-act3-head)">🌊</div>
+                  <div class="m-title" role="heading" aria-level="2">내가 AI 트레이너! 바다를 청소하는 AI를 학습시켜 볼까?</div>
                 </div>
+                <p class="ord-p">AI for Oceans(바다를 위한 AI)에서 AI에게 물고기와 쓰레기를 구별하는 법을 가르쳐요. 내가 누르는 버튼 하나하나가 AI의 학습 데이터가 돼요.</p>
 
-                <div class="m-hd2">1. 이 질문은 어떤 분석에 해당할까?</div>
-                <sc-for list="{{ fqM3 }}" as="q" hint-placeholder-count="1">
-                  <div style="display:flex; flexDirection:column; gap:8px">
-                    <span style="display:flex; gap:6px; flexWrap:wrap">
-                      <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
-                        <span class="glass-chip" data-s="{{ o.state }}" onClick="{{ o.pick }}" aria-pressed="{{ o.pressed }}" style="{{ o.style }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</span>
-                      </sc-for>
-                    </span>
-                    <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
-                      <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
-                    </sc-if>
-                  </div>
-                </sc-for>
+                <div class="m-hd2">1. 2단계부터 시작해요(1단계 영상은 건너뛰어요).</div>
+                <div class="ai-links"><a class="glass-pill" href="https://studio.code.org/kr/courses/oceans/units/1/lessons/1/levels/2" target="_blank" rel="noopener">↗ 바다를 위한 AI 2단계 열기</a></div>
 
-                <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
-                <details class="gv-help no-pdf">
-                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
-                  <div class="gv-in">
-                    <img class="gv-img gv-img--r4" src="msi-asset:./assets/roblox4.png" alt="CODAP 화면: ① 아래쪽 축에 좋아요(만)를 넣고 ② Measure 를 눌러 ③ 그림 상자와 정규 곡선을 펼친 뒤 ④ Box Plot 을 체크한 그래프">
-                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '좋아요(만)' 넣기</li><li><b>2</b>Measure 누르기</li><li><b>3</b>'그림 상자와 정규 곡선' 펼치기</li><li><b>4</b>'Box Plot' 체크</li></ol>
-                  </div>
-                </details>
-                <div class="paste-zone" data-zone="m3-graph" role="button" tabindex="0" aria-label="MISSION 3 분포 분석 그래프 붙여넣기 칸">
-                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
+                <div class="m-hd2">2. 「계속」을 눌러 3단계를 보고 답해요. AI가 바다 생물 몇몇(게, 문어, 거북 등)까지 「물고기 아님」으로 골라냈어요. 왜 그랬을까요?</div>
+                <div class="ai-pick" role="group" aria-label="활동3 바다 생물 문제 보기">
+                  <sc-for list="{{ fqA3 }}" as="o" hint-placeholder-count="3">
+                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</button>
+                  </sc-for>
                 </div>
-                <div class="pz-controls">
-                  <button type="button" class="pz-clear">🗑 지우기</button>
-                </div>
-
-                <div class="m-hd2">3. 그래프를 해석한 결과를 적어주세요.</div>
-                <textarea class="blank" rows="3" placeholder="예: 좋아요 수는 주로 ○○~○○ 구간에 몰려 있어요." aria-label="M3 그래프 해석"></textarea>
+                <sc-if value="{{ fbA3 }}" hint-placeholder-val="{{ false }}">
+                  <div class="ai-fb" data-s="{{ fbA3s }}">{{ fbA3 }}</div>
+                </sc-if>
               </div>
             </div>
 
-            <!-- ============ MISSION 4 · 관계 분석 ============ -->
+            <!-- ============ 전개 · 활동 4 — AI의 밥, 데이터 ============ -->
             <div class="m-card ms-4" style="background:var(--msi-role-act4-body)">
               <div class="m-head" style="background:var(--msi-role-act4-head)">
                 <span class="mono"><span class="ph-tag">전개</span>ACTIVITY_4</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row m-title-row--q">
-                  <div class="m-badge" style="background:var(--msi-role-act4-head)">🔗</div>
-                  <div class="m-title m-title--q" role="heading" aria-level="2">좋아요 수가 많은 게임일수록 싫어요 수도 많을까?</div>
+                <div class="m-title-row">
+                  <div class="m-badge" style="background:var(--msi-role-act4-head)">🍚</div>
+                  <div class="m-title" role="heading" aria-level="2">AI의 밥, 데이터</div>
                 </div>
 
-                <div class="m-hd2">1. 이 질문은 어떤 분석에 해당할까?</div>
-                <sc-for list="{{ fqM4 }}" as="q" hint-placeholder-count="1">
-                  <div style="display:flex; flexDirection:column; gap:8px">
-                    <span style="display:flex; gap:6px; flexWrap:wrap">
-                      <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
-                        <span class="glass-chip" data-s="{{ o.state }}" onClick="{{ o.pick }}" aria-pressed="{{ o.pressed }}" style="{{ o.style }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</span>
-                      </sc-for>
-                    </span>
-                    <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
-                      <div style="{{ q.fbStyle }}">{{ q.fb }}</div>
-                    </sc-if>
+                <div class="m-hd2">1. 데이터에 관한 낱말 세 가지를 알아봐요.</div>
+                <div class="ai-vid">
+                  <img class="ai-fig ai-vid__img" role="button" tabindex="0" title="누르면 움직이는 모습을 보여 줘요" src="msi-asset:./assets/a4-data.svg" width="680" height="300" alt="흐름 그림. 왼쪽 학습 데이터: 고양이·강아지·고양이 사진마다 정답 이름표(레이블)가 붙어 있다. 학습 화살표를 따라 인공지능 모델이 만들어지고, 아래의 테스트 데이터(이름표 없는 처음 보는 고양이 사진)를 모델에 넣으면 오른쪽에 예측 「고양이!」가 나온다.">
+                  <video class="ai-vid__v no-pdf" src="msi-asset:./assets/data-motion.mp4" preload="none" playsinline controls aria-label="학습 데이터와 테스트 데이터가 움직이는 그림"></video>
+                  <button type="button" class="glass-pill ai-vid__btn no-pdf">▶ 움직이는 모습 보기</button>
+                </div>
+                <div class="ai-cards">
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">🏷️</div><div class="ai-card__t">레이블(라벨)</div><p>데이터에 붙인 <b>정답</b> <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 레이블 뜻 빈칸"></textarea>예요. 인스타 사진에 #떡볶이를 다는 것처럼, 사진에 「고양이」라고 붙여요.</p><p class="ai-card__ex">시험공부라면? → 문제의 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동4 레이블 비유 빈칸"></textarea></p></div>
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📚</div><div class="ai-card__t">학습 데이터</div><p>모델을 학습시키려고 <b>레이블과 함께</b> 보여 주는 데이터예요.</p><p class="ai-card__ex">시험공부라면? → 공부하는 <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 학습 데이터 비유 빈칸"></textarea></p></div>
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📝</div><div class="ai-card__t">테스트 데이터</div><p>학습을 마친 모델이 얼마나 잘 맞히는지 확인하려고 쓰는, <b>학습에 쓰지 않은</b> <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 테스트 데이터 뜻 빈칸"></textarea> 데이터예요.</p><p class="ai-card__ex">시험공부라면? → <b>처음 보는 시험 문제</b></p></div>
+                </div>
+                <p class="m-sub ai-center">문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 학습에 쓰지 않은 것으로 골라요.</p>
+
+                <div class="m-hd2">2. 방금 한 AI for Oceans에서 찾아봐요.</div>
+                <div class="ai-match" data-ca-group="a4ca1" data-ca-check="button">
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="테스트 데이터" role="button" tabindex="0" aria-pressed="false">테스트 데이터</span>
+                    <span class="ca-chip" draggable="true" data-v="레이블" role="button" tabindex="0" aria-pressed="false">레이블</span>
+                    <span class="ca-chip" draggable="true" data-v="학습 데이터" role="button" tabindex="0" aria-pressed="false">학습 데이터</span>
                   </div>
-                </sc-for>
-
-                <div class="m-hd2">2. CODAP 으로 그래프를 그려 데이터를 시각화하고, 그래프를 붙여넣으세요.</div>
-                <details class="gv-help no-pdf">
-                  <summary><span class="gv-tx"><span class="gv-t">💡 그래프 시각화하기</span> <span class="gv-sub"><span class="gv-dash">— </span>그리는 법이 막히면 열어 보세요</span></span><span class="gv-pm" aria-hidden="true"></span></summary>
-                  <div class="gv-in">
-                    <img class="gv-img gv-img--r5" src="msi-asset:./assets/roblox5.png" alt="CODAP 화면: ① 아래쪽 축에 좋아요(만), ② 왼쪽 축에 싫어요(만)를 넣고 ③ Measure 를 눌러 ④ 최소제곱선과 ⑤ Show r 을 체크한 그래프">
-                    <ol class="gv-steps"><li><b>1</b>아래쪽 축에 '좋아요(만)' 넣기</li><li><b>2</b>왼쪽 축에 '싫어요(만)' 넣기</li><li><b>3</b>Measure 누르기</li><li><b>4</b>'최소제곱선' 체크</li><li><b>5</b>'Show r' 체크</li></ol>
+                  <div class="ai-row"><span class="ai-desc">내가 버튼으로 붙인 「물고기」, 「물고기 아님」</span><span class="ca-slot" id="a4ca1-1" data-answer="레이블" role="button" tabindex="0" aria-label="내가 버튼으로 붙인 것 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">내가 라벨을 붙여 가며 AI에게 보여 준 그림들</span><span class="ca-slot" id="a4ca1-2" data-answer="학습 데이터" role="button" tabindex="0" aria-label="AI에게 보여 준 그림들 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">학습이 끝난 뒤 AI가 처음 보고 분류한 바닷속 물체들</span><span class="ca-slot" id="a4ca1-3" data-answer="테스트 데이터" role="button" tabindex="0" aria-label="AI가 처음 보고 분류한 물체들 칸"></span></div>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="a4ca1Check">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
                   </div>
-                </details>
-                <div class="paste-zone" data-zone="m4-graph" role="button" tabindex="0" aria-label="MISSION 4 관계 분석 그래프 붙여넣기 칸">
-                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 그래프를 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
-                </div>
-                <div class="pz-controls">
-                  <button type="button" class="pz-clear">🗑 지우기</button>
                 </div>
 
-                <div class="m-hd2">3. 그래프를 해석한 결과를 적어주세요.</div>
-                <textarea class="blank" rows="3" placeholder="예: 좋아요 수가 많아질수록 싫어요 수는 ○○." aria-label="M4 그래프 해석"></textarea>
+                <div class="m-hd2">3. 내 취향을 맞히는 영상 추천 AI를 만들었어요. 이 AI가 잘 맞히는지 확인하려면 어떤 데이터로 시험해야 할까요?</div>
+                <div class="ai-pick ai-pick--row" role="group" aria-label="활동4 영상 추천 문제 보기">
+                  <sc-for list="{{ fqA4 }}" as="o" hint-placeholder-count="2">
+                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ fbA4 }}" hint-placeholder-val="{{ false }}">
+                  <div class="ai-fb" data-s="{{ fbA4s }}">{{ fbA4 }}</div>
+                </sc-if>
+
+                <div class="m-hd2">4. AI가 엉뚱해진 까닭을 찾아 이름표를 끌어다 놓아요.</div>
+                <div class="ai-match" data-ca-group="a4ca2" data-ca-check="button">
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="데이터 질이 나빠요" role="button" tabindex="0" aria-pressed="false">데이터 질이 나빠요</span>
+                    <span class="ca-chip" draggable="true" data-v="데이터 양이 부족해요" role="button" tabindex="0" aria-pressed="false">데이터 양이 부족해요</span>
+                  </div>
+                  <div class="ai-row"><span class="ai-desc">어제 만든 새 틱톡 계정이라 본 영상이 몇 개 없어서 추천이 내 취향과 전혀 달라요</span><span class="ca-slot" id="a4ca2-1" data-answer="데이터 양이 부족해요" role="button" tabindex="0" aria-label="새 틱톡 계정 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">동생이 내 유튜브 계정으로 키즈 영상을 몰아 봐서 추천이 키즈 영상으로 도배됐어요</span><span class="ca-slot" id="a4ca2-2" data-answer="데이터 질이 나빠요" role="button" tabindex="0" aria-label="키즈 영상 도배 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">강아지 사진 여러 장에 「고양이」 레이블이 잘못 붙어 있어요</span><span class="ca-slot" id="a4ca2-3" data-answer="데이터 질이 나빠요" role="button" tabindex="0" aria-label="잘못 붙은 레이블 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">얼굴 필터 AI가 얼굴 사진 10장만 보고 학습했어요</span><span class="ca-slot" id="a4ca2-4" data-answer="데이터 양이 부족해요" role="button" tabindex="0" aria-label="얼굴 사진 10장 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">흰 고양이 사진 1,000장으로만 학습한 AI가 검은 고양이를 못 알아봐요</span><span class="ca-slot" id="a4ca2-5" data-answer="데이터 질이 나빠요" role="button" tabindex="0" aria-label="흰 고양이 사진만 학습 칸"></span></div>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="a4ca2Check">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>데이터의 질에는 레이블이 정확한지, 한쪽으로 치우치지 않고 다양한지, 목적에 맞는 데이터인지가 모두 들어가요.</div>
               </div>
             </div>
 
-            <!-- ============ 정리 · 핵심 요약 (예시) ============ -->
+            <!-- ============ 정리 · 핵심 요약 ============ -->
             <div class="m-card" style="background:var(--msi-role-summary-body)">
               <div class="m-head" style="background:var(--msi-role-summary-head)">
                 <span class="mono"><span class="ph-tag">정리</span>KEY_SUMMARY</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-summary-head)">📝</div><div class="m-title" role="heading" aria-level="2">오늘 배운 것 — 질문에 맞는 분석과 CODAP 그래프</div></div>
+                <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-summary-head)">📝</div><div class="m-title" role="heading" aria-level="2">오늘 배운 것 — 인공지능은 데이터로 배워요</div></div>
+                <div class="ai-match" data-ca-group="sumca" data-ca-check="button">
+                  <p class="m-sub ai-center">이름표를 끌어다 빈칸에 놓아요. (같은 이름표를 두 번 써도 돼요)</p>
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="질" role="button" tabindex="0" aria-pressed="false">질</span>
+                    <span class="ca-chip" draggable="true" data-v="학습" role="button" tabindex="0" aria-pressed="false">학습</span>
+                    <span class="ca-chip" draggable="true" data-v="새로운" role="button" tabindex="0" aria-pressed="false">새로운</span>
+                    <span class="ca-chip" draggable="true" data-v="규칙" role="button" tabindex="0" aria-pressed="false">규칙</span>
+                    <span class="ca-chip" draggable="true" data-v="뉴런" role="button" tabindex="0" aria-pressed="false">뉴런</span>
+                    <span class="ca-chip" draggable="true" data-v="양" role="button" tabindex="0" aria-pressed="false">양</span>
+                    <span class="ca-chip" draggable="true" data-v="정답" role="button" tabindex="0" aria-pressed="false">정답</span>
+                  </div>
                 <div style="overflowX:auto">
-                <table class="ord-sum">
-                  <thead><tr><th>분석</th><th>이런 질문</th><th>CODAP 에서</th></tr></thead>
+                <table class="ord-sum ai-sum">
+                  <thead><tr><th>낱말</th><th>뜻</th><th>오늘 만난 예</th></tr></thead>
                   <tbody>
-                    <tr><td>구성 분석</td><td>각각 몇 %를 차지할까?</td><td>아래쪽 축 → Measure → 백분율</td></tr>
-                    <tr><td>비교 분석</td><td>어느 쪽이 평균적으로 더 클까?</td><td>두 축 → Measure → 측정 레이블 · Mean</td></tr>
-                    <tr><td>분포 분석</td><td>주로 어느 구간에 몰려 있을까?</td><td>아래쪽 축 → Measure → Box Plot</td></tr>
-                    <tr><td>관계 분석</td><td>~할수록 ~도 커질까?</td><td>두 축 → Measure → 최소제곱선 · Show r</td></tr>
+                    <tr><td>인공지능</td><td>사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 만든 소프트웨어</td><td>틱톡 추천, 인스타 필터</td></tr>
+                    <tr><td>인공 신경망</td><td>사람 뇌의 <span class="ca-slot" id="sum-1" data-answer="뉴런" role="button" tabindex="0" aria-label="핵심 정리 칸 1"></span> 연결을 흉내 낸 구조</td><td>Quick, Draw!의 낙서 인식</td></tr>
+                    <tr><td>인공지능 모델</td><td>데이터를 <span class="ca-slot" id="sum-2" data-answer="학습" role="button" tabindex="0" aria-label="핵심 정리 칸 2"></span>하여 만들어진 결과물로, 새 데이터를 분류·예측해요</td><td>낙서 알아맞히기 모델</td></tr>
+                    <tr><td>레이블</td><td>데이터에 붙인 <span class="ca-slot" id="sum-3" data-answer="정답" role="button" tabindex="0" aria-label="핵심 정리 칸 3"></span> 이름표</td><td>「물고기」, 「물고기 아님」</td></tr>
+                    <tr><td>학습 데이터</td><td>모델을 학습시키려고 레이블과 함께 보여 주는 데이터</td><td>내가 라벨을 붙인 그림</td></tr>
+                    <tr><td>테스트 데이터</td><td>학습에 쓰지 않은 <span class="ca-slot" id="sum-4" data-answer="새로운" role="button" tabindex="0" aria-label="핵심 정리 칸 4"></span> 데이터로 모델의 성능을 확인해요</td><td>AI가 처음 본 바닷속 물체</td></tr>
                   </tbody>
                 </table>
                 </div>
-                <span class="ord-ex">※ 순서 예시를 위해 새로 넣은 칸이에요.</span>
+                <p class="ai-fill">인공지능 소프트웨어는 데이터로 <span class="ca-slot" id="sum-5" data-answer="학습" role="button" tabindex="0" aria-label="핵심 정리 칸 5"></span>하고, 일반 소프트웨어는 사람이 정한 <span class="ca-slot" id="sum-6" data-answer="규칙" role="button" tabindex="0" aria-label="핵심 정리 칸 6"></span>대로만 움직여요.</p>
+                <p class="ai-fill">인공지능의 성능은 학습 데이터의 <span class="ca-slot" id="sum-7" data-answer="양" role="button" tabindex="0" aria-label="핵심 정리 칸 7"></span>과 <span class="ca-slot" id="sum-8" data-answer="질" role="button" tabindex="0" aria-label="핵심 정리 칸 8"></span>에 크게 좌우돼요.</p>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="sumcaCheck">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- ============ 정리 · 형성평가 (예시) ============ -->
+            <!-- ============ 정리 · 형성평가 (O/X — 다 고른 뒤 ✅ 정답 확인) ============ -->
             <div class="m-card" style="background:var(--msi-role-checkup-body)">
               <div class="m-head" style="background:var(--msi-role-checkup-head)">
                 <span class="mono"><span class="ph-tag">정리</span>CHECK_UP</span>
               </div>
               <div class="m-body">
                 <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-checkup-head)">✅</div><div class="m-title" role="heading" aria-level="2">형성평가 — O / X</div></div>
-                <div class="ord-ox">
-                  <div class="q"><span class="num-coin num-coin--lilac">1</span><span class="t">장르별로 몇 %인지 알고 싶을 때는 구성 분석을 한다.</span><b class="ox">O / X</b></div>
-                  <div class="q"><span class="num-coin num-coin--lilac">2</span><span class="t">두 속성의 관계를 볼 때 r 이 0 에 가까우면 관계가 뚜렷하다.</span><b class="ox">O / X</b></div>
-                  <div class="q"><span class="num-coin num-coin--lilac">3</span><span class="t">Box Plot 은 데이터가 어느 구간에 몰려 있는지 볼 때 쓴다.</span><b class="ox">O / X</b></div>
+                <p class="m-sub">문장마다 O 또는 X 를 눌러요. 누르면 바로 정답인지 알려 주고, 왜 그런지 설명해 줘요.</p>
+                <div class="ord-ox ai-ox">
+                  <sc-for list="{{ oxItems }}" as="q" hint-placeholder-count="6">
+                    <div class="q">
+                      <span class="num-coin num-coin--lilac">{{ q.n }}</span>
+                      <span class="t">{{ q.t }}</span>
+                      <span class="oxb" role="group" aria-label="{{ q.aria }}">
+                        <button type="button" class="glass-chip" data-s="{{ q.oS }}" aria-pressed="{{ q.oP }}" onClick="{{ q.pickO }}">O</button>
+                        <button type="button" class="glass-chip" data-s="{{ q.xS }}" aria-pressed="{{ q.xP }}" onClick="{{ q.pickX }}">X</button>
+                      </span>
+                      <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
+                        <span class="why" data-s="{{ q.fbS }}" role="status">{{ q.fb }}</span>
+                      </sc-if>
+                    </div>
+                  </sc-for>
                 </div>
-                <span class="ord-ex">※ 예시 모양이에요 — 실제로 만들 때는 지금 활동지처럼 눌러서 채점되는 O/X 로 만들어요.</span>
               </div>
             </div>
 
@@ -1676,7 +1768,7 @@
   </div>
 </div>
 <!-- [design.md §10] 활동 진행률 플로팅 위젯 — zoom:1.1 래퍼 밖에 두고 sheetWidgetDisplay 로 탭 게이팅 -->
-<button type="button" class="side-fab" aria-expanded="false" aria-controls="msiSidePanel" style="display:{{ sheetWidgetDisplay }}">❓ 도움말 · 진행률</button>
+<button type="button" class="side-fab" aria-expanded="false" aria-controls="msiSidePanel" style="display:{{ sheetWidgetDisplay }}">📊 진행률</button>
 <div class="sheet-side" id="msiSidePanel" style="display:{{ sheetWidgetDisplay }}">
 <div class="sheet-progress" aria-label="활동 진행률">
   <div class="sp-head">PROGRESS</div>
@@ -1692,14 +1784,6 @@
     <sc-if value="{{ sheetSaved }}" hint-placeholder-val="{{ false }}">
       <span class="sp-done">✓ 제출</span>
     </sc-if>
-  </div>
-</div>
-<!-- [07] 도움말 카드 — 진행률 위젯 아래. 버튼을 누르면 맨 위 GUIDE 카드가 나타남(09 의 왼쪽 안내 카드와 같은 동작) -->
-<div class="sheet-guide" aria-label="도움말">
-  <div class="sg-head">HELP</div>
-  <div class="sg-body">
-    <button type="button" class="sg-btn" data-guide="codap" aria-controls="guidePanel" aria-expanded="{{ guideCodapSel }}" onClick="{{ toggleGuideCodap }}">📊 CODAP 들어가고, 데이터 올리는 법</button>
-    <button type="button" class="sg-btn" data-guide="capture" aria-controls="guidePanel" aria-expanded="{{ guideCaptureSel }}" onClick="{{ toggleGuideCapture }}">📸 캡처해서 붙여넣기</button>
   </div>
 </div>
 </div>
@@ -1854,8 +1938,8 @@ class Component extends DCLogic {
     tab: 'rules', timeView: 'day', mealView: 'day',
     grade: 3, cls: 2, dayIdx: 2,
     fGrade: '', fClass: '', fNum: '', fName: '',
-    fq: [null, null, null, null], guide: '',
-    q1Pick: '', prog2: '', a3: [null, null, null], ox: [null, null, null, null, null], reflect: '', checks: [false, false, false, false],
+    fq: [null, null, null],
+    q1Pick: '', prog2: '', a3: [null, null, null], ox: [null, null, null, null, null, null], oxChecked: false, oxMsg: '', reflect: '', checks: [false, false, false, false],
     saved: false, savedName: '', sheetTick: 0,
     tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', mealDay: '', mealWeek: '', mealMonth: '', neisErr: ''
   };
@@ -1872,7 +1956,7 @@ class Component extends DCLogic {
     } catch (e) {}
     if (this._keep.t && this._keep.s) {
       const k = this._keep.s;
-      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) ? k.fq : this.state.fq });
+      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) ? k.fq : this.state.fq, ox: Array.isArray(k.ox) ? k.ox : this.state.ox });
     }
     const MINE = ['학년', '반', '번호', '이름'];   // 이 네 칸은 화면 상태(state)라 탭을 바꿔도 남음
     const visibleArea = () => Array.prototype.find.call(document.querySelectorAll('#sheetPrintArea'), (a) => a.offsetParent !== null) || null;
@@ -1880,8 +1964,12 @@ class Component extends DCLogic {
       const f = {}, z = [];
       area.querySelectorAll('textarea.blank[aria-label]').forEach((t) => { const l = t.getAttribute('aria-label'); if (MINE.indexOf(l) < 0 && t.value) f[l] = t.value; });
       area.querySelectorAll('.paste-zone').forEach((p, i) => { const im = p.querySelector('img'); z[i] = p._imgData || (im && im.src) || null; });
+      // [ai/01] 이름표 칸(.ca-slot)·순서 칸(.seq-slot)도 보관 — 탭을 바꾸면 화면에서 빠져서 끌어 놓은 것이 사라졌음
+      const ca = {}, sq = {};
+      area.querySelectorAll('.ca-slot[id]').forEach((sl) => { const v = sl.getAttribute('data-filled'); if (v) ca[sl.id] = v; });
+      area.querySelectorAll('.seq-slot[id]').forEach((sl) => { const c = sl.querySelector('.seq-chip'); if (c) sq[sl.id] = c.getAttribute('data-answer-key'); });
       const st = this.state;
-      return { s: { fGrade: st.fGrade, fClass: st.fClass, fNum: st.fNum, fName: st.fName, fq: st.fq }, f, z };
+      return { s: { fGrade: st.fGrade, fClass: st.fClass, fNum: st.fNum, fName: st.fName, fq: st.fq, ox: st.ox }, f, z, ca, sq };
     };
     const writeLocal = (d) => {
       try { localStorage.setItem(this._keepKey, JSON.stringify(d)); }
@@ -1897,6 +1985,17 @@ class Component extends DCLogic {
         const im = document.createElement('img'); im.alt = '붙여넣은 그래프'; im.src = u; p.appendChild(im);
         p.classList.add('is-filled'); p._imgData = u;
       });
+      area.querySelectorAll('.ca-slot[id]').forEach((sl) => {
+        const v = k.ca && k.ca[sl.id]; if (!v || sl.getAttribute('data-filled')) return;
+        sl.textContent = v; sl.setAttribute('data-filled', v); sl.classList.add('is-filled');
+      });
+      area.querySelectorAll('.seq-slot[id]').forEach((sl) => {
+        const key = k.sq && k.sq[sl.id]; if (!key || sl.querySelector('.seq-chip')) return;
+        const act = sl.closest('.seq-activity');
+        const c = act && Array.prototype.find.call(act.querySelectorAll('.seq-tray .seq-chip'), (x) => x.getAttribute('data-answer-key') === key);
+        if (c) { sl.appendChild(c); sl.classList.add('is-filled'); }
+      });
+      area.querySelectorAll('.seq-tray').forEach((t) => t.classList.toggle('is-empty', !t.querySelector('.seq-chip')));
       this._keepRestoring = false;
     };
     this._keepTick = () => {
@@ -1908,14 +2007,14 @@ class Component extends DCLogic {
       this._keepSig = sig; d.t = this._keep.t || Date.now(); this._keep = d; writeLocal(d);
     };
     this._keepClear = () => {
-      // 미뤄 둔 보관(0.3초)이 지운 뒤에 다시 쓰지 않게 — 이름 적고 곧바로 PDF 를 누르면 다음 사람에게 답이 되살아났음(2026-10-17 재현)
+      // [ai/01] 미뤄 둔 보관(0.3초)이 지운 뒤에 다시 쓰지 않게 — 이름 적고 곧바로 PDF 를 누르면 다음 사람에게 답이 되살아났음(07 에서 재현)
       clearTimeout(this._keepT);
       const area = visibleArea(); if (area) this._keepSig = JSON.stringify(collect(area));
       try { localStorage.removeItem(this._keepKey); } catch (e) {} this._keep = Object.assign({}, this._keep, { t: this._keep.t });
     };
     const keepSched = () => { clearTimeout(this._keepT); this._keepT = setTimeout(() => this._keepTick(), 300); };
     ['input', 'click', 'paste', 'drop', 'keyup'].forEach((ev) => document.addEventListener(ev, keepSched, true));
-    // 탭을 누르는 순간·페이지를 떠날 때는 기다리지 않고 바로 보관 — 0.3초 안에 탭을 바꾸면 마지막 입력이 빠졌음(2026-10-17)
+    // [ai/01] 탭을 누르는 순간·페이지를 떠날 때는 기다리지 않고 바로 보관 — 0.3초 안에 탭을 바꾸면 마지막 입력이 빠졌음
     document.addEventListener('click', (e) => { if (e.target && e.target.closest && e.target.closest('.tab-chip')) { clearTimeout(this._keepT); this._keepTick(); } }, true);
     window.addEventListener('pagehide', () => { clearTimeout(this._keepT); this._keepTick(); });
     if (typeof MutationObserver === 'function') { this._keepMo = new MutationObserver(keepSched); this._keepMo.observe(document.body, { subtree: true, childList: true }); }
@@ -2017,39 +2116,22 @@ class Component extends DCLogic {
     ];
   }
 
-  /* [07] 도움말 카드 — 'codap' | 'capture' | ''. 열면 맨 위 GUIDE 카드로 스크롤, 닫으면 열기 전 위치와 누른 버튼으로 돌아간다. */
-  toggleGuide(id) {
-    const next = (id && id === this.state.guide) ? '' : id;
-    if (next && !this._guideBack) this._guideBack = { y: window.scrollY, id: id };
-    this.setState({ guide: next });
-    const seen = (list) => Array.prototype.slice.call(list).filter((n) => n.getClientRects().length)[0];   // x-dc 의 숨은 복제본 건너뛰기
-    setTimeout(() => {
-      if (next) {
-        const el = seen(document.querySelectorAll('#guidePanel'));
-        if (!el) return;
-        const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-        el.focus({ preventScroll: true });
-      } else if (this._guideBack) {
-        const back = this._guideBack; this._guideBack = null;
-        window.scrollTo(0, back.y);
-        const btn = seen(document.querySelectorAll('.sheet-guide [data-guide="' + back.id + '"]'));
-        if (btn) btn.focus({ preventScroll: true });
-      }
-    }, 80);
-  }
-
   // [data5] 활동 진행률 세분화 — 미션 빈칸(textarea.blank[aria-label]) + 그래프 붙여넣기 칸(.paste-zone) + 형성평가(fq) 항목 단위 집계
   _progressParts() {
-    const root = document.getElementById('sheetPrintArea');
-    const blanks = root ? Array.prototype.slice.call(root.querySelectorAll('textarea.blank[aria-label]')) : [];
+    const root = Array.prototype.find.call(document.querySelectorAll('#sheetPrintArea'), (a) => a.offsetParent !== null) || document.getElementById('sheetPrintArea');
+    const all = (sel) => (root ? Array.prototype.slice.call(root.querySelectorAll(sel)) : []);
+    const blanks = all('textarea.blank[aria-label]');
     const blanksDone = blanks.filter((el) => (el.value || '').trim().length > 0).length;
-    const zones = root ? Array.prototype.slice.call(root.querySelectorAll('.paste-zone')) : [];
+    const zones = all('.paste-zone');
     const zonesDone = zones.filter((z) => z._imgData || (z.classList && z.classList.contains('is-filled'))).length;
-    const fq = this.state.fq || [];
+    const groups = all('[data-ca-group]');   // [ai/01] 이름표 묶음 — 칸이 모두 차면 1
+    const groupsDone = groups.filter((g) => { const ss = g.querySelectorAll('.ca-slot'); return ss.length && Array.prototype.every.call(ss, (x) => !!x.getAttribute('data-filled')); }).length;
+    const seqs = all('.seq-activity');        // [ai/01] 순서 배열 — 칸이 모두 차면 1
+    const seqsDone = seqs.filter((q) => { const ss = q.querySelectorAll('.seq-slot'); return ss.length && Array.prototype.every.call(ss, (x) => !!x.querySelector('.seq-chip')); }).length;
+    const fq = this.state.fq || [], ox = this.state.ox || [];
     return {
-      done: blanksDone + zonesDone + fq.filter(Boolean).length,
-      total: blanks.length + zones.length + fq.length
+      done: blanksDone + zonesDone + groupsDone + seqsDone + fq.filter(Boolean).length + ox.filter(Boolean).length,
+      total: blanks.length + zones.length + groups.length + seqs.length + fq.length + ox.length
     };
   }
 
@@ -2517,70 +2599,59 @@ class Component extends DCLogic {
       };
     });
 
-    const OX_Q = [
-      { t: "'어떤 음악이 가장 아름다운가?'는 데이터로 답할 수 있는 질문이다.", a: 'X' },
-      { t: '데이터로 해결할 문제를 정할 때, 문제의 범위는 넓을수록 데이터 분석이 쉬워진다.', a: 'X' },
-      { t: "표에서 가로줄은 '행'이라고 부른다.", a: 'O' },
-      { t: '표에서 세로줄은 숫자(1, 2, 3…)로 표시된다.', a: 'X' },
-      { t: "행과 열이 만나는 하나의 칸을 '셀'이라고 부른다.", a: 'O' }
+    // ── [ai/01] 하나 고르기 3문항(누르면 바로 채점) — 활동2 몬스터 · 활동3 바다 생물 · 활동4 확인용 데이터. 이유 문장은 양식 그대로 ──
+    const FQ = [
+      { opts: ['인공지능 소프트웨어', '일반 소프트웨어'], a: '일반 소프트웨어',
+        why: '이름에 AI가 붙어도 데이터로 학습하지 않고 정해진 규칙대로만 움직이면 일반 소프트웨어예요.',
+        w: { '인공지능 소프트웨어': '이름에 AI가 붙어도 데이터로 학습하지 않고 정해진 규칙대로만 움직이면 일반 소프트웨어예요.' } },
+      { opts: ['AI가 고장 나서', '학습 데이터에 물고기와 쓰레기만 있어서, 바다 생물은 배운 적이 없어서', '바다 생물은 바다에 있으면 안 돼서'],
+        a: '학습 데이터에 물고기와 쓰레기만 있어서, 바다 생물은 배운 적이 없어서',
+        why: 'AI는 우리가 가르친 것만 배워요. 학습 데이터에 없던 바다 생물은 알아보지 못했어요.',
+        w: { 'AI가 고장 나서': 'AI는 고장 나지 않았어요. 배운 대로 했을 뿐이에요.',
+          '바다 생물은 바다에 있으면 안 돼서': '바다 생물도 바닷속에 있어야 해요. AI는 우리가 가르친 것만 배워요.' } },
+      { opts: ['학습할 때 이미 보여 준 영상들', '학습에 쓰지 않은 새 영상들'], a: '학습에 쓰지 않은 새 영상들',
+        why: '학습에 쓰지 않은 새 데이터(테스트 데이터)로 시험해야 진짜 실력을 알 수 있어요.',
+        w: { '학습할 때 이미 보여 준 영상들': '이미 본 문제로 시험을 보면 진짜 실력을 알 수 없어요.' } }
     ];
-    const oxCircle = (i, v) => {
-      const pick = s.ox[i];
-      const bg = pick === v ? (v === OX_Q[i].a ? 'var(--msi-role-base-sprout)' : 'var(--msi-role-base-salmon)') : 'var(--msi-role-base-cream-paper)';
-      return "cursor:pointer; width:34px; height:34px; border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:50%; display:flex; alignItems:center; justifyContent:center; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
-    };
+    const fqPick = (i, v) => () => this.setState(st => { const a = st.fq.slice(); a[i] = v; return { fq: a }; });
+    const fqOpts = (i) => FQ[i].opts.map(v => {
+      const on = s.fq[i] === v, ok = v === FQ[i].a;
+      return { v: v, pick: fqPick(i, v), pressed: String(on), state: on ? (ok ? 'ok' : 'no') : '', icon: on ? (ok ? '✓' : '✗') : '' };
+    });
+    const fqFb = (i) => { const p = s.fq[i]; if (!p) return ''; return p === FQ[i].a ? '⭕ 정답이에요! ' + FQ[i].why : '❌ ' + (FQ[i].w[p] || '') + ' 다시 골라 보세요.'; };
+    const fqFbS = (i) => (s.fq[i] ? (s.fq[i] === FQ[i].a ? 'ok' : 'no') : '');
+    const fqA2 = fqOpts(0), fqA3 = fqOpts(1), fqA4 = fqOpts(2);
+
+    // ── [ai/01] 형성평가 O/X 6문항 — 누르면 바로 채점, 맞아도 틀려도 이유(선생님 피드백 2026-10-18, 1·3·4번 이유는 Claude 초안) ──
+    const OX_Q = [
+      { t: '틱톡 추천 피드는 내가 본 영상 데이터로 학습한 인공지능이 영상을 골라 준다.', a: 'O', why: '내가 본 영상·좋아요 데이터로 학습한 인공지능 모델이 다음 영상을 골라 줘요.' },
+      { t: '사귄 날부터 100일을 계산해 주는 디데이 앱은 인공지능 소프트웨어이다.', a: 'X', why: '정해진 계산 규칙대로만 움직이는 일반 소프트웨어예요.' },
+      { t: '인공 신경망은 사람 뇌의 신경 세포(뉴런) 연결을 흉내 낸 구조이다.', a: 'O', why: '뇌 속 뉴런들이 신호를 주고받는 모습을 흉내 낸 구조가 인공 신경망이에요.' },
+      { t: '사진에 붙인 「고양이」, 「강아지」 같은 정답 이름표를 레이블이라고 한다.', a: 'O', why: '데이터에 붙인 정답 이름표를 레이블(라벨)이라고 해요.' },
+      { t: 'AI 모델이 잘 맞히는지 확인할 때는 학습에 썼던 데이터를 다시 쓰는 것이 가장 좋다.', a: 'X', why: '학습에 쓰지 않은 새로운 테스트 데이터로 확인해야 해요.' },
+      { t: '학습 데이터에 틀린 레이블이 많아도 데이터 양만 많으면 AI 성능은 좋아진다.', a: 'X', why: 'AI는 틀린 레이블도 그대로 배워요. 데이터의 질도 중요해요.' }
+    ];
     const oxPick = (i, v) => () => this.setState(st => { const a = st.ox.slice(); a[i] = v; return { ox: a }; });
     const oxItems = OX_Q.map((q, i) => {
-      const pick = s.ox[i];
-      const right = pick === q.a;
+      const pick = s.ox[i], right = pick === q.a, graded = !!pick;
+      const st = (v) => (pick !== v ? '' : graded ? (right ? 'ok' : 'no') : 'on');
       return {
-        text: (i + 1) + '. ' + q.t,
-        oStyle: oxCircle(i, 'O'), xStyle: oxCircle(i, 'X'),
+        n: i + 1, t: q.t, aria: (i + 1) + '번 문장 O 또는 X 고르기',
+        oS: st('O'), xS: st('X'), oP: String(pick === 'O'), xP: String(pick === 'X'),
         pickO: oxPick(i, 'O'), pickX: oxPick(i, 'X'),
-        fb: !pick ? '' : (right ? '⭕ 정답이에요.' : '❌ 다시 생각해 봐요. 정답은 ' + q.a + ' 예요.'),
-        fbStyle: "fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:13px; color:" + (right ? 'var(--msi-role-ui-feedback-ok-ink)' : 'var(--msi-role-ui-feedback-no-ink)')
+        fb: graded ? (right ? '⭕ 정답이에요! ' : '❌ 오답이에요. ') + q.why : '',
+        fbS: graded ? (right ? 'ok' : 'no') : ''
       };
     });
-
-    // ── 형성평가: 질문 → 분석 유형 고르기 (4지선다, 클릭 즉시 채점) ──
-    const FQ = [
-      { t: "로블록스 인기 게임들은 장르별로 각각 몇 %를 차지하고 있을까?", a: "구성", why: "'몇 %'를 묻고 있으니 전체 게임 중 각 장르가 차지하는 비율을 보는 구성 분석이에요.", w: {
-          "비교": "비교 분석은 '어느 쪽이 더 큰가'처럼 그룹끼리 크기를 견줘요. 이 질문은 어느 장르가 더 많은지가 아니라 전체 중 각 장르가 몇 %인지를 물어요.",
-          "분포": "분포 분석은 값들이 어느 구간에 몰려 있는지 퍼진 모양을 봐요. 이 질문은 장르마다 차지하는 비율을 물으니 분포가 아니에요.",
-          "관계": "관계 분석은 '~할수록'처럼 두 속성의 관련성을 봐요. 이 질문에는 서로 이어지는 두 속성이 없어요." } },
-      { t: "평균적으로 현재 접속자 수가 가장 많은 장르는 어떤 장르일까?", a: "비교", why: "장르끼리 평균 접속자 수를 견주어 '어느 장르가 가장 큰지' 가리고 있으니 비교 분석이에요.", w: {
-          "구성": "구성 분석은 전체에서 각 그룹이 차지하는 비율(몇 %)을 봐요. 이 질문은 비율이 아니라 장르끼리 평균 접속자 수를 겨뤄요.",
-          "분포": "분포 분석은 값들이 어느 구간에 몰려 있는지를 봐요. 이 질문은 몰린 구간이 아니라 장르끼리 누가 더 큰지를 물어요.",
-          "관계": "관계 분석은 두 속성이 함께 변하는지를 봐요. 이 질문은 장르별 평균 접속자 수를 서로 견주는 질문이에요." } },
-      { t: "로블록스 인기 게임들의 좋아요 숫자는 주로 어느 구간에 몰려 있을까?", a: "분포", why: "'어느 구간에 몰려 있는지'를 묻고 있으니 좋아요 수가 퍼진 모양을 보는 분포 분석이에요.", w: {
-          "구성": "구성 분석은 전체에서 각 그룹이 몇 %인지 봐요. 이 질문은 비율이 아니라 좋아요 수가 몰린 구간을 물어요.",
-          "비교": "비교 분석은 서로 다른 그룹의 크기를 견줘요. 이 질문에는 견줄 그룹이 없고, 값이 몰려 있는 구간을 물어요.",
-          "관계": "관계 분석은 두 속성이 함께 커지는지 봐요. 이 질문에 나온 속성은 '좋아요 수' 하나뿐이에요." } },
-      { t: "좋아요 수가 많은 게임일수록 싫어요 수도 많을까?", a: "관계", why: "'~일수록'으로 좋아요 수와 싫어요 수, 두 속성을 잇고 있으니 관계 분석이에요.", w: {
-          "구성": "구성 분석은 전체에서 각 그룹의 비율(몇 %)을 봐요. 이 질문은 비율이 아니라 좋아요와 싫어요가 함께 변하는지를 물어요.",
-          "비교": "비교 분석은 두 그룹 중 어느 쪽이 더 큰지 봐요. 이 질문은 크기 비교가 아니라 두 속성이 함께 움직이는지를 물어요.",
-          "분포": "분포 분석은 값들이 어느 구간에 몰려 있는지를 봐요. 이 질문은 좋아요와 싫어요, 두 속성의 관계를 물어요." } }
-    ];
-    const FQ_OPTS = ['구성', '비교', '분포', '관계'];
-    const fqChipStyle = (i, v) => {
-      const pick = s.fq[i];
-      const bg = pick === v ? (v === FQ[i].a ? 'var(--msi-role-base-sprout)' : 'var(--msi-role-base-salmon)') : 'var(--msi-role-base-cream-paper)';
-      return "cursor:pointer; border:2px solid var(--msi-role-base-night-sky-ink); borderRadius:7px; padding:4px 12px; fontFamily:'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; fontWeight:700; fontSize:14px; background:" + bg;
+    const oxCheck = () => {
+      const left = OX_Q.filter((q, i) => !this.state.ox[i]).length;
+      if (left) { this.setState({ oxChecked: false, oxMsg: '❗ 아직 고르지 않은 문제가 ' + left + '개 있어요. 모두 고른 뒤 눌러 주세요.' }); return; }
+      const n = OX_Q.filter((q, i) => this.state.ox[i] === q.a).length;
+      this.setState({ oxChecked: true, oxMsg: n === OX_Q.length ? '⭕ ' + n + '문제 모두 정답이에요!' : '❌ ' + OX_Q.length + '문제 중 ' + n + '문제 정답 — 설명을 읽고 다시 골라 보세요.' });
     };
-    const fqPick = (i, v) => () => this.setState(st => { const a = st.fq.slice(); a[i] = v; return { fq: a }; });
-    const fqItems = FQ.map((q, i) => {
-      const pick = s.fq[i];
-      const right = pick === q.a;
-      return {
-        text: (i + 1) + '. ' + q.t,
-        opts: FQ_OPTS.map(v => ({ v: v + ' 분석', style: fqChipStyle(i, v), pick: fqPick(i, v), pressed: String(s.fq[i] === v), state: s.fq[i] === v ? (v === q.a ? 'ok' : 'no') : '', icon: s.fq[i] === v ? (v === q.a ? '✓' : '✗') : '' })),
-        fb: !pick ? '' : (right ? '⭕ 정답이에요. ' + q.why : '❌ ' + ((q.w && q.w[pick]) ? q.w[pick] + ' ' : '') + '다시 골라 보세요.'),   // 리허설 2026-10-16: 정답 이름은 숨김
-        fbStyle: "padding:9px 12px; border:3px solid var(--msi-role-base-night-sky-ink); borderRadius:10px; fontSize:13.5px; lineHeight:1.7; background:" + (right ? 'var(--msi-role-ui-feedback-ok-bg)' : 'var(--msi-role-ui-feedback-no-bg)')
-      };
-    });
-
-
-    const fqM1 = [fqItems[0]], fqM2 = [fqItems[1]], fqM3 = [fqItems[2]], fqM4 = [fqItems[3]];   // 미션마다 분석 유형 고르기 한 줄씩
+    const oxReset = () => this.setState({ ox: OX_Q.map(() => null), oxChecked: false, oxMsg: '' });
+    const oxOk = !!s.oxChecked && OX_Q.every((q, i) => s.ox[i] === q.a);
+    const oxMsgStyle = s.oxMsg ? 'color:' + (oxOk ? 'var(--msi-role-ui-feedback-ok-ink)' : 'var(--msi-role-ui-feedback-no-ink)') : '';
     void s.sheetTick;   // DOM 활동(빈칸·붙여넣기) 변화 시 _watchSheetActivities 가 sheetTick 을 올려 리렌더
     const _p = this._progressParts();
     const sheetDone = _p.done;
@@ -2638,11 +2709,9 @@ class Component extends DCLogic {
       setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
       setReflect: set('reflect'),
       q1, q1Feedback, q1FeedbackStyle,
-      a3Items, oxItems, fqItems, fqM1, fqM2, fqM3, fqM4,
-      guideOpen: !!s.guide, guideCodap: s.guide === 'codap', guideCapture: s.guide === 'capture',
-      guideCodapSel: String(s.guide === 'codap'), guideCaptureSel: String(s.guide === 'capture'),
-      guideTitle: s.guide === 'codap' ? '📊 CODAP 들어가고, 데이터 올리는 법' : '📸 캡처해서 붙여넣기',
-      toggleGuideCodap: () => this.toggleGuide('codap'), toggleGuideCapture: () => this.toggleGuide('capture'), closeGuide: () => this.toggleGuide(''),
+      a3Items, oxItems, fqA2, fqA3, fqA4,
+      fbA2: fqFb(0), fbA2s: fqFbS(0), fbA3: fqFb(1), fbA3s: fqFbS(1), fbA4: fqFb(2), fbA4s: fqFbS(2),
+      oxCheck, oxReset, oxMsg: s.oxMsg || '', oxMsgStyle,
       prog2: s.prog2, setProg2: set('prog2'),
       steps, saved: s.saved, savedName: s.savedName || '이름 없는 친구',
       savePdf: () => {
@@ -2843,6 +2912,15 @@ class Component extends DCLogic {
   });
   mark();
   new MutationObserver(function () { mark(); }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-selected'] });
+})();
+</script>
+<script>
+/* [ai/01] 활동1·활동4 그림을 누르면 영상 재생 — 활동지 탭은 다시 그려지므로 document 위임. 끝나면 그림으로 돌아감 */
+(function () {
+  function play(box) { var v = box.querySelector(".ai-vid__v"); if (!v) return; box.classList.add("is-playing"); try { v.currentTime = 0; } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  document.addEventListener("click", function (e) { var t = e.target; if (!t || !t.closest) return; var box = t.closest(".ai-vid"); if (box && (t.closest(".ai-vid__img") || t.closest(".ai-vid__btn"))) play(box); });
+  document.addEventListener("keydown", function (e) { var t = e.target; if (!t || !t.classList || !t.classList.contains("ai-vid__img")) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); play(t.closest(".ai-vid")); } });
+  document.addEventListener("ended", function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) { var b = t.closest(".ai-vid"); if (b) b.classList.remove("is-playing"); } }, true);
 })();
 </script>
 </body>

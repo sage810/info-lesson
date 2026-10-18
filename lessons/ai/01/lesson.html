@@ -719,6 +719,17 @@
   .ai-match .ca-tray, .seq-activity .seq-controls { justify-content: center; }
   .ai-pick.ai-pick--row { flex-direction: row; flex-wrap: wrap; }
   .ai-def td { vertical-align: middle; }
+  .ai-def th, .ai-def td:first-child { text-align: center; }
+  .ai-pick.ai-pick--row { justify-content: center; }
+  .ai-center { text-align: center; }
+  /* 활동1 그림을 누르면 영상(neural-motion.mp4) — 그림은 그대로 두고 그 위에 영상, PDF 에는 그림만(no-pdf) */
+  .ai-vid { position: relative; width: 100%; max-width: 680px; margin: 4px auto 0; }
+  .ai-vid .ai-fig { margin: 0; cursor: pointer; }
+  .ai-vid__v { display: none; position: absolute; top: 0; left: 0; width: 100%; height: auto; aspect-ratio: 680 / 300; object-fit: contain; border-radius: 12px; background: var(--msi-role-base-white); }
+  .ai-vid.is-playing .ai-vid__v { display: block; }
+  .ai-vid__btn { display: flex; width: fit-content; margin: 10px auto 0; }   /* 그림 아래에 따로(겹치지 않게, 피드백 2026-10-18) */
+  .ai-vid.is-playing .ai-vid__btn { display: none; }
+  .ai-sum .ca-slot { margin: 2px 3px; }
   .ai-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
   .ai-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 3px solid var(--msi-role-base-night-sky-ink); border-radius: 12px;
     background: var(--msi-role-base-white); box-shadow: 3px 3px 0 rgba(75,59,107,.14); text-align: center; word-break: keep-all; }
@@ -1465,14 +1476,18 @@
                 <table class="ord-sum ai-sum ai-def">
                   <thead><tr><th>낱말</th><th>뜻</th><th>Quick, Draw!에서는</th></tr></thead>
                   <tbody>
-                    <tr><td><textarea class="blank blank--inline" rows="1" style="width:110px" aria-label="활동1 빈칸 1"></textarea></td><td>사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 소프트웨어로 만든 것</td><td>내 낙서를 알아맞히는 AI</td></tr>
-                    <tr><td><textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동1 빈칸 2"></textarea></td><td>사람 뇌의 신경 세포(뉴런)가 신호를 주고받는 모습을 흉내 내어 만든 구조</td><td>낙서를 보며 패턴을 배우는 구조</td></tr>
+                    <tr><td>인공지능</td><td>사람의 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 1"></textarea>·<textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 2"></textarea>·<textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 지적 능력 빈칸 3"></textarea> 같은 지적 능력을 흉내 내어 소프트웨어로 만든 것</td><td>내 낙서를 알아맞히는 AI</td></tr>
+                    <tr><td><textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동1 빈칸 2"></textarea></td><td>사람 뇌의 신경 세포(뉴런)가 신호를 주고받는 모습을 흉내 내어 만든 구조</td><td>낙서를 보며 <textarea class="blank blank--inline" rows="1" style="width:70px" aria-label="활동1 Quick Draw 빈칸"></textarea>을 배우는 구조</td></tr>
                     <tr><td>학습</td><td>많은 데이터를 보면서 스스로 패턴을 찾아 배우는 과정</td><td>낙서 5천만 개에서 「고양이는 뾰족한 귀와 수염」 같은 패턴 찾기</td></tr>
-                    <tr><td><textarea class="blank blank--inline" rows="1" style="width:130px" aria-label="활동1 빈칸 3"></textarea></td><td>학습을 마치고 만들어진 결과물 — 처음 보는 데이터도 분류하거나 예측해요</td><td>새로 그린 낙서를 보고 「고양이 90%」라고 예측</td></tr>
+                    <tr><td>인공지능 모델</td><td><textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동1 모델 빈칸 1"></textarea>을 마치고 만들어진 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="활동1 모델 빈칸 2"></textarea> — 처음 보는 데이터도 분류하거나 예측해요</td><td>새로 그린 낙서를 보고 「고양이 90%」라고 예측</td></tr>
                   </tbody>
                 </table>
                 </div>
-                <img class="ai-fig" src="msi-asset:./assets/a1-neural.svg" width="680" height="300" alt="왼쪽은 사람의 뇌 속 신경 세포(뉴런)들이 선으로 이어져 신호를 주고받는 모습, 오른쪽은 그것을 흉내 내어 동그라미(인공 뉴런)를 여러 층으로 이은 컴퓨터 속 구조. 입력에 고양이 낙서를 넣으면 출력에 고양이 90%가 나온다.">
+                <div class="ai-vid">
+                  <img class="ai-fig ai-vid__img" role="button" tabindex="0" title="누르면 움직이는 모습을 보여 줘요" src="msi-asset:./assets/a1-neural.svg" width="680" height="300" alt="왼쪽은 사람의 뇌 속 신경 세포(뉴런)들이 선으로 이어져 신호를 주고받는 모습, 오른쪽은 그것을 흉내 내어 동그라미(인공 뉴런)를 여러 층으로 이은 컴퓨터 속 구조. 입력에 고양이 낙서를 넣으면 출력에 고양이 90%가 나온다.">
+                  <video class="ai-vid__v no-pdf" src="msi-asset:./assets/neural-motion.mp4" preload="none" playsinline controls aria-label="인공 신경망이 낙서를 알아보는 움직이는 그림"></video>
+                  <button type="button" class="glass-pill ai-vid__btn no-pdf">▶ 움직이는 모습 보기</button>
+                </div>
 
                 <div class="m-hd2">2. Quick, Draw!의 AI가 내 낙서를 알아맞히기까지 — 순서대로 놓아요.</div>
                 <div class="seq-activity" id="a1Seq"
@@ -1500,7 +1515,7 @@
                   </div>
                 </div>
 
-                <div class="m-hd2">3. 게임 실력에 빗대면 무엇일까요? 알맞은 이름표를 끌어다 놓아요.</div>
+                <div class="m-hd2">3. 학습, 인공지능 모델, 인공 신경망을 게임 실력에 비유하면 무엇일까요? 알맞은 이름표를 끌어다 놓아요.</div>
                 <div class="ai-match" data-ca-group="a1ca" data-ca-check="button">
                   <div class="ca-tray" aria-label="이름표 모음">
                     <span class="ca-chip" draggable="true" data-v="학습" role="button" tabindex="0" aria-pressed="false">학습</span>
@@ -1531,22 +1546,22 @@
                 </div>
 
                 <div class="m-hd2">1. 인공지능을 구분하는 기준</div>
+                <img class="ai-fig" src="msi-asset:./assets/a2-compare.svg" width="680" height="380" alt="두 줄 비교 그림. 위 줄: 사람이 정한 규칙과 입력이 일반 소프트웨어로 들어가 늘 같은 결과가 나온다. 아래 줄: 데이터로 학습해 인공지능 모델이 만들어지고, 새 입력을 모델에 넣으면 예측이 나온다.">
                 <div class="callout callout--tip"><span class="c-lbl">📌 기준은 「학습했나?」 하나예요</span>인공지능 소프트웨어는 데이터로 학습한 인공지능 모델을 써서 스스로 판단해요. 일반 소프트웨어는 사람이 미리 정해 둔 규칙과 순서대로만 움직여요.</div>
-                <img class="ai-fig" src="msi-asset:./assets/a2-compare.svg" width="680" height="330" alt="두 줄 비교 그림. 위 줄: 사람이 정한 규칙과 입력이 일반 소프트웨어로 들어가 늘 같은 결과가 나온다. 아래 줄: 데이터로 학습해 인공지능 모델이 만들어지고, 새 입력을 모델에 넣으면 예측이 나온다.">
 
-                <div class="m-hd2">2. 내 폰 속 기능을 나눠 봐요.</div>
+                <div class="m-hd2">2. 내 핸드폰 속 이 기능은 인공지능일까? 아닐까? 기능을 나눠 봐요.</div>
                 <div class="ai-match" data-ca-group="a2ca" data-ca-check="button">
                   <div class="ca-tray" aria-label="이름표 모음">
-                    <span class="ca-chip" draggable="true" data-v="인공지능" role="button" tabindex="0" aria-pressed="false">인공지능</span>
+                    <span class="ca-chip" draggable="true" data-v="인공지능 소프트웨어" role="button" tabindex="0" aria-pressed="false">인공지능 소프트웨어</span>
                     <span class="ca-chip" draggable="true" data-v="일반 소프트웨어" role="button" tabindex="0" aria-pressed="false">일반 소프트웨어</span>
                   </div>
-                  <div class="ai-row"><span class="ai-desc">내가 끝까지 본 영상과 「좋아요」를 보고 다음 영상을 골라 주는 틱톡 추천 피드</span><span class="ca-slot" id="a2ca-1" data-answer="인공지능" role="button" tabindex="0" aria-label="틱톡 추천 피드 칸"></span></div>
-                  <div class="ai-row"><span class="ai-desc">얼굴을 찾아 강아지 귀와 코를 씌워 주는 인스타그램 필터</span><span class="ca-slot" id="a2ca-2" data-answer="인공지능" role="button" tabindex="0" aria-label="인스타그램 필터 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">내가 끝까지 본 영상과 「좋아요」를 보고 다음 영상을 골라 주는 틱톡 추천 피드</span><span class="ca-slot" id="a2ca-1" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="틱톡 추천 피드 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">얼굴을 찾아 강아지 귀와 코를 씌워 주는 인스타그램 필터</span><span class="ca-slot" id="a2ca-2" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="인스타그램 필터 칸"></span></div>
                   <div class="ai-row"><span class="ai-desc">사귄 날짜를 넣으면 100일·200일을 계산해 주는 디데이 앱</span><span class="ca-slot" id="a2ca-3" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="디데이 앱 칸"></span></div>
                   <div class="ai-row"><span class="ai-desc">놀러 가서 쓴 돈을 사람 수로 똑같이 나눠 주는 1/N 정산 기능</span><span class="ca-slot" id="a2ca-4" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="1/N 정산 기능 칸"></span></div>
-                  <div class="ai-row"><span class="ai-desc">유튜브 영상 속 말소리를 알아듣고 글자로 바꿔 주는 자동 생성 자막</span><span class="ca-slot" id="a2ca-5" data-answer="인공지능" role="button" tabindex="0" aria-label="자동 생성 자막 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">유튜브 영상 속 말소리를 알아듣고 글자로 바꿔 주는 자동 생성 자막</span><span class="ca-slot" id="a2ca-5" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="자동 생성 자막 칸"></span></div>
                   <div class="ai-row"><span class="ai-desc">매일 아침 7시에 울리도록 맞춰 둔 알람</span><span class="ca-slot" id="a2ca-6" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="알람 칸"></span></div>
-                  <div class="ai-row"><span class="ai-desc">사진첩에서 「바다」를 검색하면 바다 사진만 찾아 주는 기능</span><span class="ca-slot" id="a2ca-7" data-answer="인공지능" role="button" tabindex="0" aria-label="사진첩 바다 검색 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">사진첩에서 「바다」를 검색하면 바다 사진만 찾아 주는 기능</span><span class="ca-slot" id="a2ca-7" data-answer="인공지능 소프트웨어" role="button" tabindex="0" aria-label="사진첩 바다 검색 칸"></span></div>
                   <div class="ai-row"><span class="ai-desc">이름 획수를 정해진 공식으로 더해 점수를 내는 이름 궁합 테스트</span><span class="ca-slot" id="a2ca-8" data-answer="일반 소프트웨어" role="button" tabindex="0" aria-label="이름 궁합 테스트 칸"></span></div>
                   <div class="ai-ctl">
                     <button type="button" class="glass-pill ca-check" id="a2caCheck">✅ 정답 확인</button>
@@ -1555,7 +1570,7 @@
                   </div>
                 </div>
 
-                <div class="m-hd2">3. 어떤 게임의 몬스터는 「AI」라고 불리지만, 개발자가 정해 둔 「플레이어가 세 칸 안에 오면 공격한다」 규칙대로만 움직여요. 학습을 기준으로 보면 이 몬스터를 움직이는 것은?</div>
+                <div class="m-hd2">3. 어떤 게임의 몬스터는 「AI」라고 불리지만, 개발자가 정해 둔 「플레이어가 세 칸 안에 오면 공격한다」 규칙대로만 움직여요. 이 몬스터를 움직이는 것은 인공지능 소프트웨어일까, 일반 소프트웨어일까?</div>
                 <div class="ai-pick ai-pick--row" role="group" aria-label="활동2 몬스터 문제 보기">
                   <sc-for list="{{ fqA2 }}" as="o" hint-placeholder-count="2">
                     <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="gc-ic" aria-hidden="true">{{ o.icon }}</span>{{ o.v }}</button>
@@ -1606,13 +1621,17 @@
                 </div>
 
                 <div class="m-hd2">1. 데이터에 관한 낱말 세 가지를 알아봐요.</div>
-                <div class="ai-cards">
-                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">🏷️</div><div class="ai-card__t">레이블(라벨)</div><p>데이터에 붙인 <b>정답 이름표</b>예요. 인스타 사진에 #떡볶이를 다는 것처럼, 사진에 「고양이」라고 붙여요.</p><p class="ai-card__ex">시험공부라면? → 문제의 <b>정답</b></p></div>
-                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📚</div><div class="ai-card__t">학습 데이터</div><p>모델을 학습시키려고 <b>레이블과 함께</b> 보여 주는 데이터예요.</p><p class="ai-card__ex">시험공부라면? → 공부하는 <b>문제집</b></p></div>
-                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📝</div><div class="ai-card__t">테스트 데이터</div><p>학습을 마친 모델이 얼마나 잘 맞히는지 확인하려고 쓰는, <b>학습에 쓰지 않은 새로운</b> 데이터예요.</p><p class="ai-card__ex">시험공부라면? → <b>처음 보는 시험 문제</b></p></div>
+                <div class="ai-vid">
+                  <img class="ai-fig ai-vid__img" role="button" tabindex="0" title="누르면 움직이는 모습을 보여 줘요" src="msi-asset:./assets/a4-data.svg" width="680" height="300" alt="흐름 그림. 왼쪽 학습 데이터: 고양이·강아지·고양이 사진마다 정답 이름표(레이블)가 붙어 있다. 학습 화살표를 따라 인공지능 모델이 만들어지고, 아래의 테스트 데이터(이름표 없는 처음 보는 고양이 사진)를 모델에 넣으면 오른쪽에 예측 「고양이!」가 나온다.">
+                  <video class="ai-vid__v no-pdf" src="msi-asset:./assets/data-motion.mp4" preload="none" playsinline controls aria-label="학습 데이터와 테스트 데이터가 움직이는 그림"></video>
+                  <button type="button" class="glass-pill ai-vid__btn no-pdf">▶ 움직이는 모습 보기</button>
                 </div>
-                <img class="ai-fig" src="msi-asset:./assets/a4-data.svg" width="680" height="300" alt="흐름 그림. 왼쪽 학습 데이터: 고양이·강아지·고양이 사진마다 정답 이름표(레이블)가 붙어 있다. 학습 화살표를 따라 인공지능 모델이 만들어지고, 아래의 테스트 데이터(이름표 없는 처음 보는 고양이 사진)를 모델에 넣으면 오른쪽에 예측 「고양이!」가 나온다.">
-                <p class="m-sub">문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 학습에 쓰지 않은 것으로 골라요.</p>
+                <div class="ai-cards">
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">🏷️</div><div class="ai-card__t">레이블(라벨)</div><p>데이터에 붙인 <b>정답</b> <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 레이블 뜻 빈칸"></textarea>예요. 인스타 사진에 #떡볶이를 다는 것처럼, 사진에 「고양이」라고 붙여요.</p><p class="ai-card__ex">시험공부라면? → 문제의 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동4 레이블 비유 빈칸"></textarea></p></div>
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📚</div><div class="ai-card__t">학습 데이터</div><p>모델을 학습시키려고 <b>레이블과 함께</b> 보여 주는 데이터예요.</p><p class="ai-card__ex">시험공부라면? → 공부하는 <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 학습 데이터 비유 빈칸"></textarea></p></div>
+                  <div class="ai-card"><div class="ai-card__ic" aria-hidden="true">📝</div><div class="ai-card__t">테스트 데이터</div><p>학습을 마친 모델이 얼마나 잘 맞히는지 확인하려고 쓰는, <b>학습에 쓰지 않은</b> <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동4 테스트 데이터 뜻 빈칸"></textarea> 데이터예요.</p><p class="ai-card__ex">시험공부라면? → <b>처음 보는 시험 문제</b></p></div>
+                </div>
+                <p class="m-sub ai-center">문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 학습에 쓰지 않은 것으로 골라요.</p>
 
                 <div class="m-hd2">2. 방금 한 AI for Oceans에서 찾아봐요.</div>
                 <div class="ai-match" data-ca-group="a4ca1" data-ca-check="button">
@@ -1669,21 +1688,38 @@
               </div>
               <div class="m-body">
                 <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-summary-head)">📝</div><div class="m-title" role="heading" aria-level="2">오늘 배운 것 — 인공지능은 데이터로 배워요</div></div>
+                <div class="ai-match" data-ca-group="sumca" data-ca-check="button">
+                  <p class="m-sub ai-center">이름표를 끌어다 빈칸에 놓아요. (같은 이름표를 두 번 써도 돼요)</p>
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="질" role="button" tabindex="0" aria-pressed="false">질</span>
+                    <span class="ca-chip" draggable="true" data-v="학습" role="button" tabindex="0" aria-pressed="false">학습</span>
+                    <span class="ca-chip" draggable="true" data-v="새로운" role="button" tabindex="0" aria-pressed="false">새로운</span>
+                    <span class="ca-chip" draggable="true" data-v="규칙" role="button" tabindex="0" aria-pressed="false">규칙</span>
+                    <span class="ca-chip" draggable="true" data-v="뉴런" role="button" tabindex="0" aria-pressed="false">뉴런</span>
+                    <span class="ca-chip" draggable="true" data-v="양" role="button" tabindex="0" aria-pressed="false">양</span>
+                    <span class="ca-chip" draggable="true" data-v="정답" role="button" tabindex="0" aria-pressed="false">정답</span>
+                  </div>
                 <div style="overflowX:auto">
                 <table class="ord-sum ai-sum">
                   <thead><tr><th>낱말</th><th>뜻</th><th>오늘 만난 예</th></tr></thead>
                   <tbody>
                     <tr><td>인공지능</td><td>사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 만든 소프트웨어</td><td>틱톡 추천, 인스타 필터</td></tr>
-                    <tr><td>인공 신경망</td><td>사람 뇌의 <textarea class="blank blank--inline" rows="1" style="width:90px" aria-label="핵심정리 빈칸 1"></textarea> 연결을 흉내 낸 구조</td><td>Quick, Draw!의 낙서 인식</td></tr>
-                    <tr><td>인공지능 모델</td><td>데이터를 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="핵심정리 빈칸 2"></textarea>하여 만들어진 결과물로, 새 데이터를 분류·예측해요</td><td>낙서 알아맞히기 모델</td></tr>
-                    <tr><td>레이블</td><td>데이터에 붙인 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="핵심정리 빈칸 3"></textarea> 이름표</td><td>「물고기」, 「물고기 아님」</td></tr>
+                    <tr><td>인공 신경망</td><td>사람 뇌의 <span class="ca-slot" id="sum-1" data-answer="뉴런" role="button" tabindex="0" aria-label="핵심 정리 칸 1"></span> 연결을 흉내 낸 구조</td><td>Quick, Draw!의 낙서 인식</td></tr>
+                    <tr><td>인공지능 모델</td><td>데이터를 <span class="ca-slot" id="sum-2" data-answer="학습" role="button" tabindex="0" aria-label="핵심 정리 칸 2"></span>하여 만들어진 결과물로, 새 데이터를 분류·예측해요</td><td>낙서 알아맞히기 모델</td></tr>
+                    <tr><td>레이블</td><td>데이터에 붙인 <span class="ca-slot" id="sum-3" data-answer="정답" role="button" tabindex="0" aria-label="핵심 정리 칸 3"></span> 이름표</td><td>「물고기」, 「물고기 아님」</td></tr>
                     <tr><td>학습 데이터</td><td>모델을 학습시키려고 레이블과 함께 보여 주는 데이터</td><td>내가 라벨을 붙인 그림</td></tr>
-                    <tr><td>테스트 데이터</td><td>학습에 쓰지 않은 <textarea class="blank blank--inline" rows="1" style="width:90px" aria-label="핵심정리 빈칸 4"></textarea> 데이터로 모델의 성능을 확인해요</td><td>AI가 처음 본 바닷속 물체</td></tr>
+                    <tr><td>테스트 데이터</td><td>학습에 쓰지 않은 <span class="ca-slot" id="sum-4" data-answer="새로운" role="button" tabindex="0" aria-label="핵심 정리 칸 4"></span> 데이터로 모델의 성능을 확인해요</td><td>AI가 처음 본 바닷속 물체</td></tr>
                   </tbody>
                 </table>
                 </div>
-                <p class="ai-fill">인공지능 소프트웨어는 데이터로 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="핵심정리 빈칸 5"></textarea>하고, 일반 소프트웨어는 사람이 정한 <textarea class="blank blank--inline" rows="1" style="width:80px" aria-label="핵심정리 빈칸 6"></textarea>대로만 움직여요.</p>
-                <p class="ai-fill">인공지능의 성능은 학습 데이터의 <textarea class="blank blank--inline" rows="1" style="width:60px" aria-label="핵심정리 빈칸 7"></textarea>과 <textarea class="blank blank--inline" rows="1" style="width:60px" aria-label="핵심정리 빈칸 8"></textarea>에 크게 좌우돼요.</p>
+                <p class="ai-fill">인공지능 소프트웨어는 데이터로 <span class="ca-slot" id="sum-5" data-answer="학습" role="button" tabindex="0" aria-label="핵심 정리 칸 5"></span>하고, 일반 소프트웨어는 사람이 정한 <span class="ca-slot" id="sum-6" data-answer="규칙" role="button" tabindex="0" aria-label="핵심 정리 칸 6"></span>대로만 움직여요.</p>
+                <p class="ai-fill">인공지능의 성능은 학습 데이터의 <span class="ca-slot" id="sum-7" data-answer="양" role="button" tabindex="0" aria-label="핵심 정리 칸 7"></span>과 <span class="ca-slot" id="sum-8" data-answer="질" role="button" tabindex="0" aria-label="핵심 정리 칸 8"></span>에 크게 좌우돼요.</p>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="sumcaCheck">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1694,7 +1730,7 @@
               </div>
               <div class="m-body">
                 <div class="m-title-row"><div class="m-badge" style="background:var(--msi-role-checkup-head)">✅</div><div class="m-title" role="heading" aria-level="2">형성평가 — O / X</div></div>
-                <p class="m-sub">문장마다 O 또는 X 를 고른 뒤 ✅ 정답 확인을 눌러요.</p>
+                <p class="m-sub">문장마다 O 또는 X 를 눌러요. 누르면 바로 정답인지 알려 주고, 왜 그런지 설명해 줘요.</p>
                 <div class="ord-ox ai-ox">
                   <sc-for list="{{ oxItems }}" as="q" hint-placeholder-count="6">
                     <div class="q">
@@ -1705,15 +1741,10 @@
                         <button type="button" class="glass-chip" data-s="{{ q.xS }}" aria-pressed="{{ q.xP }}" onClick="{{ q.pickX }}">X</button>
                       </span>
                       <sc-if value="{{ q.fb }}" hint-placeholder-val="{{ false }}">
-                        <span class="why" data-s="{{ q.fbS }}">{{ q.fb }}</span>
+                        <span class="why" data-s="{{ q.fbS }}" role="status">{{ q.fb }}</span>
                       </sc-if>
                     </div>
                   </sc-for>
-                </div>
-                <div class="ai-ctl">
-                  <button type="button" class="glass-pill" id="oxCheck" onClick="{{ oxCheck }}">✅ 정답 확인</button>
-                  <button type="button" class="glass-pill" onClick="{{ oxReset }}">🔀 다시 풀기</button>
-                  <span class="ca-result" id="oxResult" role="status" aria-live="polite" style="{{ oxMsgStyle }}">{{ oxMsg }}</span>
                 </div>
               </div>
             </div>
@@ -2591,7 +2622,7 @@ class Component extends DCLogic {
     const fqFbS = (i) => (s.fq[i] ? (s.fq[i] === FQ[i].a ? 'ok' : 'no') : '');
     const fqA2 = fqOpts(0), fqA3 = fqOpts(1), fqA4 = fqOpts(2);
 
-    // ── [ai/01] 형성평가 O/X 6문항 — 다 고른 뒤 ✅ 정답 확인 · 🔀 다시 풀기, 틀린 문항만 이유(1·3·4번 이유는 Claude 초안) ──
+    // ── [ai/01] 형성평가 O/X 6문항 — 누르면 바로 채점, 맞아도 틀려도 이유(선생님 피드백 2026-10-18, 1·3·4번 이유는 Claude 초안) ──
     const OX_Q = [
       { t: '틱톡 추천 피드는 내가 본 영상 데이터로 학습한 인공지능이 영상을 골라 준다.', a: 'O', why: '내가 본 영상·좋아요 데이터로 학습한 인공지능 모델이 다음 영상을 골라 줘요.' },
       { t: '사귄 날부터 100일을 계산해 주는 디데이 앱은 인공지능 소프트웨어이다.', a: 'X', why: '정해진 계산 규칙대로만 움직이는 일반 소프트웨어예요.' },
@@ -2600,15 +2631,15 @@ class Component extends DCLogic {
       { t: 'AI 모델이 잘 맞히는지 확인할 때는 학습에 썼던 데이터를 다시 쓰는 것이 가장 좋다.', a: 'X', why: '학습에 쓰지 않은 새로운 테스트 데이터로 확인해야 해요.' },
       { t: '학습 데이터에 틀린 레이블이 많아도 데이터 양만 많으면 AI 성능은 좋아진다.', a: 'X', why: 'AI는 틀린 레이블도 그대로 배워요. 데이터의 질도 중요해요.' }
     ];
-    const oxPick = (i, v) => () => this.setState(st => { const a = st.ox.slice(); a[i] = v; return { ox: a, oxChecked: false, oxMsg: '' }; });
+    const oxPick = (i, v) => () => this.setState(st => { const a = st.ox.slice(); a[i] = v; return { ox: a }; });
     const oxItems = OX_Q.map((q, i) => {
-      const pick = s.ox[i], right = pick === q.a, graded = !!(s.oxChecked && pick);
+      const pick = s.ox[i], right = pick === q.a, graded = !!pick;
       const st = (v) => (pick !== v ? '' : graded ? (right ? 'ok' : 'no') : 'on');
       return {
         n: i + 1, t: q.t, aria: (i + 1) + '번 문장 O 또는 X 고르기',
         oS: st('O'), xS: st('X'), oP: String(pick === 'O'), xP: String(pick === 'X'),
         pickO: oxPick(i, 'O'), pickX: oxPick(i, 'X'),
-        fb: graded ? (right ? '⭕ 정답' : '❌ ' + q.why) : '',
+        fb: graded ? (right ? '⭕ 정답이에요! ' : '❌ 오답이에요. ') + q.why : '',
         fbS: graded ? (right ? 'ok' : 'no') : ''
       };
     });
@@ -2881,6 +2912,15 @@ class Component extends DCLogic {
   });
   mark();
   new MutationObserver(function () { mark(); }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-selected'] });
+})();
+</script>
+<script>
+/* [ai/01] 활동1·활동4 그림을 누르면 영상 재생 — 활동지 탭은 다시 그려지므로 document 위임. 끝나면 그림으로 돌아감 */
+(function () {
+  function play(box) { var v = box.querySelector(".ai-vid__v"); if (!v) return; box.classList.add("is-playing"); try { v.currentTime = 0; } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  document.addEventListener("click", function (e) { var t = e.target; if (!t || !t.closest) return; var box = t.closest(".ai-vid"); if (box && (t.closest(".ai-vid__img") || t.closest(".ai-vid__btn"))) play(box); });
+  document.addEventListener("keydown", function (e) { var t = e.target; if (!t || !t.classList || !t.classList.contains("ai-vid__img")) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); play(t.closest(".ai-vid")); } });
+  document.addEventListener("ended", function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) { var b = t.closest(".ai-vid"); if (b) b.classList.remove("is-playing"); } }, true);
 })();
 </script>
 </body>
