@@ -1,6 +1,6 @@
 # 스킬 모음 — 무엇이 있고 어떻게 부르나
 
-이 저장소에는 **우리가 만든 스킬 6개(`lesson-*` · `skill-guide`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
+이 저장소에는 **우리가 만든 스킬 7개(`lesson-*` · `skill-guide`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
 모든 일은 메인 대화에서 선생님과 주고받으며 하고, "새 눈으로 검수"처럼 따로 떼는 게 나은 일만 `lesson-check` 가 필요할 때
 기본(범용) 서브에이전트를 잠깐 씁니다. (같은 서브에이전트 호출을 자꾸 반복하게 되면 그때 `.claude/agents/` 에 하나씩 추가.)
 
@@ -16,6 +16,7 @@
 | **lesson-new** | 새 차시를 처음 만들 때 | `/lesson-new 08 유튜브 데이터로 관계 분석` · "이 PDF 로 8차시 만들어줘" | 아이디어 2~3개 → 선택 → spec.md → 차시 폴더 → 본문 조립 (단계마다 멈춰서 확인) |
 | **lesson-teacher** | 교사용 화면·정답지 PDF | `/lesson-teacher 06` · "6차시 정답지 PDF" | answers.json 채우기 → `npm run teacher` → PDF 확인 |
 | **lesson-exam** | 수행평가(시험지)를 만들 때 | `/lesson-exam` · "수행평가 B형 만들어줘" | 결정 묻기 → 비공개(.gitignore) 먼저 → 09 틀로 시험지 → answers.json(정답·허용 답·배점) → 검사·정답 노출 검사·exam-key 합계 → 제출 가로채 시험 → 선생님 체크리스트 (기준: `docs/rules/exam.md`) |
+| **lesson-ppt** | 차시 활동지로 수업 PPT(캔바용)를 만들 때 | `/lesson-ppt ai/02` · "2차시 PPT 만들어줘" | spec.md 읽기 → 장 구성 `ppt.json` → `npm run ppt --check`(PowerPoint 로 넘침 0) → `--page` 받는 링크 게시 (기준: `docs/rules/ppt.md`) |
 | **lesson-check** | 배포 전 점검·검수 | `/lesson-check 06` · "05, 06 새 눈으로 검수해줘" | 자동 검사 + (요청 시) 서브에이전트가 better-interface 방식으로 검수 → 고를 항목만 수정 |
 | **skill-guide** | 어떤 스킬을 어떻게 쓸지 보고 고르고 싶을 때 | `? 06 빈칸 안내 문구 다듬어줘` · `스킬: 06 색 대비 확인` · `/skill-guide …` | 맞는 스킬로 계획 2~3개 비교(무엇·이번엔·조정·결과물) → 고른 것만 실행 → "앞으로도"면 조정을 저장(우리 스킬은 SKILL.md, 외부 스킬은 napkin.md) |
 
@@ -42,6 +43,7 @@
    ├─ lesson-new/    SKILL.md                              │
    ├─ lesson-teacher/SKILL.md                              │
    ├─ lesson-exam/   SKILL.md (기준: docs/rules/exam.md)    │ 우리 스킬
+   ├─ lesson-ppt/    SKILL.md (기준: docs/rules/ppt.md)     │
    ├─ lesson-check/  SKILL.md + references/review-prompt.md│
    ├─ skill-guide/   SKILL.md                              ┘
    ├─ napkin/                                              ┐
@@ -63,6 +65,7 @@
 | `npm run build` | 소스 → 배포본 (`dist/pages` = GitHub Pages, `dist/embed` = 구글 사이트 붙여넣기용, 둘 다 교사용 포함) |
 | `npm run check -- 06` | 빌드 + 브라우저 자동 검사 + 캡처 (`--find "글자"` 로 특정 부분 캡처) |
 | `npm run teacher -- 06` | answers.json 으로 정답지 PDF |
+| `npm run ppt -- ai/01 [--check] [--page]` | 차시 `ppt.json` 으로 수업 PPT(`dist/ppt/`) · `--check` PowerPoint 로 그려 넘침 검사 · `--page` 받는 링크 페이지 (처음 한 번 `npm --prefix scripts/ppt install`) |
 | `npm run exam-key -- 09 [--send]` | 수행평가 정답 표 확인(배점 합계) · 시트로 보내기(선생님 열쇠) |
 | `npm run exam-pdf -- <폴더> [--send]` | USB 로 받은 수행평가 PDF 의 숨은 답 확인 · 시트로 보내기 |
 | `npm run new -- data-analysis/08 --from 07 --title "…"` | 새 차시 폴더 |

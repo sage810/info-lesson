@@ -1,0 +1,213 @@
+<title>{{TITLE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*FONTS*/
+/* 수업 PPT 내려받기 페이지(npm run ppt -- <차시> --page 가 채움): 라벤더 모눈 책상 위 크림 창 하나, 안은 활동지 카드 문법.
+   밝은 파스텔 한 가지 테마 — 틀 규칙(어두운 테마 없음)이라 일부러 한 테마만 둔다. */
+:root{
+  color-scheme:light;
+  --desk:#e7e3f7; --grid:rgba(216,210,238,.75); --paper:#fffdf7;
+  --ink:#4b3b6b; --soft:#5a4a86; --muted:#6b5b93; --lav:#d6c4f5; --head:#e6def7;
+  --topic:linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --titlebar:linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%);
+  --ok:#3d7f6c; --no:#a65a86;
+  --f-d:'GangwonEdu','Malgun Gothic',sans-serif; --f-t:'CookieRun','Malgun Gothic',sans-serif;
+  --f-b:'Maplestory','Malgun Gothic',sans-serif; --f-p:'Silkscreen',ui-monospace,monospace;
+  --glass-in:inset 0 2px 0 rgba(255,255,255,.95),inset 0 -8px 12px -8px rgba(255,255,255,.95);
+}
+body{background-color:var(--desk);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;color:var(--ink);
+  font-family:var(--f-b);font-weight:300;font-size:16px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.win{max-width:1080px;margin:0 auto;background:var(--paper);border:4px solid var(--ink);border-radius:16px;box-shadow:8px 8px 0 rgba(75,59,107,.22);overflow:hidden}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--titlebar);border-bottom:4px solid var(--ink);box-shadow:var(--glass-in)}
+.bar-name{font-family:var(--f-d);font-size:22px;line-height:1.2;white-space:nowrap}
+.tag{font-family:var(--f-p);font-size:11px;letter-spacing:1.5px;line-height:1.4;padding:2px 8px;background:var(--lav);border:2px solid var(--ink);border-radius:6px}
+.wbtn{margin-left:auto;display:flex;gap:6px}
+.wbtn span{width:22px;height:22px;border:2px solid var(--ink);border-radius:6px;background:var(--paper)}
+.wbtn span:last-child{background:#f9cade}
+.inner{display:grid;gap:24px;padding:28px clamp(14px,3.6vw,36px) 36px}
+.intro{display:grid;gap:10px}
+.eyebrow{font-family:var(--f-p);font-size:11px;letter-spacing:2px;color:var(--muted);margin:0}
+.h1{font-family:var(--f-d);font-weight:400;font-size:clamp(30px,4.6vw,44px);line-height:1.2;margin:0;text-wrap:balance}
+.lede{margin:0;max-width:62ch;color:var(--soft);font-size:17px}
+.card{border:3px solid var(--ink);border-radius:14px;background:var(--paper);box-shadow:5px 5px 0 rgba(75,59,107,.18);overflow:hidden}
+.card>.hd{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:3px solid var(--ink);background:var(--hd,var(--head));box-shadow:var(--glass-in)}
+.px{font-family:var(--f-p);font-size:11px;letter-spacing:1.5px}
+.card>.bd{display:grid;gap:16px;padding:18px clamp(14px,2.4vw,24px) 22px}
+.ttl{margin:0;font-family:var(--f-t);font-weight:700;font-size:clamp(20px,2.6vw,24px);line-height:1.3}
+.dl{--hd:var(--topic)}
+/* 오로라 유리 알약(틀의 버튼 규칙) */
+.pill{font-family:var(--f-t);font-weight:700;font-size:15px;min-height:44px;padding:0 18px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);cursor:pointer;
+  background:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%),linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.14) 55%,rgba(255,255,255,.42)),linear-gradient(120deg,#fde1f3,#e7dcff 50%,#d6f1ff);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),3px 3px 0 rgba(75,59,107,.3);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.pill:active{transform:scale(1.04,.9)}
+.pill:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.pill[aria-busy="true"]{cursor:progress;opacity:.75}
+.dl-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.pill.big{min-height:76px;padding:10px 26px;border-width:3px;display:grid;justify-items:center;gap:2px;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),4px 4px 0 rgba(75,59,107,.3)}
+.b1{font-size:19px;line-height:1.3}
+.b2{font-family:var(--f-b);font-weight:300;font-size:14px;line-height:1.4;color:var(--soft)}
+.status{margin:0;min-height:1.7em;font-family:var(--f-t);font-weight:700;font-size:15px}
+.status.ok{color:var(--ok)} .status.no{color:var(--no)}
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:12px;counter-increment:s}
+.steps li::before{content:counter(s);width:28px;height:28px;border:2px solid var(--ink);border-radius:50%;background:linear-gradient(135deg,#e3f4ff,#d9e2ff 55%,#e6d9ff);box-shadow:2px 2px 0 rgba(75,59,107,.25);
+  display:grid;place-items:center;font-family:var(--f-t);font-weight:700;font-size:14px;line-height:1}
+.steps b,.notes b{font-family:var(--f-t);font-weight:700}
+.tip{margin:0;padding:12px 16px;border:2px dashed #b3a8cc;border-radius:11px;background:#faf8ff;font-size:15px;color:var(--soft)}
+.shots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.shot{margin:0;display:grid;gap:6px;align-content:start;min-width:0}
+.shot figcaption{display:flex;align-items:center;gap:7px;font-family:var(--f-t);font-weight:700;font-size:13px;line-height:1.4;color:var(--soft)}
+.num{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);font-size:11px;line-height:1;color:var(--ink)}
+.frame{display:block;width:100%;max-width:100%;padding:0;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#fff;
+  box-shadow:4px 4px 0 rgba(75,59,107,.2);cursor:zoom-in;transition:transform .15s cubic-bezier(.2,0,0,1),box-shadow .15s cubic-bezier(.2,0,0,1)}
+.frame img{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.frame:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 rgba(75,59,107,.24)}
+.frame:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(75,59,107,.35)}
+.frame:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.notes{margin:0;padding-left:1.15em;display:grid;gap:8px}
+.lb{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:rgba(75,59,107,.55)}
+.lb-in{display:grid;gap:12px;justify-items:center;width:min(100%,calc((100vh - 150px) * 16 / 9))}
+.lb-top,.lb-nav{width:100%;display:flex;align-items:center;gap:12px}
+.lb-cap{margin:0;flex:1;min-width:0;font-family:var(--f-t);font-weight:700;font-size:16px;line-height:1.4;color:#fffdf7}
+.lb-count{flex:1;text-align:center;font-family:var(--f-p);font-size:12px;letter-spacing:2px;color:#fffdf7}
+.lb-img{display:block;width:100%;height:auto;aspect-ratio:16/9;border:3px solid var(--ink);border-radius:10px;background:#fff;box-shadow:8px 8px 0 rgba(30,20,50,.35)}
+@media (max-width:760px){ .shots{grid-template-columns:repeat(2,minmax(0,1fr))} .bar-name{font-size:19px} }
+@media (max-width:440px){ .wbtn{display:none} }
+@media (prefers-reduced-motion:reduce){ .frame,.pill{transition:none} .pill:active{transform:none} }
+</style>
+
+<div class="win">
+  <div class="bar"><span class="bar-name">{{SCHOOL}}</span><span class="tag">PPT</span><span class="wbtn" aria-hidden="true"><span></span><span></span><span></span></span></div>
+  <main class="inner">
+    <header class="intro">
+      <p class="eyebrow">{{TAG}} · TEMPLATE_A</p>
+      <h1 class="h1">{{TITLE}}</h1>
+      <p class="lede">활동지와 같은 카드 틀(시안 A)로 만든 PowerPoint 파일이에요. 캔바에 올리면 글·칸·표를 그대로 고쳐 쓸 수 있어요.</p>
+    </header>
+
+    <section class="card dl" aria-labelledby="dl-t">
+      <div class="hd"><span class="px">DOWNLOAD</span></div>
+      <div class="bd">
+        <h2 id="dl-t" class="ttl">파일 받기</h2>
+        <div class="dl-row">
+          <button type="button" class="pill big" data-src="file-pptx" data-name="{{PPTX_NAME}}"><span class="b1">PPT 파일 받기</span><span class="b2">.pptx · {{COUNT}}장 · {{PPTX_SIZE}}</span></button>
+          <button type="button" class="pill big" data-src="file-zip" data-name="{{ZIP_NAME}}"><span class="b1">글꼴 꾸러미 받기</span><span class="b2">.zip · 글꼴 5개 · {{ZIP_SIZE}}</span></button>
+        </div>
+        <p class="status" id="dlStatus" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="cv-t">
+      <div class="hd"><span class="px">CANVA_UPLOAD</span></div>
+      <div class="bd">
+        <h2 id="cv-t" class="ttl">캔바에 올리는 순서</h2>
+        <ol class="steps">
+          <li><span>위의 두 파일을 받아 글꼴 꾸러미(.zip)의 압축을 풀어요.</span></li>
+          <li><span><b>글꼴부터 올려요.</b> 캔바 왼쪽 메뉴 「브랜드」(브랜드 키트) → 글꼴 → 「글꼴 업로드」에서 .ttf 파일 5개를 올려요. 글꼴 올리기는 캔바 교육용·Pro 계정에서 돼요. 한 번 올리면 다음 차시부터는 건너뛰어요.</span></li>
+          <li><span><b>PPT를 올려요.</b> 캔바 홈의 「업로드」로 .pptx를 고르거나 파일을 홈 화면에 끌어다 놓으면, 고칠 수 있는 프레젠테이션으로 열려요.</span></li>
+          <li><span>글꼴이 다르게 보이는 글은 골라서 글꼴 목록의 브랜드 글꼴 중 같은 이름으로 바꿔요.</span></li>
+          <li><span>모눈 책상과 카드 틀은 배경 그림이에요. 새 장은 같은 색 장을 복제해서 글만 바꿔요.</span></li>
+        </ol>
+        <p class="tip">글꼴을 올릴 수 없는 계정이라면 캔바에 있는 비슷한 글꼴로 바꿔 써요. 큰 제목은 Do Hyeon, 제목은 Jua, 본문은 Gowun Dodum이 가장 가까워요.</p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="sl-t">
+      <div class="hd"><span class="px">SLIDES_{{COUNT}}</span></div>
+      <div class="bd">
+        <h2 id="sl-t" class="ttl">들어 있는 {{COUNT}}장</h2>
+        <div class="shots">
+{{THUMBS}}
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="nt-t">
+      <div class="hd"><span class="px">NOTE</span></div>
+      <div class="bd">
+        <h2 id="nt-t" class="ttl">알아 둘 점</h2>
+        <ul class="notes">
+          <li>큰 제목 글꼴은 <b>강원교육튼튼</b>이에요. 활동지에 'GangwonEdu'로 들어 있는 글꼴 파일이 실제로는 강원교육튼튼이라, PPT도 같은 모양으로 맞췄어요.</li>
+          <li>고칠 수 있는 것은 모든 글, 이름표, 칸, 번호 동전, 표, 단추예요. 모눈 책상과 카드 틀(머리 색 띠 포함)은 배경 그림이에요.</li>
+          <li>발표자 메모에 단계별 시간과 정답·까닭을 적어 두었어요. 화면을 공유할 때 메모가 학생에게 보이지 않게 해 주세요.</li>
+          <li>사이트를 여는 단추에는 링크가 걸려 있어요. PowerPoint 슬라이드 쇼에서 누르면 열려요.</li>
+          <li>PowerPoint로 발표할 PC에는 꾸러미의 글꼴 5개를 설치해 주세요(.ttf 파일을 두 번 눌러 「설치」).</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbCap" hidden>
+  <div class="lb-in">
+    <div class="lb-top"><p class="lb-cap" id="lbCap"></p><button type="button" class="pill" id="lbClose">닫기 ✕</button></div>
+    <img class="lb-img" id="lbImg" alt="" width="960" height="540">
+    <div class="lb-nav"><button type="button" class="pill" id="lbPrev">◀ 이전</button><span class="lb-count" id="lbCount"></span><button type="button" class="pill" id="lbNext">다음 ▶</button></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---------- 파일 받기(downloads 기능 — .pptx·.zip 은 딸린 파일로 못 올려서 맨 아래 데이터 칸에 넣어 둠) ----------
+  var status = document.getElementById('dlStatus');
+  var dlP = (window.claude && window.claude.use) ? window.claude.use('downloads') : Promise.resolve(null);
+  function say(t, kind) { status.textContent = t; status.className = 'status' + (kind ? ' ' + kind : ''); }
+  document.querySelectorAll('button[data-src]').forEach(function (b) {
+    b.addEventListener('click', async function () {
+      if (b.getAttribute('aria-busy') === 'true') return;
+      b.setAttribute('aria-busy', 'true');
+      say('파일을 준비하고 있어요…');
+      try {
+        var dl = await dlP;
+        if (!dl) { say('이 화면에서는 파일을 받을 수 없어요. claude.ai에서 이 페이지를 열어 주세요.', 'no'); return; }
+        var raw = atob(document.getElementById(b.dataset.src).textContent.trim());
+        var bytes = new Uint8Array(raw.length);
+        for (var k = 0; k < raw.length; k++) bytes[k] = raw.charCodeAt(k);
+        await dl.save({ filename: b.dataset.name, data: new Blob([bytes]) });
+        say('저장했어요: ' + b.dataset.name, 'ok');
+      } catch (e) {
+        var c = e && e.code;
+        if (c === 'declined') say('저장을 취소했어요. 다시 누르면 받을 수 있어요.');
+        else if (c === 'rate_limited') say('저장 창이 이미 열려 있어요. 잠시 뒤 다시 눌러 주세요.', 'no');
+        else say('파일을 받지 못했어요. 페이지를 새로 고친 뒤 다시 눌러 주세요.', 'no');
+      } finally { b.removeAttribute('aria-busy'); }
+    });
+  });
+
+  // ---------- 미리보기 크게 보기 ----------
+  var LABELS = {{LABELS}};
+  var thumbs = [].slice.call(document.querySelectorAll('button.frame[data-i]'));
+  var lb = document.getElementById('lb'), img = document.getElementById('lbImg');
+  var cap = document.getElementById('lbCap'), count = document.getElementById('lbCount');
+  var cur = 0, opener = null;
+  function show(i) {
+    cur = (i + thumbs.length) % thumbs.length;
+    var n = String(cur + 1).padStart(2, '0');
+    img.src = 'thumbs/s' + n + '.jpg';
+    img.alt = n + '번 슬라이드 · ' + LABELS[cur];
+    cap.textContent = n + '. ' + LABELS[cur];
+    count.textContent = (cur + 1) + ' / ' + thumbs.length;
+  }
+  function open(i, b) { opener = b; lb.hidden = false; show(i); document.getElementById('lbClose').focus(); }
+  function close() { lb.hidden = true; if (opener) opener.focus(); }
+  thumbs.forEach(function (b) { b.addEventListener('click', function () { open(+b.dataset.i, b); }); });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', function () { show(cur - 1); });
+  document.getElementById('lbNext').addEventListener('click', function () { show(cur + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') show(cur - 1);
+    else if (e.key === 'ArrowRight') show(cur + 1);
+    else if (e.key === 'Tab') {
+      var f = [].slice.call(lb.querySelectorAll('button')); var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+})();
+</script>
+<script type="application/octet-stream" id="file-pptx">{{PPTX_B64}}</script>
+<script type="application/octet-stream" id="file-zip">{{ZIP_B64}}</script>

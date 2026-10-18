@@ -19,6 +19,7 @@
   바꿀 땐 `design/tokens.json`(role·glass·motion·size) → `node design/build.mjs`(틀·07·틀에서 만든 차시까지 함께 바뀜). 틀의 부품을 고치면 ai/01 도 같이.
 - **버튼은 모두 오로라 유리 알약**(선생님 지시 2026-10-16): 일반 `glass-pill` · 고르기 `glass-chip` — 기준 `DESIGN.md`(The Aurora Pill Rule)·`docs/rules/order.md` §2-1.
   예외(지금 모양 유지): 메뉴 탭 · 보기 버튼(일간/주간/월간) · 급식 ◀ ▶ · HELP 버튼 · 태블릿 도움말 버튼.
+- **수업 PPT**(시안 A 카드, 캔바용 · 선생님 결정 2026-10-18): 차시 폴더의 `ppt.json`(장 구성) → `npm run ppt -- <단원>/<차시> --check`(PowerPoint 로 그려 넘침 검사) → `--page` 로 받는 링크(아티팩트) — 스킬 `lesson-ppt`, 순서·장 모양 `docs/rules/ppt.md`. 처음 한 번 `npm --prefix scripts/ppt install`.
 - **다른 웹앱용 디자인 토큰**: `design/` (`tokens.json` 원본 → `node design/build.mjs` → `tokens.css`·`preview.html`, 부품 `components.css`, 이름은 모두 `msi-`). 활동지 디자인 값을 바꾸면 여기도 맞춘다.
 - **스킬 목록·사용법**: `.claude/README.md`(우리 스킬) · `.claude/external-skills.md`(가져온 외부 스킬) · 사람용 안내: `README.md`
 

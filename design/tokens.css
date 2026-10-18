@@ -340,6 +340,13 @@
   --msi-role-ui-today-cell: #fdeaf3;   /* 달력 오늘 칸 바탕 */
   --msi-role-ui-total-ink: #8a4f36;   /* 급식 TOTAL 글자 */
   --msi-role-ui-placeholder: #746d85;   /* 입력칸 자리표시자 글자(분홍 종이 위 4.5:1↑, 2026-10-16 audit) */
+  /* part */
+  --msi-part-figure-max: 680px;   /* 그림·영상 최대 폭 */
+  --msi-part-slot-min: 176px;   /* 이름표를 놓는 칸 최소 폭 */
+  --msi-part-choice-radius: 22px;   /* 여러 줄이 되는 알약(긴 보기 고르기 칩·순서 카드) 모서리 */
+  --msi-part-ox-min: 56px;   /* O/X 버튼 최소 폭 */
+  --msi-part-gap: 10px;   /* 버튼 줄·개념 카드·이름표 줄 사이 */
+  --msi-part-figure-ratio: 680 / 300;   /* 그림을 누르면 나오는 영상 칸 기본 비율(그림과 같게, 다르면 그 영상에만 style 로) */
 }
 
 @keyframes msi-floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}

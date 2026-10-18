@@ -36,6 +36,21 @@
 5. **[2026-10-17] docx 양식을 눈으로 확인할 도구가 없음(soffice·pdftoppm 없음) + Word COM 스크립트가 숨은 WINWORD 를 남김**
    (`$W` 가 `$w` 를 덮음 — PowerShell 변수는 대소문자 무시 / `| Select-Object -First` 가 스크립트를 중간에 멈춤)
    Do instead: `references/docx-render.ps1`(Word 쪽 EMF → PNG, `$word` 로 Quit). 남았으면 창 없고 방금 시작된 WINWORD 만 끈다 — 선생님 Word 창은 절대 건드리지 않는다.
+6. **[2026-10-18] .pptx 미리보기에 쓸 LibreOffice 가 없음(pptx 스킬의 soffice·validate.py 도 못 씀 — python 은 스토어 껍데기)**
+   Do instead: `npm run ppt -- <단원>/<차시> --check` — `scripts/ppt/render.ps1`(PowerPoint COM 으로 장마다 PNG + `TextRange.BoundWidth/BoundHeight` 넘침 검사, 켜 둔 PowerPoint 는 안 끔). 규칙 `docs/rules/ppt.md`.
+   장이 많을 때(70장+) 「Call was rejected by callee(RPC_E_CALL_REJECTED)」로 중간에 멈추면 PowerPoint 가 잠깐 바빴던 것 — 남은 POWERPNT 가 없는지 보고 다시 돌린다.
+7. **[2026-10-18] PPT 표에 큰 글(정답)을 넣으면 PowerPoint 가 줄을 스스로 늘려 아래 글과 붙음(줄 높이는 최소값이라 넘침 검사에 안 잡힘) · pptxgenjs 표 칸 `margin` 은 첫 값이 1 이상이면 pt, 1 미만이면 인치**
+   Do instead: 칸 위아래 여백 1pt(`margin: [1, 9, 1, 9]`) — 이 글꼴들의 한 줄 높이는 글자 크기 × 1.36 정도. 표 아래 글은 render PNG 로 눈 확인.
+
+## Canva MCP 로 덱 직접 고치기
+1. **[2026-10-18] 캔바 편집 도구엔 장 복제가 없고, `add_text` 는 글꼴을 못 골라 기본 글꼴로 나옴(틀 글꼴이 깨짐)**
+   Do instead: 비슷한 장을 `copy-design`(page_numbers)으로 작업본에 떠서 **있는 글·도형을 고쳐 쓴다**(새 글상자 X, 도형·그림은 `insert_shape`·`insert_fill` 가능) → 선생님 확인 → `merge-designs` insert_pages 로 원본에 넣기. 작업본은 제목에 "작업본"을 붙여 알려 둔다.
+2. **[2026-10-18] 캔바 MCP 의 함정 넷** — `merge-designs` 는 한 번에 작업 1개만 · 여러 장 insert_pages 는 **순서가 뒤집혀** 들어감 · 배경 `update_fill` 은 살짝 확대돼 틀이 어긋남 · 한글은 낱말 중간에서 줄이 바뀜
+   Do instead: 넣은 뒤 글로 순서 확인 → `reorder_page` · 배경 바꾼 뒤 `crop_media`(페이지 locator, 0·0·1920·1080) · 줄은 `\n` 으로 직접 나눔. 장을 넣거나 빼면 오른쪽 아래 쪽 번호(글자)도 다시 매긴다(두 자리면 폭 40·left 1794.392).
+3. **[2026-10-18] 캔바 MCP `create-upload-url` 은 .pptx 를 거절(「Unsupported file format ZIP」) — 공개 주소로 올려 import 하는 것도 금지**
+   Do instead: 장이 많으면 `npm run ppt` 로 만들고 받는 링크(아티팩트, 같은 URL 갱신)에서 선생님이 받아 캔바에 올림 → 그 디자인에서 새 장만 `merge-designs` 로 원본에 넣는다. 쪽 번호는 PowerPoint 자동 번호라 최종 순서 그대로 전체 덱을 만들어야 맞는다.
+4. **[2026-10-18] `read-design` 은 여러 쪽 design_content 를 100,000자에서 자름 · 캔바 화면의 글자 숫자는 API `fontSize`(px) × 0.75(화면 45 = API 60)**
+   Do instead: 쪽을 나눠 읽거나 `transaction_id` + `element_ids` 로 골라 읽는다. 선생님이 말한 캔바 숫자 n → `font_size` = n ÷ 0.75. `edit-design` 은 쪽(page_index)마다 한 번씩, 저장(commit)은 미리보기를 보여 드리고 허락받은 뒤.
 
 ## Domain Behavior Guardrails
 1. **[2026-09-24] x-dc 는 화면에 안 보이는 원본 템플릿 복제본을 남김 → 전역 querySelector 가 엉뚱한 요소를 잡음**
@@ -59,6 +74,16 @@
    Do instead: 틀(`_templates/order`)의 자동 보관(`this._keep…`, 메모리 + localStorage 3시간, PDF 저장하면 지움)을 쓴다. 리허설은 "적기 → 다른 탭 → 돌아오기 → 새로고침" 까지.
 9. **[2026-10-16] 색은 역할 토큰으로만 — 07·틀은 색 글자 대신 `var(--msi-role-…)` (흰 PDF 바탕·canvas fillStyle 만 예외)**
    Do instead: 값은 `design/tokens.json` role → `node design/build.mjs`(표식 있는 lesson.html 블록 자동 갱신). 공용 글꼴을 바꾸거나 새 데이터를 넣으면 `python scripts/font-subset.py` 다시(원본 design/fonts).
+10. **[2026-10-18] 'GangwonEdu' 글꼴 파일(design/fonts·shared/fonts 의 GangwonEdu-400.woff2)의 실제 글꼴은 강원교육튼튼(GangwonEduPower) ExtraBold** — DESIGN.md 의 "강원교육모두"와 다름
+   Do instead: PPT·캔바처럼 웹 밖에서 큰 제목을 같은 모양으로 내려면 글꼴 이름 `GangwonEduPower`(강원교육튼튼, 이 PC 설치됨)를 쓴다. 쿠키런은 굵기마다 이름이 따로라 `CookieRun Bold` + 굵게 끔.
+
+## 모션그래픽 (scripts/motion · docs/rules/motion.md)
+1. **[2026-10-18] WebCodecs(VideoEncoder)는 보안 문맥에서만 — about:blank·file:// 에선 `undefined`**
+   Do instead: 127.0.0.1 로 띄운 페이지에서 쓴다(render.mjs 의 서버). `hardwareAcceleration:'prefer-software'` + `bitrateMode:'quantizer'` 조합은 이 PC 에서 거절되니 enc.html 처럼 후보를 차례로 `isConfigSupported` 로 고른다.
+2. **[2026-10-18] `display:flex` 로 가운데 맞춘 상자 안에서 글과 `<b>` 사이 띄어쓰기가 사라짐(글 조각이 각각 flex 항목이 됨)**
+   Do instead: 안 내용을 `<span>` 하나로 감싼다.
+3. **[2026-10-18] 아티팩트 페이지는 doctype·html·head·body 를 넣지 않는다(게시 때 틀로 감쌈)** — 원본 index.html 은 완전한 문서로 두고 `--page` 가 껍데기를 걷어 낸 site/index.html 을 만든다.
+   Do instead: 원본을 고치고 `npm run motion -- <차시> --page` 로 다시 만들어 같은 file_path 로 게시.
 
 ## User Directives
 1. **[2026-09-24] "고민만", "가능 여부만" 이라고 하면 만들지 않는다**

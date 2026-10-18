@@ -1,0 +1,13 @@
+{
+  "name": "msi-ppt",
+  "private": true,
+  "description": "수업 PPT(.pptx) 만들기 전용 패키지 — npm run ppt 가 쓴다. 처음 한 번: npm --prefix scripts/ppt install (docs/rules/ppt.md)",
+  "type": "module",
+  "dependencies": {
+    "fontkit": "^2.0.4",
+    "jszip": "^3.10.2",
+    "pptxgenjs": "^4.0.1",
+    "subset-font": "^2.9.0",
+    "wawoff2": "^2.0.1"
+  }
+}

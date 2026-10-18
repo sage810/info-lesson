@@ -3,7 +3,9 @@
   "private": true,
   "description": "신현중학교 정보 수업 활동지 — 소스(lessons/)를 구글 사이트·GitHub Pages 배포본으로 빌드",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
@@ -16,7 +18,9 @@
     "portal-upgrade": "node scripts/portal-upgrade.mjs",
     "template-preview": "node scripts/template-preview.mjs",
     "exam-key": "node scripts/exam-key.mjs",
-    "exam-pdf": "node scripts/exam-pdf.mjs"
+    "exam-pdf": "node scripts/exam-pdf.mjs",
+    "ppt": "node scripts/ppt/index.mjs",
+    "motion": "node scripts/motion/render.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.56.1"

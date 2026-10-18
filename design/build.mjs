@@ -12,6 +12,7 @@ const PREFIX = {
   'border-width': 'bw-', radius: 'radius-', shadow: 'shadow-', gradient: 'gradient-', focus: 'focus-', duration: 'duration-',
   role: 'role-',   // 역할 → 색(카드 머리·몸통·탭·과목…) — 새 차시 틀이 씀. 아래 "역할 색" 참고
   glass: 'glass-', motion: 'motion-',   // 유리 층·움직임(2026-10-16) — 활동지 블록에도 들어감
+  part: 'part-',   // 활동 부품 치수(ai/01, 2026-10-18) — 활동지 블록에도 들어감
 };
 const varName = (group, name) => `--msi-${PREFIX[group]}${name}`;
 const alias = (v) => String(v).replace(/\{([\w-]+)\.([\w-]+)\}/g, (_, g, n) => `var(${varName(g, n)})`);
@@ -121,6 +122,16 @@ ${sizes}
         <div class="msi-table-scroll"><table class="msi-table"><tr><th>교시</th><th>과목</th></tr><tr><td>1</td><td>정보</td></tr><tr><td>2</td><td>수학</td></tr></table></div>
       </div></section>
 
+    <section class="msi-card" style="--accent:var(--msi-accent-4)"><div class="msi-card-head"><span>ACTIVITY_PARTS</span><span class="r">AI/01 · parts.md</span></div>
+      <div class="msi-card-body">
+        <div class="msi-act-line"><h2 class="msi-h2">활동 부품(새 차시 틀 = ai/01)</h2></div>
+        <div class="msi-table-scroll"><table class="msi-concept-table"><tr><th>낱말</th><th>뜻</th><th>예</th></tr><tr><td>인공지능</td><td>사람의 <input class="msi-field" style="display:inline-block;width:70px;padding:4px 8px" aria-label="예시 빈칸"> 같은 지적 능력을 흉내 낸 소프트웨어</td><td>낙서 알아맞히기</td></tr></table></div>
+        <div class="msi-cards"><div class="msi-concept-card"><div class="ic">🏷️</div><div class="t">레이블</div><p>데이터에 붙인 정답 이름표</p><p class="ex">시험공부라면? → 정답</p></div><div class="msi-concept-card"><div class="ic">📚</div><div class="t">학습 데이터</div><p>레이블과 함께 보여 주는 데이터</p><p class="ex">시험공부라면? → 문제집</p></div><div class="msi-concept-card"><div class="ic">📝</div><div class="t">테스트 데이터</div><p>학습에 쓰지 않은 새 데이터</p><p class="ex">시험공부라면? → 처음 보는 시험</p></div></div>
+        <div class="msi-match"><div class="msi-tray"><button class="msi-pill" type="button">인공지능 소프트웨어</button><button class="msi-pill" type="button">일반 소프트웨어</button></div><div class="msi-match-row"><span class="d">틱톡 추천 피드</span><span class="msi-slot">인공지능 소프트웨어</span></div><div class="msi-match-row"><span class="d">매일 7시 알람</span><span class="msi-slot"></span></div><div class="msi-ctl"><button class="msi-pill" type="button">✅ 정답 확인</button><button class="msi-pill" type="button">🔀 다시 섞기</button></div></div>
+        <div class="msi-pick row"><button class="msi-pill" type="button">학습할 때 이미 본 영상들</button><button class="msi-pill" type="button" data-s="ok">✓ 학습에 쓰지 않은 새 영상들</button></div>
+        <div class="msi-feedback" data-s="ok">⭕ 정답이에요! 학습에 쓰지 않은 새 데이터로 시험해야 진짜 실력을 알 수 있어요.</div>
+        <div class="msi-ox"><div class="q"><span class="msi-num">1</span><span class="t">디데이 앱은 인공지능 소프트웨어이다.</span><span class="oxb"><button class="msi-pill" type="button" data-s="no">O</button><button class="msi-pill" type="button">X</button></span><span class="why" data-s="no">❌ 오답이에요. 정해진 규칙대로만 움직이는 일반 소프트웨어예요.</span></div></div>
+      </div></section>
     <div class="row">${[1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<section class="msi-card" style="--accent:var(--msi-accent-${i});flex:1 1 90px"><div class="msi-card-head"><span>ACCENT_${i}</span></div><div class="msi-card-body" style="padding:10px"> </div></section>`).join('')}</div>
   </div>
 </div>
@@ -136,7 +147,7 @@ console.log('✔ design/preview.html');
 //   <style id="msi-role-tokens">…</style> 를 이 스크립트가 tokens.json 값으로 다시 채운다(그 표식이 있는 차시·틀만).
 const ROOT = path.join(dir, '..');
 const roles = Object.entries(tokens.role).filter(([n]) => !n.startsWith('$'));
-const LESSON_GROUPS = ['glass', 'motion', 'size'];   // 활동지 블록에 role 과 함께 넣는 묶음(유리 층·움직임·손가락 크기, 2026-10-16)
+const LESSON_GROUPS = ['glass', 'motion', 'size', 'part'];   // 활동지 블록에 role 과 함께 넣는 묶음(유리 층·움직임·손가락 크기, 2026-10-16)
 const extra = LESSON_GROUPS.flatMap((g) => Object.entries(tokens[g]).filter(([n]) => !n.startsWith('$')).map(([n, v]) => [g, n, v]));
 const roleBlock = `<style id="msi-role-tokens">/* 자동 생성 — design/tokens.json 의 role 을 고치고 node design/build.mjs (docs/rules/color-map.md) */
 :root{

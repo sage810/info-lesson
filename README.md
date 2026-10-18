@@ -18,7 +18,7 @@
 | `docs/rules/` | 규칙: 디자인(`design.md`) · 활동 유형(`components.md`) · PDF 버튼(`pdf.md`) · 임베드(`embed.md`) · 4탭 탭 명세(`portal/`) · 4탭으로 옮기기(`shell-porting.md`) | 규칙이 바뀔 때 |
 | `docs/log/` | 작업 이력(구현 노트·활동 설계 기록) | 새 활동 유형을 만들면 한 절 추가 |
 | `docs/legacy-files.md` | 옛 `output/` 파일이 어디로 갔는지, 꺼내는 법 | — |
-| `scripts/` | Node 스크립트(빌드·검사·정답지·가져오기) + NEIS 데이터 받기(PowerShell) | 거의 안 고쳐요 |
+| `scripts/` | Node 스크립트(빌드·검사·정답지·가져오기·수업 PPT `ppt/`) + NEIS 데이터 받기(PowerShell) | 거의 안 고쳐요 |
 | `data/` | NEIS 시간표·급식 원자료와 `neis-snapshot.json` | `npm run neis` 가 갱신 |
 | `apps-script/` | Google Apps Script 작은 API (제출 PDF 모으기 · NEIS 프록시) + 배포 방법 | 배포할 때 한 번 |
 | `input/` | 원자료: 캡처 이미지·CSV·Claude Design 원본 | 자료를 넣을 때 |
@@ -55,6 +55,8 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 | 양식으로 새 차시 | `docs/templates/활동지 양식.docx` 를 채워서 "이 양식으로 08차시 만들어줘" | (Word · Google 문서 둘 다 됨. 꼭 = 학습 주제·활동, 나머지 칸은 비우면 초안 · "없음"이면 뺌) |
 | 수업 자료 올리기 | "이 PDF 수업 자료에 올려줘" | 파일을 `materials/` 에 넣기 → (제목·설명은 `materials.json`) → `npm run build` |
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
+| 수업 PPT (캔바용) | "ai/01 PPT 만들어줘" | 차시 폴더 `ppt.json` 에 장 구성 → `npm run ppt -- ai/01 --check` → `dist/ppt/ai-01/` (처음 한 번 `npm --prefix scripts/ppt install`, 규칙 `docs/rules/ppt.md`) |
+| 수업용 모션그래픽 (영상) | "ai/01 모션그래픽 만들어줘" | 차시 폴더 `motion/index.html` 에 장면 → `npm run motion -- ai/01 --sheet 5` 로 확인 → `--mp4` 로 MP4 → `dist/motion/ai-01/` (ffmpeg 없이 Chrome 이 만듦, 규칙 `docs/rules/motion.md`) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |
 | 수정 요청 메모 (선생님 전용) | **"03차시 메모 켜줘"** → 빌드·미리보기 서버·`?memo=1` 열기까지 한 번에. 고칠 글을 선택하거나 "🎯 요소 고르기"로 클릭해 요청을 적고 "📤 보내기" → `.claude/feedback.md` 에 쌓임 → Claude 에 **"피드백 처리해줘"** (GitHub Pages 에서 켜면 "전체 복사" → 붙여넣기) | `npm run memo -- 03` (끄려면 주소 끝 `?memo=0`. 학생 화면에는 안 보임, `feedback.md` 는 git 에 안 올라감) |
 | 완성된 HTML 파일 들여오기 | "이 파일 06차시로 가져와줘" | `npm run import -- <파일> data-analysis/06` |

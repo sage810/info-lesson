@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>motion encoder</title>
+<!-- render.mjs 가 쓰는 인코더 페이지: PNG 프레임(base64) → VideoFrame → WebCodecs H.264 → mp4-muxer → MP4 바이트.
+     보안 문맥(127.0.0.1)에서만 WebCodecs 가 있다. -->
+<script src="/__mp4-muxer.js"></script>
+<canvas id="sheet"></canvas>
+<script>
+const enc = {
+  async start({ width, height, fps, qp, bitrate }) {
+    const { Muxer, ArrayBufferTarget } = Mp4Muxer;
+    this.muxer = new Muxer({ target: new ArrayBufferTarget(), video: { codec: 'avc', width, height, frameRate: fps }, fastStart: 'in-memory' });
+    this.err = null; this.i = 0; this.fps = fps; this.qp = qp;
+    this.encoder = new VideoEncoder({ output: (chunk, meta) => this.muxer.addVideoChunk(chunk, meta), error: e => { this.err = String(e); } });
+    /* 되는 설정을 차례로 찾는다: QP 고정(화질 일정, 파일은 움직임만큼) → 가변 비트레이트 */
+    const base = { codec: 'avc1.640028', width, height, framerate: fps, latencyMode: 'quality', avc: { format: 'avc' } };
+    const cands = [];
+    if (qp) { cands.push({ ...base, bitrateMode: 'quantizer' }, { ...base, bitrateMode: 'quantizer', hardwareAcceleration: 'prefer-hardware' }, { ...base, bitrateMode: 'quantizer', hardwareAcceleration: 'prefer-software' }); }
+    const br = bitrate || 3_000_000;
+    cands.push({ ...base, bitrate: br, bitrateMode: 'variable', hardwareAcceleration: 'prefer-software' }, { ...base, bitrate: br, bitrateMode: 'variable' }, { ...base, bitrate: br });
+    let cfg = null;
+    for (const c of cands) { const s = await VideoEncoder.isConfigSupported(c); if (s.supported) { cfg = c; break; } }
+    if (!cfg) throw new Error('H.264 encoder: no supported config');
+    if (cfg.bitrateMode !== 'quantizer') this.qp = 0;
+    this.encoder.configure(cfg);
+    return cfg;
+  },
+  async add(b64) {
+    if (this.err) throw new Error(this.err);
+    const blob = await (await fetch('data:image/png;base64,' + b64)).blob();
+    const bmp = await createImageBitmap(blob);
+    const us = Math.round(1e6 / this.fps);
+    const frame = new VideoFrame(bmp, { timestamp: this.i * us, duration: us });
+    const opts = { keyFrame: this.i % (this.fps * 2) === 0 };
+    if (this.qp) opts.avc = { quantizer: this.qp };
+    this.encoder.encode(frame, opts); frame.close(); bmp.close(); this.i++;
+    while (this.encoder.encodeQueueSize > 6) await new Promise(r => setTimeout(r, 15));
+    return this.i;
+  },
+  async finish() {
+    await this.encoder.flush(); this.encoder.close(); this.muxer.finalize();
+    this.buf = new Uint8Array(this.muxer.target.buffer);
+    return this.buf.byteLength;
+  },
+  chunk(offset, size) {          // 큰 파일은 나눠서 넘긴다(base64)
+    const part = this.buf.subarray(offset, Math.min(this.buf.byteLength, offset + size));
+    let s = ''; for (let i = 0; i < part.length; i += 0x8000) s += String.fromCharCode.apply(null, part.subarray(i, i + 0x8000));
+    return btoa(s);
+  }
+};
+/* 한눈에 보기(격자) — 프레임을 줄여 그린다 */
+const sheet = {
+  start(n, cols, cw, ch) {
+    const c = document.getElementById('sheet'); this.c = c; this.cols = cols; this.cw = cw; this.ch = ch; this.i = 0;
+    c.width = cols * cw; c.height = Math.ceil(n / cols) * ch; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); this.g = g;
+  },
+  async add(b64, label) {
+    const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode();
+    const x = (this.i % this.cols) * this.cw, y = Math.floor(this.i / this.cols) * this.ch;
+    this.g.drawImage(img, x, y, this.cw, this.ch);
+    this.g.fillStyle = 'rgba(0,0,0,.65)'; this.g.fillRect(x, y, 86, 26); this.g.fillStyle = '#fff'; this.g.font = 'bold 16px sans-serif'; this.g.fillText(label, x + 6, y + 19);
+    this.g.strokeStyle = '#999'; this.g.strokeRect(x + .5, y + .5, this.cw - 1, this.ch - 1); this.i++;
+  }
+};
+window.enc = enc; window.sheet = sheet;
+</script>

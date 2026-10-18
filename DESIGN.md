@@ -448,9 +448,19 @@ components:
 ### 번호 동전 (Signature)
 오늘의 목표 · 형성평가 번호. 28px 원, 2px 잉크 테두리, CookieRun 15px, 그 카드 머리 계열의 그라데이션(목표 = 로즈 더스트, 형성평가 = 라일락), 2px 어긋난 그림자.
 
+### Activity Parts (ai/01 — 새 차시 틀, 2026-10-18)
+새 차시 틀 `lessons/_templates/order` = ai/01 「인공지능이란?」. 쓰는 법·근거는 `docs/rules/parts.md`, 치수 토큰은 `design/tokens.json` 의 `part`(`--msi-part-*` — 활동지 토큰 블록에도 자동으로 들어감), 다른 웹앱용 부품은 `design/components.css` 의 `msi-` 활동 부품(미리보기 `design/preview.html` ACTIVITY_PARTS).
+- **카드 제목 = 글자만**(질문 스티커 없음), 단계 소제목 `1. 2. 3.`
+- **The Center Rule**: 버튼 줄 · 바깥 사이트 버튼 · 이름표 모음 · 짧은 보기 두 개는 가운데. 이름표 줄은 가로 반반 2열(설명 | 칸), 각각 가운데.
+- **개념 표**: 1열·1행 가운데, 뜻의 핵심어를 빈칸. **개념 카드 3장**: 아이콘 · 낱말 · 뜻 · 「시험공부라면?」 줄, 흐름 그림은 카드 위.
+- **형성평가 O/X**: 누르면 바로 채점 + 맞아도 틀려도 이유. **핵심 정리**: 글자 빈칸 대신 이름표 끌어 놓기.
+- **그림**: SVG(또는 선생님 PNG), 글자는 CookieRun Bold(SVG 안에 글꼴), 비교는 두 칸 + 큰 색 띠 제목, 화살표 이름은 화살표 옆. 그림을 누르면 영상(그림 아래 ▶ 버튼, PDF 에는 그림만).
+- 치수: 그림 최대 `--msi-part-figure-max`(680px) · 이름표 칸 `--msi-part-slot-min`(176px) · 여러 줄 알약 `--msi-part-choice-radius`(22px) · O/X `--msi-part-ox-min`(56px) · 간격 `--msi-part-gap`(10px) · 영상 비율 `--msi-part-figure-ratio`.
+
 ## Do's and Don'ts
 
 ### Do:
+- **Do** 새 차시는 ai/01 부품 모양(`docs/rules/parts.md`)대로 — 가운데 정렬 · 글자만 제목 · O/X 즉시 채점 · 그림 글자 CookieRun Bold.
 - **Do** 버튼은 모두 오로라 유리 알약으로 만든다 — 일반 버튼 `glass-pill`, 고르기 버튼 `glass-chip`(높이 44px↑, 2px 잉크 테두리, 3px 어긋난 그림자).
 - **Do** 색을 역할 토큰으로 쓴다 — `var(--msi-role-act2-head)` 처럼. 바꿀 땐 `design/tokens.json` 의 `role` 만 고치고 `node design/build.mjs`.
 - **Do** 새 차시는 틀 `lessons/_templates/order` 에서 출발한다.
@@ -469,3 +479,5 @@ components:
 - **Don't** 교사용 화면에 왼쪽 고정 카드를 두지 않는다.
 - **Don't** `color-mix()` · `color()` 같은 새 색 함수를 PDF 로 저장되는 영역에 쓰지 않는다 — PDF 캡처(html2canvas 1.4.1)가 못 읽어 저장이 실패한다. 투명도는 rgba 토큰으로. 요소 자체의 `inset` 속광도 PDF 에서 흰 판이 되니 `::after` 에 두거나 PDF 복제본(`.msi-pdf-clone`)에서 끈다.
 - **Don't** 손가락으로 누르는 칩·버튼을 44px 보다 작게 만들지 않는다(학생 기기는 태블릿·크롬북).
+- **Don't** 개념을 줄글 빈칸으로만 늘어놓지 않는다 — 표·카드로(ai/01 피드백). 그림 속 글자가 옆 빈칸의 정답을 알려 주지 않게 한다.
+- **Don't** 그림의 화살표 이름표를 화살표에 겹치지 않는다. 버튼을 그림 위에 겹치지 않는다(그림 아래로).

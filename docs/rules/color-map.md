@@ -291,3 +291,9 @@
 | content-max | `--msi-size-content-max` | `1080px` |
 | 문서형 화면 | `--msi-size-doc-max` | `980px` |
 | 손가락으로 누르는 것의 최소 높이(태블릿·크롬북) | `--msi-size-touch-min` | `44px` |
+| 그림·영상 최대 폭 | `--msi-part-figure-max` | `680px` |
+| 이름표를 놓는 칸 최소 폭 | `--msi-part-slot-min` | `176px` |
+| 여러 줄이 되는 알약(긴 보기 고르기 칩·순서 카드) 모서리 | `--msi-part-choice-radius` | `22px` |
+| O/X 버튼 최소 폭 | `--msi-part-ox-min` | `56px` |
+| 버튼 줄·개념 카드·이름표 줄 사이 | `--msi-part-gap` | `10px` |
+| 그림을 누르면 나오는 영상 칸 기본 비율(그림과 같게, 다르면 그 영상에만 style 로) | `--msi-part-figure-ratio` | `680 / 300` |

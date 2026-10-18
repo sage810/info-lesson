@@ -2,7 +2,15 @@
 
 새 차시는 틀 `lessons/_templates/order`(= ai/01 「인공지능이란?」)에서 출발한다. 이 문서는 **틀 안 부품을 어떻게 쓰는지**와
 **왜 그렇게 정했는지(피드백)**를 적는다. 순서·색은 `order.md`, 색 값은 `color-map.md`(역할 토큰) — 이번 부품은 새 색을 만들지 않았다.
-부품 CSS 는 틀 `lesson.html` 의 `/* ── [ai/01] …` 블록(이름은 `ai-` 로 시작하지만 모든 차시용), 동작은 같은 파일 `class Component` 와 맨 끝 `<script>`.
+부품 CSS 는 틀 `lesson.html` 의 `/* ── [ai/01] 활동 부품 …` 블록(이름은 `ai-` 로 시작하지만 모든 차시용), 동작은 같은 파일 `class Component` 와 맨 끝 `<script>`.
+
+**디자인 시스템에 기록된 곳**
+| 무엇 | 어디 |
+|---|---|
+| 치수 토큰 | `design/tokens.json` 의 `part` → `--msi-part-figure-max`(680px) · `-slot-min`(176px) · `-choice-radius`(22px) · `-ox-min`(56px) · `-gap`(10px) · `-figure-ratio`(680 / 300). `node design/build.mjs` 가 활동지 토큰 블록(틀·ai/01·07)에도 넣는다 |
+| 색 | 새 색 없음 — 역할 토큰(`color-map.md`) |
+| 다른 웹앱용 부품 | `design/components.css` 활동 부품(`msi-ctl` · `msi-match` · `msi-concept-table` · `msi-cards` · `msi-pick` · `msi-ox` · `msi-figure`), 미리보기 `design/preview.html` ACTIVITY_PARTS |
+| 규칙 요약 | `DESIGN.md` Components › Activity Parts · Do's and Don'ts |
 
 ## 1. 카드 · 글
 
@@ -39,6 +47,7 @@
   - **비교 그림은 두 칸**: 왼쪽 | 오른쪽, 칸 맨 위 큰 색 띠 제목(20px↑), 같은 줄끼리 비교(재료 → 만들어진 것 → 결과). 이름을 작은 네모 칸에 넣지 않는다. (10-18 a2)
   - **화살표 이름(「학습」 등)은 화살표 옆·위로 띄운다** — 화살표와 겹치지 않게. (10-18 a2·a4)
   - 그림 글자가 바로 옆 빈칸의 정답을 알려 주지 않게(「인공 신경망」 칸 위 그림에는 「컴퓨터 속 구조」).
+- 선생님이 그림(PNG)을 주면 그대로 `assets/` 에 넣고 `width`·`height` 를 그 그림 크기로(ai/01 활동 4 = 1920×1080). 영상 비율이 기본(680:300)과 다르면 그 영상에만 `style="aspectRatio:16 / 9"`.
 - **그림을 누르면 영상**: `.ai-vid` 안에 그림 `img.ai-fig.ai-vid__img` + `video.ai-vid__v.no-pdf`(msi-asset mp4) + 그림 **아래** `button.glass-pill.ai-vid__btn.no-pdf` 「▶ 움직이는 모습 보기」. 끝나면 그림으로 돌아옴, PDF 에는 그림만. 영상은 그림과 같은 가로세로 비(지금 680:300 — 다르면 `.ai-vid__v` 의 `aspect-ratio` 를 맞춘다). (10-18)
   - 영상은 `assets/` 에 mp4 로(빌드가 mp4 를 앎 — `scripts/lib/common.mjs`). 구글 사이트 붙여넣기(embed)용 파일에는 영상이 통째로 들어가 커진다(ai/01: 영상 2개 ≈ +1.5MB).
 

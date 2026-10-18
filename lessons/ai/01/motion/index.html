@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>인공지능이란? 모션그래픽</title>
+<meta name="description" content="정보 · 인공지능 1차시 「인공지능이란?」 수업용 모션그래픽 — 자막만(소리 없음). 선생님이 설명하며 틀어 줘요.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 글꼴 — 활동지와 같은 파일(shared/fonts). 미리보기 서버·아티팩트가 fonts/ 로 준다 */
+@font-face{font-family:'GangwonEdu';font-weight:400;font-display:block;src:url(fonts/GangwonEdu-400.woff2) format('woff2')}
+@font-face{font-family:'CookieRun';font-weight:400;font-display:block;src:url(fonts/CookieRun-400.woff2) format('woff2')}
+@font-face{font-family:'CookieRun';font-weight:700;font-display:block;src:url(fonts/CookieRun-700.woff2) format('woff2')}
+@font-face{font-family:'Maplestory';font-weight:300;font-display:block;src:url(fonts/Maplestory-300.woff2) format('woff2')}
+@font-face{font-family:'Maplestory';font-weight:700;font-display:block;src:url(fonts/Maplestory-700.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-weight:400;font-display:block;src:url(fonts/Silkscreen-400.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-weight:700;font-display:block;src:url(fonts/Silkscreen-700.woff2) format('woff2')}
+
+/* 색 = design/tokens.json role 값 그대로(활동지·PPT 와 같은 팔레트, 새 색 없음) */
+:root{
+  --ink:#4b3b6b; --ink2:#6b5b93; --rose-ink:#a65a86;
+  --cream:#fffdf7; --page-bg:#e7e3f7; --page-grid:rgba(216,210,238,.75);
+  --sky:#c4d8f7; --sky-body:#f4f8fe; --mint:#bfe9dd; --mint-body:#f1fbf7; --lav:#d6c4f5; --lav-body:#f8f4fe;
+  --lime:#e3f4b0; --lime-body:#fbfdf0; --salmon:#f7bfb2; --salmon-body:#fff4f1; --sage:#c9e4dc; --sage-body:#f3faf7;
+  --green:#d8f0c4; --green-body:#f7fcf2; --rose:#e8c4c4; --lilac:#eec6ea; --yellow:#fbe6a2; --ok:#a8e6cf; --no:#ffb3bd;
+  --glass-top:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%);
+  --glass-top-head:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.7),rgba(255,255,255,0) 62%);
+  --glass-white:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.14) 55%,rgba(255,255,255,.42));
+  --chip-glass:linear-gradient(120deg,rgba(253,225,243,.75),rgba(231,220,255,.75) 50%,rgba(214,241,255,.75));
+  --glass-inset:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -8px 14px -10px rgba(255,255,255,.9);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1); --ease-out:cubic-bezier(.2,0,0,1);
+  --round:'CookieRun',Apple SD Gothic Neo,Malgun Gothic,Noto Sans KR,sans-serif;
+  --body:'Maplestory',Apple SD Gothic Neo,Malgun Gothic,Noto Sans KR,sans-serif;
+  --pixel:'Silkscreen',monospace;
+  --page-fg:#4b3b6b; --hint:#6b5b93;   /* 무대 바깥(책상·조작 줄)만 테마를 따른다 — 무대(영상)는 늘 크림 */
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page-bg:#2a2440;--page-grid:rgba(255,255,255,.07);--page-fg:#efe9ff;--hint:#c9c2dd;color-scheme:dark}}
+:root[data-theme="dark"]{--page-bg:#2a2440;--page-grid:rgba(255,255,255,.07);--page-fg:#efe9ff;--hint:#c9c2dd;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--body);font-weight:300;color:var(--page-fg);background:var(--page-bg);
+  background-image:linear-gradient(var(--page-grid) 1px,transparent 1px),linear-gradient(90deg,var(--page-grid) 1px,transparent 1px);background-size:28px 28px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:100%;overflow:hidden;
+  padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#box{position:relative;flex:none}
+#wrap{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+#stage{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;background:var(--cream);color:var(--ink);
+  border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 rgba(75,59,107,.22);cursor:pointer}
+#stage>*{pointer-events:none}
+.scene{position:absolute;inset:0;opacity:0}
+.ov{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible}
+.abs{position:absolute}
+.center{text-align:center}
+.round{font-family:var(--round);font-weight:700}
+b,strong{font-family:var(--round);font-weight:700}
+
+/* 장면 머리 띠 = 활동지 카드 머리(단계 흰 이름표 + 픽셀 이름 + 제목), 유리 빛 */
+.head{position:absolute;left:0;top:0;width:1920px;height:104px;display:flex;align-items:center;gap:22px;padding:0 64px;border-bottom:4px solid var(--ink)}
+.head::after{content:'';position:absolute;inset:0;background:var(--glass-top-head);pointer-events:none}
+.head .chip{display:inline-flex;align-items:center;height:50px;padding:0 22px;border:3px solid var(--ink);border-radius:999px;background:#fff;font-family:var(--round);font-weight:700;font-size:28px}
+.head .px{font-family:var(--pixel);font-weight:700;font-size:30px;letter-spacing:.02em}
+.head .vdiv{width:3px;height:52px;background:var(--ink);border-radius:2px;opacity:.55}
+.head .badge{display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border:3px solid var(--ink);border-radius:50%;background:#fff;font-size:30px;line-height:1}
+.head .ttl{font-family:var(--round);font-weight:700;font-size:42px;letter-spacing:-.01em}
+
+/* 자막 — 아래 가운데, 흰 상자 + 3px 잉크, 핵심어는 형광펜 */
+.capwrap{position:absolute;left:0;right:0;bottom:44px;display:flex;justify-content:center;pointer-events:none}
+.cap{max-width:1720px;padding:20px 40px;border:3px solid var(--ink);border-radius:20px;background:#fff;box-shadow:5px 5px 0 rgba(75,59,107,.16);
+  font-size:38px;line-height:1.5;text-align:center;word-break:keep-all}
+.cap b{background:linear-gradient(transparent 58%,var(--yellow) 58%);padding:0 3px;border-radius:4px}
+
+/* 공통 부품 */
+.card{border:3px solid var(--ink);border-radius:20px;background:#fff;box-shadow:5px 5px 0 rgba(75,59,107,.16)}
+.panel{border:3px solid var(--ink);border-radius:26px;box-shadow:6px 6px 0 rgba(75,59,107,.16)}
+.panel .ptitle{position:absolute;left:0;right:0;top:26px;text-align:center;font-family:var(--round);font-weight:700;font-size:36px}
+.panel .pfoot{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:27px;color:var(--ink2)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:8px 26px;border:3px solid var(--ink);border-radius:999px;background:#fff;
+  font-family:var(--round);font-weight:700;font-size:32px;line-height:1.3;box-shadow:4px 4px 0 rgba(75,59,107,.2);white-space:nowrap}
+.pill.yellow{background:var(--yellow)} .pill.mint{background:var(--mint)} .pill.lav{background:var(--lav)} .pill.sky{background:var(--sky)} .pill.rose{background:var(--rose)}
+.pill.xl{font-size:40px;padding:12px 36px} .pill.sm{font-size:26px;padding:4px 18px;box-shadow:3px 3px 0 rgba(75,59,107,.2)}
+.pill .px{font-family:var(--pixel);font-size:.92em}
+.tag{display:inline-block;padding:6px 18px;border:3px solid var(--ink);border-radius:14px;background:#fff;font-family:var(--round);font-weight:700;font-size:28px;box-shadow:3px 3px 0 rgba(75,59,107,.18)}
+.sticker{position:absolute;padding:10px 30px;border:3px solid var(--ink);border-radius:16px;background:var(--mint);font-family:var(--round);font-weight:700;font-size:40px;box-shadow:5px 5px 0 rgba(75,59,107,.25)}
+.note{font-size:26px;color:var(--ink2);line-height:1.45;text-align:center}
+.abox{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 14px;border:3px solid var(--ink);border-radius:16px;background:#fff;text-align:center}
+.abox .t{font-family:var(--round);font-weight:700;font-size:30px;line-height:1.25} .abox .d{font-size:22px;color:var(--ink2);line-height:1.3}
+.abox.yellow{background:var(--yellow)} .abox.mint{background:var(--mint)} .abox.lav{background:var(--lav-body)}
+.photo{position:absolute;display:flex;align-items:center;justify-content:center;border:3px solid var(--ink);border-radius:18px;background:#fff}
+.photo.dashed{border-style:dashed}
+.photo svg{width:78%;height:78%}
+.doodle{position:absolute;display:flex;align-items:center;justify-content:center;border:3px solid var(--ink);border-radius:16px;background:#fff;box-shadow:3px 3px 0 rgba(75,59,107,.14)}
+.doodle svg{width:76%;height:76%}
+.spark{position:absolute;width:18px;height:18px;background:var(--yellow);border:3px solid var(--ink);border-radius:4px;transform:rotate(45deg);offset-rotate:0deg;opacity:0}
+.node{transform-box:fill-box;transform-origin:center}
+.emo{font-size:64px;line-height:1.1}
+.term{font-family:var(--round);font-weight:700;font-size:44px;line-height:1.2}
+.mean{font-size:28px;color:var(--ink2);line-height:1.4;text-align:center;word-break:keep-all}
+.big-title{font-family:'GangwonEdu',var(--round);font-weight:400;font-size:170px;line-height:1.05;letter-spacing:-.01em}
+.sub{font-size:46px}
+.step{display:inline-flex;align-items:center;gap:12px;height:66px;padding:0 24px 0 10px;border:3px solid var(--ink);border-radius:999px;background:#fff;font-family:var(--round);font-weight:700;font-size:30px;box-shadow:4px 4px 0 rgba(75,59,107,.2)}
+.step .coin{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:3px solid var(--ink);border-radius:50%;background:linear-gradient(135deg,#f8e6e6,#e8c4c4);font-size:24px}
+.step.on{background:var(--lav);box-shadow:inset 0 -5px 0 var(--ink),4px 4px 0 rgba(75,59,107,.2)}
+.col{position:absolute;border:3px solid var(--ink);border-radius:24px;box-shadow:6px 6px 0 rgba(75,59,107,.16)}
+.col .chead{height:84px;display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--ink);border-radius:21px 21px 0 0;font-family:var(--round);font-weight:700;font-size:36px}
+.fchip{position:absolute;display:inline-flex;align-items:center;gap:14px;height:76px;padding:0 26px;border:3px solid var(--ink);border-radius:999px;background:#fff;
+  font-family:var(--round);font-weight:700;font-size:29px;box-shadow:4px 4px 0 rgba(75,59,107,.2);white-space:nowrap}
+.fchip .e{font-size:36px}
+.tcard{position:absolute;width:540px;height:250px;border:3px solid var(--ink);border-radius:20px;background:#fff;box-shadow:5px 5px 0 rgba(75,59,107,.16);overflow:hidden}
+.tcard .th{height:72px;display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--ink);font-family:var(--round);font-weight:700;font-size:36px}
+.tcard .tb{padding:14px 22px;font-size:26px;line-height:1.45;text-align:center;word-break:keep-all}
+.tcard .tx{margin-top:4px;font-size:23px;color:var(--ink2)}
+.endtitle{font-family:var(--round);font-weight:700;font-size:72px;line-height:1.3}
+
+/* 재생 조작(웹 보기) — 모든 버튼은 오로라 유리 알약(DESIGN.md) */
+#ctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;width:min(1920px,100%);padding:0 4px}
+.glass-pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);
+  font-family:var(--round);font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap;
+  background:var(--glass-top),var(--glass-white),var(--chip-glass);box-shadow:var(--glass-inset),3px 3px 0 rgba(75,59,107,.28);transition:transform .45s var(--ease-spring),box-shadow .25s var(--ease-out)}
+.glass-pill:hover{box-shadow:var(--glass-inset),4px 4px 0 rgba(75,59,107,.28)}
+.glass-pill:active{transform:scale(1.04,.9)}
+.glass-pill:focus-visible{outline:3px solid #ee9dbf;outline-offset:2px}
+.glass-pill.on{background:var(--glass-top),var(--glass-white),var(--lav);box-shadow:var(--glass-inset),inset 0 -4px 0 var(--ink),2px 2px 0 rgba(75,59,107,.35)}
+.glass-pill.main{min-width:120px;font-size:17px}
+#time{font-family:var(--pixel);font-size:16px;min-width:120px;text-align:center;color:var(--page-fg);font-variant-numeric:tabular-nums}
+#seek{-webkit-appearance:none;appearance:none;flex:1 1 320px;min-width:220px;height:14px;border:2px solid var(--ink);border-radius:999px;background:#fff;cursor:pointer}
+#seek::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border:2px solid var(--ink);border-radius:50%;background:var(--glass-top),var(--glass-white),var(--chip-glass);box-shadow:2px 2px 0 rgba(75,59,107,.3)}
+#hint{font-size:13px;color:var(--hint);width:100%;text-align:center}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.glass-pill{transition:none}}
+#bigplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+#bigplay span{display:inline-flex;align-items:center;justify-content:center;width:180px;height:180px;border:5px solid var(--ink);border-radius:50%;
+  background:var(--glass-top),var(--glass-white),var(--chip-glass);box-shadow:var(--glass-inset),8px 8px 0 rgba(75,59,107,.28);font-size:90px;padding-left:16px;color:var(--ink)}
+#bigplay.hide{display:none}
+body.render{display:block;padding:0;background:var(--cream);background-image:none}
+body.render #box{width:1920px;height:1080px}
+body.render #stage{border:0;border-radius:0;box-shadow:none;cursor:default}
+body.render #ctl,body.render #bigplay{display:none}
+</style>
+</head>
+<body>
+<!-- 그림 조각(낙서·사진 아이콘) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="d-cat" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="58" r="26"/><path d="M30 40 L34 16 L47 33"/><path d="M70 40 L66 16 L53 33"/>
+      <circle cx="41" cy="55" r="2.6" fill="#4b3b6b" stroke="none"/><circle cx="59" cy="55" r="2.6" fill="#4b3b6b" stroke="none"/>
+      <path d="M45 66 q5 5 10 0"/><path d="M24 60 l-13 -3 M24 67 l-13 3 M76 60 l13 -3 M76 67 l13 3"/>
+    </g>
+    <g id="d-dog" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="56" r="24"/><path d="M30 42 C 12 48, 12 78, 30 78"/><path d="M70 42 C 88 48, 88 78, 70 78"/>
+      <circle cx="41" cy="52" r="2.6" fill="#4b3b6b" stroke="none"/><circle cx="59" cy="52" r="2.6" fill="#4b3b6b" stroke="none"/>
+      <ellipse cx="50" cy="62" rx="5" ry="3.5" fill="#4b3b6b" stroke="none"/><path d="M42 70 q8 7 16 0"/>
+    </g>
+    <g id="d-house" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 54 L50 24 L82 54"/><path d="M28 50 V 82 H 72 V 50"/><path d="M44 82 V 64 H 56 V 82"/><path d="M62 34 V 26 H 70 V 42"/>
+    </g>
+    <g id="d-sun" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="50" r="16"/><path d="M50 18 V 28 M50 72 V 82 M18 50 H 28 M72 50 H 82 M27 27 l7 7 M66 66 l7 7 M73 27 l-7 7 M34 66 l-7 7"/>
+    </g>
+    <g id="d-star" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M50 18 L59 40 L82 42 L64 57 L70 80 L50 67 L30 80 L36 57 L18 42 L41 40 Z"/>
+    </g>
+    <g id="d-fish" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 50 C 32 28, 60 28, 74 50 C 60 72, 32 72, 18 50 Z"/><path d="M74 50 L 90 38 V 62 Z"/><circle cx="30" cy="47" r="2.6" fill="#4b3b6b" stroke="none"/>
+    </g>
+    <g id="d-tree" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M50 16 L24 52 H 36 L 20 72 H 80 L 64 52 H 76 Z"/><path d="M44 72 V 86 H 56 V 72"/>
+    </g>
+    <g id="d-flower" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="44" r="9"/><circle cx="50" cy="24" r="8"/><circle cx="69" cy="37" r="8"/><circle cx="62" cy="60" r="8"/><circle cx="38" cy="60" r="8"/><circle cx="31" cy="37" r="8"/><path d="M50 68 V 88 M50 78 q-10 -4 -14 -12"/>
+    </g>
+    <g id="d-cup" fill="none" stroke="#4b3b6b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M26 34 H 66 V 72 a8 8 0 0 1 -8 8 H 34 a8 8 0 0 1 -8 -8 Z"/><path d="M66 44 h8 a8 8 0 0 1 0 16 h-8"/><path d="M38 22 q4 -6 0 -10 M50 22 q4 -6 0 -10"/>
+    </g>
+    <g id="ph-cat" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 44 L34 14 L52 34 Z" fill="#fff"/><path d="M72 44 L66 14 L48 34 Z" fill="#fff"/><circle cx="50" cy="60" r="28" fill="#fff"/>
+      <circle cx="40" cy="58" r="3" fill="#4b3b6b" stroke="none"/><circle cx="60" cy="58" r="3" fill="#4b3b6b" stroke="none"/>
+      <path d="M44 68 q6 5 12 0" fill="none" stroke-width="3"/><path d="M22 62 l-14 -2 M22 69 l-14 3 M78 62 l14 -2 M78 69 l14 3" stroke-width="3"/>
+    </g>
+    <g id="ph-dog" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 38 C 10 44, 10 78, 30 80 Z" fill="#f7bfb2"/><path d="M70 38 C 90 44, 90 78, 70 80 Z" fill="#f7bfb2"/><circle cx="50" cy="58" r="28" fill="#fff"/>
+      <circle cx="40" cy="54" r="3" fill="#4b3b6b" stroke="none"/><circle cx="60" cy="54" r="3" fill="#4b3b6b" stroke="none"/>
+      <ellipse cx="50" cy="64" rx="5.5" ry="4" fill="#4b3b6b" stroke="none"/><path d="M42 72 q8 7 16 0" fill="none" stroke-width="3"/>
+    </g>
+    <g id="ph-cat2" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 44 L34 14 L52 34 Z" fill="#ffd9a8"/><path d="M72 44 L66 14 L48 34 Z" fill="#ffd9a8"/><circle cx="50" cy="60" r="28" fill="#ffd9a8"/>
+      <path d="M36 42 l5 9 M50 38 v9 M64 42 l-5 9" stroke="#e0a060" stroke-width="3.5"/>
+      <path d="M35 60 q5 -6 10 0 M55 60 q5 -6 10 0" fill="none" stroke-width="3"/><path d="M44 70 q6 5 12 0" fill="none" stroke-width="3"/><path d="M22 62 l-14 -2 M22 69 l-14 3 M78 62 l14 -2 M78 69 l14 3" stroke-width="3"/>
+    </g>
+    <g id="ph-cat3" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 44 L34 14 L52 34 Z" fill="#d9d3ea"/><path d="M72 44 L66 14 L48 34 Z" fill="#d9d3ea"/><circle cx="50" cy="60" r="28" fill="#d9d3ea"/>
+      <circle cx="40" cy="57" r="6" fill="#fff"/><circle cx="60" cy="57" r="6" fill="#fff"/><circle cx="41" cy="58" r="2.6" fill="#4b3b6b" stroke="none"/><circle cx="61" cy="58" r="2.6" fill="#4b3b6b" stroke="none"/>
+      <path d="M46 69 q4 4 8 0" fill="none" stroke-width="3"/><path d="M22 62 l-14 -2 M22 69 l-14 3 M78 62 l14 -2 M78 69 l14 3" stroke-width="3"/>
+    </g>
+    <g id="ph-cat4" stroke="#4b3b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 44 L34 14 L52 34 Z" fill="#4b3b6b"/><path d="M72 44 L66 14 L48 34 Z" fill="#4b3b6b"/><circle cx="50" cy="60" r="28" fill="#4b3b6b"/>
+      <circle cx="40" cy="57" r="5" fill="#fff" stroke="none"/><circle cx="60" cy="57" r="5" fill="#fff" stroke="none"/><circle cx="41" cy="58" r="2.4" fill="#4b3b6b" stroke="none"/><circle cx="61" cy="58" r="2.4" fill="#4b3b6b" stroke="none"/>
+      <path d="M46 69 q4 4 8 0" fill="none" stroke="#fff" stroke-width="3"/><path d="M22 62 l-14 -2 M22 69 l-14 3 M78 62 l14 -2 M78 69 l14 3" stroke-width="3"/>
+    </g>
+  </defs>
+</svg>
+
+<div id="box"><div id="wrap">
+  <div id="stage" role="img" aria-label="인공지능이란? 모션그래픽"></div>
+  <div id="bigplay"><span>▶</span></div>
+</div></div>
+<div id="ctl">
+  <button type="button" class="glass-pill main" id="btnPlay" aria-label="재생">▶ 재생</button>
+  <button type="button" class="glass-pill" id="btnRestart">⟲ 처음부터</button>
+  <span id="chapters"></span>
+  <span id="time">0:00 / 0:00</span>
+  <input id="seek" type="range" min="0" max="1000" value="0" aria-label="재생 위치">
+  <button type="button" class="glass-pill" id="btnFull">⛶ 전체 화면</button>
+  <button type="button" class="glass-pill" id="btnMp4" hidden>⬇ MP4 받기</button>
+  <div id="hint">화면을 누르면 재생·멈춤 · 스페이스 = 재생/멈춤 · ← → = 앞·뒤 장면 · Home = 처음</div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const stage = document.getElementById('stage');
+const RENDER = new URLSearchParams(location.search).get('render') === '1';
+if (RENDER) document.body.classList.add('render');
+const INK = '#4b3b6b', INK2 = '#6b5b93', EASE = 'cubic-bezier(.2,0,0,1)', SPRING = 'cubic-bezier(.34,1.56,.64,1)';
+const SVG = 'http://www.w3.org/2000/svg';
+
+/* ───────── 타임라인(WAAPI) — 모든 움직임을 0초 기준 절대 시각으로 적고, 한 시계로 돌린다 ───────── */
+const specs = []; const seen = new WeakSet();
+function anim(el, kf, t, dur, o = {}) {
+  const fill = seen.has(el) ? 'forwards' : 'both'; seen.add(el);
+  specs.push({ el, kf, delay: Math.round(t * 1000), duration: Math.max(1, Math.round(dur * 1000)), easing: o.ease || EASE, fill, composite: o.composite || 'replace' });
+}
+const fadeIn  = (e, t, d = .5, dy = 18) => anim(e, [{ opacity: 0, transform: `translateY(${dy}px)` }, { opacity: 1, transform: 'translateY(0px)' }], t, d);
+const fadeOut = (e, t, d = .4) => anim(e, [{ opacity: 1 }, { opacity: 0 }], t, d);
+const pop     = (e, t, d = .55, base = '') => anim(e, [{ opacity: 0, transform: `${base} scale(.5)` }, { opacity: 1, transform: `${base} scale(1)` }], t, d, { ease: SPRING });
+const flyIn   = (e, t, d, from, base = '') => anim(e, [{ opacity: 0, transform: `${from} scale(.6)` }, { opacity: 1, transform: `${base} translate(0px,0px) scale(1)` }], t, d);
+const move    = (e, t, d, from, to, ease = EASE) => anim(e, [{ transform: from }, { transform: to }], t, d, { ease });
+function draw(path, t, d) { const L = path.getTotalLength(); path.style.strokeDasharray = `${L} ${L}`; anim(path, [{ strokeDashoffset: L }, { strokeDashoffset: 0 }], t, d); }
+function flash(el, t, prop, from, to, d = .5) { anim(el, [{ [prop]: from }, { [prop]: to, offset: .4 }, { [prop]: from }], t, d); }
+
+/* ───────── DOM 도우미 ───────── */
+function el(tag, cls, parent, style, html) {
+  const e = document.createElement(tag); if (cls) e.className = cls; if (style) Object.assign(e.style, style); if (html != null) e.innerHTML = html;
+  (parent || stage).appendChild(e); return e;
+}
+function box(parent, { x = 0, y = 0, w, h, cls = '', html, style }) {
+  const e = el('div', 'abs ' + cls, parent, { left: x + 'px', top: y + 'px', width: w != null ? w + 'px' : '', height: h != null ? h + 'px' : '' }, html);
+  if (style) Object.assign(e.style, style); return e;
+}
+function svg(tag, attrs, parent) { const e = document.createElementNS(SVG, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+function overlay(parent) { return svg('svg', { class: 'ov', viewBox: '0 0 1920 1080' }, parent); }
+const md = s => s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+function scene(t0, t1) { const s = el('section', 'scene'); fadeIn(s, t0, .5, 0); if (t1 != null) fadeOut(s, t1 - .5, .5); return s; }
+function head(s, t, { stage: st, pixel, emoji, title, color }) {
+  const h = el('div', 'head', s, { background: color },
+    `<span class="chip">${st}</span><span class="px">${pixel}</span><span class="vdiv"></span><span class="badge">${emoji}</span><span class="ttl">${title}</span>`);
+  anim(h, [{ transform: 'translateY(-112px)' }, { transform: 'translateY(0px)' }], t, .6);
+}
+function cap(s, text, t0, t1) {
+  const w = el('div', 'capwrap', s); const c = el('div', 'cap', w, null, md(text));
+  fadeIn(c, t0, .45, 14); if (t1 != null) fadeOut(c, t1 - .35, .35); return c;
+}
+/* 화살표: 선은 그려지고(dash) 머리는 끝에 나타남 */
+function arrow(ov, x1, y1, x2, y2, t, d = .5, sw = 5) {
+  const g = svg('g', {}, ov);
+  const line = svg('line', { x1, y1, x2, y2, stroke: INK, 'stroke-width': sw, 'stroke-linecap': 'round' }, g);
+  const a = Math.atan2(y2 - y1, x2 - x1), L = 22;
+  const p = [[x2, y2], [x2 - L * Math.cos(a - .5), y2 - L * Math.sin(a - .5)], [x2 - L * Math.cos(a + .5), y2 - L * Math.sin(a + .5)]].map(q => q.join(',')).join(' ');
+  const headP = svg('polygon', { points: p, fill: INK }, g);
+  draw(line, t, d); anim(headP, [{ opacity: 0 }, { opacity: 1 }], t + d - .12, .15);
+  return g;
+}
+function label(s, x, y, text, t, cls = 'pill sm') { const e = box(s, { x, y, cls: 'center', html: `<span class="${cls}">${text}</span>` }); pop(e, t, .45); return e; }
+/* 낙서 카드·사진 카드 */
+function doodle(parent, x, y, size, id) {
+  const d = box(parent, { x, y, w: size, h: size, cls: 'doodle' }); d.style.position = 'absolute';
+  const sv = svg('svg', { viewBox: '0 0 100 100' }, d); svg('use', { href: '#' + id }, sv); return d;
+}
+function photo(parent, x, y, size, id, dashed) {
+  const d = box(parent, { x, y, w: size, h: size, cls: 'photo' + (dashed ? ' dashed' : '') });
+  const sv = svg('svg', { viewBox: '0 0 100 100' }, d); svg('use', { href: '#' + id }, sv); return d;
+}
+/* 인공 신경망(층마다 동그라미, 선) — 패널 좌표 안에 */
+function network(sv, layers, x0, dx, cy, dy, r) {
+  const pos = layers.map((n, li) => Array.from({ length: n }, (_, i) => [x0 + li * dx, cy + (i - (n - 1) / 2) * dy]));
+  const links = [];
+  for (let li = 0; li < layers.length - 1; li++) for (const a of pos[li]) for (const b of pos[li + 1])
+    links.push({ li, el: svg('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#9b8fc4', 'stroke-width': Math.max(2, r / 7) }, sv) });
+  const nodes = pos.map((layer, li) => layer.map(p => svg('circle', { class: 'node', cx: p[0], cy: p[1], r, fill: li === layers.length - 1 ? '#bfe9dd' : '#c4d8f7', stroke: INK, 'stroke-width': Math.max(2.5, r / 7) }, sv)));
+  return { pos, links, nodes };
+}
+function buildNet(net, t, gap = .25) {           /* 층마다 동그라미가 톡톡, 그다음 층으로 선이 그려짐 */
+  net.nodes.forEach((layer, li) => { layer.forEach((n, i) => pop(n, t + li * gap * 2 + i * .07, .4)); });
+  net.links.forEach(l => draw(l.el, t + l.li * gap * 2 + gap, gap * 1.6));
+  return t + (net.nodes.length - 1) * gap * 2 + gap * 2;
+}
+function signal(net, t, step = .45) {           /* 입력층부터 차례로 노랗게 번쩍 */
+  net.nodes.forEach((layer, li) => layer.forEach(n => flash(n, t + li * step, 'fill', n.getAttribute('fill'), '#fbe6a2', step * 1.6)));
+  net.links.forEach(l => flash(l.el, t + l.li * step + step * .3, 'stroke', '#9b8fc4', INK, step * 1.4));
+  return t + net.nodes.length * step;
+}
+/* 큰 고양이 낙서(선이 그려지는 판) — viewBox 100 */
+function catSketch(parent, x, y, size, t, d = 2.6) {
+  const sv = svg('svg', { class: 'abs', viewBox: '0 0 100 100', style: `left:${x}px;top:${y}px;width:${size}px;height:${size}px;overflow:visible` }, parent);
+  const g = svg('g', { fill: 'none', stroke: INK, 'stroke-width': 4.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, sv);
+  const parts = ['M24 58 a26 26 0 1 0 52 0 a26 26 0 1 0 -52 0', 'M30 40 L34 16 L47 33', 'M70 40 L66 16 L53 33', 'M45 66 q5 5 10 0', 'M24 60 l-13 -3 M24 67 l-13 3', 'M76 60 l13 -3 M76 67 l13 3'];
+  const lens = [2.6, .8, .8, .5, .7, .7]; const sum = lens.reduce((a, b) => a + b, 0); let c = t;
+  parts.forEach((p, i) => { const e = svg('path', { d: p }, g); const dd = d * lens[i] / sum; draw(e, c, dd); c += dd; });
+  const eyes = svg('g', { fill: INK }, sv); svg('circle', { cx: 41, cy: 55, r: 2.6 }, eyes); svg('circle', { cx: 59, cy: 55, r: 2.6 }, eyes);
+  anim(eyes, [{ opacity: 0 }, { opacity: 1 }], t + d * .55, .1);
+  return c;
+}
+
+/* ───────── 장(챕터) 시각 ───────── */
+const CH = [
+  { name: '표지', t: 0 }, { name: '도입 · Quick, Draw!', t: 7 }, { name: '① 인공 신경망', t: 20 }, { name: '② 학습 · 모델', t: 52 },
+  { name: '③ AI일까, 아닐까?', t: 82 }, { name: '④ AI의 밥, 데이터', t: 112 }, { name: '정리', t: 147 }
+];
+const END = 168;
+
+/* ── 0. 표지 ── */
+{
+  const s = scene(0, CH[1].t);
+  const tag = box(s, { x: 0, y: 292, w: 1920, cls: 'center', html: '<span class="pill white"><span class="px">LESSON_01</span>&nbsp;·&nbsp;정보 · 인공지능</span>' }); pop(tag, .3);
+  const marker = box(s, { x: 560, y: 548, w: 800, h: 34, style: { backgroundColor: 'var(--lav)', borderRadius: '17px', transformOrigin: '0 50%' } });
+  anim(marker, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], 1.25, .6);
+  const title = box(s, { x: 0, y: 390, w: 1920, cls: 'center big-title', html: '인공지능이란?' }); fadeIn(title, .7, .7, 30);
+  const sub = box(s, { x: 0, y: 636, w: 1920, cls: 'center sub', html: '오늘은 인공지능의 정체를 밝혀요' }); fadeIn(sub, 1.7, .6);
+  catSketch(s, 170, 300, 320, 1.0, 2.4);
+  const nsv = svg('svg', { class: 'abs', viewBox: '0 0 360 320', style: 'left:1400px;top:300px;width:360px;height:320px;overflow:visible' }, s);
+  const net = network(nsv, [3, 4, 2], 40, 120, 160, 70, 20); buildNet(net, 1.4, .22); signal(net, 3.6, .3);
+  const row = box(s, { x: 0, y: 790, w: 1920, cls: 'center', style: { display: 'flex', justifyContent: 'center', gap: '22px' } });
+  ['🎨 Quick, Draw!', '🧠 인공 신경망', '🤖 AI일까, 아닐까?', '🍚 AI의 밥, 데이터'].forEach((h, i) => { const p = el('span', 'pill', row, null, h); pop(p, 2.6 + i * .3, .5); });
+}
+
+/* ── 1. 도입 · Quick, Draw! ── */
+{
+  const t0 = CH[1].t, s = scene(t0, CH[2].t);
+  head(s, t0, { stage: '도입', pixel: 'WARM_UP', emoji: '🎨', title: '내 낙서, AI가 몇 개나 알아맞힐까?', color: 'var(--sage)' });
+  const card = box(s, { x: 220, y: 170, w: 640, h: 660, cls: 'card' }); fadeIn(card, t0 + .4, .5);
+  el('div', 'abs', card, { left: '24px', top: '18px', fontFamily: 'var(--pixel)', fontWeight: 700, fontSize: '26px' }, 'QUICK_DRAW');
+  const clock = el('div', 'abs pill sm yellow', card, { right: '20px', top: '14px' }, '⏱ 20초'); pop(clock, t0 + .9, .4);
+  el('div', 'abs note', card, { left: '0', right: '0', top: '66px', fontSize: '24px' }, '제시어: <b>고양이</b>');
+  catSketch(card, 110, 140, 420, t0 + 1.2, 3.0);
+  const bub1 = box(s, { x: 1000, y: 300, w: 760, h: 170, cls: 'card center', html: '<span>🤖 음… 이건… <b>고양이</b>?</span>', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '46px', fontFamily: 'var(--round)', fontWeight: 700, background: 'var(--sky-body)' } });
+  pop(bub1, t0 + 4.3); fadeOut(bub1, t0 + 5.8, .25);
+  const bub2 = box(s, { x: 1000, y: 300, w: 760, h: 170, cls: 'card center', html: '<span>🤖 <b>고양이</b> 맞았어요! ✓</span>', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '46px', fontFamily: 'var(--round)', fontWeight: 700, background: 'var(--ok)' } });
+  pop(bub2, t0 + 5.9);
+  const pct = box(s, { x: 1000, y: 520, w: 760, cls: 'center', html: '<span class="pill yellow xl">고양이 90%</span>' }); pop(pct, t0 + 6.5);
+  cap(s, 'Quick, Draw!의 AI는 내 낙서를 **어떻게** 알아맞혔을까요?', t0 + 7.0, t0 + 9.9);
+  cap(s, '오늘은 **인공지능의 정체**를 밝혀요.', t0 + 10.1, CH[2].t - .3);
+}
+
+/* ── 2. ① 인공지능 · 인공 신경망 ── */
+{
+  const t0 = CH[2].t, t1 = CH[3].t, s = scene(t0, t1);
+  head(s, t0, { stage: '전개', pixel: 'ACTIVITY_1', emoji: '🧠', title: '인공지능은 어떻게 내 낙서를 알아봤을까?', color: 'var(--sky)' });
+  cap(s, '사람의 **학습·인식·추론** 같은 지적 능력을 흉내 내어 소프트웨어로 만든 것을 **인공지능**이라고 해요.', t0 + .9, t0 + 7.6);
+  const A = [['📚', '학습', '경험하며 새로운 것을<br>배우는 능력'], ['👀', '인식', '보고 듣고 무엇인지<br>알아보는 능력'], ['💡', '추론', '아는 것을 바탕으로<br>짐작하고 판단하는 능력']];
+  A.forEach((a, i) => {
+    const c = box(s, { x: 330 + i * 440, y: 220, w: 380, h: 300, cls: 'card', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px' } });
+    c.innerHTML = `<div class="emo">${a[0]}</div><div class="term">${a[1]}</div><div class="mean">${a[2]}</div>`;
+    pop(c, t0 + 1.4 + i * .7); fadeOut(c, t0 + 7.5, .4);
+  });
+  const ov = overlay(s); const ar = arrow(ov, 960, 545, 960, 625, t0 + 3.7, .4); fadeOut(ar, t0 + 7.5, .4);
+  const chip = box(s, { x: 0, y: 650, w: 1920, cls: 'center', html: '<span class="pill mint xl">흉내 내어 소프트웨어로 만든 것 = <b>인공지능</b></span>' }); pop(chip, t0 + 4.3); fadeOut(chip, t0 + 7.5, .4);
+
+  /* 뇌 ↔ 컴퓨터 속 구조 (활동지 그림 a1-neural 과 같은 구성) */
+  const L = box(s, { x: 120, y: 150, w: 740, h: 710, cls: 'panel', style: { backgroundColor: 'var(--salmon-body)' } }); fadeIn(L, t0 + 8.2, .5);
+  el('div', 'ptitle', L, null, '사람의 뇌'); el('div', 'pfoot', L, null, '신경 세포(뉴런)가 신호를 주고받아요');
+  const lsv = svg('svg', { class: 'abs', viewBox: '0 0 740 710', style: 'left:0;top:0;width:740px;height:710px' }, L);
+  const P = ['M145 260 C 220 285, 270 360, 332 385', 'M145 260 C 120 335, 145 460, 195 522', 'M332 385 C 407 335, 457 285, 520 248', 'M332 385 C 370 460, 432 510, 495 548', 'M195 522 C 257 560, 370 572, 495 548'];
+  const N = [[145, 260, 40], [332, 385, 44], [520, 248, 40], [195, 522, 38], [495, 548, 40]];
+  const dend = ['M145 260 l-45 -35 M145 260 l-50 15 M145 260 l-10 -55', 'M520 248 l45 -30 M520 248 l50 20 M520 248 l5 -55', 'M195 522 l-50 15 M195 522 l-30 45', 'M495 548 l50 10 M495 548 l25 45', 'M332 385 l-15 -55'];
+  const gl = svg('g', { fill: 'none', stroke: INK, 'stroke-width': 7, 'stroke-linecap': 'round' }, lsv);
+  P.forEach((d, i) => draw(svg('path', { d }, gl), t0 + 9.4 + i * .32, .5));
+  dend.forEach((d, i) => { const e = svg('path', { d, 'stroke-width': 6 }, gl); anim(e, [{ opacity: 0 }, { opacity: 1 }], t0 + 9.0 + i * .15, .3); });
+  N.forEach(([cx, cy, r], i) => pop(svg('circle', { class: 'node', cx, cy, r, fill: '#f7bfb2', stroke: INK, 'stroke-width': 6 }, lsv), t0 + 8.8 + i * .22, .45));
+  for (let k = 0; k < 6; k++) {
+    const sp = el('div', 'spark', L, { offsetPath: `path("${P[k % 5]}")` });
+    anim(sp, [{ offsetDistance: '0%', opacity: 0 }, { offsetDistance: '15%', opacity: 1, offset: .15 }, { offsetDistance: '85%', opacity: 1, offset: .85 }, { offsetDistance: '100%', opacity: 0 }], t0 + 11.0 + k * .55, 1.1);
+  }
+  cap(s, '사람의 뇌에서는 수많은 **신경 세포(뉴런)**가 신호를 주고받으며 배워요.', t0 + 8.3, t0 + 14.8);
+  const ov2 = overlay(s); arrow(ov2, 880, 520, 1040, 520, t0 + 15.2, .5, 6);
+  const lbl = box(s, { x: 860, y: 448, w: 200, cls: 'center round', html: '흉내 내기', style: { fontSize: '30px', color: INK2 } }); fadeIn(lbl, t0 + 15.3, .4, 8);
+  const R = box(s, { x: 1060, y: 150, w: 740, h: 710, cls: 'panel', style: { backgroundColor: 'var(--sky-body)' } }); fadeIn(R, t0 + 15.7, .5);
+  el('div', 'ptitle', R, null, '컴퓨터 속 구조');
+  const inp = photo(R, 52, 282, 150, 'd-cat'); inp.classList.remove('photo'); inp.className = 'abs doodle'; pop(inp, t0 + 16.4, .45);
+  el('div', 'abs note', R, { left: '52px', top: '440px', width: '150px', fontSize: '25px' }, '입력');
+  const rsv = svg('svg', { class: 'abs', viewBox: '0 0 740 710', style: 'left:0;top:0;width:740px;height:710px' }, R);
+  const inLine = svg('line', { x1: 206, y1: 357, x2: 258, y2: 357, stroke: INK, 'stroke-width': 5, 'stroke-linecap': 'round' }, rsv); draw(inLine, t0 + 16.8, .3);
+  const net = network(rsv, [3, 4, 3, 1], 290, 130, 357, 105, 24); buildNet(net, t0 + 17.0, .3); signal(net, t0 + 21.0, .5);
+  const out = box(R, { x: 540, y: 560, w: 200, cls: 'center', html: '<span class="pill yellow sm">고양이 90%</span>' }); pop(out, t0 + 23.4, .5);
+  el('div', 'abs note', R, { left: '540px', right: '0', top: '636px', fontSize: '25px' }, '출력');
+  const outArrow = arrow(rsv, 680, 384, 650, 548, t0 + 23.0, .35, 4);
+  const legend = el('div', 'abs note', R, { left: '40px', bottom: '34px', fontSize: '25px', display: 'flex', alignItems: 'center', gap: '10px' }, '<span style="display:inline-block;width:22px;height:22px;border:3px solid #4b3b6b;border-radius:50%;background:#c4d8f7"></span>인공 뉴런'); fadeIn(legend, t0 + 19.5, .4, 6);
+  cap(s, '이 모습을 흉내 내어 만든 구조가 **인공 신경망**이에요.', t0 + 15.0, t0 + 24.2);
+  const stk = el('div', 'sticker', s, { left: '1590px', top: '112px' }, '인공 신경망'); pop(stk, t0 + 24.4, .55, 'rotate(-4deg)');
+  cap(s, '인공 신경망은 많은 데이터를 보면서 스스로 **패턴**을 찾아요. 이렇게 데이터로 배우는 과정을 **학습**이라고 해요.', t0 + 24.6, t1 - .3);
+}
+
+/* ── 3. ② 학습 → 인공지능 모델 (순서 배열 4단계) ── */
+{
+  const t0 = CH[3].t, t1 = CH[4].t, s = scene(t0, t1);
+  head(s, t0, { stage: '전개', pixel: 'ACTIVITY_1', emoji: '🧠', title: 'Quick, Draw!의 AI가 내 낙서를 알아맞히기까지', color: 'var(--sky)' });
+  const steps = ['낙서 모으기', '패턴 학습', '모델 완성', '새 낙서 예측'];
+  const row = box(s, { x: 0, y: 150, w: 1920, style: { display: 'flex', justifyContent: 'center', gap: '26px' } });
+  const stepEls = steps.map((n, i) => { const e = el('span', 'step', row, null, `<span class="coin">${'①②③④'[i]}</span>${n}`); pop(e, t0 + .5 + i * .15, .45); return e; });
+  const stepAt = [t0 + .8, t0 + 6.2, t0 + 14.2, t0 + 19.2];
+  stepEls.forEach((e, i) => {
+    anim(e, [{ backgroundColor: '#fff', boxShadow: '4px 4px 0 rgba(75,59,107,.2)' }, { backgroundColor: '#d6c4f5', boxShadow: 'inset 0 -5px 0 #4b3b6b, 4px 4px 0 rgba(75,59,107,.2)' }], stepAt[i], .3);
+    if (i < 3) anim(e, [{ backgroundColor: '#d6c4f5', boxShadow: 'inset 0 -5px 0 #4b3b6b, 4px 4px 0 rgba(75,59,107,.2)' }, { backgroundColor: '#fff', boxShadow: '4px 4px 0 rgba(75,59,107,.2)' }], stepAt[i + 1], .3);
+  });
+  /* ① 낙서 모으기 — 낙서 카드가 사방에서 날아와 쌓임 */
+  cap(s, '① 전 세계 사람들이 Quick, Draw!에서 그린 낙서 **5천만 개**를 모아요.', t0 + .9, t0 + 6.0);
+  const ids = ['d-cat', 'd-dog', 'd-house', 'd-sun', 'd-star', 'd-fish', 'd-tree', 'd-flower', 'd-cup', 'd-cat', 'd-dog', 'd-sun'];
+  const cards = ids.map((id, i) => {
+    const col = i % 4, rw = Math.floor(i / 4); const d = doodle(s, 150 + col * 140, 300 + rw * 140, 116, id);
+    const ang = (i * 137) % 360, rad = 700 + (i % 3) * 200, fx = Math.cos(ang * Math.PI / 180) * rad, fy = Math.sin(ang * Math.PI / 180) * rad;
+    flyIn(d, t0 + 1.2 + i * .22, .7, `translate(${fx.toFixed(0)}px,${fy.toFixed(0)}px) rotate(${(ang % 60) - 30}deg)`); return d;
+  });
+  const cnt = box(s, { x: 150, y: 735, w: 540, cls: 'center', html: '<span class="pill yellow xl">낙서 5천만 개!</span>' }); pop(cnt, t0 + 4.2);
+  /* ② 패턴 학습 — 낙서가 신경망으로 들어가고, 패턴 쪽지가 붙음 */
+  cap(s, '② 인공 신경망이 낙서를 보며 「고양이는 뾰족한 귀와 수염」 같은 **패턴**을 학습해요.', t0 + 6.3, t0 + 14.0);
+  const NP = box(s, { x: 800, y: 300, w: 330, h: 410, cls: 'panel', style: { backgroundColor: 'var(--sky-body)' } }); fadeIn(NP, t0 + 6.4, .5);
+  el('div', 'ptitle', NP, { top: '14px', fontSize: '30px' }, '인공 신경망');
+  const npsv = svg('svg', { class: 'abs', viewBox: '0 0 330 410', style: 'left:0;top:0;width:330px;height:410px' }, NP);
+  const net2 = network(npsv, [3, 4, 3, 1], 45, 80, 240, 70, 16); buildNet(net2, t0 + 6.8, .2);
+  [0, 5, 9, 2, 7, 10].forEach((ci, k) => {
+    const d = cards[ci]; const tx = 965 - (parseFloat(d.style.left) + 58), ty = 505 - (parseFloat(d.style.top) + 58);
+    anim(d, [{ transform: 'translate(0px,0px) scale(1)', opacity: 1 }, { transform: `translate(${tx}px,${ty}px) scale(.15)`, opacity: 0 }], t0 + 7.6 + k * .55, .8);
+  });
+  signal(net2, t0 + 8.4, .35); signal(net2, t0 + 10.4, .35);
+  const pat1 = el('div', 'sticker', s, { left: '1180px', top: '360px', background: 'var(--salmon-body)', fontSize: '36px' }, '뾰족한 귀 ▲'); pop(pat1, t0 + 10.6, .5, 'rotate(3deg)');
+  const pat2 = el('div', 'sticker', s, { left: '1180px', top: '500px', background: 'var(--salmon-body)', fontSize: '36px' }, '수염 ≡'); pop(pat2, t0 + 11.6, .5, 'rotate(-3deg)');
+  const pat3 = el('div', 'sticker', s, { left: '1180px', top: '640px', background: 'var(--salmon-body)', fontSize: '36px' }, '동그란 얼굴 ○'); pop(pat3, t0 + 12.6, .5, 'rotate(2deg)');
+  /* ③ 모델 완성 */
+  cap(s, '③ 학습 결과로 「낙서 알아맞히기」 **인공지능 모델**이 만들어져요.', t0 + 14.3, t0 + 19.0);
+  [NP, pat1, pat2, pat3, cnt, ...cards.filter((_, i) => ![0, 5, 9, 2, 7, 10].includes(i))].forEach(e => fadeOut(e, t0 + 14.4, .5));
+  const model = box(s, { x: 780, y: 380, w: 380, h: 220, cls: 'card', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', background: 'var(--mint)', borderRadius: '28px' } });
+  model.innerHTML = '<div class="term" style="font-size:46px">인공지능 모델</div><div class="note" style="font-size:26px">낙서 알아맞히기</div>'; pop(model, t0 + 15.0, .7);
+  ['✨', '✨', '✨'].forEach((e, i) => { const sp = box(s, { x: [740, 1170, 950][i], y: [350, 340, 610][i], html: e, style: { fontSize: '54px' } }); anim(sp, [{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1.1)', offset: .5 }, { opacity: 0, transform: 'scale(.6)' }], t0 + 15.5 + i * .25, 1.0); });
+  /* ④ 새 낙서 예측 */
+  cap(s, '④ 내가 새로 그린 낙서를 모델이 보고 무엇인지 **예측**해요.', t0 + 19.3, t0 + 24.6);
+  const nd = doodle(s, 420, 410, 170, 'd-cat'); nd.style.transformOrigin = '50% 50%'; flyIn(nd, t0 + 19.5, .6, 'translate(-500px,0px)');
+  const ndl = box(s, { x: 370, y: 600, w: 270, cls: 'center', html: '<span class="pill sm">새 낙서</span>' }); pop(ndl, t0 + 20.0, .4);
+  const ov = overlay(s); arrow(ov, 610, 495, 760, 495, t0 + 20.6, .5, 6);
+  anim(model, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-3deg)', offset: .25 }, { transform: 'rotate(3deg)', offset: .5 }, { transform: 'rotate(-2deg)', offset: .75 }, { transform: 'rotate(0deg)' }], t0 + 21.2, 1.2);
+  arrow(ov, 1180, 495, 1330, 495, t0 + 22.4, .4, 6);
+  const res = box(s, { x: 1350, y: 430, w: 420, cls: 'center', html: '<span class="pill yellow xl">고양이 90%</span>' }); pop(res, t0 + 22.9, .6);
+  const res2 = box(s, { x: 1350, y: 540, w: 420, cls: 'center note', html: '처음 보는 낙서도 알아맞혀요', style: { fontSize: '28px' } }); fadeIn(res2, t0 + 23.6, .4);
+  cap(s, '데이터를 모으고 → 학습하고 → 모델이 만들어진 뒤 → 새 낙서를 예측해요.', t0 + 24.9, t1 - .3);
+  stepEls.forEach((e, i) => anim(e, [{ backgroundColor: '#fff', boxShadow: '4px 4px 0 rgba(75,59,107,.2)' }, { backgroundColor: '#bfe9dd', boxShadow: 'inset 0 -5px 0 #4b3b6b, 4px 4px 0 rgba(75,59,107,.2)' }], t0 + 25.2 + i * .2, .3));
+}
+
+/* ── 4. ③ 인공지능일까, 아닐까? ── */
+{
+  const t0 = CH[4].t, t1 = CH[5].t, s = scene(t0, t1);
+  head(s, t0, { stage: '전개', pixel: 'ACTIVITY_2', emoji: '🤖', title: '인공지능일까, 아닐까?', color: 'var(--mint)' });
+  cap(s, '구분하는 기준은 **「학습했나?」** 하나예요.', t0 + .6, t0 + 3.4);
+  const q = box(s, { x: 0, y: 400, w: 1920, cls: 'center', html: '<span class="pill yellow" style="font-size:84px;padding:18px 60px">학습했나?</span>', style: { transformOrigin: '50% 50%' } });
+  pop(q, t0 + .9, .6); anim(q, [{ transform: 'translateY(0px) scale(1)' }, { transform: 'translateY(-280px) scale(.5)' }], t0 + 3.0, .7);
+  const cols = [['일반 소프트웨어', 'var(--sky)', 'var(--sky-body)', 140], ['인공지능 소프트웨어', 'var(--mint)', 'var(--mint-body)', 1000]];
+  const colEls = cols.map(([name, hc, bc, x]) => {
+    const c = box(s, { x, y: 250, w: 780, h: 616, cls: 'col', style: { background: bc } }); el('div', 'chead', c, { background: hc }, name);
+    fadeIn(c, t0 + 3.2, .5, 24); return c;
+  });
+  /* 세 줄 흐름(활동지 그림 a2-compare 와 같은 줄) */
+  const flows = [
+    [['사람이 정한 규칙', '예) 세 칸 안에 오면 공격!', 'yellow'], ['규칙대로만 움직이는 프로그램', '', ''], ['늘 같은 결과', '같은 입력이면 같은 답 · 스스로 배우지 않아요', '']],
+    [['데이터 + 정답 이름표', '예) 고양이·강아지 사진 수천 장', 'yellow'], ['인공지능 모델', '', 'mint'], ['예측', '처음 보는 것도 배운 대로 판단해요', '']]
+  ];
+  const alabels = [['사람이 코드로 입력', '입력이 들어오면'], ['스스로 학습', '새 입력이 들어오면']];
+  const flowEls = [];
+  flows.forEach((f, ci) => {
+    const c = colEls[ci], ov = overlay(c); ov.setAttribute('viewBox', '0 0 780 616'); ov.style.width = '780px'; ov.style.height = '616px';
+    f.forEach(([t, d, cl], ri) => {
+      const b = el('div', 'abox ' + cl, c, { left: '110px', top: (104 + ri * 172) + 'px', width: '560px', height: '112px' }, `<div class="t">${t}</div>${d ? `<div class="d">${d}</div>` : ''}`);
+      fadeIn(b, t0 + 3.8 + ri * 1.1 + ci * .3, .5, 16); flowEls.push(b);
+      if (ri < 2) {
+        const a = arrow(ov, 390, 220 + ri * 172, 390, 270 + ri * 172, t0 + 4.4 + ri * 1.1 + ci * .3, .4, 5); flowEls.push(a);
+        const al = el('div', 'abs note', c, { left: '410px', top: (224 + ri * 172) + 'px', fontSize: '24px', textAlign: 'left', color: ci ? 'var(--rose-ink)' : INK2, fontFamily: 'var(--round)', fontWeight: 700 }, alabels[ci][ri]);
+        fadeIn(al, t0 + 4.5 + ri * 1.1 + ci * .3, .4, 6); flowEls.push(al);
+      }
+    });
+  });
+  cap(s, '일반 소프트웨어는 사람이 미리 정해 둔 **규칙**과 순서대로만 움직여요.', t0 + 3.6, t0 + 7.4);
+  cap(s, '인공지능 소프트웨어는 데이터로 학습한 **인공지능 모델**을 써서 스스로 판단해요.', t0 + 7.6, t0 + 11.2);
+  flowEls.forEach(e => fadeOut(e, t0 + 11.4, .4));
+  cap(s, '내 핸드폰 속 이 기능은 인공지능일까? 아닐까?', t0 + 11.6, t0 + 24.4);
+  const feats = [
+    ['⏰', '매일 아침 7시에 울리는 알람', 0], ['🎵', '내가 본 영상으로 다음 영상을 고르는 틱톡 추천', 1], ['📅', '100일·200일을 계산하는 디데이 앱', 0],
+    ['🐶', '얼굴을 찾아 강아지 귀를 씌우는 인스타 필터', 1], ['💸', '쓴 돈을 사람 수로 나누는 1/N 정산', 0], ['💬', '말소리를 글자로 바꾸는 유튜브 자동 자막', 1],
+    ['🔢', '획수를 공식으로 더하는 이름 궁합 테스트', 0], ['🖼️', '사진첩에서 「바다」 사진만 찾아 주는 검색', 1]
+  ];
+  const slot = [0, 0];
+  feats.forEach(([e, txt, side], i) => {
+    const k = slot[side]++; const x = side ? 1030 : 170, y = 330 + k * 110;
+    const ch = el('div', 'fchip', s, { left: x + 'px', top: y + 'px', width: '720px' }, `<span class="e">${e}</span>${txt}`);
+    const dx = 960 - (x + 360), dy = 190 - y;
+    anim(ch, [{ opacity: 0, transform: `translate(${dx}px,${dy}px) scale(.7)` }, { opacity: 1, transform: `translate(${dx}px,${dy}px) scale(1)`, offset: .3 }, { opacity: 1, transform: 'translate(0px,0px) scale(1)' }], t0 + 12.0 + i * 1.5, 1.0);
+    flash(colEls[side].firstChild, t0 + 12.9 + i * 1.5, 'backgroundColor', side ? '#bfe9dd' : '#c4d8f7', '#fbe6a2', .5);
+  });
+  cap(s, '이름에 「AI」가 붙어도, 데이터로 학습하지 않고 **정해진 규칙**대로만 움직이면 일반 소프트웨어예요.', t0 + 24.6, t1 - .3);
+  const mon = el('div', 'fchip', s, { left: '170px', top: (330 + 4 * 110) + 'px', width: '720px', background: 'var(--yellow)' }, '<span class="e">👾</span>「AI」라 불리지만 규칙대로만 움직이는 게임 몬스터');
+  anim(mon, [{ opacity: 0, transform: 'translate(430px,-580px) scale(.7)' }, { opacity: 1, transform: 'translate(430px,-580px) scale(1)', offset: .3 }, { opacity: 1, transform: 'translate(0px,0px) scale(1)' }], t0 + 25.2, 1.1);
+  flash(colEls[0].firstChild, t0 + 26.2, 'backgroundColor', '#c4d8f7', '#fbe6a2', .5);
+}
+
+/* ── 5. ④ AI의 밥, 데이터 (활동지 그림 a4-data 와 같은 구성) ── */
+{
+  const t0 = CH[5].t, t1 = CH[6].t, s = scene(t0, t1);
+  head(s, t0, { stage: '전개', pixel: 'ACTIVITY_4', emoji: '🍚', title: 'AI의 밥, 데이터', color: 'var(--lav)' });
+  const fig = el('div', 'abs', s, { left: '0', top: '0', width: '1920px', height: '1080px' });
+  cap(s, 'AI는 **데이터**를 먹고 배워요. 데이터에 관한 낱말 세 가지를 알아봐요.', t0 + .6, t0 + 3.6);
+  const TR = box(fig, { x: 130, y: 150, w: 820, h: 700, cls: 'panel', style: { backgroundColor: 'var(--lav-body)' } }); fadeIn(TR, t0 + .8, .5);
+  const trt = el('div', 'abs tag', TR, { left: '28px', top: '24px', fontSize: '32px' }, '학습 데이터'); pop(trt, t0 + 1.2, .4);
+  const phIds = ['ph-cat', 'ph-dog', 'ph-cat2'], lbls = ['고양이', '강아지', '고양이'];
+  const phs = phIds.map((id, i) => { const p = photo(TR, 60 + i * 255, 130, 210, id); pop(p, t0 + 1.4 + i * .3, .5); return p; });
+  cap(s, '**레이블**은 데이터에 붙인 정답 이름표예요. 사진에 「고양이」라고 붙이는 것처럼요.', t0 + 3.8, t0 + 8.2);
+  const lbEls = lbls.map((t, i) => { const e = box(TR, { x: 60 + i * 255, y: 372, w: 210, cls: 'center', html: `<span class="pill yellow" style="font-size:30px;padding:6px 0;width:200px">${t}</span>` }); anim(e, [{ opacity: 0, transform: 'translateY(-40px)' }, { opacity: 1, transform: 'translateY(0px)' }], t0 + 4.2 + i * .35, .5, { ease: SPRING }); return e; });
+  const lbBox = el('div', 'abs card', TR, { left: '120px', top: '505px', width: '580px', height: '150px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px' },
+    '<div class="term" style="font-size:40px;color:var(--rose-ink)">레이블</div><div class="note" style="font-size:27px">사진마다 붙인 정답 이름표</div>');
+  fadeIn(lbBox, t0 + 5.6, .5, 16);
+  const tov = overlay(TR); tov.setAttribute('viewBox', '0 0 820 700'); tov.style.width = '820px'; tov.style.height = '700px';
+  arrow(tov, 420, 500, 420, 450, t0 + 6.0, .35, 5);
+  cap(s, '**학습 데이터**는 모델을 학습시키려고 레이블과 함께 보여 주는 데이터예요.', t0 + 8.4, t0 + 12.4);
+  flash(trt, t0 + 8.6, 'backgroundColor', '#fff', '#fbe6a2', 1.2);
+  const ov = overlay(fig);
+  arrow(ov, 965, 450, 1125, 450, t0 + 9.4, .5, 6);
+  const learn = box(fig, { x: 960, y: 372, w: 170, cls: 'center', html: '<span class="pill sm">학습</span>' }); pop(learn, t0 + 9.6, .4);
+  const model = box(fig, { x: 1140, y: 360, w: 380, h: 180, cls: 'card', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--mint)', borderRadius: '28px', fontFamily: 'var(--round)', fontWeight: 700, fontSize: '42px' } }, );
+  model.textContent = '인공지능 모델'; pop(model, t0 + 10.0, .6);
+  cap(s, '**테스트 데이터**는 학습에 쓰지 않은, **처음 보는** 새 데이터예요. 모델이 얼마나 잘 맞히는지 확인해요.', t0 + 12.6, t0 + 17.6);
+  const TE = box(fig, { x: 1160, y: 600, w: 340, h: 260, cls: 'panel', style: { backgroundColor: 'var(--lav-body)' } }); fadeIn(TE, t0 + 12.8, .5);
+  const tet = el('div', 'abs tag', TE, { left: '0', right: '0', top: '18px', margin: '0 auto', width: 'fit-content', fontSize: '28px' }, '테스트 데이터'); pop(tet, t0 + 13.2, .4);
+  const tph = photo(TE, 95, 86, 150, 'ph-cat3', true); pop(tph, t0 + 13.6, .5);
+  const tnote = box(fig, { x: 1530, y: 700, w: 360, cls: 'note', html: '처음 보는 사진<br>(이름표 없음)', style: { fontSize: '27px' } }); fadeIn(tnote, t0 + 14.2, .4);
+  arrow(ov, 1330, 596, 1330, 548, t0 + 15.0, .4, 6);
+  arrow(ov, 1525, 450, 1600, 450, t0 + 15.6, .4, 6);
+  const pred = box(fig, { x: 1610, y: 360, w: 280, h: 180, cls: 'card center', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--yellow)', borderRadius: '28px', fontFamily: 'var(--round)', fontWeight: 700, fontSize: '40px', lineHeight: 1.25 } });
+  pred.innerHTML = '예측<br>고양이!'; pop(pred, t0 + 16.1, .6);
+  cap(s, '시험공부라면? 학습 데이터는 **문제집**, 테스트 데이터는 **처음 보는 시험 문제**예요.', t0 + 17.8, t0 + 21.0);
+  const an1 = el('div', 'sticker', fig, { left: '640px', top: '112px', background: 'var(--yellow)', fontSize: '32px' }, '📚 문제집'); pop(an1, t0 + 18.2, .5, 'rotate(3deg)');
+  const an2 = el('div', 'sticker', fig, { left: '1520px', top: '800px', background: 'var(--yellow)', fontSize: '32px' }, '📝 처음 보는 시험 문제'); pop(an2, t0 + 18.9, .5, 'rotate(-3deg)');
+  cap(s, '문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 **학습에 쓰지 않은** 것으로 골라요.', t0 + 21.2, t0 + 25.6);
+  /* 양과 질 */
+  fadeOut(fig, t0 + 25.6, .5);
+  cap(s, '인공지능의 성능은 학습 데이터의 **양**과 **질**에 크게 좌우돼요.', t0 + 25.8, t0 + 29.4);
+  const mk = (x, title, t) => {
+    const c = box(s, { x, y: 150, w: 760, h: 700, cls: 'col', style: { backgroundColor: '#fff' } }); el('div', 'chead', c, { backgroundColor: 'var(--salmon)' }, title); fadeIn(c, t, .5, 24); return c;
+  };
+  const Q1 = mk(160, '데이터 양이 부족해요', t0 + 26.2), Q2 = mk(1000, '데이터 질이 나빠요', t0 + 27.0);
+  /* 양: 사진 2장만 → 모델 → ? */
+  const q1ph = ['ph-cat', 'ph-dog'].map((id, i) => { const p = photo(Q1, 60 + i * 150, 150, 130, id); pop(p, t0 + 29.6 + i * .25, .45); return p; });
+  const q1m = box(Q1, { x: 420, y: 150, w: 280, h: 130, cls: 'card', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--mint)', fontFamily: 'var(--round)', fontWeight: 700, fontSize: '34px' } }); q1m.textContent = '모델'; pop(q1m, t0 + 30.2, .45);
+  const q1ov = overlay(Q1); q1ov.setAttribute('viewBox', '0 0 760 700'); q1ov.style.width = '760px'; q1ov.style.height = '700px'; arrow(q1ov, 345, 215, 410, 215, t0 + 30.0, .3, 5);
+  const q1q = photo(Q1, 130, 330, 130, 'ph-cat2'); pop(q1q, t0 + 30.8, .45);
+  const q1a = box(Q1, { x: 300, y: 350, w: 400, cls: 'center', html: '<span class="pill" style="font-size:40px">🤔 ?</span>' }); pop(q1a, t0 + 31.3, .5);
+  const q1t = box(Q1, { x: 40, y: 510, w: 680, cls: 'note', html: '사진 <b>10장</b>만 보고 배우면<br>제대로 알아보지 못해요', style: { fontSize: '30px', lineHeight: 1.5 } }); fadeIn(q1t, t0 + 31.8, .4);
+  cap(s, '본 데이터가 몇 개 없으면 AI가 제대로 배우지 못해요 — 데이터의 **양**이 중요해요.', t0 + 29.6, t0 + 32.9);
+  /* 질: 틀린 레이블 + 치우친 데이터 */
+  cap(s, '틀린 레이블, 한쪽으로 치우친 데이터로 배우면 AI가 엉뚱해져요 — 데이터의 **질**도 중요해요.', t0 + 33.1, t1 - .3);
+  const q2d = photo(Q2, 60, 130, 130, 'ph-dog'); pop(q2d, t0 + 33.3, .45);
+  const q2l = box(Q2, { x: 50, y: 272, w: 150, cls: 'center', html: '<span class="pill yellow sm">고양이</span>' }); pop(q2l, t0 + 33.7, .4);
+  const q2x = box(Q2, { x: 150, y: 110, html: '✗', style: { fontFamily: 'var(--round)', fontWeight: 700, fontSize: '80px', color: '#d9486a' } }); pop(q2x, t0 + 34.2, .4);
+  const q2t = box(Q2, { x: 230, y: 160, w: 500, cls: 'note', html: '레이블이 <b>틀렸어요</b><br>AI는 틀린 정답도 그대로 배워요', style: { textAlign: 'left', fontSize: '28px', lineHeight: 1.5 } }); fadeIn(q2t, t0 + 34.5, .4);
+  const q2w = [0, 1, 2].map(i => { const p = photo(Q2, 60 + i * 110, 380, 95, 'ph-cat'); pop(p, t0 + 35.2 + i * .2, .4); return p; });
+  const q2b = photo(Q2, 440, 380, 95, 'ph-cat4', true); pop(q2b, t0 + 36.0, .4);
+  const q2q = box(Q2, { x: 545, y: 395, html: '🤔 ?', style: { fontFamily: 'var(--round)', fontWeight: 700, fontSize: '40px' } }); pop(q2q, t0 + 36.4, .4);
+  const q2t2 = box(Q2, { x: 40, y: 510, w: 680, cls: 'note', html: '흰 고양이만 보고 배우면<br>검은 고양이를 못 알아봐요 — <b>치우친</b> 데이터', style: { fontSize: '28px', lineHeight: 1.5 } }); fadeIn(q2t2, t0 + 36.8, .4);
+}
+
+/* ── 6. 정리 ── */
+{
+  const t0 = CH[6].t, s = scene(t0, END);
+  head(s, t0, { stage: '정리', pixel: 'KEY_SUMMARY', emoji: '📝', title: '오늘 배운 것 — 인공지능은 데이터로 배워요', color: 'var(--salmon)' });
+  const terms = [
+    ['인공지능', '사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 만든 소프트웨어', '예) 틱톡 추천, 인스타 필터', 'var(--sky)'],
+    ['인공 신경망', '사람 뇌의 뉴런 연결을 흉내 낸 구조', '예) Quick, Draw!의 낙서 인식', 'var(--sky)'],
+    ['인공지능 모델', '데이터를 학습하여 만들어진 결과물 — 새 데이터를 분류·예측해요', '예) 낙서 알아맞히기 모델', 'var(--sky)'],
+    ['레이블', '데이터에 붙인 정답 이름표', '예) 「고양이」, 「강아지」', 'var(--lav)'],
+    ['학습 데이터', '모델을 학습시키려고 레이블과 함께 보여 주는 데이터', '예) 이름표를 붙인 사진들', 'var(--lav)'],
+    ['테스트 데이터', '학습에 쓰지 않은 새로운 데이터로 모델의 성능을 확인해요', '예) AI가 처음 본 사진', 'var(--lav)']
+  ];
+  const tEls = terms.map(([t, m, x, c], i) => {
+    const e = el('div', 'tcard', s, { left: (150 + (i % 3) * 580) + 'px', top: (150 + Math.floor(i / 3) * 290) + 'px' }, `<div class="th" style="background:${c}">${t}</div><div class="tb">${m}<div class="tx">${x}</div></div>`);
+    anim(e, [{ opacity: 0, transform: 'rotateX(80deg) translateY(20px)' }, { opacity: 1, transform: 'rotateX(0deg) translateY(0px)' }], t0 + .6 + i * .35, .6); e.style.transformOrigin = '50% 0'; return e;
+  });
+  cap(s, '인공지능 소프트웨어는 데이터로 **학습**하고, 일반 소프트웨어는 사람이 정한 **규칙**대로만 움직여요.', t0 + 4.2, t0 + 8.6);
+  cap(s, '인공지능의 성능은 학습 데이터의 **양**과 **질**에 크게 좌우돼요.', t0 + 8.8, t0 + 12.4);
+  tEls.forEach(e => fadeOut(e, t0 + 12.6, .5));
+  const endT = box(s, { x: 0, y: 360, w: 1920, cls: 'center endtitle', html: '오늘 배운 것을 활동지에 정리해요 ✏️' }); fadeIn(endT, t0 + 13.0, .6, 24);
+  const endS = box(s, { x: 0, y: 500, w: 1920, cls: 'center sub', html: '활동지는 PDF로 저장해서 제출해요', style: { color: INK2 } }); fadeIn(endS, t0 + 13.6, .5);
+  const endP = box(s, { x: 0, y: 640, w: 1920, cls: 'center', html: '<span class="pill"><span class="px">LESSON_01</span>&nbsp;·&nbsp;인공지능이란?</span>' }); pop(endP, t0 + 14.2, .5);
+}
+
+/* ───────── 재생기 ───────── */
+let anims = [], DURATION = END * 1000, cur = 0, playing = false, raf = 0, last = 0;
+function build() {
+  anims = specs.map(s => { const a = s.el.animate(s.kf, { delay: s.delay, duration: s.duration, easing: s.easing, fill: s.fill, composite: s.composite }); a.pause(); return a; });
+  DURATION = Math.max(END * 1000, ...specs.map(s => s.delay + s.duration));
+  seek(0);
+}
+function seek(ms) { cur = Math.max(0, Math.min(DURATION, ms)); for (const a of anims) a.currentTime = cur; updateUI(); }
+function tick(now) { if (!playing) return; const dt = now - last; last = now; seek(cur + dt); if (cur >= DURATION) { pause(); return; } raf = requestAnimationFrame(tick); }
+function play() { if (cur >= DURATION) cur = 0; playing = true; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); updateUI(); }
+function pause() { playing = false; cancelAnimationFrame(raf); updateUI(); }
+const fmt = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+const $ = id => document.getElementById(id);
+function updateUI() {
+  if (RENDER) return;
+  $('time').textContent = `${fmt(cur)} / ${fmt(DURATION)}`;
+  if (document.activeElement !== $('seek')) $('seek').value = Math.round(cur / DURATION * 1000);
+  $('btnPlay').textContent = playing ? '⏸ 멈춤' : '▶ 재생'; $('btnPlay').setAttribute('aria-label', playing ? '멈춤' : '재생');
+  $('bigplay').classList.toggle('hide', playing);
+  const idx = CH.reduce((m, c, i) => cur >= c.t * 1000 - 1 ? i : m, 0);
+  [...$('chapters').children].forEach((b, i) => b.classList.toggle('on', i === idx));
+}
+function fit() {
+  if (RENDER) return;
+  const ctlH = $('ctl').offsetHeight + 14 + 32;
+  const sc = Math.min((innerWidth - 32) / 1920, (innerHeight - ctlH) / 1080);
+  $('wrap').style.transform = `scale(${sc})`; $('box').style.width = (1920 * sc) + 'px'; $('box').style.height = (1080 * sc) + 'px';
+}
+function ui() {
+  CH.forEach((c, i) => { const b = el('button', 'glass-pill', $('chapters'), null, c.name); b.type = 'button'; b.addEventListener('click', () => { seek(c.t * 1000); if (!playing) play(); }); });
+  $('btnPlay').addEventListener('click', () => playing ? pause() : play());
+  $('btnRestart').addEventListener('click', () => { seek(0); play(); });
+  $('btnFull').addEventListener('click', () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
+  $('seek').addEventListener('input', e => seek(e.target.value / 1000 * DURATION));
+  stage.addEventListener('click', () => playing ? pause() : play());
+  addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' && e.key !== ' ') return;
+    const idx = CH.reduce((m, c, i) => cur >= c.t * 1000 + 300 ? i : m, -1);
+    if (e.key === ' ') { e.preventDefault(); playing ? pause() : play(); }
+    else if (e.key === 'ArrowRight') { const n = CH.find(c => c.t * 1000 > cur + 300); seek(n ? n.t * 1000 : DURATION); }
+    else if (e.key === 'ArrowLeft') { seek((CH[Math.max(0, idx)] || CH[0]).t * 1000); }
+    else if (e.key === 'Home') seek(0);
+  });
+  addEventListener('resize', fit); fit();
+  mp4Button();
+}
+/* 받는 링크(아티팩트)에서만: 딸린 파일 motion.mp4 를 downloads 기능으로 저장 — 로컬 보기에는 단추가 안 보인다 */
+async function mp4Button() {
+  if (!window.claude || typeof window.claude.use !== 'function') return;
+  const dl = await window.claude.use('downloads').catch(() => null); if (!dl) return;
+  const head = await fetch('motion.mp4', { method: 'HEAD' }).catch(() => null); if (!head || !head.ok) return;
+  const btn = $('btnMp4'); btn.hidden = false; const label = '⬇ MP4 받기';
+  btn.addEventListener('click', async () => {
+    btn.disabled = true; btn.textContent = '⏳ 준비 중…';
+    try {
+      const r = await fetch('motion.mp4'); if (!r.ok) throw new Error('파일 없음');
+      await dl.save({ filename: '정보수업_인공지능_01차시_모션그래픽.mp4', data: await r.blob() });
+      btn.textContent = '✓ 저장했어요';
+    } catch (e) { btn.textContent = e && e.code === 'declined' ? label : '받기 실패 · 다시 눌러 주세요'; }
+    finally { btn.disabled = false; setTimeout(() => { btn.textContent = label; }, 3000); }
+  });
+}
+/* 글꼴 7벌을 먼저 다 불러온 뒤 타임라인을 만든다(캡처 때 글꼴 바뀜 방지) */
+const FACES = ['400 20px GangwonEdu', '400 20px CookieRun', '700 20px CookieRun', '300 20px Maplestory', '700 20px Maplestory', '400 20px Silkscreen', '700 20px Silkscreen'];
+const ready = (document.fonts ? Promise.all(FACES.map(f => document.fonts.load(f))).then(() => document.fonts.ready) : Promise.resolve()).then(() => { build(); if (!RENDER) ui(); });
+window.__motion = { ready, get duration() { return DURATION; }, seek, play, pause, chapters: CH };
+})();
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@
 |---|---|
 | `tokens.json` | **원본.** 색·서체·글자 크기·줄 간격·여백·폭·테두리·모서리·그림자·그라디언트·포커스·움직임 (W3C Design Tokens 형식) |
 | `tokens.css` | 위에서 만든 CSS 변수(`--msi-…`) + `@font-face` + `@keyframes msi-floaty` — **직접 고치지 않음** |
-| `components.css` | 토큰으로 만든 기본 부품(`.msi-…`): 격자 바탕, 창+타이틀바, 주제·일반 카드, 픽셀 태그, 힌트 상자, 버튼, 칩, 입력칸, 체크 행, NOTE, 표, 상태 알약, 포커스·인쇄 |
+| `components.css` | 토큰으로 만든 기본 부품(`.msi-…`): 격자 바탕, 창+타이틀바, 주제·일반 카드, 픽셀 태그, 힌트 상자, 버튼, 칩, 입력칸, 체크 행, NOTE, 표, 상태 알약, 포커스·인쇄 + **활동 부품**(ai/01 — 가운데 버튼 줄·이름표 2열·개념 표/카드·고르기·O/X·그림+영상, 치수 `part` 토큰, 규칙 `docs/rules/parts.md`) |
 | `fonts/` | GangwonEdu · CookieRun(400/700) · Maplestory(300/700) · Silkscreen(400/700) woff2 |
 | `preview.html` | 브라우저로 열면 색·서체·부품을 한눈에 (자동 생성) |
 | `build.mjs` | `node design/build.mjs` → `tokens.css` · `preview.html` 다시 만들기 |
