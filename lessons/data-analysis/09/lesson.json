@@ -1,0 +1,9 @@
+{
+  "unit": "data-analysis",
+  "unitTitle": "데이터분석",
+  "no": "09",
+  "title": "데이터분석 수행평가 A형",
+  "shell": "standalone",
+  "status": "live",
+  "submit": true
+}
