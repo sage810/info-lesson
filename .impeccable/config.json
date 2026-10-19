@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "lessons/ai/01/present.html"
+        ],
+        "createdAt": "2026-10-19T07:09:06.753Z",
+        "reason": "Claude triage 2026-10-19: window→card→sticker nesting is the DESIGN.md North Star (화면 전체가 하나의 창 + 스티커 카드) and mirrors lessons/ai/01/lesson.html; the two non-incumbent boxes (figure frame, O/X reason box) were flattened instead. Not user-confirmed."
+      }
+    ]
+  }
+}

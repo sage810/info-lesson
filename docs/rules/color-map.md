@@ -271,6 +271,7 @@
 | 달력 오늘 칸 바탕 | `--msi-role-ui-today-cell` | `#fdeaf3` |
 | 급식 TOTAL 글자 | `--msi-role-ui-total-ink` | `#8a4f36` |
 | 입력칸 자리표시자 글자(분홍 종이 위 4.5:1↑, 2026-10-16 audit) | `--msi-role-ui-placeholder` | `#746d85` |
+| 수업용 화면 「일반 소프트웨어」 이름표(선생님 지정 2026-10-19, 「인공지능 소프트웨어」는 base-lilac) | `--msi-role-ui-label-general` | `#ffd685` |
 
 ## 유리 · 움직임 · 손가락 크기 (색이 아닌 토큰 — 활동지 블록에 함께 들어감)
 

@@ -340,6 +340,7 @@
   --msi-role-ui-today-cell: #fdeaf3;   /* 달력 오늘 칸 바탕 */
   --msi-role-ui-total-ink: #8a4f36;   /* 급식 TOTAL 글자 */
   --msi-role-ui-placeholder: #746d85;   /* 입력칸 자리표시자 글자(분홍 종이 위 4.5:1↑, 2026-10-16 audit) */
+  --msi-role-ui-label-general: #ffd685;   /* 수업용 화면 「일반 소프트웨어」 이름표(선생님 지정 2026-10-19, 「인공지능 소프트웨어」는 base-lilac) */
   /* part */
   --msi-part-figure-max: 680px;   /* 그림·영상 최대 폭 */
   --msi-part-slot-min: 176px;   /* 이름표를 놓는 칸 최소 폭 */

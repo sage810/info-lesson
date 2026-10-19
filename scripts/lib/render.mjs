@@ -28,17 +28,9 @@ function mustExist(file, marker, lesson) {
   }
 }
 
-/**
- * @param lesson  listLessons() 의 한 항목
- * @param opts    { variant: 'embed'|'pages', raw?: boolean, teacher?: boolean, hook?: boolean }
- * @returns       { html, copies: [{ from, to }] }  — copies 는 pages 변형에서 dist/pages 로 복사할 파일
- */
-export function renderLesson(lesson, opts) {
-  const { variant, raw = false, teacher = false, hook = true } = opts;
-  const copies = new Map();
-  let html = readText(lesson.src);
-
-  // 1) 표식이 없는 곳에 우연히 들어간 경우를 막기 위해, 모든 치환은 함수형 replacer 로 한다($ 문자 보호).
+// 표식(<script data-msi-src> · msi-asset:) → embed 는 파일 내용을 넣고, pages 는 상대 경로로 바꾸며 복사할 파일을 copies 에 모은다.
+function swapMarkers(html, lesson, variant, copies) {
+  // 표식이 없는 곳에 우연히 들어간 경우를 막기 위해, 모든 치환은 함수형 replacer 로 한다($ 문자 보호).
   html = html.replace(SCRIPT_MARKER_RE, (m, p) => {
     const file = resolveMarkerPath(p, lesson.dir);
     mustExist(file, p, lesson);
@@ -60,6 +52,18 @@ export function renderLesson(lesson, opts) {
     copies.set(target, file);
     return relFromPage(target, lesson);
   });
+  return html;
+}
+
+/**
+ * @param lesson  listLessons() 의 한 항목
+ * @param opts    { variant: 'embed'|'pages', raw?: boolean, teacher?: boolean, hook?: boolean }
+ * @returns       { html, copies: [{ from, to }] }  — copies 는 pages 변형에서 dist/pages 로 복사할 파일
+ */
+export function renderLesson(lesson, opts) {
+  const { variant, raw = false, teacher = false, hook = true } = opts;
+  const copies = new Map();
+  let html = swapMarkers(readText(lesson.src), lesson, variant, copies);
 
   if (html.includes(SNAPSHOT_MARKER)) {
     const snapFile = path.join(ROOT, 'data', 'neis-snapshot.json');
@@ -113,5 +117,19 @@ export function renderLesson(lesson, opts) {
     }
   }
 
+  return { html, copies: [...copies].map(([to, from]) => ({ to, from })) };
+}
+
+/**
+ * 차시 폴더의 다른 페이지(present.html = 선생님이 띄우는 수업용 화면) — 표식만 바꾸고 제출 스크립트는 붙이지 않는다.
+ * 수정 요청 메모(?memo=1)만 차시 페이지처럼 붙인다. 차시 페이지와 같은 폴더(dist/pages/<단원>/<차시>/)라 상대 경로 계산이 같다.
+ */
+export function renderPage(lesson, file) {
+  const copies = new Map();
+  let html = swapMarkers(readText(file), lesson, 'pages', copies);
+  copies.set(MEMO_PATH, path.join(ROOT, MEMO_PATH));
+  const tag = `\n<script src="${relFromPage(MEMO_PATH, lesson)}"></script>\n`;
+  const i = html.lastIndexOf('</body>');
+  html = i >= 0 ? html.slice(0, i) + tag + html.slice(i) : html + tag;
   return { html, copies: [...copies].map(([to, from]) => ({ to, from })) };
 }

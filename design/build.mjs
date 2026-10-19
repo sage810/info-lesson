@@ -161,7 +161,7 @@ const synced = [];
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
     if (e.isDirectory()) walk(p);
-    else if (e.name === 'lesson.html') {
+    else if (e.name === 'lesson.html' || e.name === 'present.html') {   // present.html = 수업용 화면(2026-10-19)
       const src = fs.readFileSync(p, 'utf8');
       if (!ROLE_RE.test(src)) continue;
       const nl = src.includes('\r\n') ? '\r\n' : '\n';

@@ -183,6 +183,7 @@ colors:
   role-ui-today-cell: "#fdeaf3"
   role-ui-total-ink: "#8a4f36"
   role-ui-placeholder: "#746d85"
+  role-ui-label-general: "#ffd685"
 typography:
   display:
     fontFamily: "GangwonEdu, Do Hyeon, Apple SD Gothic Neo, Malgun Gothic, sans-serif"

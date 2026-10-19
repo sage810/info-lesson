@@ -293,3 +293,10 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 만드는 법: 한 파일 `lessons/ai/01/motion/index.html` — 모든 움직임을 **WAAPI 한 시계**에 걸어(`anim(el, kf, 시작초, 길이초)`) `__motion.seek(ms)` 로 아무 시각이나 그릴 수 있게 → `scripts/motion/render.mjs` 가 Chrome 으로 프레임을 캡처하고 인코더 페이지(`enc.html`, WebCodecs H.264 QP 24 + `vendor/mp4-muxer.js`)가 MP4 로 묶는다. **ffmpeg 없이** 1920×1080·30fps. `npm run motion -- ai/01 --sheet 5 | --snap … | --mp4 | --page`.
 - 규칙·순서: **`docs/rules/motion.md`**. 웹 보기 조작(재생·장 고르기·전체 화면·키보드)의 버튼은 오로라 유리 알약. 페이지 바깥(책상·조작 줄)만 어두운 테마를 따르고 무대는 늘 크림.
 - 받는 링크(아티팩트): https://claude.ai/artifact/T4Tecto1G4RdpNsrndaGT8 — 웹 애니메이션 페이지 + 글꼴 딸린 파일 + MP4(11.4MB) 받기 단추(`downloads` 기능). MP4 원본: `dist/motion/ai-01/정보수업_ai_01차시_모션그래픽.mp4`(1920×1080·30fps·2분 48초).
+
+## 수업용 화면(정답 공개 슬라이드) — ai/01 「인공지능이란?」 — 2026-10-19
+- 선생님 요청: 활동지를 바탕으로 교사가 띄워 개념을 설명하고 **빈칸 정답을 하나씩 공개**하는 한 장짜리 HTML. 차시 폴더의 **`present.html`** → 사이트 `…/<단원>/<차시>/present.html`(첫 화면 목록엔 안 나옴, noindex). 빌드가 `present.html` 이 있으면 같이 올리고(`scripts/build.mjs` · `renderPage`), 메모(?memo=1)도 붙는다.
+- 1600×900 무대를 창 크기에 맞춰 scale(스크롤 없음). 위 제목줄(단계·카드 이름·제목·진행 점·n/전체), 아래 버튼(◀ · 👀 모두 보기 · 🙈 가리기 · ⛶ · ▶). 단축키는 2쪽 「사용 안내」 장. **Space = 가린 정답 하나씩(위→아래·왼→오른), 다 열리면 다음 장** · ←→ 장만 · A/R/F(한글 입력 상태도 되게 `e.code`).
+- 공개 부품: 글자 빈칸(보라 점선 「?」, 너비 = 정답 길이, 열린 칸은 칸마다 다른 파스텔) · 순서 칸(같은 카드가 흐려짐) · 이름표(분류 색 — 인공지능 SW #eec6ea, 일반 SW #ffd685 = 새 역할 토큰 `ui-label-general`) · 하나 고르기·O/X(정답 초록·고른 오답 빨강 + 이유) · 그림 자리 영상 · 열 하나씩(`.colrv`, 아기 비유 장).
+- 색은 역할 토큰만(`<style id="msi-role-tokens">` 블록을 `node design/build.mjs` 가 `present.html` 에도 채움). 피드백 모드로 50여 개 반영(24장).
+- 점검(Playwright): 1536×864 · 1920×1080 두 크기에서 모든 장을 「정답 모두 보기」로 캡처 + 넘침 측정, 장마다 Space 차례, 누르기·단축키·영상 — 스크립트는 그때그때 scratchpad(넘침 0 확인).
