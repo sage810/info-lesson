@@ -14,6 +14,7 @@
 - **배포본**: `dist/` — `npm run build` 결과. **손으로 고치지 않는다**(git 에도 안 올라감)
 - **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드·수행평가 `exam.md`·교사용 `teacher.md` — 교사용엔 왼쪽 고정바 절대 없음 · 새 활동지 순서 `order.md` — 도입·전개·정리 · 역할→색 표 `color-map.md`(자동 생성)) · 이력: `docs/log/`
 - **새 차시 틀**: `lessons/_templates/order`(사이트에 안 올라감, = ai/01 「인공지능이란?」 2026-10-18) — `npm run new -- <단원>/<차시>` 의 **기본**(선생님 결정 2026-10-16: 새 차시는 지금 틀 그대로, 본문만 바꿈).
+  **활동지 글자는 모두 16px 이상**(선생님 지시 2026-10-20 — `--msi-size-text-min`, `docs/rules/design.md` §2.2).
   **부품 모양 규칙 `docs/rules/parts.md`**(글자만 제목 · 가운데 정렬 · 이름표 2열 · 개념 표/카드 · O/X 즉시 채점 · 핵심 정리 이름표 · SVG 글꼴 · 그림+영상).
   미리보기 `npm run template-preview`. 색은 역할 토큰 `var(--msi-role-…)`, 유리·움직임·손가락 크기는 `--msi-glass-*`·`--msi-motion-*`·`--msi-size-touch-min`.
   바꿀 땐 `design/tokens.json`(role·glass·motion·size) → `node design/build.mjs`(틀·07·틀에서 만든 차시까지 함께 바뀜). 틀의 부품을 고치면 ai/01 도 같이.

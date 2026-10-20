@@ -105,6 +105,7 @@
   --msi-size-content-max: 1080px;
   --msi-size-doc-max: 980px;   /* 문서형 화면 */
   --msi-size-touch-min: 44px;   /* 손가락으로 누르는 것의 최소 높이(태블릿·크롬북) */
+  --msi-size-text-min: 16px;   /* 수업 활동지 글자 최소 크기 — 이보다 작은 글자 없음(선생님 지시 2026-10-20, ai/01·새 차시 틀) */
   /* border-width */
   --msi-bw-window: 4px;
   --msi-bw-default: 3px;   /* 카드·칩·입력·버튼·태그 */

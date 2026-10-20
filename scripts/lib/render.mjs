@@ -30,6 +30,10 @@ function mustExist(file, marker, lesson) {
 
 // 표식(<script data-msi-src> · msi-asset:) → embed 는 파일 내용을 넣고, pages 는 상대 경로로 바꾸며 복사할 파일을 copies 에 모은다.
 function swapMarkers(html, lesson, variant, copies) {
+  // 한쪽에만 넣는 부분(2026-10-20, 큰 영상 등): <!--msi-pages-only-->…<!--/msi-pages-only--> 는 embed(구글 사이트 한 파일)에서,
+  // <!--msi-embed-only-->…<!--/msi-embed-only--> 는 pages(사이트)에서 뺀다. 표식을 먼저 걷어 내야 빠진 쪽 그림·영상이 붙지 않는다.
+  const drop = variant === 'embed' ? 'pages-only' : 'embed-only';
+  html = html.replace(new RegExp(`<!--msi-${drop}-->[\\s\\S]*?<!--/msi-${drop}-->`, 'g'), () => '');
   // 표식이 없는 곳에 우연히 들어간 경우를 막기 위해, 모든 치환은 함수형 replacer 로 한다($ 문자 보호).
   html = html.replace(SCRIPT_MARKER_RE, (m, p) => {
     const file = resolveMarkerPath(p, lesson.dir);

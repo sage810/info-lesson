@@ -292,6 +292,7 @@
 | content-max | `--msi-size-content-max` | `1080px` |
 | 문서형 화면 | `--msi-size-doc-max` | `980px` |
 | 손가락으로 누르는 것의 최소 높이(태블릿·크롬북) | `--msi-size-touch-min` | `44px` |
+| 수업 활동지 글자 최소 크기 — 이보다 작은 글자 없음(선생님 지시 2026-10-20, ai/01·새 차시 틀) | `--msi-size-text-min` | `16px` |
 | 그림·영상 최대 폭 | `--msi-part-figure-max` | `680px` |
 | 이름표를 놓는 칸 최소 폭 | `--msi-part-slot-min` | `176px` |
 | 여러 줄이 되는 알약(긴 보기 고르기 칩·순서 카드) 모서리 | `--msi-part-choice-radius` | `22px` |

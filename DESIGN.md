@@ -364,6 +364,8 @@ components:
 
 **The Four Voices Rule.** 글꼴은 네 개뿐이고 역할을 바꾸지 않는다 — 제목에 본문 글꼴, 버튼에 픽셀 글꼴을 쓰지 않는다.
 
+**The 16px Floor Rule.** 수업 활동지 탭(과 진행률 카드)에는 16px 보다 작은 글자가 없다(선생님 지시 2026-10-20) — 위 Body 15px · 작은 설명 14px · Label 11px 도 활동지 안에서는 16px. 토큰 `--msi-size-text-min`, 규칙 묶음은 ai/01 · 새 차시 틀의 `/* ── 글자 최소 16px … */`. 이름표 줄 설명 · 하나 고르기 보기는 17px. 자세히: `docs/rules/design.md` §2.2.
+
 ## Layout
 
 화면은 라벤더 모눈 바탕화면 위에 놓인 하나의 창이다. 창은 가운데 최대 1080px(문서형 화면 980px), 바탕 여백 위 28px · 옆 20px · 아래 60px, 창 안 여백 24px · 22px.
@@ -462,6 +464,7 @@ components:
 
 ### Do:
 - **Do** 새 차시는 ai/01 부품 모양(`docs/rules/parts.md`)대로 — 가운데 정렬 · 글자만 제목 · O/X 즉시 채점 · 그림 글자 CookieRun Bold.
+- **Do** 수업 활동지의 글자는 모두 16px 이상(The 16px Floor Rule) — 새 글자도 처음부터 16px 이상으로.
 - **Do** 버튼은 모두 오로라 유리 알약으로 만든다 — 일반 버튼 `glass-pill`, 고르기 버튼 `glass-chip`(높이 44px↑, 2px 잉크 테두리, 3px 어긋난 그림자).
 - **Do** 색을 역할 토큰으로 쓴다 — `var(--msi-role-act2-head)` 처럼. 바꿀 땐 `design/tokens.json` 의 `role` 만 고치고 `node design/build.mjs`.
 - **Do** 새 차시는 틀 `lessons/_templates/order` 에서 출발한다.

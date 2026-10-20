@@ -218,6 +218,7 @@
   --msi-size-content-max: 1080px;
   --msi-size-doc-max: 980px;
   --msi-size-touch-min: 44px;
+  --msi-size-text-min: 16px;
   --msi-part-figure-max: 680px;
   --msi-part-slot-min: 176px;
   --msi-part-choice-radius: 22px;
@@ -262,11 +263,6 @@
 [data-v="일반 소프트웨어"]{--cat:var(--msi-role-ui-label-general)}   /* 선생님 지정 #ffd685(2026-10-19) */
 [data-v="인공 신경망"],[data-v="뉴런"]{--cat:var(--msi-role-base-periwinkle)}
 [data-v="인공지능 모델"]{--cat:var(--msi-role-base-cotton-pink)}
-[data-v="레이블"],[data-v="정답"]{--cat:var(--msi-role-base-butter)}
-[data-v="학습 데이터"]{--cat:var(--msi-role-base-sky)}
-[data-v="테스트 데이터"],[data-v="새로운"]{--cat:var(--msi-role-base-apricot)}
-[data-v="데이터 양이 부족해요"],[data-v="양"]{--cat:var(--msi-role-base-sand)}
-[data-v="데이터 질이 나빠요"],[data-v="질"]{--cat:var(--msi-role-base-lilac)}
 
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden}
@@ -293,10 +289,10 @@ body.is-fs #stage{border-radius:0;box-shadow:none}
 .b-sep{flex:none;width:3px;height:34px;border-radius:2px;background:var(--ink);opacity:.45}
 .b-badge{flex:none;width:46px;height:46px;display:grid;place-items:center;border:3px solid var(--ink);border-radius:11px;background:var(--white);font-size:24px;line-height:1;box-shadow:2px 2px 0 rgba(75,59,107,.22)}
 .b-title{flex:1;min-width:0;font:700 28px/1.25 var(--round);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.b-dots{flex:none;display:flex;align-items:center;gap:5px}
-.dot{width:13px;height:13px;padding:0;border:2px solid var(--ink);border-radius:50%;background:var(--white);opacity:.6;cursor:pointer}
+.b-dots{flex:none;display:flex;align-items:center;gap:4px}
+.dot{width:12px;height:12px;padding:0;border:2px solid var(--ink);border-radius:50%;background:var(--white);opacity:.6;cursor:pointer}
 .dot.is-past{background:var(--ink);opacity:.75}
-.dot.is-cur{width:20px;height:20px;border-width:3px;opacity:1;box-shadow:2px 2px 0 rgba(75,59,107,.3)}
+.dot.is-cur{width:18px;height:18px;border-width:3px;opacity:1;box-shadow:2px 2px 0 rgba(75,59,107,.3)}
 .dot.ph-start{margin-left:10px}
 .dot:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .b-count{flex:none;min-width:96px;text-align:right;font:700 26px/1 var(--round);font-variant-numeric:tabular-nums}
@@ -347,7 +343,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .links{display:flex;justify-content:center;gap:16px}
 .fill{flex:1;min-height:0}
 .mid{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:22px}   /* 크기가 바뀌지 않는 내용만 — 정답이 열려도 자리가 그대로 */
-.lead,.sub,.callout,.qcard,.lm-d,.oxq .t,.why,.tbl td,.ccard p,.steps li{text-wrap:pretty}
+.lead,.sub,.callout,.qcard,.lm-d,.oxq .t,.why,.tbl td,.steps li{text-wrap:pretty}
 .callout{margin:0;padding:16px 24px;border:3px solid var(--ink);border-radius:16px;font:300 26px/1.65 var(--body);box-shadow:4px 4px 0 rgba(75,59,107,.14);word-break:keep-all}
 .callout .lbl{display:block;margin-bottom:4px;font:700 27px/1.4 var(--round)}
 .callout--tip{background:var(--msi-role-ui-callout-tip)}
@@ -450,13 +446,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .coin{flex:none;display:inline-grid;place-items:center;width:52px;height:52px;border:2.5px solid var(--ink);border-radius:50%;background:var(--msi-role-checkup-coin);
   font:700 26px/1 var(--round);box-shadow:2px 2px 0 rgba(75,59,107,.25)}
 
-/* 개념 카드 3장 */
-.cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.ccard{display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 22px;border:3px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card);text-align:center;word-break:keep-all}
-.ccard .ic{font-size:46px;line-height:1.1}
-.ccard .t{font:700 32px/1.25 var(--round)}
-.ccard p{margin:0;font:300 26px/1.7 var(--body)}
-.ccard p.ex{margin-top:auto;width:100%;padding:10px 12px;border-radius:12px;background:var(--msi-role-ui-callout-reason);font-size:25px;line-height:1.6}
 
 /* 단계 목록(동기유발) */
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
@@ -491,9 +480,9 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .tbl--big .qb{min-height:58px;padding:2px 16px;font-size:32px}
 .tbl--big .qb::after{font-size:36px}
 .tbl--big .lm-s--in{width:150px;min-height:56px;font-size:29px}
+.callout--big{font-size:42px;line-height:2.1;padding:36px 40px}   /* 정리 핵심 문장 — 한 문장만 남아 장 가운데 크게(2026-10-20) */
+.callout--big .lm-s--in{width:180px;min-height:68px;font-size:38px}
 .tbl--fill{flex:1}
-.tbl--sum td,.tbl--sum td:first-child{font-size:28px;padding:7px 16px}   /* 정리 표는 6줄이라 한 장에 들어가게 조금 작게 */
-.tbl--sum .lm-s--in{min-height:50px}
 .mi-mock{width:1240px;margin:0 auto;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--msi-role-myinfo-body);box-shadow:var(--sh-card)}
 .mi-mock .hd{padding:12px 24px;border-bottom:3px solid var(--ink);background:var(--msi-role-myinfo-head);font:700 22px/1 var(--pixel);letter-spacing:.5px}
 .mi-mock .bd{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:24px;padding:28px 30px 32px}
@@ -510,10 +499,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .must{align-self:center;margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 36px;border:4px solid var(--ink);border-radius:18px;background:var(--msi-role-base-butter);
   font:700 42px/1.2 var(--round);box-shadow:6px 6px 0 rgba(75,59,107,.28)}
 .must b{padding:0 6px;background:linear-gradient(transparent 56%,var(--msi-role-base-salmon) 56%)}
-.halves{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:0}
-.half{display:flex;flex-direction:column;gap:16px;min-height:0;padding-top:4px}
-.half + .half{padding-top:22px;border-top:2px dashed rgba(75,59,107,.28)}
-.lm--fill{flex:1;min-height:0}
 .fork{display:flex;flex-direction:column;align-items:stretch;gap:16px}   /* 「학습했나?」 갈림길(시안 C) */
 .fork .q{align-self:center;padding:12px 40px;border:4px solid var(--ink);border-radius:22px;background:var(--msi-glass-top),var(--msi-glass-white),var(--msi-role-topic-head);font:700 44px/1.2 var(--round);box-shadow:5px 5px 0 rgba(75,59,107,.25)}   /* 시안 A(2026-10-19) */
 .fork .q::before{content:"🔍";margin-right:10px}
@@ -558,10 +543,13 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .lv .c small{font:300 22px/1.3 var(--body);color:var(--muted)}
 .lv .ar{text-align:center;font:700 34px var(--round);color:var(--muted)}
 .lm--mid .lm-row{padding-top:6px;padding-bottom:6px}
+/* 영상 장 — 큰 영상 + 재생·일시정지 알약(2026-10-20) */
+.vp{margin:0;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.vp-box{position:relative;border-radius:12px;overflow:hidden;background:var(--white);outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+.vp-box video{display:block;width:100%;height:100%;object-fit:contain;background:var(--white)}
+.vp-ctl{display:flex;justify-content:center;gap:18px}
 .lead--big{font-size:36px;font-weight:700;line-height:1.7;text-align:center}   /* 동기유발 설명(시안 B) */
 .lead--big b{padding:0 3px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
-.lm--fill .lm-row{flex:1}
-.lm--fill .lm-d{font-size:28px}
 
 @media (prefers-reduced-motion:reduce){
   .slide.is-on,.qb.is-open .qb-a,.ss.is-open .ss-a,.lm-s.is-open .lm-a{animation:none}
@@ -732,6 +720,15 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       </div>
     </section>
 
+    <!-- ══ 8-0 · 활동 2 — 영상: 일반 몬스터와 AI 몬스터(선생님 파일 · 피드백 2026-10-20) ══ -->
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="인공지능일까, 아닐까?" data-name="영상 · 일반 몬스터와 AI 몬스터">
+      <h2 class="h"><span class="n">1</span>영상으로 알아봐요 — 일반 몬스터와 AI 몬스터</h2>
+      <figure class="vp">
+        <div class="vp-box" style="width:900px;aspect-ratio:16 / 9"><video src="msi-asset:./assets/a2-monster.mp4" preload="metadata" playsinline aria-label="일반 몬스터와 AI 몬스터 영상"></video></div>
+        <div class="vp-ctl"><button type="button" class="gp gp--big vp-play" aria-disabled="false">▶ 재생</button><button type="button" class="gp gp--big vp-pause" aria-disabled="true">⏸ 일시정지</button></div>
+      </figure>
+    </section>
+
     <!-- ══ 8 · 활동 2 — 구분하는 기준(그림 + 안내) ══ -->
     <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="인공지능일까, 아닐까?" data-name="1. 인공지능을 구분하는 기준">
       <h2 class="h"><span class="n">1</span>인공지능을 구분하는 기준</h2>
@@ -827,125 +824,39 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       </div>
     </section>
 
-    <!-- ══ 13 · 활동 4 — 흐름 그림(누르면 영상) ══ -->
-    <section class="slide" data-role="act4" data-phase="전개" data-code="ACTIVITY_4" data-badge="🍚" data-title="AI의 밥, 데이터" data-name="1. 데이터에 관한 낱말 세 가지">
-      <h2 class="h"><span class="n">1</span>데이터에 관한 낱말 세 가지를 알아봐요</h2>
-      <figure class="vf has-video">
-        <div class="vf-box" style="width:944px;aspect-ratio:16 / 9">
-          <img src="msi-asset:./assets/a4-data.png" width="1920" height="1080" alt="흐름 그림. 왼쪽 학습 데이터: 고양이·강아지·고양이 사진마다 정답 이름표(레이블)가 붙어 있다. 학습 화살표를 따라 인공지능 모델이 만들어지고, 아래의 테스트 데이터(이름표 없는 처음 보는 고양이 사진)를 모델에 넣으면 오른쪽에 예측 「고양이!」가 나온다.">
-          <video src="msi-asset:./assets/data-motion.mp4" preload="metadata" playsinline controls aria-label="학습 데이터와 테스트 데이터가 움직이는 그림"></video>
-        </div>
-        <button type="button" class="gp gp--big vf-btn">▶ 움직이는 모습 보기</button>
-      </figure>
-    </section>
-
-    <!-- ══ 14 · 활동 4 — 개념 카드 3장 ══ -->
-    <section class="slide" data-role="act4" data-phase="전개" data-code="ACTIVITY_4" data-badge="🍚" data-title="AI의 밥, 데이터" data-name="레이블 · 학습 데이터 · 테스트 데이터">
-      <h2 class="h"><span class="n">1</span>레이블 · 학습 데이터 · 테스트 데이터</h2>
-      <div class="mid">
-      <div class="cards3">
-        <div class="ccard"><div class="ic" aria-hidden="true">🏷️</div><div class="t">레이블(라벨)</div>
-          <p>데이터에 붙인 <b>정답</b> <button type="button" class="qb"><span class="qb-a">이름표</span></button>예요. 인스타 사진에 #떡볶이를 다는 것처럼, 사진에 「고양이」라고 붙여요.</p>
-          <p class="ex">시험공부라면? → 문제의 <button type="button" class="qb"><span class="qb-a">정답</span></button></p></div>
-        <div class="ccard"><div class="ic" aria-hidden="true">📚</div><div class="t">학습 데이터</div>
-          <p>모델을 학습시키려고 <b>레이블과 함께</b> 보여 주는 데이터예요.</p>
-          <p class="ex">시험공부라면? → 공부하는 <button type="button" class="qb"><span class="qb-a">문제집</span></button></p></div>
-        <div class="ccard"><div class="ic" aria-hidden="true">📝</div><div class="t">테스트 데이터</div>
-          <p>학습을 마친 모델이 얼마나 잘 맞히는지 확인하려고 쓰는, <b>학습에 쓰지 않은</b> <button type="button" class="qb"><span class="qb-a">새로운</span></button> 데이터예요.</p>
-          <p class="ex">시험공부라면? → <b>처음 보는 시험 문제</b></p></div>
-      </div>
-      <p class="sub center" style="margin:0">문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 학습에 쓰지 않은 것으로 골라요.</p>
-      </div>
-    </section>
-
-    <!-- ══ 15 · 활동 4 — AI for Oceans 에서 찾기 + 어떤 데이터로 시험할까 ══ -->
-    <section class="slide" data-role="act4" data-phase="전개" data-code="ACTIVITY_4" data-badge="🍚" data-title="AI의 밥, 데이터" data-name="2·3. AI for Oceans에서 찾기 · 어떤 데이터로 시험할까?">
-      <div class="halves">
-      <div class="half">
-      <div class="hrow">
-        <h2 class="h"><span class="n">2</span>방금 한 AI for Oceans에서 찾아봐요</h2>
-        <div class="tray" aria-label="이름표 모음"><span class="lab" data-v="테스트 데이터">테스트 데이터</span><span class="lab" data-v="레이블">레이블</span><span class="lab" data-v="학습 데이터">학습 데이터</span></div>
-      </div>
-      <div class="lm" style="--slot-w:250px">
-        <div class="lm-row"><span class="lm-d">내가 버튼으로 붙인 「물고기」, 「물고기 아님」</span><button type="button" class="lm-s" data-v="레이블"><span class="lm-a">레이블</span></button></div>
-        <div class="lm-row"><span class="lm-d">내가 라벨을 붙여 가며 AI에게 보여 준 그림들</span><button type="button" class="lm-s" data-v="학습 데이터"><span class="lm-a">학습 데이터</span></button></div>
-        <div class="lm-row"><span class="lm-d">학습이 끝난 뒤 AI가 처음 보고 분류한 바닷속 물체들</span><button type="button" class="lm-s" data-v="테스트 데이터"><span class="lm-a">테스트 데이터</span></button></div>
-      </div>
-      </div>
-      <div class="half pick" data-a="학습에 쓰지 않은 새 영상들" data-why="학습에 쓰지 않은 새 데이터(테스트 데이터)로 시험해야 진짜 실력을 알 수 있어요.">
-        <h2 class="h" style="font-size:30px;line-height:1.45;align-items:flex-start"><span class="n">3</span><span>내 취향을 맞히는 영상 추천 AI를 만들었어요. 이 AI가 잘 맞히는지 확인하려면 어떤 데이터로 시험해야 할까요?</span></h2>
-        <div class="opts">
-          <button type="button" class="gp po" data-v="학습할 때 이미 보여 준 영상들" data-w="이미 본 문제로 시험을 보면 진짜 실력을 알 수 없어요."><span class="ic" aria-hidden="true"></span>학습할 때 이미 보여 준 영상들</button>
-          <button type="button" class="gp po" data-v="학습에 쓰지 않은 새 영상들"><span class="ic" aria-hidden="true"></span>학습에 쓰지 않은 새 영상들</button>
-        </div>
-        <div class="why" hidden role="status"></div>
-      </div>
-      </div>
-    </section>
-
-    <!-- ══ 16 · 활동 4 — AI가 엉뚱해진 까닭 ══ -->
-    <section class="slide" data-role="act4" data-phase="전개" data-code="ACTIVITY_4" data-badge="🍚" data-title="AI의 밥, 데이터" data-name="4. AI가 엉뚱해진 까닭은?">
-      <div class="hrow">
-        <h2 class="h"><span class="n">4</span>AI가 엉뚱해진 까닭은?</h2>
-        <div class="tray" aria-label="이름표 모음"><span class="lab" data-v="데이터 질이 나빠요">데이터 질이 나빠요</span><span class="lab" data-v="데이터 양이 부족해요">데이터 양이 부족해요</span></div>
-      </div>
-      <div class="lm lm--fill" style="--slot-w:300px">
-        <div class="lm-row"><span class="lm-d">어제 만든 새 틱톡 계정이라 본 영상이 몇 개 없어서 추천이 내 취향과 전혀 달라요</span><button type="button" class="lm-s" data-v="데이터 양이 부족해요"><span class="lm-a">데이터 양이 부족해요</span></button></div>
-        <div class="lm-row"><span class="lm-d">동생이 내 유튜브 계정으로 키즈 영상을 몰아 봐서 추천이 키즈 영상으로 도배됐어요</span><button type="button" class="lm-s" data-v="데이터 질이 나빠요"><span class="lm-a">데이터 질이 나빠요</span></button></div>
-        <div class="lm-row"><span class="lm-d">강아지 사진 여러 장에 「고양이」 레이블이 잘못 붙어 있어요</span><button type="button" class="lm-s" data-v="데이터 질이 나빠요"><span class="lm-a">데이터 질이 나빠요</span></button></div>
-        <div class="lm-row"><span class="lm-d">얼굴 필터 AI가 얼굴 사진 10장만 보고 학습했어요</span><button type="button" class="lm-s" data-v="데이터 양이 부족해요"><span class="lm-a">데이터 양이 부족해요</span></button></div>
-        <div class="lm-row"><span class="lm-d">흰 고양이 사진 1,000장으로만 학습한 AI가 검은 고양이를 못 알아봐요</span><button type="button" class="lm-s" data-v="데이터 질이 나빠요"><span class="lm-a">데이터 질이 나빠요</span></button></div>
-      </div>
-      <p class="callout callout--reason"><span class="lbl">💡 Tip</span>데이터의 질에는 레이블이 정확한지, 한쪽으로 치우치지 않고 다양한지, 목적에 맞는 데이터인지가 모두 들어가요.</p>
-    </section>
-
-    <!-- ══ 17 · 정리 — 낱말 표 ══ -->
+    <!-- ══ 13 · 정리 — 낱말 표 ══ -->
     <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 인공지능은 데이터로 배워요" data-name="오늘 배운 것 — 낱말">
       <div class="hrow">
         <h2 class="h">오늘 배운 것</h2>
-        <div class="tray" aria-label="이름표 모음(같은 이름표를 두 번 써도 돼요)"><span class="lab" data-v="질">질</span><span class="lab" data-v="학습">학습</span><span class="lab" data-v="새로운">새로운</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span><span class="lab" data-v="양">양</span><span class="lab" data-v="정답">정답</span></div>
+        <div class="tray" aria-label="이름표 모음(같은 이름표를 두 번 써도 돼요)"><span class="lab" data-v="학습">학습</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span></div>
       </div>
-      <table class="tbl tbl--big tbl--fill tbl--sum">
+      <table class="tbl tbl--big tbl--fill">
         <colgroup><col style="width:250px"><col style="width:790px"><col></colgroup>
         <thead><tr><th>낱말</th><th>뜻</th><th>오늘 만난 예</th></tr></thead>
         <tbody>
           <tr><td>인공지능</td><td>사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 만든 소프트웨어</td><td>틱톡 추천, 인스타 필터</td></tr>
           <tr><td>인공 신경망</td><td>사람 뇌의 <button type="button" class="lm-s lm-s--in" data-v="뉴런"><span class="lm-a">뉴런</span></button> 연결을 흉내 낸 구조</td><td>Quick, Draw!의 그림 인식</td></tr>
           <tr><td>인공지능 모델</td><td>데이터를 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>하여 만들어진 결과물로, 새 데이터를 <span style="white-space:nowrap">분류·예측해요</span></td><td>그림 알아맞히기 모델</td></tr>
-          <tr><td>레이블</td><td>데이터에 붙인 <button type="button" class="lm-s lm-s--in" data-v="정답"><span class="lm-a">정답</span></button> 이름표</td><td>「물고기」, 「물고기 아님」</td></tr>
-          <tr><td>학습 데이터</td><td>모델을 학습시키려고 레이블과 함께 보여 주는 데이터</td><td>내가 라벨을 붙인 그림</td></tr>
-          <tr><td>테스트 데이터</td><td>학습에 쓰지 않은 <button type="button" class="lm-s lm-s--in" data-v="새로운"><span class="lm-a">새로운</span></button> 데이터로 모델의 성능을 확인해요</td><td>AI가 처음 본 바닷속 물체</td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- ══ 18 · 정리 — 핵심 문장 ══ -->
+    <!-- ══ 14 · 정리 — 핵심 문장 ══ -->
     <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 인공지능은 데이터로 배워요" data-name="인공지능은 데이터로 배워요">
       <h2 class="h">인공지능은 데이터로 배워요</h2>
-      <div class="tray" aria-label="이름표 모음"><span class="lab" data-v="질">질</span><span class="lab" data-v="학습">학습</span><span class="lab" data-v="새로운">새로운</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span><span class="lab" data-v="양">양</span><span class="lab" data-v="정답">정답</span></div>
-      <div style="display:flex;flex-direction:column;gap:26px;margin-top:20px">
-        <p class="callout callout--tip center" style="font-size:32px;line-height:2;padding:22px 30px">인공지능 소프트웨어는 데이터로 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>하고,<br>일반 소프트웨어는 사람이 정한 <button type="button" class="lm-s lm-s--in" data-v="규칙"><span class="lm-a">규칙</span></button>대로만 움직여요.</p>
-        <p class="callout callout--tip center" style="font-size:32px;line-height:2;padding:22px 30px">인공지능의 성능은 학습 데이터의 <button type="button" class="lm-s lm-s--in" data-v="양"><span class="lm-a">양</span></button>과 <button type="button" class="lm-s lm-s--in" data-v="질"><span class="lm-a">질</span></button>에 크게 좌우돼요.</p>
+      <div class="tray" aria-label="이름표 모음"><span class="lab" data-v="학습">학습</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span></div>
+      <div class="mid">
+        <p class="callout callout--tip callout--big center">인공지능 소프트웨어는 데이터로 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>하고,<br>일반 소프트웨어는 사람이 정한 <button type="button" class="lm-s lm-s--in" data-v="규칙"><span class="lm-a">규칙</span></button>대로만 움직여요.</p>
       </div>
     </section>
 
-    <!-- ══ 19 · 정리 — 형성평가 O/X 1~3 ══ -->
-    <section class="slide" data-role="checkup" data-phase="정리" data-code="CHECK_UP" data-badge="✅" data-title="형성평가 — O / X" data-name="형성평가 1~3">
-      <h2 class="h">형성평가 — O / X <span class="sub" style="margin:0 0 0 6px">(1~3)</span></h2>
+    <!-- ══ 15 · 정리 — 형성평가 O/X ══ -->
+    <section class="slide" data-role="checkup" data-phase="정리" data-code="CHECK_UP" data-badge="✅" data-title="형성평가 — O / X" data-name="형성평가">
+      <h2 class="h">형성평가 — O / X</h2>
       <div class="oxl">
         <div class="oxq" data-a="O" data-why="내가 본 영상·좋아요 데이터로 학습한 인공지능 모델이 다음 영상을 골라 줘요."><span class="coin">1</span><span class="t">틱톡 추천 피드는 내가 본 영상 데이터로 학습한 인공지능이 영상을 골라 준다.</span><span class="oxb" role="group" aria-label="1번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
         <div class="oxq" data-a="X" data-why="정해진 계산 규칙대로만 움직이는 일반 소프트웨어예요."><span class="coin">2</span><span class="t">사귄 날부터 100일을 계산해 주는 디데이 앱은 인공지능 소프트웨어이다.</span><span class="oxb" role="group" aria-label="2번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
         <div class="oxq" data-a="O" data-why="뇌 속 뉴런들이 신호를 주고받는 모습을 흉내 낸 구조가 인공 신경망이에요."><span class="coin">3</span><span class="t">인공 신경망은 사람 뇌의 신경 세포(뉴런) 연결을 흉내 낸 구조이다.</span><span class="oxb" role="group" aria-label="3번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
-      </div>
-    </section>
-
-    <!-- ══ 20 · 정리 — 형성평가 O/X 4~6 ══ -->
-    <section class="slide" data-role="checkup" data-phase="정리" data-code="CHECK_UP" data-badge="✅" data-title="형성평가 — O / X" data-name="형성평가 4~6">
-      <h2 class="h">형성평가 — O / X <span class="sub" style="margin:0 0 0 6px">(4~6)</span></h2>
-      <div class="oxl">
-        <div class="oxq" data-a="O" data-why="데이터에 붙인 정답 이름표를 레이블(라벨)이라고 해요."><span class="coin">4</span><span class="t">사진에 붙인 「고양이」, 「강아지」 같은 정답 이름표를 레이블이라고 한다.</span><span class="oxb" role="group" aria-label="4번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
-        <div class="oxq" data-a="X" data-why="학습에 쓰지 않은 새로운 테스트 데이터로 확인해야 해요."><span class="coin">5</span><span class="t">AI 모델이 잘 맞히는지 확인할 때는 학습에 썼던 데이터를 다시 쓰는 것이 가장 좋다.</span><span class="oxb" role="group" aria-label="5번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
-        <div class="oxq" data-a="X" data-why="AI는 틀린 레이블도 그대로 배워요. 데이터의 질도 중요해요."><span class="coin">6</span><span class="t">학습 데이터에 틀린 레이블이 많아도 데이터 양만 많으면 AI 성능은 좋아진다.</span><span class="oxb" role="group" aria-label="6번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
       </div>
     </section>
 
@@ -1119,7 +1030,10 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     var p = v.play(); if (p && p.catch) p.catch(function () {});
   }
   function stop(vf) { var v = vf.querySelector('video'); if (v) v.pause(); vf.classList.remove('is-playing'); vfBtn(vf, false); }
-  function stopVideos(sl) { [].forEach.call(sl.querySelectorAll('.vf.is-playing'), stop); }
+  function stopVideos(sl) { [].forEach.call(sl.querySelectorAll('.vf.is-playing'), stop); [].forEach.call(sl.querySelectorAll('.vp video'), function (v) { v.pause(); }); }
+  // 영상 장(.vp) — 재생 중엔 「일시정지」만, 멈췄으면 「재생」만 또렷하게
+  function vpSync(v) { var vp = v.closest('.vp'); if (!vp) return; setDis(vp.querySelector('.vp-play'), !v.paused); setDis(vp.querySelector('.vp-pause'), v.paused); }
+  ['play', 'pause', 'ended'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && e.target.closest('.vp')) vpSync(e.target); }, true); });
   document.addEventListener('ended', function (e) { var vf = e.target.closest && e.target.closest('.vf'); if (vf) stop(vf); }, true);
 
   // 6) 누르기
@@ -1132,6 +1046,10 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       box.dataset.picked = box.dataset.picked === el.dataset.v ? '' : el.dataset.v;   // 같은 보기를 다시 누르면 가림
       if (!box.dataset.picked) box.dataset.all = '';
       render(box);
+    }
+    else if ((el = t.closest('.vp-play, .vp-pause'))) {
+      var vv = el.closest('.vp').querySelector('video');
+      if (el.classList.contains('vp-play')) { var pp = vv.play(); if (pp && pp.catch) pp.catch(function () {}); } else vv.pause();
     }
     else if ((el = t.closest('.vf-btn'))) { box = el.closest('.vf'); if (box.classList.contains('is-playing')) stop(box); else play(box); }
     else if ((el = t.closest('.vf.has-video .vf-box img'))) play(el.closest('.vf'));

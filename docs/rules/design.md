@@ -89,6 +89,14 @@
 - `body { font-family:'Maplestory'; font-weight:300; color:var(--ink); }`
 - 링크: `a{color:var(--link)} a:hover{color:var(--link-hover)}`
 
+**글자 최소 16px — 수업 활동지 (선생님 지시 2026-10-20)**
+
+- 수업 활동지 탭(`#sheetPrintArea`)과 진행률 카드에는 **16px 보다 작은 글자를 두지 않는다**. 본문·설명·표·버튼·칩·입력칸·번호 동전·픽셀 라벨(Silkscreen)·단계 이름표까지 모두.
+- 값은 토큰 `--msi-size-text-min`(16px, `design/tokens.json` size → 활동지 토큰 블록에 자동).
+- 적용: ai/01 · 새 차시 틀(`lessons/_templates/order`)의 `/* ── 글자 최소 16px … */` 규칙 묶음이 작은 글자(클래스·인라인 9~15px)를 16px 로 끌어올린다. 새로 만드는 글자는 처음부터 16px 이상으로 쓴다(이름표 줄 설명·하나 고르기 보기는 17px).
+- 아래 표의 small·pixel·pixel-xs 는 활동지 밖(4탭 시간표·급식 등, 예전 차시)에서만 쓴다.
+- 확인: 활동지 탭을 브라우저로 열고 `#sheetPrintArea` 안 글자의 계산된 크기가 모두 16px 이상인지 잰다(2026-10-20 ai/01·틀 0개 확인).
+
 **타입 스케일 (px)**
 
 | 토큰 | 크기 | 예 |

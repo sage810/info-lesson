@@ -214,6 +214,7 @@
   --msi-size-content-max: 1080px;
   --msi-size-doc-max: 980px;
   --msi-size-touch-min: 44px;
+  --msi-size-text-min: 16px;
   --msi-part-figure-max: 680px;
   --msi-part-slot-min: 176px;
   --msi-part-choice-radius: 22px;
@@ -719,8 +720,8 @@
   .ai-links .glass-pill { white-space: normal; text-align: center; line-height: 1.4; padding-top: 6px; padding-bottom: 6px; }
   .ai-match { display: flex; flex-direction: column; gap: 8px; }
   .ai-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 10px 14px; padding: 8px 12px; border: 2px solid var(--msi-role-base-night-sky-ink); border-radius: 10px;
-    background: var(--msi-role-base-white); font-size: 14.5px; line-height: 1.6; word-break: keep-all; }
-  .ai-row .ai-desc { text-align: center; }   /* 가로를 절반씩 2열, 각각 가운데(피드백) */
+    background: var(--msi-role-base-white); font-size: 17px; line-height: 1.6; word-break: keep-all; }   /* 14.5 → 17px(선생님 피드백 2026-10-20 「눈에 안 보여」) */
+  .ai-row .ai-desc { text-align: center; text-wrap: balance; }   /* 가로를 절반씩 2열, 각각 가운데(피드백) */
   .ai-row .ca-slot { justify-self: center; min-width: var(--msi-part-slot-min); height: auto; min-height: var(--msi-size-touch-min); box-sizing: border-box; }
   .ai-ctl { display: flex; gap: var(--msi-part-gap); flex-wrap: wrap; align-items: center; justify-content: center; }
   .ai-match .ca-tray, .seq-activity .seq-controls { justify-content: center; }
@@ -735,7 +736,7 @@
   .ai-vid__v { display: none; position: absolute; top: 0; left: 0; width: 100%; height: auto; aspect-ratio: var(--msi-part-figure-ratio); object-fit: contain; border-radius: 12px; background: var(--msi-role-base-white); }
   .ai-vid.is-playing .ai-vid__v { display: block; }
   .ai-vid__btn { display: flex; width: fit-content; margin: 10px auto 0; }   /* 그림 아래에 따로(겹치지 않게, 피드백 2026-10-18) */
-  .ai-vid.is-playing .ai-vid__btn { display: none; }
+  .ai-vid.is-playing .ai-vid__btn { margin-top: 14px; }   /* 재생 중에도 버튼은 그대로 — ⏸ 일시정지 / ▶ 이어 보기(2026-10-20) */
   .ai-sum .ca-slot { margin: 2px 3px; }
   .ai-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--msi-part-gap); }
   .ai-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 3px solid var(--msi-role-base-night-sky-ink); border-radius: 12px;
@@ -761,7 +762,7 @@
   /* 하나 고르기(긴 보기) · O/X 고르기 칩 */
   .ai-pick { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
   .ai-pick .glass-chip, .ai-ox .glass-chip { border: 2px solid var(--msi-role-base-night-sky-ink); cursor: pointer;
-    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14.5px; }
+    font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 17px; }   /* 하나 고르기 보기도 17px(2026-10-20) */
   .ai-pick .glass-chip { justify-content: flex-start; text-align: left; line-height: 1.5; padding: 8px 18px !important; border-radius: var(--msi-part-choice-radius) !important; word-break: keep-all; }
   .glass-chip[data-s="on"] { --gc-tint: var(--msi-role-base-lavender); box-shadow: var(--msi-glass-inset), inset 0 -4px 0 var(--msi-role-base-night-sky-ink), 3px 3px 0 rgba(75,59,107,.28); }
   .msi-pdf-clone .glass-chip[data-s="on"] { background: var(--msi-role-base-lavender) !important; }
@@ -785,6 +786,15 @@
     .ord-ox.ai-ox .q .oxb { grid-column: 2; justify-self: start; }
     .ord-ox.ai-ox .q .why { grid-column: 1 / -1; }
   }
+  /* ── 글자 최소 16px(선생님 지시 2026-10-20) — 수업 활동지 탭·진행률 카드에 16px 보다 작은 글자 없음.
+     값은 --msi-size-text-min(design/tokens.json size). 인라인 fontSize(9~15px)도 여기서 끌어올린다. 규칙: docs/rules/design.md §글자 크기 ── */
+  #sheetPrintArea :is(.m-head .mono, .gh, .tg-hd, .ph-tag, .m-sub, .m-lead, .callout, .callout .c-lbl, .seq-num, .seq-result, .ca-result,
+    .ord-sum, .ord-sum th, .ord-sum td, .ord-p, .ord-ox .q, .ai-fill, .ai-fb, .ai-ox .q .why, .ai-card p, .ai-card p.ai-card__ex,
+    .glass-pill:not(.glass-pill--big), .ai-ox .glass-chip, .seq-chip, .ca-chip, .ca-slot, .m-badge, .num-coin, textarea.blank, textarea.blank.blank--inline, .unit-head .no),
+  #sheetPrintArea :is([style*="font-size: 9px"], [style*="font-size: 10px"], [style*="font-size: 11px"], [style*="font-size: 12px"], [style*="font-size: 13px"],
+    [style*="font-size: 13.5px"], [style*="font-size: 14px"], [style*="font-size: 14.5px"], [style*="font-size: 15px"]),
+  .sheet-progress, .sheet-progress *, .sheet-side, .sheet-side * { font-size: var(--msi-size-text-min) !important; }
+  .sheet-progress .sp-count .big, .sheet-progress .sp-count .big * { font-size: 20px !important; }   /* 원래 크기 그대로 */
   .sg-btn, .gd-close { transition: transform .08s ease, box-shadow .08s ease, background-color .12s ease; }
   .sg-btn { border-radius: 4px; }
   .sg-btn:hover, .gd-close:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 rgba(75,59,107,.35); }
@@ -2924,10 +2934,16 @@ class Component extends DCLogic {
 <script>
 /* [ai/01] 활동1·활동4 그림을 누르면 영상 재생 — 활동지 탭은 다시 그려지므로 document 위임. 끝나면 그림으로 돌아감 */
 (function () {
-  function play(box) { var v = box.querySelector(".ai-vid__v"); if (!v) return; box.classList.add("is-playing"); try { v.currentTime = 0; } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-  document.addEventListener("click", function (e) { var t = e.target; if (!t || !t.closest) return; var box = t.closest(".ai-vid"); if (box && (t.closest(".ai-vid__img") || t.closest(".ai-vid__btn"))) play(box); });
+  function label(box) { var v = box.querySelector(".ai-vid__v"), b = box.querySelector(".ai-vid__btn"); if (!b || !v) return;
+    b.textContent = !box.classList.contains("is-playing") ? "▶ 움직이는 모습 보기" : (v.paused ? "▶ 이어 보기" : "⏸ 일시정지"); }
+  function play(box) { var v = box.querySelector(".ai-vid__v"); if (!v) return; box.classList.add("is-playing"); try { v.currentTime = 0; } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); label(box); }
+  document.addEventListener("click", function (e) { var t = e.target; if (!t || !t.closest) return; var box = t.closest(".ai-vid"); if (!box) return;
+    var v = box.querySelector(".ai-vid__v");
+    if (t.closest(".ai-vid__btn") && box.classList.contains("is-playing") && v) { if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); label(box); return; }   // 재생 중 버튼 = 일시정지 · 이어 보기
+    if (t.closest(".ai-vid__img") || t.closest(".ai-vid__btn")) play(box); });
+  ["play", "pause"].forEach(function (ev) { document.addEventListener(ev, function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) label(t.closest(".ai-vid")); }, true); });   // 영상 자체 조작줄로 멈춰도 버튼 글이 맞게
   document.addEventListener("keydown", function (e) { var t = e.target; if (!t || !t.classList || !t.classList.contains("ai-vid__img")) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); play(t.closest(".ai-vid")); } });
-  document.addEventListener("ended", function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) { var b = t.closest(".ai-vid"); if (b) b.classList.remove("is-playing"); } }, true);
+  document.addEventListener("ended", function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) { var b = t.closest(".ai-vid"); if (b) { b.classList.remove("is-playing"); label(b); } } }, true);
 })();
 </script>
 </body>

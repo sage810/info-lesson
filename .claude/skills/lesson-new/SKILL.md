@@ -36,6 +36,7 @@ npm run new -- <단원>/<차시> --title "제목"
   **바꾸는 건 본문(주제·목표·도입·활동·정리 내용)뿐** — 순서 · 색(역할 토큰 `var(--msi-role-…)`, 표 `docs/rules/color-map.md`) ·
   유리 효과(`--msi-glass-*`) · 움직임(`--msi-motion-*`) · 버튼 · 자동 보관 · 태블릿 도움말 버튼 · PDF 처리 · 4탭 화면은 손대지 않는다.
   색·유리 값을 글자로 새로 쓰지 말고 토큰을 쓴다(새 값이면 `design/tokens.json` 에 더하고 `node design/build.mjs`).
+  **글자는 모두 16px 이상**(선생님 지시 2026-10-20, `docs/rules/design.md` §2.2) — 틀의 「글자 최소 16px」 묶음을 지우지 말고, 새로 쓰는 글자(인라인 fontSize 포함)도 16px 이상으로. 만든 뒤 활동지 탭의 계산된 글자 크기가 모두 16px 이상인지 잰다.
   쓰지 않는 부품 카드는 통째로 지운다. CHECK_UP 은 틀처럼 누르면 바로 채점되는 O/X(맞아도 틀려도 이유).
   만든 뒤 리허설: 적기 → 다른 탭 → 돌아오기 → 새로고침 → PDF 저장(`.claude/napkin.md`).
 - **버튼은 모두 오로라 유리 알약**(선생님 지시 2026-10-16, `DESIGN.md` The Aurora Pill Rule): 일반 버튼 `class="glass-pill"`(큰 것 `glass-pill--big`),

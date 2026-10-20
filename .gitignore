@@ -35,6 +35,7 @@ secrets/
 # 수행평가 — 저장소가 공개라서 시험 날까지 이 PC 에만 둔다(선생님 결정 2026-10-02).
 # 시험 날 공개할 때 첫 줄(폴더)만 지운다. 정답 파일(answers.json)은 공개 뒤에도 계속 올리지 않는다.
 # 09·10 공개(선생님 결정 2026-10-19) — 시험 대비 자료(요약·안내 문서, summary/)는 이 PC 에만.
+
 lessons/data-analysis/09/answers.json
 lessons/data-analysis/09/summary/
 lessons/data-analysis/09/*.docx
