@@ -289,7 +289,7 @@ body.is-fs #stage{border-radius:0;box-shadow:none}
 
 /* 위: 창 제목줄 — 단계 · 카드 이름 · 제목 · 진행 점 · n / 전체 */
 #bar{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:0 22px 0 18px;border-bottom:3px solid var(--ink);background:var(--head)}
-#bar::after,#ctl::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;box-shadow:var(--msi-glass-inset-head);background:var(--msi-glass-top-head)}
+#bar::after,#ctl::after,.tm-hd::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;box-shadow:var(--msi-glass-inset-head);background:var(--msi-glass-top-head)}
 .b-ph{flex:none;padding:3px 12px;border:2.5px solid var(--ink);border-radius:8px;background:var(--white);font:700 22px/1.2 var(--round)}
 .b-code{flex:none;font:700 18px/1 var(--pixel);letter-spacing:.5px}
 .b-sep{flex:none;width:3px;height:34px;border-radius:2px;background:var(--ink);opacity:.45}
@@ -575,7 +575,37 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .lead--big{font-size:36px;font-weight:700;line-height:1.7;text-align:center}   /* 동기유발 설명(시안 B) */
 .lead--big b{padding:0 3px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
 
+/* ── ⏱ 타이머(2026-10-20 선생님 결정: 가운데 크게 · 슬라이드는 흐리게 하지 않음 · 장을 넘겨도 계속) ── */
+#cTimer[aria-pressed="true"]{--tint:var(--msi-role-base-lavender);box-shadow:var(--msi-glass-inset),inset 0 -4px 0 var(--ink),2px 2px 0 rgba(75,59,107,.3)}
+.tm{position:absolute;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none}   /* 카드 밖은 슬라이드를 그대로 누를 수 있게 */
+.tm[hidden],.tm-bd[hidden],.tm .gp[hidden]{display:none}
+.tm-card{--tm-fill:var(--msi-role-base-periwinkle);pointer-events:auto;width:900px;border:4px solid var(--ink);border-radius:24px;overflow:hidden;background:var(--msi-role-base-cream-paper);box-shadow:8px 8px 0 rgba(75,59,107,.22);animation:pop .3s var(--msi-motion-ease-spring)}
+.tm-hd{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:3px solid var(--ink);background:var(--msi-role-topic-head)}
+.tm-k{font:700 18px/1 var(--pixel);letter-spacing:.5px}
+.tm-title{font:700 28px/1.2 var(--round)}
+.tm-bd{display:flex;align-items:center;justify-content:center;gap:44px;padding:34px 36px}
+.tm-col{display:flex;flex-direction:column;align-items:center;gap:22px}
+.tm-row{display:flex;align-items:center;gap:14px}
+.tm-sel{appearance:none;-webkit-appearance:none;padding:6px 56px 6px 24px;border:3px solid var(--ink);border-radius:14px;cursor:pointer;color:var(--ink);font:700 54px/1.2 var(--round);font-variant-numeric:tabular-nums;box-shadow:3px 3px 0 rgba(75,59,107,.18);
+  background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%234b3b6b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center/30px}
+.tm-sel:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.tm-unit{font:700 44px/1 var(--round)}
+.tm-warn{margin:0;font:700 24px/1.4 var(--round);color:var(--msi-role-ui-feedback-no-ink)}
+.tm-dg{font:700 150px/1 var(--round);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.tm-disc{flex:none;width:260px;height:260px}
+.tm-disc .shd{fill:rgba(75,59,107,.18)}
+.tm-disc .face{fill:var(--white);stroke:var(--ink);stroke-width:3}
+.tm-disc .wedge{fill:var(--tm-fill)}
+.tm-disc .hand{stroke:var(--ink);stroke-width:3.5;stroke-linecap:round}
+.tm-disc .pin{fill:var(--ink)}
+.tm-card.is-soon{--tm-fill:var(--msi-role-base-butter)}
+.tm-card.is-soon .tm-hd{background:var(--msi-role-base-butter)}
+.tm-card.is-done .tm-hd{background:var(--msi-role-chip-no)}
+.tm-card.is-done .tm-dg{color:var(--msi-role-ui-feedback-no-ink)}
+.tm-card.is-paused .tm-dg{opacity:.5}
+
 @media (prefers-reduced-motion:reduce){
+  .tm-card{animation:none}
   .slide.is-on,.qb.is-open .qb-a,.ss.is-open .ss-a,.lm-s.is-open .lm-a{animation:none}
   .glow i{animation:none}
   .gp,.qb,.sc,.tl [data-col]{transition:none}
@@ -641,7 +671,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
           <div class="gk"><span class="k"><b>보기 · O/X</b></span><span>학생이 말한 답을 누르면 정답은 초록, 고른 오답은 빨강 + 이유</span></div>
           <div class="gk"><span class="k"><b>▶ 움직이는<br>모습 보기</b></span><span>그림 자리에서 영상이 나와요</span></div>
           <div class="gk"><span class="k"><b>위 진행 점</b></span><span>누르면 그 장으로 바로 가요</span></div>
-          <div class="gk"><span class="k"><b>아래 버튼</b></span><span>◀ 이전 · 다음 ▶ · ⛶ 전체화면<br>👀 모두 보기 · 🙈 가리기</span></div>
+          <div class="gk"><span class="k"><b>아래 버튼</b></span><span>◀ 이전 · 다음 ▶ · ⛶ 전체화면 · ⏱ 타이머<br>👀 모두 보기 · 🙈 가리기</span></div>
         </div>
       </div>
       <p class="guide-tip">한글 입력 상태여도 A · R · F 가 돼요. 다음 장(▶ 또는 Space)은 동기유발이에요.</p>
@@ -979,6 +1009,26 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       </div>
     </section>
 
+    <!-- ⏱ 타이머 카드 — ⏱ 버튼으로 열고 닫음. 장(.slide)이 아니라서 장을 넘겨도 계속 보이고 흐름 -->
+    <div class="tm" id="timer" role="region" aria-label="타이머" hidden>
+      <div class="tm-card">
+        <div class="tm-hd"><span class="tm-k">TIMER</span><b class="tm-title" id="tmTitle">⏱ 타이머</b></div>
+        <div class="tm-bd" id="tmSetup">
+          <div class="tm-col">
+            <div class="tm-row"><select class="tm-sel" id="tmMin" aria-label="분"></select><span class="tm-unit" aria-hidden="true">분</span><select class="tm-sel" id="tmSec" aria-label="초"></select><span class="tm-unit" aria-hidden="true">초</span></div>
+            <button type="button" class="gp gp--big" id="tmStart">▶ 시작</button>
+            <p class="tm-warn" id="tmWarn" hidden>10초 이상 골라 주세요.</p>
+          </div>
+        </div>
+        <div class="tm-bd" id="tmRun" hidden>
+          <svg class="tm-disc" viewBox="0 0 100 100" aria-hidden="true"><circle class="shd" cx="52" cy="52" r="46"/><circle class="face" cx="50" cy="50" r="46"/><path class="wedge" id="tmWedge" d=""/><line class="hand" id="tmHand" x1="50" y1="50" x2="50" y2="14"/><circle class="pin" cx="50" cy="50" r="5"/></svg>
+          <div class="tm-col">
+            <span class="tm-dg" id="tmDg" role="timer" aria-label="남은 시간">05:00</span>
+            <div class="tm-row"><button type="button" class="gp gp--big" id="tmPause">⏸ 멈춤</button><button type="button" class="gp gp--big" id="tmMute" style="--tint:var(--msi-role-chip-no)" hidden>🔕 소리 끄기</button><button type="button" class="gp gp--big" id="tmReset">↺ 다시</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer id="ctl">
@@ -986,6 +1036,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <button type="button" class="gp" id="cAll">👀 이 화면 정답 모두 보기</button>
     <button type="button" class="gp" id="cHide">🙈 다시 가리기</button>
     <span class="spacer" aria-hidden="true"></span>
+    <button type="button" class="gp" id="cTimer" aria-pressed="false" aria-controls="timer">⏱ 타이머</button>
     <button type="button" class="gp" id="cFs"><span aria-hidden="true">⛶</span><span class="t">전체화면</span></button>
     <button type="button" class="gp" id="cNext">다음 ▶</button>
   </footer>
@@ -1190,7 +1241,8 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
   document.addEventListener('keydown', function (e) {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     var tag = e.target && e.target.tagName, c = e.code, k = e.key;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (c === 'Space' && e.target.closest && e.target.closest('#timer')) return;   // 타이머 단추에 초점이 있으면 스페이스 = 그 단추
     if (c === 'Space' && tag === 'VIDEO') return;   // 영상에 초점이 있으면 스페이스 = 재생·멈춤
     if (c === 'Space') { e.preventDefault(); if (!revealNext()) go(cur + 1); }   // 정답 하나씩 → 다 보이면 다음 장
     else if (k === 'ArrowRight' || k === 'PageDown') { e.preventDefault(); go(cur + 1); }
@@ -1207,6 +1259,123 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
   var start = parseInt((location.hash || '').slice(1), 10);
   go(start >= 1 && start <= N ? start - 1 : 0);
   window.__present = { go: go, revealAll: revealAll, count: N, current: function () { return cur; } };   // 점검 스크립트용
+})();
+</script>
+<script>
+/* ⏱ 타이머 — 분 0~30 · 초 10초 단위(고른 값은 이 기기에 기억), 마지막 1분(전체의 20% 이하) 노랑, 끝나면 알림음 3번 + 연어색.
+   ⏱ 를 다시 누르면 멈추고 사라짐(선생님 결정 2026-10-20). 시간은 끝나는 시각으로 계산하고 알림음은 오디오 시계에 미리 예약(참고 github.com/sage810/timer) */
+(function () {
+  'use strict';
+  var byId = function (id) { return document.getElementById(id); };
+  var btn = byId('cTimer'), box = byId('timer'), card = box.querySelector('.tm-card'), live = byId('live');
+  var el = { title: byId('tmTitle'), setup: byId('tmSetup'), run: byId('tmRun'), min: byId('tmMin'), sec: byId('tmSec'), start: byId('tmStart'), warn: byId('tmWarn'),
+    dg: byId('tmDg'), wedge: byId('tmWedge'), hand: byId('tmHand'), pause: byId('tmPause'), mute: byId('tmMute'), reset: byId('tmReset') };
+  var KEY = 'msi-present-timer';
+  var S = { phase: 'setup', total: 0, endAt: 0, remain: 0, paused: false };
+  var raf = 0, finT = 0, ringT = 0;
+
+  function fill(sel, lo, hi, step) { for (var i = lo; i <= hi; i += step) { var o = document.createElement('option'); o.value = String(i); o.textContent = (i < 10 ? '0' : '') + i; sel.appendChild(o); } }
+  fill(el.min, 0, 30, 1); fill(el.sec, 0, 50, 10);
+  var saved = null; try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  el.min.value = String(saved && saved.m >= 0 && saved.m <= 30 ? saved.m : 5);
+  el.sec.value = String(saved && saved.s >= 0 && saved.s <= 50 && saved.s % 10 === 0 ? saved.s : 0);
+  if (!el.min.value) el.min.value = '5';
+  if (!el.sec.value) el.sec.value = '0';
+
+  // 알림음 — 「딩·동·댕」 3번(4초 간격)
+  var ac = null, chimes = [], armed = false;
+  function audio(after) {
+    try {
+      if (!ac) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ac = new AC(); }
+      if (!ac) return;
+      if (ac.state === 'running') { if (after) after(); }
+      else { var p = ac.resume(); if (p && p.then) p.then(function () { if (after) after(); }).catch(function () {}); }
+    } catch (e) {}
+  }
+  function chimeAt(t) {
+    [[784, 0], [988, 0.22], [1175, 0.44]].forEach(function (x) {
+      try {
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = 'sine'; o.frequency.value = x[0];
+        g.gain.setValueAtTime(0.0001, t + x[1]); g.gain.exponentialRampToValueAtTime(0.22, t + x[1] + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + x[1] + 1.3);
+        o.connect(g); g.connect(ac.destination); o.start(t + x[1]); o.stop(t + x[1] + 1.4); chimes.push({ o: o, g: g });
+      } catch (e) {}
+    });
+  }
+  function cancelChimes() { chimes.forEach(function (c) { try { c.o.stop(); } catch (e) {} try { c.g.disconnect(); } catch (e) {} }); chimes = []; armed = false; }
+  function ringIn(ms) { cancelChimes(); if (!ac || ac.state !== 'running') return; var t0 = ac.currentTime + Math.max(0, ms) / 1000 + 0.05; chimeAt(t0); chimeAt(t0 + 4); chimeAt(t0 + 8); armed = true; }
+
+  // 화면 꺼짐 막기(타이머가 흐르는 동안)
+  var wake = null;
+  function wakeOn() { try { if ('wakeLock' in navigator && !wake && document.visibilityState === 'visible') navigator.wakeLock.request('screen').then(function (w) { wake = w; w.addEventListener('release', function () { wake = null; }); }).catch(function () {}); } catch (e) {} }
+  function wakeOff() { try { if (wake) wake.release(); } catch (e) {} wake = null; }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && S.phase === 'run' && !S.paused) { wakeOn(); loop(); } });
+
+  // 그리기
+  function remaining() { return S.paused ? S.remain : Math.max(0, S.endAt - Date.now()); }
+  function fmt(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60), r = s % 60; return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r; }
+  function pt(r, a) { var rad = a * Math.PI / 180; return [(50 + r * Math.sin(rad)).toFixed(2), (50 - r * Math.cos(rad)).toFixed(2)]; }
+  function wedge(f) {
+    if (f >= 0.9995) return 'M50 10 A40 40 0 1 1 50 90 A40 40 0 1 1 50 10 Z';
+    if (f <= 0.0005) return '';
+    var p = pt(40, f * 360); return 'M50 50 L50 10 A40 40 0 ' + (f > 0.5 ? 1 : 0) + ' 1 ' + p[0] + ' ' + p[1] + ' Z';
+  }
+  var lastSec = -1;
+  function render() {
+    var rem = S.phase === 'done' ? 0 : remaining(), f = S.total ? Math.min(1, Math.max(0, rem / S.total)) : 0;
+    el.wedge.setAttribute('d', wedge(f));
+    var h = pt(36, f * 360); el.hand.setAttribute('x2', h[0]); el.hand.setAttribute('y2', h[1]);
+    var soon = S.phase === 'run' && rem <= Math.min(60000, S.total * 0.2);
+    card.classList.toggle('is-soon', soon); card.classList.toggle('is-done', S.phase === 'done'); card.classList.toggle('is-paused', S.phase === 'run' && S.paused);
+    el.title.textContent = S.phase === 'setup' ? '⏱ 타이머' : S.phase === 'done' ? '⏰ 시간 끝!' : S.paused ? '⏸ 멈춤' : soon ? '곧 끝나요' : '남은 시간';
+    el.setup.hidden = S.phase !== 'setup'; el.run.hidden = S.phase === 'setup';
+    el.pause.hidden = S.phase !== 'run'; el.pause.textContent = S.paused ? '▶ 계속' : '⏸ 멈춤';
+    var s = Math.ceil(rem / 1000);
+    if (s !== lastSec) { el.dg.textContent = fmt(rem); el.dg.setAttribute('aria-label', '남은 시간 ' + Math.floor(s / 60) + '분 ' + (s % 60) + '초'); lastSec = s; }
+  }
+  function loop() {
+    cancelAnimationFrame(raf);
+    var step = function () { if (S.phase !== 'run' || S.paused || box.hidden) return; if (remaining() <= 0) { finish(); return; } render(); raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  }
+  function armFinish() { clearTimeout(finT); if (S.phase === 'run' && !S.paused) finT = setTimeout(function () { if (S.phase === 'run' && !S.paused && remaining() <= 0) finish(); else armFinish(); }, Math.max(0, S.endAt - Date.now()) + 40); }
+
+  // 동작
+  function start(ms) {
+    S.phase = 'run'; S.total = ms; S.remain = ms; S.endAt = Date.now() + ms; S.paused = false; lastSec = -1;
+    audio(function () { ringIn(remaining()); });
+    wakeOn(); render(); armFinish(); loop();
+  }
+  function pause() { S.remain = remaining(); S.paused = true; clearTimeout(finT); cancelChimes(); render(); }
+  function resume() { S.endAt = Date.now() + S.remain; S.paused = false; audio(function () { ringIn(remaining()); }); render(); armFinish(); loop(); }
+  function stopRing() { cancelChimes(); clearTimeout(ringT); el.mute.hidden = true; }
+  function finish() {
+    clearTimeout(finT); cancelAnimationFrame(raf); wakeOff();
+    S.phase = 'done'; S.paused = false; render();
+    if (!armed) audio(function () { var t0 = ac.currentTime + 0.05; chimeAt(t0); chimeAt(t0 + 4); chimeAt(t0 + 8); });   // 미리 예약하지 못했으면 지금 울림
+    armed = false;
+    el.mute.hidden = false; clearTimeout(ringT); ringT = setTimeout(function () { el.mute.hidden = true; }, 9600);
+    if (live) live.textContent = '타이머 — 시간이 다 됐어요';
+  }
+  function toSetup() { clearTimeout(finT); cancelAnimationFrame(raf); stopRing(); wakeOff(); S.phase = 'setup'; S.paused = false; render(); }
+  function open() { box.hidden = false; btn.setAttribute('aria-pressed', 'true'); toSetup(); }
+  function close() { toSetup(); box.hidden = true; btn.setAttribute('aria-pressed', 'false'); el.warn.hidden = true; }
+
+  var blurAfter = function (fn) { return function (e) { fn(); if (e.detail && e.currentTarget.blur) e.currentTarget.blur(); }; };   // 마우스로 누른 뒤에도 스페이스가 「정답 하나씩」으로 가게
+  btn.addEventListener('click', blurAfter(function () { if (box.hidden) open(); else close(); }));
+  el.start.addEventListener('click', blurAfter(function () {
+    var m = Number(el.min.value), s = Number(el.sec.value), ms = (m * 60 + s) * 1000;
+    if (ms <= 0) { el.warn.hidden = false; el.min.focus(); return; }
+    el.warn.hidden = true;
+    try { localStorage.setItem(KEY, JSON.stringify({ m: m, s: s })); } catch (e) {}
+    start(ms);
+  }));
+  [el.min, el.sec].forEach(function (x) { x.addEventListener('change', function () { el.warn.hidden = true; }); });
+  el.pause.addEventListener('click', blurAfter(function () { if (S.paused) resume(); else pause(); }));
+  el.mute.addEventListener('click', blurAfter(stopRing));
+  el.reset.addEventListener('click', blurAfter(toSetup));
+  render();
+  window.__timer = { open: open, close: close, start: start, state: function () { return { open: !box.hidden, phase: S.phase, paused: S.paused, remain: remaining(), soon: card.classList.contains('is-soon'), title: el.title.textContent, digits: el.dg.textContent }; } };   // 점검 스크립트용
 })();
 </script>
 </body>
