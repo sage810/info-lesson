@@ -1,4 +1,4 @@
-# 「활동지 양식.docx」로 새 차시 만들기 (1판 2026-09-30 · 2판 2026-10-17)
+# 「활동지 양식.docx」로 새 차시 만들기 (1판 2026-09-30 · 2판 2026-10-17 · 2판 고침 2026-10-20)
 
 선생님이 `docs/templates/활동지 양식.docx` 에 내용을 적어 와서 **"이 양식으로 N차시 만들어줘"** 라고 할 때 따른다.
 PDF 로 만들 때(`from-pdf.md`)와 흐름·부품·확인은 같고, **읽는 법과 칸·표기 해석**만 다르다.
@@ -28,7 +28,7 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 | 학습 목표 | TODAY_GOALS 목표 상자(`num-coin`) | 초안 |
 | 도입 — 동기유발 (제목 · 내용) | `도입` WARM_UP — 제목 → `.m-title`, 내용 → 본문·부품 | 초안 |
 | 도입 — 학습주제 제시 (제목 · 내용) | `도입` TODAY_TOPIC(학습주제 제시) | 초안 |
-| 활동 n **(꼭, 1개 이상)** (제목 · 내용) | `전개` ACTIVITY_n — 제목 → 질문 스티커 `.m-title--q`, 내용의 `1. 2. 3.` → 단계 소제목 `.m-hd2` + 그 아래 부품 | 0개면 묻는다. 제목만 비면 초안 |
+| 활동 n **(꼭, 1개 이상)** (제목 · 내용) | `전개` ACTIVITY_n — 제목 → `.m-title`(글자만, 질문 스티커 안 씀 — `parts.md` §1), 내용의 `1. 2. 3.` → 단계 소제목 `.m-hd2` + 그 아래 부품 | 0개면 묻는다. 제목만 비면 초안 |
 | 정리 — 핵심 정리 (제목 · 내용) | `정리` KEY_SUMMARY(order.md 이름은 "핵심 요약") | 초안 |
 | 정리 — 형성평가 (문제) | `정리` CHECK_UP — 실제로 눌러서 채점되는 O/X 등(`num-coin--lilac`) | 초안 |
 
@@ -45,7 +45,7 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 | 양식 표기 | 부품 |
 |---|---|
 | `1. 2. 3.` (활동 내용의 단계) | 단계 소제목 `.m-hd2`("1. …"), 단계 글 안 이름표는 그 아래 부품으로 |
-| `[[정답]]` (문장 속) | 문장 속 글자 칸 `.st-mean` + `textarea.blank.blank--inline`(03). 정답은 `answers.json` fill |
+| `[[정답]]` (문장 속) | 문장 속 글자 칸 `.st-mean` + `textarea.blank.blank--inline`(03). 정답은 `answers.json` fill. **핵심 정리(KEY_SUMMARY)에서는 이름표 칸** `span.ca-slot` — 표의 낱말 칸까지, 이름표 모음 = 정답 낱말들(`parts.md` §3) |
 | `[[ ]]` | 같은 칸, 정답 없음(정답지 비움) |
 | `[쓰기 칸 N줄]` · `예시:` | `textarea.blank rows=N`. 예시 답은 placeholder 로, 정답지에서는 비움("정답지에 채울 칸"이 "예시 답도"면 채움) |
 | `[안내]` · `[Tip]` · `[주의]` | `.callout--info` · `.callout--reason` · `.callout--info`(⚠️ 라벨) — 콜아웃은 냉색만 |
@@ -56,7 +56,8 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 | `[O/X]` (`→ O` / `-> X`) | 틀(ai/01)의 O/X — **누르면 바로 채점, 맞아도 틀려도 이유**(`(이유: …)` 를 둘 다에 씀, 없으면 새로 씀). 형성평가 CHECK_UP 모양(`order.md` §2-0-5, `parts.md` §3) |
 | `[이름표 끌어 놓기]` (`칸 → 정답`) | 공용 `chip-slot`, 여러 개면 `data-ca-group` + 버튼 채점(02) |
 | `[순서 배열]` | `seq-order` — 새 차시는 ai/01 표식: `.seq-activity#id` + `data-fb-all/-partial/-none/-incomplete`, 칸 `data-answer` 차례가 정답, 버튼 `[data-seq-check]`·`[data-seq-reset]`(04 는 고정 id 그대로) |
-| `[그림]` | 새 SVG(`from-pdf.md` §6) — 글자는 CookieRun Bold(`references/svg-font.mjs`), 비교는 두 칸·화살표 이름은 옆(`parts.md` §4). 받은 파일·영상(mp4)이면 「그림을 누르면 영상」 `.ai-vid` |
+| `[그림]` | 새 SVG(`from-pdf.md` §6) — 글자는 CookieRun Bold(`references/svg-font.mjs`), 비교는 두 칸·화살표 이름은 옆(`parts.md` §4). 받은 그림 파일은 그대로 `assets/` |
+| `[영상]` | 「그림을 누르면 영상」 `.ai-vid`(그림 → ▶ 버튼 → 단계 소제목 순서). 수 MB 큰 영상은 사이트에만 `<!--msi-pages-only-->`(구글 사이트용엔 그림만) — `parts.md` §4. 유튜브는 `[링크]` |
 | `[붙여넣기 칸]` | `paste-zone`(06·07) |
 | `[링크]` | 새 탭 버튼(`.gm-btn` 모양) |
 | `[메모]` | 만드는 방법 부탁 — 활동지에 넣지 않는다 |
@@ -67,7 +68,7 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 
 ## 4. 만들 때 부탁 (모두 선택)
 
-비었으면 아래 기본값을 쓰고 **알린다**.
+양식에서 이 칸은 뺐다(선생님이 Word 로 고친 판 2026-10-17). 선생님이 `[메모]`·말로 부탁하면 따르고, 없으면 아래 기본값을 쓰고 **알린다**.
 
 | 칸 | 기본값 |
 |---|---|
@@ -77,7 +78,8 @@ node .claude/skills/lesson-new/references/docx-read.mjs "<채운 양식.docx>" >
 | 데이터 나눠 주는 법 | 묻는다(수업자료 폴더 / 활동지 내려받기 버튼) |
 | 맨 앞 안내 상자 | 빼기(지금 틀에 없음). "넣기"면 목표 다음·도입 앞에(`order.md` §1) |
 | 교사용 정답지에 채울 칸 | 정답 있는 칸만 |
-| 채점 방식 | 활동마다 알맞게(고르기 칩은 누르면 바로, O/X 묶음은 ✅ 정답 확인) |
+| 채점 방식 | 활동마다 알맞게 — 하나 고르기·O/X 는 누르면 바로(맞아도 틀려도 이유), 이름표·순서는 ✅ 정답 확인(`parts.md` §3) |
+| 수업용 슬라이드 | 활동지가 확정되면 만들지 묻는다(`lesson-new` SKILL §6, `docs/rules/present.md`) |
 
 ## 5. 1판(미션 1~5)으로 채워 온 양식
 
@@ -95,6 +97,10 @@ spec.md 의 원자료에는 양식 파일 이름을, 흐름 표는 `order.md` �
 ## 양식 고치기
 
 양식 원본은 `references/template-docx.mjs`(docx 패키지는 scratchpad 에만 설치) → `docs/templates/활동지 양식.docx`.
+**저장소의 양식은 선생님이 Word 로 손본 판일 수 있다**(마지막 수정자가 「신현중학교 정보」가 아니면 — `docProps/core.xml` 의 `lastModifiedBy`).
+그때는 스크립트로 새로 만들어 덮어쓰지 말고, 먼저 `docx-read.mjs` 로 스크립트 판과 글을 비교해 선생님이 바꾼 곳을 스크립트에도 옮긴다.
+작은 고침은 양식 docx 의 `word/document.xml` 을 직접 고친다(jszip — scratchpad 의 docx 패키지에 들어 있음, 2026-10-20 처음).
+고친 뒤 스크립트로 만든 판과 `docx-read` 글이 같아야 한다.
 칸을 바꾸면 이 파일 §2 와 양식의 「한눈에」 표를, 표기를 새로 만들면 이 파일 §3 표와 양식의 「📎 참고 1. 활동 표기법」 표를 같이 고친다.
 확인:
 1. `docx-read.mjs` 로 다시 읽어 구조(✍️ ~ 📎 사이 칸)가 그대로인지.

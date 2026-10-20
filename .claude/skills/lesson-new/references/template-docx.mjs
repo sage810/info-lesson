@@ -1,6 +1,8 @@
 // 「활동지 양식.docx」 만들기 — 선생님이 이 양식에 내용을 적어 오면 활동지로 만든다(from-template.md).
 // 2판(2026-10-17): 활동지 순서(docs/rules/order.md)와 같은 칸 — 기본 정보(학습 주제·차시·단원·학습 목표) → 도입(동기유발·학습주제 제시)
 //   → 활동 1·2·3…(개수 자유) → 정리(핵심 정리·형성평가) → 만들 때 부탁. 꼭 = 학습 주제·활동, 나머지는 선택(비우면 Claude 초안, "없음"이면 뺌).
+// 2판 고침(2026-10-20): 선생님이 Word 로 고친 판(10-17)에 맞춤 — 「만들 때 부탁」 칸 없음 · (선택) 표시 없음(「꼭」은 활동·한눈에 표만).
+//   + ai/01 규칙 반영: 표기 [영상] · 핵심 정리 [[정답]] = 이름표 칸. 수업용 슬라이드는 양식에 칸을 두지 않고 활동지가 끝난 뒤 묻는다(lesson-new §6).
 //   쪽 순서: 1쪽 사용법·한눈에 → ✍️ 여기부터 작성 → 📎 참고(표기법·작성 예시). Claude 는 ✍️ ~ 📎 사이만 읽는다.
 // Google 문서 · Claude 웹에서 깨지지 않게: 기본 제목 스타일(제목 1~3), DXA 너비 표, 글상자·도형·양식 컨트롤 없음, 표기는 글자([ ], [[ ]])만.
 // 실행(docx 패키지는 scratchpad 에만):
@@ -31,11 +33,11 @@ const bullet = (str) => new Paragraph({ numbering: { reference: 'bul', level: 0 
 const goal = () => new Paragraph({ numbering: { reference: 'goal', level: 0 }, spacing: { after: 60 }, children: [] });
 const blank = () => new Paragraph({ children: [] });
 
-// 꼭 / 선택 표시 — 꼭은 굵은 빨강, 선택은 회색
+// 꼭 표시 — 굵은 빨강. 선택 표시는 선생님 판(10-17)에서 뺐다 → 찍지 않음
 const tagRun = (kind, extra = '', size) => new TextRun({ text: ` (${kind}${extra})`, bold: kind === '꼭', color: kind === '꼭' ? MUST : GRAY, ...(size ? { size } : {}) });
-const Hk = (level, text, kind, extra = '') => new Paragraph({ heading: level, children: [new TextRun(text), tagRun(kind, extra, 20)] });
-const lab = (text, kind) => new Paragraph({ spacing: CELL, children: [new TextRun({ text, bold: true }), tagRun(kind)] });
-const kindP = (kind) => new Paragraph({ spacing: CELL, children: [new TextRun({ text: kind, bold: kind.startsWith('꼭'), color: kind.startsWith('꼭') ? MUST : GRAY })] });
+const Hk = (level, text, kind, extra = '') => new Paragraph({ heading: level, children: [new TextRun(text), ...(kind === '꼭' ? [tagRun(kind, extra, 20)] : [])] });
+const lab = (text) => new Paragraph({ spacing: CELL, children: [new TextRun({ text, bold: true })] });   // 기본 정보 칸 이름 — 표시 없음(선생님 판)
+const kindP = (kind) => new Paragraph({ spacing: CELL, children: kind.startsWith('꼭') ? [new TextRun({ text: kind, bold: true, color: MUST })] : [] });
 
 const border = { style: BorderStyle.SINGLE, size: 4, color: LINE };
 // 표: 너비는 표(columnWidths)와 칸(width) 둘 다 DXA — 퍼센트는 Google 문서에서 깨짐
@@ -71,7 +73,7 @@ const howTo = [
   bullet('선택 칸을 비워 두면 Claude 가 초안을 써서 확인받아요. 활동지에서 빼려면 **없음**, 만들 때 물어봐 주길 원하면 **물어봐 줘** 라고 적어요.'),
   bullet('활동 수는 자유예요. 「활동 3」 덩어리를 복사해 붙이고 번호만 바꿔요. 남는 활동은 지워요.'),
   bullet('빈칸·퀴즈는 대괄호 이름표로 적어요. 예) 데이터의 [[패턴]]을 찾아본다 · [O/X] · [쓰기 칸 3줄] — 목록은 「📎 참고 1」. 말로 적어도 돼요.'),
-  bullet('내용만 적어요(색·배치는 틀대로). 그림은 [그림] 으로 설명하고 파일은 따로 줘요.'),
+  bullet('내용만 적어요(색·배치는 틀대로). 그림은 [그림], 동영상은 [영상] 으로 설명하고 파일은 따로 줘요.'),
   bullet('Google 문서로 써도 돼요(파일 → 다운로드 → Microsoft Word). 학생 이름·학번은 적지 않아요.'),
 ];
 
@@ -85,7 +87,7 @@ const map = [
     ['도입 — 동기유발 · 학습주제 제시', '도입 카드 2장 — 수업을 여는 질문 · 오늘 배울 것 소개', [kindP('선택')]],
     ['활동 1, 2, 3 …', '전개 카드 — 활동마다 한 장', [kindP('꼭 (1개 이상)')]],
     ['정리 — 핵심 정리 · 형성평가', '정리 카드 2장 — 오늘 꼭 기억할 것 · 눌러서 채점하는 문제', [kindP('선택')]],
-    ['만들 때 부탁', '틀 · 공개 · 파일 · 정답지 · 채점 방식', [kindP('선택 (비우면 기본값)')]],
+    ['만들 때 부탁', '틀 · 공개 · 파일 · 정답지 · 채점 방식', ''],
   ]),
 ];
 
@@ -124,24 +126,13 @@ const form = [
 
   Hk(HeadingLevel.HEADING_2, '정리', '선택'),
   Hk(HeadingLevel.HEADING_3, '핵심 정리', '선택'),
-  note('※ 오늘 꼭 기억할 것 — 문장이나 표로. 문장 속 [[정답]] 은 학생이 채우는 빈칸이 돼요.'),
+  note('※ 오늘 꼭 기억할 것 — 문장이나 표로. [[정답]] 은 학생이 이름표를 끌어다 놓는 칸이 돼요(이름표 = 정답 낱말들). 표의 낱말 칸에도 써요.'),
   label('제목: '), label('내용: '), blank(), blank(),
   Hk(HeadingLevel.HEADING_3, '형성평가', '선택'),
   note('※ [O/X] · [하나 고르기] · [모두 고르기] 로 적어요. 예) [O/X] 다음 줄부터 「문장 → O」를 한 줄씩.'),
   label('문제: '), blank(), blank(), blank(),
 
-  Hk(HeadingLevel.HEADING_2, '만들 때 부탁', '모두 선택', ' — 비우면 기본값'),
-  table(WI, [
-    ['항목', '적기'],
-    [['틀', { note: '4탭(이용 규칙·시간표·급식·활동지) 또는 한 화면 — 비우면 4탭' }], ''],
-    [['공개', { note: '바로 공개 또는 준비 중 — 비우면 바로 공개' }], ''],
-    [['함께 주는 파일', { note: '데이터(CSV)·원자료(PDF·한글)·그림 파일 이름(있으면)' }], ''],
-    [['데이터 나눠 주는 법', { note: '수업자료 폴더 또는 활동지의 내려받기 버튼 — 비우면 물어봐요' }], ''],
-    [['맨 앞 안내 상자', { note: '「이 학습지는 이렇게 써요」·제미나이 Tip: 넣기 또는 빼기 — 비우면 빼기(지금 틀에는 없어요)' }], ''],
-    [['교사용 정답지에 채울 칸', { note: '정답 있는 칸만 또는 예시 답도 — 비우면 정답 있는 칸만' }], ''],
-    [['채점 방식', { note: '누르면 바로 채점 또는 다 고른 뒤 ✅ 정답 확인 — 비우면 활동마다 알맞게' }], ''],
-    ['그 밖에 부탁할 것', ''],
-  ], { labelCol: true }),
+  // 「만들 때 부탁」 칸은 선생님 판(10-17)에서 뺐다 — 기본값은 from-template.md §4
 ];
 
 // ── 📎 참고 1. 활동 표기법 ──
@@ -165,6 +156,7 @@ const notation = [
     ['[이름표 끌어 놓기]', '이름표 목록 한 줄 + "칸 → 정답"을 한 줄씩', ['[이름표 끌어 놓기] 이름표: 아날로그, 디지털', '체온계(수은) → 아날로그', '디지털카메라 → 디지털']],
     ['[순서 배열]', '올바른 순서대로 적어요. 활동지에서는 섞어서 보여 줘요.', '[순서 배열] 1) 문제 정하기 2) 데이터 수집 3) 데이터 분석 4) 결과 공유'],
     ['[그림]', '필요한 그림을 말로 설명(또는 따로 줄 파일 이름)', '[그림] 체온계 그림, 화면에 36.5 표시'],
+    ['[영상]', '보여 줄 동영상 파일(mp4, 따로 줌)과 틀 자리. 그림을 누르면 재생돼요. 유튜브 영상은 [링크] 로', '[영상] 일반몬스터와_AI몬스터.mp4 — 비교 그림을 누르면 재생'],
     ['[붙여넣기 칸]', '학생이 캡처한 그래프·화면을 붙여 넣는 칸', '[붙여넣기 칸] 내가 만든 막대그래프 캡처'],
     ['[링크]', '열어 볼 사이트·영상 주소', '[링크] 제미나이 열기 https://gemini.google.com'],
     ['[메모]', 'Claude 에게만 하는 말(활동지에는 안 나와요)', '[메모] 이 표는 폰에서 보기 좋게 세로로 바꿔 줘.'],
@@ -249,7 +241,7 @@ const doc = new Document({
     children: [
       new Paragraph({ heading: HeadingLevel.TITLE, children: [new TextRun('정보 수업 활동지 양식')] }),
       P('내용을 적어 주면 Claude 가 수업 활동지로 만들어요. 칸은 활동지 순서 그대로예요.'),
-      note('양식 2판 · 2026-10-17 · 신현중학교 정보'),
+      note('양식 2판 · 2026-10-17 (10-20 고침) · 신현중학교 정보'),
       ...howTo, ...map, ...form, ...notation, ...example,
     ],
   }],
