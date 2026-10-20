@@ -1,5 +1,7 @@
 // GitHub Pages 첫 화면 — 수업 활동지(lessons/*/lesson.json + lessons/units.json) · 수업 자료(materials/). 손으로 고칠 필요 없음.
 // 디자인은 docs/rules/design.md 의 토큰(잉크·크림 종이·격자 배경·파스텔 헤더)을 그대로 쓴다.
+import fs from 'node:fs';
+import path from 'node:path';
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ACCENTS = ['#a9dce4', '#c4d8f7', '#fbe6a2', '#d6c4f5', '#bfe9dd', '#eec6ea', '#f7bfb2', '#e3e0b0'];
 // 이 확장자는 새 탭에서 열고, 나머지(pptx·hwp·zip …)는 내려받는다
@@ -15,12 +17,13 @@ export function renderIndex(lessons, units = [], materials = []) {
     byUnit.get(l.unit).items.push(l);
   }
   // 차시 한 줄 — 줄 전체가 학생용 링크(제목 링크를 줄 크기로 늘림), 아래 작은 줄에 학생용 · 교사용 링크
+  // 차시 폴더에 present.html 이 있으면 교사용 다음에 「수업용 슬라이드」(선생님 지시 2026-10-20, docs/rules/present.md)
   const lessonRow = (l) => `
           <li class="row live">
             <span class="num">${esc(l.no)}</span>
             <div class="txt">
               <a class="name" href="${esc(l.unit)}/${esc(l.no)}/">${esc(l.meta.title)}</a>${l.meta.status === 'draft' ? ' <span class="draft">준비 중</span>' : ''}
-              <div class="subs"><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/">학생용</a><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/teacher.html">교사용</a></div>
+              <div class="subs"><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/">학생용</a><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/teacher.html">교사용</a>${fs.existsSync(path.join(l.dir, 'present.html')) ? `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/present.html">수업용 슬라이드</a>` : ''}</div>
             </div>
           </li>`;
   const soonRow = (no) => `
@@ -134,7 +137,7 @@ export function renderIndex(lessons, units = [], materials = []) {
   </div>
   <main>
     <ul class="notice">
-      <li>차시를 골라 열어요. 교사용은 진행률 위젯이 없는 화면이에요.</li>
+      <li>차시를 골라 열어요. 교사용은 진행률 위젯이 없는 화면, 수업용 슬라이드는 선생님이 띄워 정답을 하나씩 보여 주는 화면이에요.</li>
       <li>자동 생성 페이지 · lessons/ 와 materials/ 폴더를 바꾸면 다음 배포 때 반영돼요.</li>
     </ul>
     <section class="area" id="lessons">

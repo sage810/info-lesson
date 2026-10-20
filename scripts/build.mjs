@@ -8,7 +8,7 @@
 // 결과
 //   dist/pages/index.html                         첫 화면: 수업 활동지(차시 목록) · 수업 자료
 //   dist/pages/<단원>/<차시>/index.html · teacher.html   학생용 · 교사용(진행률 위젯 숨김)
-//   dist/pages/<단원>/<차시>/present.html             수업용 화면(차시 폴더에 present.html 이 있을 때만, 목록엔 안 나옴)
+//   dist/pages/<단원>/<차시>/present.html             수업용 화면(차시 폴더에 present.html 이 있을 때만, 첫 화면 「수업용 슬라이드」 버튼)
 //   dist/pages/materials/<파일>                    수업 자료 (materials/ 그대로 복사)
 //   dist/embed/<단원>-<차시>.html · .teacher.html        한 파일짜리 (구글 사이트 "삽입할 코드"용)
 import fs from 'node:fs';
@@ -47,7 +47,7 @@ export function build(args = []) {
         }
         out[teacher ? 'pagesTeacher' : 'pages'] = { file: rel(f), kb: Math.round(Buffer.byteLength(html) / 1024) };
       }
-      // 수업용 화면(선생님이 띄워 정답을 하나씩 공개) — 차시 폴더에 present.html 이 있으면 같은 자리에. 첫 화면 목록에는 넣지 않는다
+      // 수업용 화면(선생님이 띄워 정답을 하나씩 공개) — 차시 폴더에 present.html 이 있으면 같은 자리에. 첫 화면엔 교사용 다음 「수업용 슬라이드」 버튼(index-page.mjs)
       const present = path.join(l.dir, 'present.html');
       if (fs.existsSync(present)) {
         const { html, copies } = renderPage(l, present);

@@ -12,7 +12,7 @@
 - **고치는 곳**: `lessons/<단원>/<차시>/lesson.html` (작은 소스) · `assets/` · `answers.json` · `spec.md` · `lesson.json`
 - **공용**: `shared/` (폰트·라이브러리·여러 차시가 같이 쓰는 그림·동작 스크립트) — 바꾸면 모든 차시에 영향
 - **배포본**: `dist/` — `npm run build` 결과. **손으로 고치지 않는다**(git 에도 안 올라감)
-- **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드·수행평가 `exam.md`·교사용 `teacher.md` — 교사용엔 왼쪽 고정바 절대 없음 · 새 활동지 순서 `order.md` — 도입·전개·정리 · 역할→색 표 `color-map.md`(자동 생성)) · 이력: `docs/log/`
+- **규칙 문서**: `docs/rules/` (디자인·활동 유형·PDF·임베드·수행평가 `exam.md`·교사용 `teacher.md` — 교사용엔 왼쪽 고정바 절대 없음 · 수업용 슬라이드 `present.md` — 차시 폴더에 `present.html` 만 두면 첫 화면에 교사용 다음 버튼 자동 · 새 활동지 순서 `order.md` — 도입·전개·정리 · 역할→색 표 `color-map.md`(자동 생성)) · 이력: `docs/log/`
 - **새 차시 틀**: `lessons/_templates/order`(사이트에 안 올라감, = ai/01 「인공지능이란?」 2026-10-18) — `npm run new -- <단원>/<차시>` 의 **기본**(선생님 결정 2026-10-16: 새 차시는 지금 틀 그대로, 본문만 바꿈).
   **활동지 글자는 모두 16px 이상**(선생님 지시 2026-10-20 — `--msi-size-text-min`, `docs/rules/design.md` §2.2).
   **부품 모양 규칙 `docs/rules/parts.md`**(글자만 제목 · 가운데 정렬 · 이름표 2열 · 개념 표/카드 · O/X 즉시 채점 · 핵심 정리 이름표 · SVG 글꼴 · 그림+영상).
