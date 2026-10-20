@@ -788,7 +788,7 @@
   }
   /* ── 글자 최소 16px(선생님 지시 2026-10-20) — 수업 활동지 탭·진행률 카드에 16px 보다 작은 글자 없음.
      값은 --msi-size-text-min(design/tokens.json size). 인라인 fontSize(9~15px)도 여기서 끌어올린다. 규칙: docs/rules/design.md §글자 크기 ── */
-  #sheetPrintArea :is(.m-head .mono, .gh, .tg-hd, .ph-tag, .m-sub, .m-lead, .callout, .callout .c-lbl, .seq-num, .seq-result, .ca-result,
+  #sheetPrintArea :is(.m-head .mono, .gh, .tg-hd, .ph-tag, .m-sub, .m-lead, .callout, .callout .c-lbl, .seq-num, .seq-mark, .seq-result, .ca-result,
     .ord-sum, .ord-sum th, .ord-sum td, .ord-p, .ord-ox .q, .ai-fill, .ai-fb, .ai-ox .q .why, .ai-card p, .ai-card p.ai-card__ex,
     .glass-pill:not(.glass-pill--big), .ai-ox .glass-chip, .seq-chip, .ca-chip, .ca-slot, .m-badge, .num-coin, textarea.blank, textarea.blank.blank--inline, .unit-head .no),
   #sheetPrintArea :is([style*="font-size: 9px"], [style*="font-size: 10px"], [style*="font-size: 11px"], [style*="font-size: 12px"], [style*="font-size: 13px"],
@@ -1985,8 +1985,12 @@ class Component extends DCLogic {
       const ca = {}, sq = {};
       area.querySelectorAll('.ca-slot[id]').forEach((sl) => { const v = sl.getAttribute('data-filled'); if (v) ca[sl.id] = v; });
       area.querySelectorAll('.seq-slot[id]').forEach((sl) => { const c = sl.querySelector('.seq-chip'); if (c) sq[sl.id] = c.getAttribute('data-answer-key'); });
+      // 확인을 누른 묶음(결과 글이 보이는 것) — 탭·새로고침 뒤 다시 눌러 초록 칸·결과 글을 되살림(2026-10-20 리허설)
+      const ck = [];
+      area.querySelectorAll('[data-ca-group]').forEach((g) => { const r = g.querySelector('.ca-result'); if (r && r.textContent.trim()) ck.push('ca:' + g.getAttribute('data-ca-group')); });
+      area.querySelectorAll('.seq-activity[id]').forEach((q) => { const r = q.querySelector('.seq-result'); if (r && r.textContent.trim()) ck.push('sq:' + q.id); });
       const st = this.state;
-      return { s: { fGrade: st.fGrade, fClass: st.fClass, fNum: st.fNum, fName: st.fName, fq: st.fq, ox: st.ox }, f, z, ca, sq };
+      return { s: { fGrade: st.fGrade, fClass: st.fClass, fNum: st.fNum, fName: st.fName, fq: st.fq, ox: st.ox }, f, z, ca, sq, ck };
     };
     const writeLocal = (d) => {
       try { localStorage.setItem(this._keepKey, JSON.stringify(d)); }
@@ -2013,6 +2017,11 @@ class Component extends DCLogic {
         if (c) { sl.appendChild(c); sl.classList.add('is-filled'); }
       });
       area.querySelectorAll('.seq-tray').forEach((t) => t.classList.toggle('is-empty', !t.querySelector('.seq-chip')));
+      (k.ck || []).forEach((id) => {   // 확인했던 묶음은 같은 확인 단추를 다시 눌러 채점 표시를 그린다
+        const b = id.indexOf('ca:') === 0 ? area.querySelector('[data-ca-group="' + id.slice(3) + '"] .ca-check')
+          : area.querySelector('#' + id.slice(3) + ' [data-seq-check]');
+        if (b) b.click();
+      });
       this._keepRestoring = false;
     };
     this._keepTick = () => {
