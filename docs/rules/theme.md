@@ -67,6 +67,8 @@
 
 ## 4. 새 테마 만들기 순서
 
+> 받은 테마를 옮기고 입히는 일(2~5)은 스킬 **`lesson-theme`** 이 한다 — 도구: `.claude/skills/lesson-theme/references/`.
+
 1. **Claude Design** — 프롬프트 `docs/templates/claude-design-prompt.md`, 첨부할 지금 틀 캡처는 `node scripts/template-capture.mjs`.
 2. 받은 결과물(견본 HTML · theme.css · 테마 설명)을 `input/claude-design/<이름>/` 에 둔다.
 3. Claude Code 가 `design/themes/<이름>/theme.css` + `theme.md` 를 쓴다 — Claude Design 의 theme.css 를 바탕으로 2절 변수만 남기고,

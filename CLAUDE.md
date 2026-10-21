@@ -21,7 +21,7 @@
 - **버튼은 모두 오로라 유리 알약**(선생님 지시 2026-10-16): 일반 `glass-pill` · 고르기 `glass-chip` — 기준 `DESIGN.md`(The Aurora Pill Rule)·`docs/rules/order.md` §2-1.
   예외(지금 모양 유지): 메뉴 탭 · 보기 버튼(일간/주간/월간) · 급식 ◀ ▶ · HELP 버튼 · 태블릿 도움말 버튼.
   단 **차시 테마는 메뉴 탭 모양을 바꿀 수 있다**(선생님 결정 2026-10-22 — sticker: 분홍 트랙 안 알약, 시안 A).
-- **차시 테마**(선생님 결정 2026-10-21): 차시마다 색·모양(모서리·테두리·그림자)을 바꿀 수 있다, 글꼴은 공통. 차시 `lesson.json` 의 `"theme": "<이름>"` → 빌드가 `design/themes/<이름>/theme.css` 를 입힌다(줄 없으면 기본 테마, 지난 차시 그대로). ai/01 = `sticker`(스케치북 스티커, 2026-10-22).
+- **차시 테마**(선생님 결정 2026-10-21): 차시마다 색·모양(모서리·테두리·그림자)을 바꿀 수 있다, 글꼴은 공통. 차시 `lesson.json` 의 `"theme": "<이름>"` → 빌드가 `design/themes/<이름>/theme.css` 를 입힌다(줄 없으면 기본 테마, 지난 차시 그대로). ai/01 = `sticker`(스케치북 스티커, 2026-10-22). 받은 테마 옮기기·입히기는 스킬 `lesson-theme`.
   새 차시 `npm run new -- <단원>/<차시> --theme <이름>` · 미리보기 `npm run template-preview -- order --theme <이름>` · 테마 만들기는 Claude Design(`docs/templates/claude-design-prompt.md`) — 규칙 `docs/rules/theme.md`.
   틀에 새 모서리·테두리·그림자를 쓸 땐 숫자 대신 `--msi-shape-*`·`rgba(var(--msi-rgb-ink),…)`.
 - **수업 PPT**(시안 A 카드, 캔바용 · 선생님 결정 2026-10-18): 차시 폴더의 `ppt.json`(장 구성) → `npm run ppt -- <단원>/<차시> --check`(PowerPoint 로 그려 넘침 검사) → `--page` 로 받는 링크(아티팩트) — 스킬 `lesson-ppt`, 순서·장 모양 `docs/rules/ppt.md`. 처음 한 번 `npm --prefix scripts/ppt install`.

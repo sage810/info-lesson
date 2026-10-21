@@ -55,6 +55,7 @@ Claude Code 에게 말로 부탁하면 스킬이 알아서 합니다. 직접 할
 | 양식으로 새 차시 | `docs/templates/활동지 양식.docx` 를 채워서 "이 양식으로 08차시 만들어줘" | (Word · Google 문서 둘 다 됨. 꼭 = 학습 주제·활동, 나머지 칸은 비우면 초안 · "없음"이면 뺌) |
 | 수업 자료 올리기 | "이 PDF 수업 자료에 올려줘" | 파일을 `materials/` 에 넣기 → (제목·설명은 `materials.json`) → `npm run build` |
 | 교사용 · 정답지 | "06 정답지 PDF" | `npm run teacher -- 06` (교사용 화면은 build 때 자동) |
+| 차시 테마 (색·모양) | "Claude Design 이 테마 만들어줬어, ai/02 에 입혀줘" · `/lesson-theme` | `design/themes/<이름>/theme.css` → `npm run template-preview -- order --theme <이름>` → 차시 `lesson.json` 에 `"theme": "<이름>"` (규칙 `docs/rules/theme.md`) |
 | 수업 PPT (캔바용) | "ai/01 PPT 만들어줘" | 차시 폴더 `ppt.json` 에 장 구성 → `npm run ppt -- ai/01 --check` → `dist/ppt/ai-01/` (처음 한 번 `npm --prefix scripts/ppt install`, 규칙 `docs/rules/ppt.md`) |
 | 수업용 모션그래픽 (영상) | "ai/01 모션그래픽 만들어줘" | 차시 폴더 `motion/index.html` 에 장면 → `npm run motion -- ai/01 --sheet 5` 로 확인 → `--mp4` 로 MP4 → `dist/motion/ai-01/` (ffmpeg 없이 Chrome 이 만듦, 규칙 `docs/rules/motion.md`) |
 | 점검 | "05, 06 검수해줘" | `npm run check` |

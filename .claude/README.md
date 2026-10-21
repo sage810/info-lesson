@@ -1,6 +1,6 @@
 # 스킬 모음 — 무엇이 있고 어떻게 부르나
 
-이 저장소에는 **우리가 만든 스킬 7개(`lesson-*` · `skill-guide`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
+이 저장소에는 **우리가 만든 스킬 8개(`lesson-*` · `skill-guide`)** 와 **가져온 외부 스킬 10개**가 있고, **에이전트는 없습니다.**
 모든 일은 메인 대화에서 선생님과 주고받으며 하고, "새 눈으로 검수"처럼 따로 떼는 게 나은 일만 `lesson-check` 가 필요할 때
 기본(범용) 서브에이전트를 잠깐 씁니다. (같은 서브에이전트 호출을 자꾸 반복하게 되면 그때 `.claude/agents/` 에 하나씩 추가.)
 
@@ -17,6 +17,7 @@
 | **lesson-teacher** | 교사용 화면·정답지 PDF | `/lesson-teacher 06` · "6차시 정답지 PDF" | answers.json 채우기 → `npm run teacher` → PDF 확인 |
 | **lesson-exam** | 수행평가(시험지)를 만들 때 | `/lesson-exam` · "수행평가 B형 만들어줘" | 결정 묻기 → 비공개(.gitignore) 먼저 → 09 틀로 시험지 → answers.json(정답·허용 답·배점) → 검사·정답 노출 검사·exam-key 합계 → 제출 가로채 시험 → 선생님 체크리스트 (기준: `docs/rules/exam.md`) |
 | **lesson-ppt** | 차시 활동지로 수업 PPT(캔바용)를 만들 때 | `/lesson-ppt ai/02` · "2차시 PPT 만들어줘" | spec.md 읽기 → 장 구성 `ppt.json` → `npm run ppt --check`(PowerPoint 로 넘침 0) → `--page` 받는 링크 게시 (기준: `docs/rules/ppt.md`) |
+| **lesson-theme** | 차시 테마(색·모양)를 만들거나 입힐 때 | `/lesson-theme` · "Claude Design 이 테마 만들어줬어 (zip)" · "ai/02 에 sticker 입혀줘" · 테마 미리보기의 「아이콘 변경」 피드백 | 견본 읽기 → 결정 묻기 → `design/themes/<이름>/theme.css` → 틀 미리보기·견본 캡처 비교 → PDF 리허설 → 차시에 입히기(숫자 차시는 변수로 바꾸고 전후 같음 확인) → 아이콘 그림 (기준: `docs/rules/theme.md`) |
 | **lesson-check** | 배포 전 점검·검수 | `/lesson-check 06` · "05, 06 새 눈으로 검수해줘" | 자동 검사 + (요청 시) 서브에이전트가 better-interface 방식으로 검수 → 고를 항목만 수정 |
 | **skill-guide** | 어떤 스킬을 어떻게 쓸지 보고 고르고 싶을 때 | `? 06 빈칸 안내 문구 다듬어줘` · `스킬: 06 색 대비 확인` · `/skill-guide …` | 맞는 스킬로 계획 2~3개 비교(무엇·이번엔·조정·결과물) → 고른 것만 실행 → "앞으로도"면 조정을 저장(우리 스킬은 SKILL.md, 외부 스킬은 napkin.md) |
 
@@ -44,6 +45,7 @@
    ├─ lesson-teacher/SKILL.md                              │
    ├─ lesson-exam/   SKILL.md (기준: docs/rules/exam.md)    │ 우리 스킬
    ├─ lesson-ppt/    SKILL.md (기준: docs/rules/ppt.md)     │
+   ├─ lesson-theme/  SKILL.md + references/*.mjs(견본 캡처·아이콘·PDF 리허설·숫자→변수·전후 비교) │
    ├─ lesson-check/  SKILL.md + references/review-prompt.md│
    ├─ skill-guide/   SKILL.md                              ┘
    ├─ napkin/                                              ┐
