@@ -349,6 +349,37 @@
   --msi-part-ox-min: 56px;   /* O/X 버튼 최소 폭 */
   --msi-part-gap: 10px;   /* 버튼 줄·개념 카드·이름표 줄 사이 */
   --msi-part-figure-ratio: 680 / 300;   /* 그림을 누르면 나오는 영상 칸 기본 비율(그림과 같게, 다르면 그 영상에만 style 로) */
+  /* shape */
+  --msi-shape-radius-k: 1;   /* 둥글기 배율 — 0 이면 네모, 1.5 면 더 둥글게(알약·동그라미는 그대로) */
+  --msi-shape-r2: calc(2px * var(--msi-shape-radius-k));   /* 기본 2px 모서리 */
+  --msi-shape-r4: calc(4px * var(--msi-shape-radius-k));   /* 기본 4px 모서리 */
+  --msi-shape-r5: calc(5px * var(--msi-shape-radius-k));   /* 기본 5px 모서리 */
+  --msi-shape-r6: calc(6px * var(--msi-shape-radius-k));   /* 기본 6px 모서리 */
+  --msi-shape-r7: calc(7px * var(--msi-shape-radius-k));   /* 기본 7px 모서리 */
+  --msi-shape-r8: calc(8px * var(--msi-shape-radius-k));   /* 기본 8px 모서리 */
+  --msi-shape-r9: calc(9px * var(--msi-shape-radius-k));   /* 기본 9px 모서리 */
+  --msi-shape-r10: calc(10px * var(--msi-shape-radius-k));   /* 기본 10px 모서리 */
+  --msi-shape-r11: calc(11px * var(--msi-shape-radius-k));   /* 기본 11px 모서리 */
+  --msi-shape-r12: calc(12px * var(--msi-shape-radius-k));   /* 기본 12px 모서리 */
+  --msi-shape-r14: calc(14px * var(--msi-shape-radius-k));   /* 기본 14px 모서리 */
+  --msi-shape-r16: calc(16px * var(--msi-shape-radius-k));   /* 기본 16px 모서리 */
+  --msi-shape-r20: calc(20px * var(--msi-shape-radius-k));   /* 기본 20px 모서리 */
+  --msi-shape-r-pill: 999px;   /* 알약 버튼·칩(The Aurora Pill Rule) — 테마가 바꾸면 버튼이 알약이 아니게 됨 */
+  --msi-shape-bw1: 1px;   /* 가는 선 */
+  --msi-shape-bw2: 2px;   /* 작은 칩·점선 구분선 */
+  --msi-shape-bw3: 3px;   /* 카드·버튼·입력칸 기본 테두리 */
+  --msi-shape-bw4: 4px;   /* 창·주제 카드 */
+  --msi-shape-shadow-k: 1;   /* 어긋난 그림자 거리 배율 — 0 이면 그림자 없음 */
+  --msi-shape-shadow-blur: 0px;   /* 그림자 흐림 — 기본 0(The Zero-Blur Rule), 테마가 부드러운 그림자를 원할 때만 */
+  --msi-shape-sh1: calc(1px * var(--msi-shape-shadow-k)) calc(1px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 1px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh2: calc(2px * var(--msi-shape-shadow-k)) calc(2px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 2px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh3: calc(3px * var(--msi-shape-shadow-k)) calc(3px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 3px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh4: calc(4px * var(--msi-shape-shadow-k)) calc(4px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 4px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh5: calc(5px * var(--msi-shape-shadow-k)) calc(5px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 5px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh6: calc(6px * var(--msi-shape-shadow-k)) calc(6px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 6px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  --msi-shape-sh8: calc(8px * var(--msi-shape-shadow-k)) calc(8px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);   /* 기본 8px 어긋난 그림자의 위치·흐림(색은 rgba(var(--msi-rgb-ink),투명도)) */
+  /* rgb */
+  --msi-rgb-ink: 75,59,107;   /* 밤하늘 잉크(base-night-sky-ink #4b3b6b)의 R,G,B — 테마가 잉크 색을 바꾸면 같이 바꾼다 */
 }
 
 @keyframes msi-floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}

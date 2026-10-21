@@ -25,6 +25,9 @@
    Do instead: 먼저 `docProps/core.xml` 의 lastModifiedBy 와 `docx-read.mjs` 글 비교로 손본 곳을 찾고, 작은 고침은 docx 안 XML 을 jszip 으로 직접 고친 뒤 스크립트도 같은 글이 나오게 맞춘다(`from-template.md` 「양식 고치기」).
 7. **[2026-10-17] 정답지 `{ near, text }` 누르기는 안에 요소가 없는 단추만 찾음 → `glass-chip`(안에 `.gc-ic`)은 못 누름**
    Do instead: 묶음 aria-label 로 선택자를 쓴다: `"[aria-label='…'] button.glass-chip:has-text('정답 보기'):visible"`, O/X 는 `button:text-is('O')`.
+10. **[2026-10-21] 차시 테마를 `design/tokens.json` 에 넣으면 안 됨 — `node design/build.mjs` 가 표식 있는 차시(틀·ai/01·07·present.html)를 모두 바꿈**
+   Do instead: 테마는 `design/themes/<이름>/theme.css` + 차시 `lesson.json` 의 `"theme"`(빌드가 `</body>` 앞에 넣음, `docs/rules/theme.md`). 틀을 고칠 땐 숫자 대신 `--msi-shape-*` 변수. 바꾼 뒤 「전후 계산 스타일 같음」 확인은 getComputedStyle 비교(4탭·폰·올림·누름·포커스).
+   메뉴 탭·창 단추·PDF 버튼은 인라인 style(`tabChip()` 등)·`!important` 규칙이라 theme.css 선택자에도 `!important`. 유리·오로라는 `--msi-glass-*: none`·`aurora-*-aNN: rgba(0,0,0,0)` 로 끔. SVG data URI 배경(말풍선 동전)은 PDF 에도 나옴(sticker, 2026-10-21).
 
 ## Shell & Command Reliability
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**

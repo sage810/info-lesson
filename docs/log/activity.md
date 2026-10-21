@@ -300,3 +300,10 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 공개 부품: 글자 빈칸(보라 점선 「?」, 너비 = 정답 길이, 열린 칸은 칸마다 다른 파스텔) · 순서 칸(같은 카드가 흐려짐) · 이름표(분류 색 — 인공지능 SW #eec6ea, 일반 SW #ffd685 = 새 역할 토큰 `ui-label-general`) · 하나 고르기·O/X(정답 초록·고른 오답 빨강 + 이유) · 그림 자리 영상 · 열 하나씩(`.colrv`, 아기 비유 장).
 - 색은 역할 토큰만(`<style id="msi-role-tokens">` 블록을 `node design/build.mjs` 가 `present.html` 에도 채움). 피드백 모드로 50여 개 반영(24장).
 - 점검(Playwright): 1536×864 · 1920×1080 두 크기에서 모든 장을 「정답 모두 보기」로 캡처 + 넘침 측정, 장마다 Space 차례, 누르기·단축키·영상 — 스크립트는 그때그때 scratchpad(넘침 0 확인).
+
+## 차시 테마 sticker(스케치북 스티커) — Claude Design 견본 → 틀 · ai/01 — 2026-10-21~22
+- 선생님이 Claude Design 으로 만든 테마(handoff zip)를 받아 `design/themes/sticker/theme.css` 로 옮김 — 크림 종이 점무늬 · 갈색 잉크 · 카드 12벌 파스텔 · 폭신한 그림자 · 말풍선 번호 동전 · 박음질 PDF 버튼. 원본은 `input/claude-design/sticker/`.
+- 물어서 정함: 단계 번호 「1.」 은 글자 그대로(별 X) · 메뉴 탭은 분홍 트랙 안 알약(시안 A, 네모 칩 B 와 비교) — 테마는 메뉴 탭 모양을 바꿀 수 있다(CLAUDE.md 등 예외 규칙에 한 줄).
+- 피드백 모드로 아이콘 14개를 선생님 그림(치이카와 캐릭터, 공개 사용은 선생님 결정)으로: 틀의 이모지 자리에 `data-ic` · 제목줄 🏫 는 `span.app-ic` 이름표만 붙이고 테마가 그림을 씌움(테마 없으면 픽셀 같음). 그림은 분홍 바탕 지우기 · 자르기 · 128px.
+- 빌드: 테마 CSS 의 `msi-asset:` 도 바꿈(`render.mjs` — 사이트는 파일, embed 는 data URI). PDF 는 id 를 지운 복제본(`.msi-pdf-clone`)을 찍으므로 카드 쪽 테마 규칙은 `:is(#sheetPrintArea, .msi-pdf-clone)`.
+- ai/01 에 입힘(내용은 그대로): 틀 줄을 숫자로 되돌려 같으면 틀 줄로 바꾸는 방식으로 234줄 → 테마 없이 4탭 × 1280/390 계산 스타일 전후 같음 → `"theme": "sticker"`. 규칙 `docs/rules/theme.md`.

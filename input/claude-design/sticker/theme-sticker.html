@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>theme-sticker — 스케치북 스티커 테마 견본</title>
+<style>
+/* ============================================================
+   THEME: sticker (스케치북 스티커)
+   모든 색·모서리·테두리·그림자·간격은 여기 :root 에만 둔다.
+   색은 #hex / rgba() 만 사용 (html2canvas 1.4.1 호환).
+   ============================================================ */
+:root{
+  /* 바탕 */
+  --msi-role-page-bg:#FAF2E1;
+  --msi-role-page-grid:#E8D9C0;
+  --msi-role-base-night-sky-ink:#4A3B32;
+  --msi-role-base-cream-paper:#FFFDF8;
+  --msi-role-base-blush-paper:#FEF2F5;
+  --msi-role-base-muted-violet:#7A6A60;
+  --msi-role-ui-placeholder:#857062;
+
+  /* 카드 한 벌 (머리 / 몸통) */
+  /* 첨부 벽지 6장에서 추출한 밀키 파스텔 (크림 #F8F0E0 · 베이비블루 #D8E8F8 · 밀키핑크 #F8B8C0 · 버터 #F8F0B8 · 민트 #98D8B8 · 피치 #F8E0D0 · 라벤더 #D0D0E8 · 연두 #B8D878 · 라일락 #F0C8E0)
+     위→아래로 따뜻함(W)·차가움(C)이 번갈아 오도록 배치. 채도는 벽지처럼 낮고 뽀얗게 */
+  --msi-role-topic-head:#F9C4D0;    --msi-role-topic-body:#FEF2F5;    /* 1 밀키핑크 (W) */
+  --msi-role-myinfo-head:#D4E6F7;   --msi-role-myinfo-body:#F2F7FC;   /* 2 베이비블루 (C) 새 이름 */
+  --msi-role-goals-head:#FBEFB4;    --msi-role-goals-body:#FFFBE9;    --msi-role-goals-coin:#F6A8BC;   /* 3 버터 (W) · 동전 핑크 */
+  --msi-role-warmup-head:#BFE6D6;   --msi-role-warmup-body:#EFF9F5;   /* 4 민트 (C) */
+  --msi-role-intro-head:#FBDCC8;    --msi-role-intro-body:#FEF6F0;    /* 5 피치 (W) */
+  --msi-role-act1-head:#DCD6EE;     --msi-role-act1-body:#F6F4FB;     /* 6 라벤더 (C) */
+  --msi-role-act2-head:#EFD0E6;     --msi-role-act2-body:#FAF2F8;     /* 7 라일락핑크 (W) */
+  --msi-role-act3-head:#BFE1E6;     --msi-role-act3-body:#EFF8F9;     /* 8 아쿠아 (C) — 바다 */
+  --msi-role-act4-head:#F8CFC4;     --msi-role-act4-body:#FEF4F1;     /* 9 살몬 (W) — 밥 */
+  --msi-role-summary-head:#D9E8B4;  --msi-role-summary-body:#F5F9EC;  /* 10 연두 (C) */
+  --msi-role-checkup-head:#CDD9F3;  --msi-role-checkup-body:#F2F5FC;  --msi-role-checkup-coin:#FBEFB4; /* 11 페리윙클 (C) · 동전 버터 */
+  --msi-role-order-coin:#D4E6F7;    /* 순서 배열 ①~④ · 베이비블루 (새 이름) */
+  /* 번호 동전 말풍선 모양 — 채움색은 위 *-coin 값과 같음 (data URI 안이라 var() 불가) */
+  --msi-role-goals-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23F6A8BC' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --msi-role-checkup-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23FBEFB4' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+  /* order-coin-shape 는 미사용(순서 배열은 말랑 네모) — 필요 시 말풍선으로 되돌릴 때 사용 */
+  --msi-role-order-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23D4E6F7' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --msi-role-progress-head:#FBE3E8; --msi-role-progress-body:#FFFDF8; /* 옆 · 블러시 */
+
+  /* 탭 (고른 탭 색) */
+  --msi-role-tab-rules:#FFFDF8;
+  --msi-role-tab-time:#FFFDF8;
+  --msi-role-tab-meal:#FFFDF8;
+  --msi-role-tab-sheet:#FFFDF8;
+
+  /* 버튼 */
+  --msi-role-chip-glass:#FFFDF8;
+  --msi-role-chip-ok:#DDF2E6;
+  --msi-role-chip-no:#FBE0E0;
+  --msi-role-pdf-btn:#F7AEC0;
+  --msi-role-pdf-done:#BFE6D6;
+  --msi-role-pdf-error:#F6B4AE;
+
+  /* 안내·채점 */
+  --msi-role-ui-callout-tip:#F1EEF9;
+  --msi-role-ui-callout-reason:#EEF7F2;
+  --msi-role-ui-feedback-ok-bg:#DDF2E6;
+  --msi-role-ui-feedback-ok-ink:#2F6B48;
+  --msi-role-ui-feedback-no-bg:#FBE0E0;
+  --msi-role-ui-feedback-no-ink:#A64A4A;
+  --msi-role-ui-focus-pink:#E56A8E;
+
+  /* 새 값 (기존 자리 없음) */
+  --msi-role-titlebar-bg:#FBE3E8;
+  --msi-role-titlebar-stripe:rgba(255,255,255,0.45);
+  --msi-role-tabbar-track:#F3C9D5;
+  --msi-role-tab-ink-idle:#4A3B32;
+  --msi-role-tab-hover:rgba(255,255,255,0.5);
+  --msi-role-pdf-busy:#FBEFB4;
+  --msi-role-btn-link:#D4E6F7;
+  --msi-role-pdf-stitch:rgba(74,59,50,0.35);
+  --msi-role-pdf-glow:rgba(247,174,192,0.55);
+  --msi-role-ui-tagpool-bg:#FFFDF8;
+  --msi-role-ui-tagpool-dash:#E0CBB0;
+  --msi-role-ui-drop-dash:#C9ADA1;
+  --msi-role-ui-drop-ink:#857062;
+  --msi-role-ui-progress-fill:#F6A8BC;
+  --msi-role-ui-table-head:#F3EAE0;
+  --msi-role-ui-step-mark:#F6A8BC;
+  --msi-role-ui-step-mark-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Cpath d='M23 3 C25 3 26 5 27 8 L29 15 C29.5 16.5 30.5 17.5 32 17.7 L40 18.5 C43 19 44 22 41.8 24 L36 29 C34.8 30 34.4 31.5 34.7 33 L36.5 41 C37 44 34.5 45.5 32 44 L25 40 C23.8 39.3 22.2 39.3 21 40 L14 44 C11.5 45.5 9 44 9.5 41 L11.3 33 C11.6 31.5 11.2 30 10 29 L4.2 24 C2 22 3 19 6 18.5 L14 17.7 C15.5 17.5 16.5 16.5 17 15 L19 8 C20 5 21 3 23 3 Z' fill='%23F6A8BC'/%3E%3Cellipse cx='17' cy='14' rx='3' ry='1.8' fill='%23FFFFFF' transform='rotate(-35 17 14)'/%3E%3C/svg%3E");
+  --msi-role-ui-disabled-bg:#EFE8DF;
+  --msi-role-ui-disabled-ink:#9A8C82;
+  --msi-role-ui-win-dot-1:#FBEFB4;
+  --msi-role-ui-win-dot-2:#BFE6D6;
+  --msi-role-ui-win-dot-3:#F6B4AE;
+
+  /* 모서리 */
+  --msi-radius-window:22px;
+  --msi-radius-card:18px;
+  --msi-radius-box:14px;
+  --msi-radius-btn:999px;
+  --msi-radius-input:12px;
+  --msi-radius-tag:8px;
+
+  /* 테두리 두께 */
+  --msi-border-window:3px;
+  --msi-border-base:3px;
+  --msi-border-small:2px;
+
+  /* 그림자 (1b 폭신 그림자) — inset 없음 */
+  --msi-shadow-window:0 14px 34px rgba(74,59,50,0.14);
+  --msi-shadow-card:0 8px 20px rgba(74,59,50,0.10);
+  --msi-shadow-btn:0 4px 10px rgba(74,59,50,0.14);
+  --msi-shadow-chip:0 3px 8px rgba(74,59,50,0.14);
+  --msi-shadow-press:0 1px 2px rgba(74,59,50,0.12);
+
+  /* 간격 */
+  --msi-space-1:6px;
+  --msi-space-2:10px;
+  --msi-space-3:16px;
+  --msi-space-4:22px;
+  --msi-space-5:30px;
+
+  /* 글꼴 (역할 4개) */
+  --msi-font-display:'GangwonEdu','CookieRun',sans-serif;   /* 큰 제목 */
+  --msi-font-title:'CookieRun',sans-serif;                   /* 카드 제목·버튼 */
+  --msi-font-body:'Maplestory',sans-serif;                   /* 본문 */
+  --msi-font-label:'Silkscreen',monospace;                   /* 영문 라벨 */
+  --msi-fs-h1:40px;
+  --msi-fs-card-title:24px;
+  --msi-fs-sub:18px;
+  --msi-fs-body:17px;
+  --msi-fs-small:16px;
+  --msi-fs-label:16px;
+  --msi-fs-btn:17px;
+  --msi-fs-pdf:22px;
+  --msi-motion:160ms;
+}
+
+/* 글꼴 — 저장소 shared/fonts 와 같은 파일 */
+@font-face{font-family:'GangwonEdu';src:url('https://sage810.github.io/info-lesson/shared/fonts/GangwonEdu-400.woff2') format('woff2');font-weight:400 700;font-display:swap}
+@font-face{font-family:'CookieRun';src:url('https://sage810.github.io/info-lesson/shared/fonts/CookieRun-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'CookieRun';src:url('https://sage810.github.io/info-lesson/shared/fonts/CookieRun-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Maplestory';src:url('https://sage810.github.io/info-lesson/shared/fonts/Maplestory-300.woff2') format('woff2');font-weight:300 400;font-display:swap}
+@font-face{font-family:'Maplestory';src:url('https://sage810.github.io/info-lesson/shared/fonts/Maplestory-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Silkscreen';src:url('https://sage810.github.io/info-lesson/shared/fonts/Silkscreen-400.woff2') format('woff2');font-weight:400;font-display:swap}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--msi-role-page-bg);
+  background-image:radial-gradient(var(--msi-role-page-grid) 1.4px, rgba(0,0,0,0) 1.6px);
+  background-size:22px 22px;
+  color:var(--msi-role-base-night-sky-ink);
+  font-family:var(--msi-font-body);
+  font-size:var(--msi-fs-body);
+  line-height:1.5;
+  padding:36px 24px 80px 150px;
+}
+a{color:var(--msi-role-base-night-sky-ink)}
+a:hover{color:var(--msi-role-ui-focus-pink)}
+svg{display:inline-block;vertical-align:middle}
+
+/* 키보드 포커스 — 모든 누르는 것 공통 */
+:where(button,[role=button],input,textarea,a,[tabindex]):focus-visible{
+  outline:3px solid var(--msi-role-ui-focus-pink);
+  outline-offset:3px;
+  border-radius:var(--msi-radius-tag);
+}
+.show-focus{outline:3px solid var(--msi-role-ui-focus-pink);outline-offset:3px}
+
+/* ---------- 창 ---------- */
+.win{
+  max-width:1232px;margin:0 auto;
+  background:var(--msi-role-base-cream-paper);
+  border:var(--msi-border-window) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-window);
+  box-shadow:var(--msi-shadow-window);
+  overflow:hidden;position:relative;
+}
+.titlebar{
+  display:flex;align-items:center;gap:var(--msi-space-3);flex-wrap:wrap;
+  padding:12px 18px;
+  background:var(--msi-role-titlebar-bg);
+  background-image:repeating-linear-gradient(90deg, var(--msi-role-titlebar-stripe) 0 10px, rgba(0,0,0,0) 10px 20px);
+  border-bottom:var(--msi-border-window) solid var(--msi-role-base-night-sky-ink);
+}
+.titlebar__name{font-family:var(--msi-font-display);font-size:26px;white-space:nowrap;flex:1 1 auto;min-width:max-content}
+.tabbar{display:flex;flex:none;gap:var(--msi-space-1);background:var(--msi-role-tabbar-track);padding:5px;border-radius:var(--msi-radius-btn)}
+.tab{
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn);
+  min-height:44px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;
+  border:0;background:rgba(0,0,0,0);border-radius:var(--msi-radius-btn);
+  color:var(--msi-role-tab-ink-idle);cursor:pointer;white-space:nowrap;
+  transition:background var(--msi-motion),box-shadow var(--msi-motion);
+}
+.tab:hover{background:var(--msi-role-tab-hover)}
+.tab[aria-selected=true]{color:var(--msi-role-base-night-sky-ink);box-shadow:var(--msi-shadow-chip)}
+.tab--rules[aria-selected=true]{background:var(--msi-role-tab-rules)}
+.tab--time[aria-selected=true]{background:var(--msi-role-tab-time)}
+.tab--meal[aria-selected=true]{background:var(--msi-role-tab-meal)}
+.tab--sheet[aria-selected=true]{background:var(--msi-role-tab-sheet)}
+.windots{display:flex;flex:none;gap:6px;order:2}
+.tabbar{order:1}
+@media (max-width:1100px){.tabbar{order:3;width:100%;justify-content:center}.titlebar__name{flex:1 1 auto}}
+.windots span{width:26px;height:26px;border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:50%;display:inline-block}
+.windots span:nth-child(1){background:var(--msi-role-ui-win-dot-1)}
+.windots span:nth-child(2){background:var(--msi-role-ui-win-dot-2)}
+.windots span:nth-child(3){background:var(--msi-role-ui-win-dot-3)}
+
+.sheet{padding:var(--msi-space-5) 28px 40px;display:flex;flex-direction:column;gap:var(--msi-space-4)}
+
+/* ---------- 큰 제목 + 차시 태그 ---------- */
+.sheet__h1{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:0 0 4px}
+.sheet__h1 h1{font-family:var(--msi-font-display);font-size:var(--msi-fs-h1);font-weight:400;margin:0;line-height:1.15}
+.lesson-tag{
+  font-family:var(--msi-font-label);font-size:var(--msi-fs-label);letter-spacing:1px;
+  background:var(--msi-role-intro-head);border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-tag);padding:6px 12px;
+}
+
+/* ---------- 카드 ---------- */
+.card{
+  position:relative;
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-card);
+  box-shadow:var(--msi-shadow-card);
+  background:var(--card-body,var(--msi-role-base-cream-paper));
+}
+.card__head{
+  display:flex;align-items:center;gap:var(--msi-space-2);
+  padding:9px 18px;
+  background:var(--card-head,var(--msi-role-ui-table-head));
+  border-bottom:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);
+  border-radius:calc(var(--msi-radius-card) - var(--msi-border-base)) calc(var(--msi-radius-card) - var(--msi-border-base)) 0 0;
+}
+.card__stage{
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-small);
+  background:var(--msi-role-base-cream-paper);border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-tag);padding:2px 10px;line-height:1.5;
+}
+.card__label{font-family:var(--msi-font-label);font-size:var(--msi-fs-label);letter-spacing:1px}
+.card__body{padding:var(--msi-space-4) 22px 26px;display:flex;flex-direction:column;gap:var(--msi-space-3)}
+.card--topic{--card-head:var(--msi-role-topic-head);--card-body:var(--msi-role-topic-body)}
+.card--myinfo{--card-head:var(--msi-role-myinfo-head);--card-body:var(--msi-role-myinfo-body)}
+.card--goals{--card-head:var(--msi-role-goals-head);--card-body:var(--msi-role-goals-body)}
+.card--warmup{--card-head:var(--msi-role-warmup-head);--card-body:var(--msi-role-warmup-body)}
+.card--intro{--card-head:var(--msi-role-intro-head);--card-body:var(--msi-role-intro-body)}
+.card--act1{--card-head:var(--msi-role-act1-head);--card-body:var(--msi-role-act1-body)}
+.card--act2{--card-head:var(--msi-role-act2-head);--card-body:var(--msi-role-act2-body)}
+.card--act3{--card-head:var(--msi-role-act3-head);--card-body:var(--msi-role-act3-body)}
+.card--act4{--card-head:var(--msi-role-act4-head);--card-body:var(--msi-role-act4-body)}
+.card--summary{--card-head:var(--msi-role-summary-head);--card-body:var(--msi-role-summary-body)}
+.card--checkup{--card-head:var(--msi-role-checkup-head);--card-body:var(--msi-role-checkup-body)}
+.card--progress{--card-head:var(--msi-role-progress-head);--card-body:var(--msi-role-progress-body)}
+
+
+/* ---------- 글 ---------- */
+.card__title{display:flex;align-items:center;gap:12px;margin:0}
+.card__title h2{font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-card-title);margin:0;line-height:1.3}
+.icon-box{width:46px;height:46px;flex:none;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box)}
+/* 단계 소제목 「1. 2. 3.」 — 번호는 <span class="sub__n">N</span> 반짝 별 방울(3d) 안 정중앙, 글은 별 오른쪽에서 시작(줄바꿈돼도 별 밑으로 안 들어감) */
+.sub{display:flex;align-items:flex-start;gap:10px;font-weight:700;font-size:var(--msi-fs-sub);line-height:1.5;margin:0}
+.sub__n{flex:none;width:34px;height:34px;margin-top:-4px;padding-top:3px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-small);line-height:1;color:var(--msi-role-base-night-sky-ink);
+  background:var(--msi-role-ui-step-mark-shape) center / 34px 34px no-repeat}
+p{margin:0}
+.small{font-size:var(--msi-fs-small);color:var(--msi-role-base-muted-violet)}
+.callout{
+  border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-box);padding:14px 18px;display:flex;flex-direction:column;gap:6px;
+}
+.callout--tip{background:var(--msi-role-ui-callout-tip)}
+.callout--reason{background:var(--msi-role-ui-callout-reason)}
+.callout b{font-family:var(--msi-font-title);font-size:var(--msi-fs-body)}
+
+/* ---------- 입력칸 ---------- */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:700;font-size:var(--msi-fs-body)}
+.input,textarea.input{
+  font-family:var(--msi-font-body);font-size:var(--msi-fs-body);color:var(--msi-role-base-night-sky-ink);
+  background:var(--msi-role-base-blush-paper);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-input);
+  min-height:52px;padding:10px 14px;width:100%;
+}
+.input::placeholder,textarea.input::placeholder{color:var(--msi-role-ui-placeholder);opacity:1}
+.input:focus,textarea.input:focus{outline:3px solid var(--msi-role-ui-focus-pink);outline-offset:2px;background:var(--msi-role-base-cream-paper)}
+.input.is-typing{outline:3px solid var(--msi-role-ui-focus-pink);outline-offset:2px;background:var(--msi-role-base-cream-paper)}
+.input.is-filled{background:var(--msi-role-base-cream-paper)}
+textarea.input{min-height:96px;resize:vertical}
+.input--inline{display:inline-block;width:88px;min-height:44px;padding:6px 10px;text-align:center;vertical-align:middle;margin:0 4px}
+.blank{display:inline-block;width:84px;min-height:38px;font-family:var(--msi-font-body);font-size:var(--msi-fs-small);color:var(--msi-role-base-night-sky-ink);text-align:center;vertical-align:middle;margin:0 4px;
+  background:var(--msi-role-base-blush-paper);border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-tag)}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--msi-space-3)}
+
+/* ---------- 목표 줄 + 번호 동전 ---------- */
+.goal-row{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--msi-role-base-cream-paper);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box)}
+/* 번호 동전 — 말풍선 동그라미: 잉크선 + 작은 꼬리, 파스텔 채움 (SVG data URI 배경) */
+.coin{width:44px;height:44px;flex:none;display:inline-flex;align-items:center;justify-content:center;padding-bottom:5px;
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-sub);color:var(--msi-role-base-night-sky-ink);
+  background:var(--coin-shape,var(--msi-role-goals-coin-shape)) center / 44px 44px no-repeat}
+.coin--checkup{--coin-shape:var(--msi-role-checkup-coin-shape)}
+
+/* ---------- 표 ---------- */
+.tbl{width:100%;border-collapse:collapse;background:var(--msi-role-base-cream-paper);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);overflow:hidden;font-size:var(--msi-fs-body)}
+.tbl-wrap{border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);overflow:hidden;background:var(--msi-role-base-cream-paper)}
+.tbl-wrap .tbl{border:0;border-radius:0}
+.tbl th,.tbl td{border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);padding:10px 14px;text-align:left;vertical-align:middle}
+.tbl th{background:var(--msi-role-ui-table-head);font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-body);text-align:center}
+.tbl td:first-child{font-weight:700;text-align:center;white-space:nowrap}
+.tbl tr>*:first-child{border-left:0}.tbl tr>*:last-child{border-right:0}
+.tbl tr:first-child>*{border-top:0}.tbl tr:last-child>*{border-bottom:0}
+
+/* ---------- 개념 카드 3장 ---------- */
+.concepts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--msi-space-3)}
+.concept{background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);
+  padding:18px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.concept__word{font-family:var(--msi-font-title);font-weight:700;font-size:20px}
+.concept__word .drop{min-width:120px}
+.concept__exam{width:100%;background:var(--msi-role-ui-callout-reason);border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);
+  border-radius:var(--msi-radius-tag);padding:8px 10px;font-size:var(--msi-fs-small)}
+
+/* ---------- 이름표(알약) + 빈 칸 ---------- */
+.tagpool{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;padding:14px;
+  background:var(--msi-role-ui-tagpool-bg);border:var(--msi-border-base) dashed var(--msi-role-ui-tagpool-dash);border-radius:var(--msi-radius-box)}
+.chip{
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn);
+  min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;
+  background:var(--msi-role-chip-glass);color:var(--msi-role-base-night-sky-ink);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);
+  box-shadow:var(--msi-shadow-chip);cursor:grab;user-select:none;
+  transition:transform var(--msi-motion),box-shadow var(--msi-motion),background var(--msi-motion);
+}
+.chip:hover{transform:translateY(-2px);box-shadow:var(--msi-shadow-btn)}
+.chip:active,.chip.is-pressed{transform:translateY(1px);box-shadow:var(--msi-shadow-press)}
+.chip.is-ok{background:var(--msi-role-ui-feedback-ok-bg);color:var(--msi-role-ui-feedback-ok-ink);border-color:var(--msi-role-ui-feedback-ok-ink)}
+.chip.is-no{background:var(--msi-role-ui-feedback-no-bg);color:var(--msi-role-ui-feedback-no-ink);border-color:var(--msi-role-ui-feedback-no-ink)}
+.chip.is-disabled{background:var(--msi-role-ui-disabled-bg);color:var(--msi-role-ui-disabled-ink);border-color:var(--msi-role-ui-disabled-ink);box-shadow:none;cursor:not-allowed}
+.drop{
+  font-family:var(--msi-font-label);font-size:var(--msi-fs-label);letter-spacing:1px;color:var(--msi-role-ui-drop-ink);
+  min-height:44px;min-width:170px;display:inline-flex;align-items:center;justify-content:center;padding:0 12px;
+  background:var(--msi-role-base-blush-paper);border:var(--msi-border-base) dashed var(--msi-role-ui-drop-dash);border-radius:var(--msi-radius-btn);
+}
+.drop.is-filled{padding:0;border:0;background:rgba(0,0,0,0)}
+.drop--wide{width:100%;border-radius:var(--msi-radius-box)}
+.drop--wide .chip{width:100%;border-radius:var(--msi-radius-box);justify-content:flex-start;padding:0 18px}
+.match-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px 10px 22px;
+  background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box)}
+.match-row>span:first-child{flex:1;min-width:0}
+.stack{display:flex;flex-direction:column;gap:10px}
+.result{display:flex;align-items:center;gap:8px;justify-content:center;font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-body);
+  padding:10px 16px;border-radius:var(--msi-radius-box);border:var(--msi-border-small) solid}
+.result.is-ok{background:var(--msi-role-ui-feedback-ok-bg);color:var(--msi-role-ui-feedback-ok-ink);border-color:var(--msi-role-ui-feedback-ok-ink)}
+.result.is-no{background:var(--msi-role-ui-feedback-no-bg);color:var(--msi-role-ui-feedback-no-ink);border-color:var(--msi-role-ui-feedback-no-ink)}
+
+/* 순서 배열 */
+.order-row{display:flex;align-items:center;gap:12px}
+/* 순서 배열 ①~④ — 말랑 네모: 둥근 네모 스티커, 베이비블루 채움 + 잉크 테두리 + 폭신 그림자 */
+.order-row .coin{width:40px;height:40px;padding:0;background:var(--msi-role-order-coin);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);
+  border-radius:13px;box-shadow:var(--msi-shadow-chip);font-size:20px;line-height:1}
+
+/* ---------- 하나 고르기 ---------- */
+.choices{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.choices--v{flex-direction:column;align-items:flex-start}
+.choice{
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn);text-align:left;
+  min-height:46px;display:inline-flex;align-items:center;gap:8px;padding:8px 20px;
+  background:var(--msi-role-chip-glass);color:var(--msi-role-base-night-sky-ink);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);
+  box-shadow:var(--msi-shadow-chip);cursor:pointer;line-height:1.35;
+  transition:transform var(--msi-motion),box-shadow var(--msi-motion);
+}
+.choice:hover{transform:translateY(-2px);box-shadow:var(--msi-shadow-btn)}
+.choice:active{transform:translateY(1px);box-shadow:var(--msi-shadow-press)}
+.choice.is-ok{background:var(--msi-role-ui-feedback-ok-bg);color:var(--msi-role-ui-feedback-ok-ink);border-color:var(--msi-role-ui-feedback-ok-ink)}
+.choice.is-no{background:var(--msi-role-ui-feedback-no-bg);color:var(--msi-role-ui-feedback-no-ink);border-color:var(--msi-role-ui-feedback-no-ink)}
+.choice.is-disabled{background:var(--msi-role-ui-disabled-bg);color:var(--msi-role-ui-disabled-ink);border-color:var(--msi-role-ui-disabled-ink);box-shadow:none;cursor:not-allowed}
+.reason{font-size:var(--msi-fs-body);padding:10px 16px;border-radius:var(--msi-radius-box);border:var(--msi-border-small) solid}
+.reason.is-ok{background:var(--msi-role-ui-feedback-ok-bg);color:var(--msi-role-ui-feedback-ok-ink);border-color:var(--msi-role-ui-feedback-ok-ink)}
+.reason.is-no{background:var(--msi-role-ui-feedback-no-bg);color:var(--msi-role-ui-feedback-no-ink);border-color:var(--msi-role-ui-feedback-no-ink)}
+
+/* ---------- O/X 줄 ---------- */
+.ox-row{display:flex;align-items:center;gap:14px;padding:10px 14px 10px 16px;
+  background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);flex-wrap:wrap}
+.ox-row>p{flex:1;min-width:200px}
+.ox-btns{display:flex;gap:8px}
+.ox{width:52px;height:46px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--msi-font-title);font-weight:700;font-size:20px;
+  background:var(--msi-role-chip-glass);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);
+  box-shadow:var(--msi-shadow-chip);cursor:pointer;color:var(--msi-role-base-night-sky-ink);transition:transform var(--msi-motion),box-shadow var(--msi-motion)}
+.ox:hover{transform:translateY(-2px);box-shadow:var(--msi-shadow-btn)}
+.ox:active{transform:translateY(1px);box-shadow:var(--msi-shadow-press)}
+.ox.is-ok{background:var(--msi-role-ui-feedback-ok-bg);color:var(--msi-role-ui-feedback-ok-ink);border-color:var(--msi-role-ui-feedback-ok-ink)}
+.ox.is-no{background:var(--msi-role-ui-feedback-no-bg);color:var(--msi-role-ui-feedback-no-ink);border-color:var(--msi-role-ui-feedback-no-ink)}
+.ox-row .reason{flex-basis:100%}
+
+/* ---------- 일반 버튼 ---------- */
+.btn-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn);
+  min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;
+  background:var(--btn-bg,var(--msi-role-chip-glass));color:var(--msi-role-base-night-sky-ink);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);
+  box-shadow:var(--msi-shadow-btn);cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:transform var(--msi-motion),box-shadow var(--msi-motion);
+}
+.btn--check{--btn-bg:var(--msi-role-warmup-head)}
+.btn--link{--btn-bg:var(--msi-role-btn-link)}
+.btn:hover,.btn.is-hover{transform:translateY(-2px);box-shadow:0 7px 14px rgba(74,59,50,0.18)}
+.btn:active,.btn.is-pressed{transform:translateY(1px);box-shadow:var(--msi-shadow-press)}
+.btn:disabled,.btn.is-disabled{background:var(--msi-role-ui-disabled-bg);color:var(--msi-role-ui-disabled-ink);border-color:var(--msi-role-ui-disabled-ink);box-shadow:none;cursor:not-allowed;transform:none}
+
+/* ---------- 그림 상자 ---------- */
+.figure{display:flex;flex-direction:column;align-items:center;gap:12px}
+.figure__box{width:100%;max-width:760px;min-height:220px;display:flex;align-items:center;justify-content:center;
+  background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);
+  color:var(--msi-role-base-muted-violet);font-size:var(--msi-fs-small);text-align:center;padding:20px}
+
+/* ---------- PDF 버튼 (1c 박음질 라벨) ---------- */
+.pdf-wrap{display:flex;justify-content:center;padding-top:var(--msi-space-2)}
+.pdf-btn{
+  position:relative;font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-pdf);
+  min-height:66px;display:inline-flex;align-items:center;gap:12px;padding:0 44px;
+  background:var(--msi-role-pdf-btn);color:var(--msi-role-base-night-sky-ink);
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);
+  box-shadow:0 10px 24px var(--msi-role-pdf-glow);cursor:pointer;
+  transition:transform var(--msi-motion),box-shadow var(--msi-motion),background var(--msi-motion);
+}
+.pdf-btn::before{content:"";position:absolute;left:6px;right:6px;top:6px;bottom:6px;
+  border:var(--msi-border-small) dashed var(--msi-role-pdf-stitch);border-radius:calc(var(--msi-radius-box) - 6px);pointer-events:none}
+.pdf-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px var(--msi-role-pdf-glow)}
+.pdf-btn:active{transform:translateY(1px);box-shadow:var(--msi-shadow-press)}
+.pdf-btn.is-busy{background:var(--msi-role-pdf-busy);box-shadow:0 10px 24px rgba(251,239,180,0.7);cursor:progress}
+.pdf-btn.is-done{background:var(--msi-role-pdf-done);box-shadow:0 10px 24px rgba(191,230,214,0.7)}
+.pdf-btn.is-error{background:var(--msi-role-pdf-error);box-shadow:0 10px 24px rgba(246,180,174,0.7)}
+
+/* ---------- 진행률 카드 ---------- */
+.progress{
+  position:fixed;left:14px;top:120px;width:118px;z-index:10;
+  border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);
+  background:var(--msi-role-progress-body);box-shadow:var(--msi-shadow-card);
+}
+.progress--static{position:static;width:150px}
+.progress__head{font-family:var(--msi-font-label);font-size:var(--msi-fs-label);letter-spacing:1px;padding:5px 10px;
+  background:var(--msi-role-progress-head);border-bottom:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);
+  border-radius:calc(var(--msi-radius-box) - var(--msi-border-base)) calc(var(--msi-radius-box) - var(--msi-border-base)) 0 0}
+.progress__body{padding:10px;display:flex;flex-direction:column;gap:6px}
+.progress__title{font-weight:700;font-size:var(--msi-fs-small)}
+.progress__num{font-family:var(--msi-font-title);font-weight:700;font-size:20px;line-height:1.1}
+.progress__num small{font-family:var(--msi-font-body);font-weight:300;font-size:var(--msi-fs-small);color:var(--msi-role-base-muted-violet)}
+.bar{height:14px;border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);background:var(--msi-role-base-cream-paper);overflow:hidden}
+.bar i{display:block;height:100%;width:var(--pct,0%);background:var(--msi-role-ui-progress-fill);border-radius:var(--msi-radius-btn);transition:width var(--msi-motion)}
+.progress-fab{display:none;min-height:46px;align-items:center;gap:6px;padding:0 16px;
+  font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn);
+  background:var(--msi-role-progress-head);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-btn);box-shadow:var(--msi-shadow-btn);color:var(--msi-role-base-night-sky-ink);cursor:pointer}
+
+/* ---------- 부품 전시 구역 ---------- */
+.spec{max-width:1232px;margin:56px auto 0;display:flex;flex-direction:column;gap:var(--msi-space-4)}
+.spec>h2{font-family:var(--msi-font-display);font-size:32px;font-weight:400;margin:0;text-align:center}
+.spec-card{background:var(--msi-role-base-cream-paper);border:var(--msi-border-base) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-card);box-shadow:var(--msi-shadow-card);padding:22px 24px 26px;display:flex;flex-direction:column;gap:14px}
+.spec-card>h3{font-family:var(--msi-font-title);font-size:20px;margin:0;display:flex;gap:10px;align-items:center}
+.spec-card>h3 .card__label{color:var(--msi-role-base-muted-violet)}
+.spec-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.spec-item{display:flex;flex-direction:column;gap:6px;align-items:center}
+.spec-item .small{font-size:var(--msi-fs-small)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.swatch{border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink);border-radius:var(--msi-radius-box);overflow:hidden;background:var(--msi-role-base-cream-paper)}
+.swatch i{display:block;height:34px}
+.swatch b{display:block;height:28px}
+.swatch span{display:block;padding:6px 10px;font-size:var(--msi-fs-small)}
+.type-sample{display:grid;grid-template-columns:200px 1fr;gap:10px 18px;align-items:baseline}
+.type-sample .small{font-size:var(--msi-fs-small)}
+
+/* ---------- 움직임 ---------- */
+@keyframes pop{0%{transform:scale(0.92)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+.chip.is-dropped{animation:pop var(--msi-motion) ease-out 1}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+
+/* ---------- 좁은 화면 (폰 390px) ---------- */
+@media (max-width:760px){
+  body{padding:16px 10px 90px 10px}
+  .titlebar{flex-wrap:wrap;gap:10px;padding:12px}
+  .titlebar__name{flex:1 1 auto}
+  .windots{order:2}
+  .tabbar{order:3;width:100%;flex-wrap:wrap;justify-content:center;border-radius:var(--msi-radius-box)}
+  .tab{flex:1 1 44%;justify-content:center}
+  .sheet{padding:22px 14px 30px}
+  .sheet__h1 h1{font-size:34px}
+  .card__body{padding:18px 14px 22px}
+  .grid-4,.concepts{grid-template-columns:1fr}
+  .match-row{flex-direction:column;align-items:stretch;padding:12px 14px}
+  .drop{min-width:0;width:100%}
+  .progress{display:none}
+  .progress--static{display:block}
+  .progress-fab{display:inline-flex;position:fixed;right:14px;bottom:14px;z-index:10}
+  .type-sample{grid-template-columns:1fr}
+  .tbl th,.tbl td{padding:8px 8px}
+  .pdf-btn{padding:0 28px;font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- 진행률 카드 (화면 따라다님) -->
+<aside class="progress" aria-label="활동 진행률">
+  <div class="progress__head">PROGRESS</div>
+  <div class="progress__body">
+    <div class="progress__title">활동 진행률</div>
+    <div class="progress__num">0% <small>0/32</small></div>
+    <div class="bar"><i style="--pct:0%"></i></div>
+  </div>
+</aside>
+<button class="progress-fab" type="button">📊 진행률</button>
+
+<div class="win">
+  <header class="titlebar">
+    <div class="titlebar__name">🏫 신현중학교 정보</div>
+    <nav class="tabbar" role="tablist" aria-label="메뉴">
+      <button class="tab tab--rules" role="tab" aria-selected="false" type="button">📜 이용 규칙</button>
+      <button class="tab tab--time" role="tab" aria-selected="false" type="button">🕒 시간표</button>
+      <button class="tab tab--meal" role="tab" aria-selected="false" type="button">🍚 오늘의 급식</button>
+      <button class="tab tab--sheet" role="tab" aria-selected="true" type="button">✏️ 수업 활동지</button>
+    </nav>
+    <div class="windots" aria-hidden="true"><span></span><span></span><span></span></div>
+  </header>
+
+  <main class="sheet">
+    <div class="sheet__h1"><h1>수업 활동지</h1><span class="lesson-tag">LESSON_01</span></div>
+
+    <!-- 주제 카드 -->
+    <section class="card card--topic">
+      <div class="card__head"><span class="card__label">TODAY_TOPIC</span></div>
+      <div class="card__body" style="align-items:center;text-align:center;gap:10px;padding-top:30px;padding-bottom:30px">
+        <div style="font-family:var(--msi-font-title);font-weight:700;font-size:20px;display:inline-flex;gap:10px;align-items:center">
+          <span style="background:var(--msi-role-goals-head);padding:2px 12px;border-radius:var(--msi-radius-btn);border:var(--msi-border-small) solid var(--msi-role-base-night-sky-ink)">인공지능</span><span>· 1차시</span>
+        </div>
+        <div style="font-family:var(--msi-font-display);font-size:var(--msi-fs-h1);line-height:1.15">인공지능이란?</div>
+      </div>
+    </section>
+
+    <!-- 내 정보 -->
+    <section class="card card--myinfo">
+      <div class="card__head"><span class="card__label">MY_INFO</span></div>
+      <div class="card__body">
+        <div class="grid-4">
+          <div class="field"><label for="f-grade">학년</label><input class="input is-filled" id="f-grade" value="2"></div>
+          <div class="field"><label for="f-class">반</label><input class="input is-typing" id="f-class" value="3" aria-describedby="typing-note"></div>
+          <div class="field"><label for="f-num">번호</label><input class="input" id="f-num" placeholder="번호"></div>
+          <div class="field"><label for="f-name">이름</label><input class="input" id="f-name" placeholder="이름을 적어요"></div>
+        </div>
+        <p class="small" id="typing-note">채움 / 입력 중(분홍 테두리) / 비어 있음 + 안내 글 순서예요.</p>
+      </div>
+    </section>
+
+    <!-- 오늘의 목표 -->
+    <section class="card card--goals">
+      <div class="card__head"><span class="card__label">TODAY_GOALS</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="30" height="30" viewBox="0 0 44 44"><circle cx="22" cy="22" r="17" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><circle cx="22" cy="22" r="10" fill="#FFC9D6" stroke="#4A3B32" stroke-width="3"/><circle cx="22" cy="22" r="3.5" fill="#4A3B32"/></svg></span>
+          <h2>오늘의 목표</h2>
+        </div>
+        <div class="stack">
+          <div class="goal-row"><span class="coin" data-comment-anchor="c4fe5b7c53-span">1</span><p>인공지능과 인공지능 모델이 무엇인지 설명할 수 있어요.</p></div>
+          <div class="goal-row"><span class="coin">2</span><p>인공지능 소프트웨어와 일반 소프트웨어를 구분할 수 있어요.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 도입 WARM_UP -->
+    <section class="card card--warmup">
+      <div class="card__head"><span class="card__stage">도입</span><span class="card__label">WARM_UP</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><path d="M22 6 C11 6 5 14 5 22 C5 30 11 36 18 36 C22 36 21 31 25 31 C30 31 39 31 39 22 C39 13 32 6 22 6 Z" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/><circle cx="14" cy="20" r="3" fill="#FFB3C7"/><circle cx="22" cy="14" r="3" fill="#FFE27A"/><circle cx="30" cy="19" r="3" fill="#BDE3F7"/><circle cx="14" cy="28" r="3" fill="#C8EBD4"/></svg></span>
+          <h2>내 낙서, AI가 몇 개나 알아맞힐까?</h2>
+        </div>
+        <p>Quick, Draw!는 제시어를 20초 안에 그리면 AI가 무엇을 그렸는지 알아맞히는 게임이에요. 제시어 6개를 그려보고, AI가 몇 개를 맞혔는지 선생님께 이야기해주세요!</p>
+        <div class="btn-row"><a class="btn btn--link" href="#" role="button">🔗 Quick, Draw! 열기</a></div>
+        <p class="sub"><span class="sub__n">1</span>「시작하기」를 누르고 제시어 6개를 그려요. AI가 몇 개를 맞혔는지 적어요.</p>
+        <p>내 그림: <input class="input input--inline" aria-label="맞힌 개수" value="4"> 개 맞힘</p>
+        <p class="sub"><span class="sub__n">2</span>컴퓨터는 어떻게 내 그림을 알아맞혔을까요? 내 생각을 적어 봐요.</p>
+        <textarea class="input" placeholder="내 생각을 적어요"></textarea>
+      </div>
+    </section>
+
+    <!-- 도입 TODAY_TOPIC -->
+    <section class="card card--intro">
+      <div class="card__head"><span class="card__stage">도입</span><span class="card__label">TODAY_TOPIC</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><circle cx="18" cy="18" r="12" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><circle cx="14" cy="17" r="2" fill="#4A3B32"/><circle cx="22" cy="17" r="2" fill="#4A3B32"/><path d="M15 22 q3 2.5 6 0" fill="none" stroke="#4A3B32" stroke-width="2.5" stroke-linecap="round"/><path d="M27 27 L38 38" stroke="#4A3B32" stroke-width="5" stroke-linecap="round"/></svg></span>
+          <h2>오늘은 인공지능의 정체를 밝혀요</h2>
+        </div>
+        <p>유튜브·틱톡 추천과 인스타 필터 속 인공지능은 어떻게 똑똑해질까요? 인공지능과 인공지능 모델이 무엇인지 알아보고, 인공지능인 것과 아닌 것을 가려내요.</p>
+      </div>
+    </section>
+
+    <!-- 전개 ACTIVITY_1 -->
+    <section class="card card--act1">
+      <div class="card__head"><span class="card__stage">전개</span><span class="card__label">ACTIVITY_1</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><ellipse cx="22" cy="24" rx="17" ry="15" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><circle cx="16" cy="22" r="2.2" fill="#4A3B32"/><circle cx="28" cy="22" r="2.2" fill="#4A3B32"/><ellipse cx="12" cy="28" rx="3" ry="2" fill="#FFB3C7"/><ellipse cx="32" cy="28" rx="3" ry="2" fill="#FFB3C7"/><path d="M19 28 q3 3 6 0" fill="none" stroke="#4A3B32" stroke-width="2.5" stroke-linecap="round"/><path d="M11 12 q4 -8 8 0 M25 12 q4 -8 8 0" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/></svg></span>
+          <h2>인공지능은 어떻게 내 낙서를 알아봤을까?</h2>
+        </div>
+        <p class="sub"><span class="sub__n">1</span>인공지능이란?</p>
+        <p class="small">빈칸에 알맞은 낱말을 적어요.</p>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>낱말</th><th>뜻</th><th>Quick, Draw!에서는</th></tr></thead>
+          <tbody>
+            <tr><td>인공지능</td><td>사람의 <input class="blank" aria-label="빈칸">·<input class="blank" aria-label="빈칸">·<input class="blank" aria-label="빈칸"> 같은 지적 능력을 흉내 내어 소프트웨어로 만든 것</td><td>내 낙서를 알아맞히는 AI</td></tr>
+            <tr><td><input class="blank" style="width:120px" aria-label="빈칸"></td><td>사람 뇌의 신경 세포(뉴런)가 신호를 주고받는 모습을 흉내 내어 만든 구조</td><td>낙서를 보며 <input class="blank" aria-label="빈칸">을 배우는 구조</td></tr>
+            <tr><td>학습</td><td>많은 데이터를 보면서 스스로 패턴을 찾아 배우는 과정</td><td>낙서 5천만 개에서 「고양이는 뾰족한 귀와 수염」 같은 패턴 찾기</td></tr>
+            <tr><td>인공지능 모델</td><td><input class="blank" aria-label="빈칸">을 마치고 만들어진 <input class="blank" aria-label="빈칸"> — 처음 보는 데이터도 분류하거나 예측해요</td><td>새로 그린 낙서를 보고 「고양이 90%」라고 예측</td></tr>
+          </tbody>
+        </table></div>
+        <div class="figure">
+          <div class="figure__box">그림 자리 — 사람의 뇌 ↔ 컴퓨터 속 구조 (a1-neural.svg)</div>
+          <button class="btn" type="button">▶ 움직이는 모습 보기</button>
+        </div>
+        <p class="sub"><span class="sub__n">2</span>Quick, Draw!의 AI가 내 낙서를 알아맞히기까지 — 순서대로 놓아요.</p>
+        <p class="small">카드를 끌어다 ①~④ 자리에 놓아요. (카드를 누른 뒤 자리를 눌러도 돼요)</p>
+        <div class="tagpool">
+          <span class="chip" tabindex="0" role="button">학습 결과로 「낙서 알아맞히기」 인공지능 모델이 만들어져요.</span>
+          <span class="chip" tabindex="0" role="button">내가 새로 그린 낙서를 모델이 보고 무엇인지 예측해요.</span>
+          <span class="chip" tabindex="0" role="button">인공 신경망이 낙서를 보며 「고양이는 뾰족한 귀와 수염」 같은 패턴을 학습해요.</span>
+        </div>
+        <div class="stack">
+          <div class="order-row"><span class="coin">①</span><span class="drop drop--wide is-filled"><span class="chip is-dropped">전 세계 사람들이 Quick, Draw!에서 그린 낙서 5천만 개를 모아요.</span></span></div>
+          <div class="order-row"><span class="coin">②</span><span class="drop drop--wide">DROP HERE</span></div>
+          <div class="order-row"><span class="coin">③</span><span class="drop drop--wide">DROP HERE</span></div>
+          <div class="order-row"><span class="coin">④</span><span class="drop drop--wide">DROP HERE</span></div>
+        </div>
+        <div class="btn-row"><button class="btn btn--check" type="button">✅ 순서 확인</button><button class="btn" type="button">🔀 다시 섞기</button></div>
+        <p class="sub"><span class="sub__n">3</span>학습, 인공지능 모델, 인공 신경망을 게임 실력에 비유하면 무엇일까요? 알맞은 이름표를 끌어다 놓아요.</p>
+        <div class="tagpool">
+          <span class="chip" tabindex="0" role="button">학습</span>
+          <span class="chip" tabindex="0" role="button">인공지능 모델</span>
+          <span class="chip" tabindex="0" role="button">인공 신경망</span>
+        </div>
+        <div class="stack">
+          <div class="match-row"><span>뇌처럼 서로 연결되어 있어서, 연습하면 배울 수 있는 머리</span><span class="drop is-filled"><span class="chip is-ok">✓ 인공 신경망</span></span></div>
+          <div class="match-row"><span>수백 판을 하면서 「이럴 땐 이렇게!」를 몸에 익히는 연습</span><span class="drop is-filled"><span class="chip is-no">✗ 인공지능 모델</span></span></div>
+          <div class="match-row"><span>연습을 마치고 처음 만나는 상대와의 실전에서 발휘하는 실력</span><span class="drop">DROP HERE</span></div>
+        </div>
+        <div class="result is-no">✗ 3개 중 1개 맞았어요. 틀린 칸을 다시 놓아 봐요.</div>
+        <div class="btn-row"><button class="btn btn--check" type="button">✅ 정답 확인</button><button class="btn" type="button">🔀 다시 섞기</button></div>
+      </div>
+    </section>
+
+    <!-- 전개 ACTIVITY_2 -->
+    <section class="card card--act2">
+      <div class="card__head"><span class="card__stage">전개</span><span class="card__label">ACTIVITY_2</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><rect x="7" y="12" width="30" height="24" rx="8" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><circle cx="16" cy="24" r="3" fill="#4A3B32"/><circle cx="28" cy="24" r="3" fill="#4A3B32"/><path d="M18 30 q4 3 8 0" fill="none" stroke="#4A3B32" stroke-width="2.5" stroke-linecap="round"/><path d="M22 12 V5" stroke="#4A3B32" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="4" r="3" fill="#FFE27A" stroke="#4A3B32" stroke-width="2"/></svg></span>
+          <h2>인공지능일까, 아닐까?</h2>
+        </div>
+        <p class="sub"><span class="sub__n">1</span>인공지능을 구분하는 기준</p>
+        <div class="figure">
+          <div class="figure__box">그림 자리 — 일반 소프트웨어 vs 인공지능 소프트웨어 (a2-compare.svg)</div>
+          <button class="btn" type="button">▶ 움직이는 모습 보기</button>
+        </div>
+        <div class="callout callout--tip"><b>📌 기준은 「학습했나?」 하나예요</b><p>인공지능 소프트웨어는 데이터로 학습한 인공지능 모델을 써서 스스로 판단해요. 일반 소프트웨어는 사람이 미리 정해 둔 규칙과 순서대로만 움직여요.</p></div>
+        <p class="sub"><span class="sub__n">2</span>내 핸드폰 속 이 기능은 인공지능일까? 아닐까? 기능을 나눠 봐요.</p>
+        <div class="tagpool"><span class="chip" tabindex="0" role="button">인공지능 소프트웨어</span><span class="chip" tabindex="0" role="button">일반 소프트웨어</span></div>
+        <div class="stack">
+          <div class="match-row"><span>내가 끝까지 본 영상과 「좋아요」를 보고 다음 영상을 골라 주는 틱톡 추천 피드</span><span class="drop">DROP HERE</span></div>
+          <div class="match-row"><span>얼굴을 찾아 강아지 귀와 코를 씌워 주는 인스타그램 필터</span><span class="drop">DROP HERE</span></div>
+          <div class="match-row"><span>사귄 날짜를 넣으면 100일·200일을 계산해 주는 디데이 앱</span><span class="drop">DROP HERE</span></div>
+          <div class="match-row"><span>매일 아침 7시에 울리도록 맞춰 둔 알람</span><span class="drop">DROP HERE</span></div>
+        </div>
+        <div class="btn-row"><button class="btn btn--check" type="button">✅ 정답 확인</button><button class="btn" type="button">🔀 다시 섞기</button></div>
+        <p class="sub"><span class="sub__n">3</span>어떤 게임의 몬스터는 「AI」라고 불리지만, 개발자가 정해 둔 「플레이어가 세 칸 안에 오면 공격한다」 규칙대로만 움직여요. 이 몬스터를 움직이는 것은 인공지능 소프트웨어일까, 일반 소프트웨어일까?</p>
+        <div class="choices">
+          <button class="choice is-disabled" type="button" disabled>인공지능 소프트웨어</button>
+          <button class="choice is-ok" type="button">✓ 일반 소프트웨어</button>
+        </div>
+        <div class="reason is-ok">✓ 맞아요! 사람이 정한 규칙대로만 움직이고, 데이터로 학습하지 않았으니 일반 소프트웨어예요.</div>
+      </div>
+    </section>
+
+    <!-- 전개 ACTIVITY_3 -->
+    <section class="card card--act3">
+      <div class="card__head"><span class="card__stage">전개</span><span class="card__label">ACTIVITY_3</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><path d="M8 22 C14 10 30 10 36 22 L41 17 L40 30 L28 28 L33 24 C29 17 17 17 13 25 Z" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/><circle cx="17" cy="21" r="2.2" fill="#4A3B32"/><path d="M6 34 C12 28 18 28 24 34 C30 40 36 40 42 34" fill="none" stroke="#4A3B32" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <h2>내가 AI 트레이너! 바다를 청소하는 AI를 학습시켜 볼까?</h2>
+        </div>
+        <p>AI for Oceans(바다를 위한 AI)에서 AI에게 물고기와 쓰레기를 구별하는 법을 가르쳐요. 내가 누르는 버튼 하나하나가 AI의 학습 데이터가 돼요.</p>
+        <p class="sub"><span class="sub__n">1</span>2단계부터 시작해요(1단계 영상은 건너뛰어요).</p>
+        <div class="btn-row"><a class="btn btn--link" href="#" role="button">🔗 바다를 위한 AI 2단계 열기</a></div>
+        <p class="sub"><span class="sub__n">2</span>「계속」을 눌러 3단계를 보고 답해요. AI가 바다 생물 몇몇(게, 문어, 거북 등)까지 「물고기 아님」으로 골라냈어요. 왜 그랬을까요?</p>
+        <div class="choices choices--v">
+          <button class="choice is-no" type="button">✗ AI가 고장 나서</button>
+          <button class="choice is-disabled" type="button" disabled>학습 데이터에 물고기와 쓰레기만 있어서, 바다 생물은 배운 적이 없어서</button>
+          <button class="choice is-disabled" type="button" disabled>바다 생물은 바다에 있으면 안 돼서</button>
+        </div>
+        <div class="reason is-no">✗ 아쉬워요. AI는 고장 난 게 아니라, 학습 데이터에 없던 것을 배운 적이 없어서 「물고기 아님」으로 골랐어요.</div>
+      </div>
+    </section>
+
+    <!-- 전개 ACTIVITY_4 -->
+    <section class="card card--act4">
+      <div class="card__head"><span class="card__stage">전개</span><span class="card__label">ACTIVITY_4</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><path d="M5 22 H39 C39 32 32 38 22 38 C12 38 5 32 5 22 Z" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/><path d="M9 22 C12 12 32 12 35 22" fill="#FFE6A8" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/><circle cx="18" cy="18" r="1.8" fill="#4A3B32"/><circle cx="26" cy="18" r="1.8" fill="#4A3B32"/></svg></span>
+          <h2>AI의 밥, 데이터</h2>
+        </div>
+        <p class="sub"><span class="sub__n">1</span>데이터에 관한 낱말 세 가지를 알아봐요.</p>
+        <div class="figure">
+          <div class="figure__box">그림 자리 — 학습 데이터·레이블·테스트 데이터 흐름 (a4-data)</div>
+          <button class="btn" type="button">▶ 움직이는 모습 보기</button>
+        </div>
+        <div class="tagpool"><span class="chip" tabindex="0" role="button">학습 데이터</span><span class="chip" tabindex="0" role="button">테스트 데이터</span><span class="chip" tabindex="0" role="button">레이블</span></div>
+        <div class="concepts">
+          <div class="concept">
+            <svg width="40" height="40" viewBox="0 0 44 44"><path d="M6 10 H28 L40 22 L28 34 H6 Z" fill="#FFE6A8" stroke="#4A3B32" stroke-width="3" stroke-linejoin="round"/><circle cx="14" cy="22" r="3" fill="#FFFFFF" stroke="#4A3B32" stroke-width="2.5"/></svg>
+            <div class="concept__word"><span class="drop is-filled"><span class="chip is-dropped">레이블</span></span></div>
+            <p>데이터에 붙인 정답 <input class="blank" aria-label="빈칸">예요. 인스타 사진에 #떡볶이를 다는 것처럼, 사진에 「고양이」라고 붙여요.</p>
+            <div class="concept__exam">시험공부라면? → 문제의 <input class="blank" style="width:70px" aria-label="빈칸"></div>
+          </div>
+          <div class="concept">
+            <svg width="40" height="40" viewBox="0 0 44 44"><rect x="6" y="12" width="22" height="26" rx="4" fill="#C8EBD4" stroke="#4A3B32" stroke-width="3"/><rect x="12" y="7" width="22" height="26" rx="4" fill="#BDE3F7" stroke="#4A3B32" stroke-width="3"/><rect x="18" y="3" width="20" height="24" rx="4" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/></svg>
+            <div class="concept__word"><span class="drop">DROP HERE</span></div>
+            <p>모델을 학습시키려고 레이블과 함께 보여 주는 데이터예요.</p>
+            <div class="concept__exam">시험공부라면? → 공부하는 <input class="blank" style="width:70px" aria-label="빈칸"></div>
+          </div>
+          <div class="concept">
+            <svg width="40" height="40" viewBox="0 0 44 44"><rect x="8" y="5" width="28" height="34" rx="5" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><path d="M15 15 H29 M15 22 H29 M15 29 H23" stroke="#4A3B32" stroke-width="3" stroke-linecap="round"/><path d="M30 28 L36 34 L42 24" fill="none" stroke="#2E6B44" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="concept__word"><span class="drop">DROP HERE</span></div>
+            <p>학습을 마친 모델이 얼마나 잘 맞히는지 확인하려고 쓰는, 학습에 쓰지 않은 <input class="blank" aria-label="빈칸"> 데이터예요.</p>
+            <div class="concept__exam">시험공부라면? → 처음 보는 시험 문제</div>
+          </div>
+        </div>
+        <p class="small" style="text-align:center">문제집 문제가 그대로 시험에 나오면 진짜 실력을 알 수 없겠죠? 그래서 테스트 데이터는 학습에 쓰지 않은 것으로 골라요.</p>
+        <div class="btn-row"><button class="btn btn--check" type="button">✅ 정답 확인</button><button class="btn" type="button">🔀 다시 섞기</button></div>
+        <p class="sub"><span class="sub__n">3</span>내 취향을 맞히는 영상 추천 AI를 만들었어요. 이 AI가 잘 맞히는지 확인하려면 어떤 데이터로 시험해야 할까요?</p>
+        <div class="choices"><button class="choice" type="button">학습할 때 이미 보여 준 영상들</button><button class="choice" type="button">학습에 쓰지 않은 새 영상들</button></div>
+        <div class="callout callout--reason"><b>💡 Tip</b><p>데이터의 질에는 레이블이 정확한지, 한쪽으로 치우치지 않고 다양한지, 목적에 맞는 데이터인지가 모두 들어가요.</p></div>
+      </div>
+    </section>
+
+    <!-- 정리 KEY_SUMMARY -->
+    <section class="card card--summary">
+      <div class="card__head"><span class="card__stage">정리</span><span class="card__label">KEY_SUMMARY</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><rect x="7" y="6" width="26" height="32" rx="5" fill="#FFFFFF" stroke="#4A3B32" stroke-width="3"/><path d="M14 16 H26 M14 23 H26 M14 30 H20" stroke="#4A3B32" stroke-width="3" stroke-linecap="round"/><path d="M28 34 L38 24 L41 27 L31 37 L27 38 Z" fill="#FFB3C7" stroke="#4A3B32" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+          <h2>오늘 배운 것 — 인공지능은 데이터로 배워요</h2>
+        </div>
+        <p class="small" style="text-align:center">이름표를 끌어다 빈칸에 놓아요. (같은 이름표를 두 번 써도 돼요)</p>
+        <div class="tagpool"><span class="chip" tabindex="0" role="button">질</span><span class="chip" tabindex="0" role="button">학습</span><span class="chip" tabindex="0" role="button">새로운</span><span class="chip" tabindex="0" role="button">규칙</span><span class="chip" tabindex="0" role="button">뉴런</span><span class="chip" tabindex="0" role="button">양</span><span class="chip" tabindex="0" role="button">정답</span></div>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>낱말</th><th>뜻</th><th>오늘 만난 예</th></tr></thead>
+          <tbody>
+            <tr><td>인공지능</td><td>사람의 학습·인식·추론 같은 지적 능력을 흉내 내어 만든 소프트웨어</td><td>틱톡 추천, 인스타 필터</td></tr>
+            <tr><td>인공 신경망</td><td>사람 뇌의 <span class="drop" style="min-width:90px;min-height:38px"></span> 연결을 흉내 낸 구조</td><td>Quick, Draw!의 낙서 인식</td></tr>
+            <tr><td>레이블</td><td>데이터에 붙인 <span class="drop is-filled" style="min-width:0"><span class="chip is-ok" style="min-height:40px;padding:0 14px">✓ 정답</span></span> 이름표</td><td>「물고기」, 「물고기 아님」</td></tr>
+          </tbody>
+        </table></div>
+        <p>인공지능 소프트웨어는 데이터로 <span class="drop" style="min-width:90px;min-height:38px"></span>하고, 일반 소프트웨어는 사람이 정한 <span class="drop" style="min-width:90px;min-height:38px"></span>대로만 움직여요.</p>
+        <div class="btn-row"><button class="btn btn--check" type="button">✅ 정답 확인</button><button class="btn" type="button">🔀 다시 섞기</button></div>
+      </div>
+    </section>
+
+    <!-- 정리 CHECK_UP -->
+    <section class="card card--checkup">
+      <div class="card__head"><span class="card__stage">정리</span><span class="card__label">CHECK_UP</span></div>
+      <div class="card__body">
+        <div class="card__title">
+          <span class="icon-box"><svg width="32" height="32" viewBox="0 0 44 44"><rect x="6" y="6" width="32" height="32" rx="9" fill="#D6E8B8" stroke="#4A3B32" stroke-width="3"/><path d="M14 23 L20 29 L31 16" fill="none" stroke="#4A3B32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h2>형성평가 — O / X</h2>
+        </div>
+        <p class="small">문장마다 O 또는 X 를 눌러요. 누르면 바로 정답인지 알려 주고, 왜 그런지 설명해 줘요.</p>
+        <div class="stack">
+          <div class="ox-row"><span class="coin coin--checkup">1</span><p>틱톡 추천 피드는 내가 본 영상 데이터로 학습한 인공지능이 영상을 골라 준다.</p><div class="ox-btns"><button class="ox is-ok" type="button">O</button><button class="ox" type="button">X</button></div><div class="reason is-ok">✓ 맞아요. 내가 본 영상·좋아요 데이터로 학습한 모델이 다음 영상을 예측해요.</div></div>
+          <div class="ox-row"><span class="coin coin--checkup">2</span><p>사귄 날부터 100일을 계산해 주는 디데이 앱은 인공지능 소프트웨어이다.</p><div class="ox-btns"><button class="ox is-no" type="button">O</button><button class="ox" type="button">X</button></div><div class="reason is-no">✗ 아니에요. 날짜 계산은 사람이 정한 공식대로만 움직이는 일반 소프트웨어예요.</div></div>
+          <div class="ox-row"><span class="coin coin--checkup">3</span><p>인공 신경망은 사람 뇌의 신경 세포(뉴런) 연결을 흉내 낸 구조이다.</p><div class="ox-btns"><button class="ox" type="button">O</button><button class="ox" type="button">X</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pdf-wrap"><button class="pdf-btn" type="button">📄 PDF로 저장하기</button></div>
+  </main>
+</div>
+
+<!-- ======================= 부품 상태 전시 ======================= -->
+<section class="spec" aria-label="부품 상태 모음">
+  <h2>부품 상태 모음</h2>
+
+  <div class="spec-card">
+    <h3>메뉴 탭 <span class="card__label">TABS</span></h3>
+    <div class="spec-row">
+      <div class="spec-item"><nav class="tabbar"><span class="tab tab--rules">📜 이용 규칙</span><span class="tab tab--time" style="background:rgba(255,255,255,0.5)">🕒 시간표</span><span class="tab tab--meal" aria-selected="true">🍚 오늘의 급식</span><span class="tab tab--sheet" aria-selected="true">✏️ 수업 활동지</span></nav><span class="small">평소 / 마우스 올림 / 고름(급식) / 고름(활동지)</span></div>
+      <div class="spec-item"><nav class="tabbar"><span class="tab tab--rules" aria-selected="true">📜 이용 규칙</span><span class="tab tab--time" aria-selected="true">🕒 시간표</span></nav><span class="small">고름(규칙) / 고름(시간표)</span></div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>입력칸 <span class="card__label">INPUT</span></h3>
+    <div class="spec-row" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="spec-item" style="align-items:stretch"><input class="input" placeholder="이름을 적어요"><span class="small">비어 있음 + 안내 글</span></div>
+      <div class="spec-item" style="align-items:stretch"><input class="input is-typing" value="홍길"><span class="small">입력 중</span></div>
+      <div class="spec-item" style="align-items:stretch"><input class="input is-filled" value="홍길동"><span class="small">채움</span></div>
+      <div class="spec-item" style="align-items:stretch"><textarea class="input" placeholder="내 생각을 적어요"></textarea><span class="small">여러 줄 · 비어 있음</span></div>
+      <div class="spec-item" style="align-items:stretch"><textarea class="input is-typing">패턴을 많이 봐서</textarea><span class="small">여러 줄 · 입력 중</span></div>
+      <div class="spec-item" style="align-items:stretch"><textarea class="input is-filled">낙서를 많이 보고 패턴을 배웠기 때문이에요.</textarea><span class="small">여러 줄 · 채움</span></div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>카드 머리·몸통 한 벌 <span class="card__label">CARD_SETS</span></h3>
+    <div class="swatches">
+      <div class="swatch"><i style="background:var(--msi-role-topic-head)"></i><b style="background:var(--msi-role-topic-body)"></b><span>topic</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-myinfo-head)"></i><b style="background:var(--msi-role-myinfo-body)"></b><span>myinfo (새 이름)</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-goals-head)"></i><b style="background:var(--msi-role-goals-body)"></b><span>goals</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-warmup-head)"></i><b style="background:var(--msi-role-warmup-body)"></b><span>warmup</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-intro-head)"></i><b style="background:var(--msi-role-intro-body)"></b><span>intro</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-act1-head)"></i><b style="background:var(--msi-role-act1-body)"></b><span>act1</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-act2-head)"></i><b style="background:var(--msi-role-act2-body)"></b><span>act2</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-act3-head)"></i><b style="background:var(--msi-role-act3-body)"></b><span>act3</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-act4-head)"></i><b style="background:var(--msi-role-act4-body)"></b><span>act4</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-summary-head)"></i><b style="background:var(--msi-role-summary-body)"></b><span>summary</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-checkup-head)"></i><b style="background:var(--msi-role-checkup-body)"></b><span>checkup</span></div>
+      <div class="swatch"><i style="background:var(--msi-role-progress-head)"></i><b style="background:var(--msi-role-progress-body)"></b><span>progress</span></div>
+    </div>
+    <div class="spec-row"><span class="coin">1</span><span class="small">goals-coin</span><span class="coin coin--checkup">1</span><span class="small">checkup-coin</span></div>
+  </div>
+
+  <div class="spec-card">
+    <h3>글 <span class="card__label">TYPE</span></h3>
+    <div class="type-sample">
+      <span class="small">큰 제목 · 강원교육모두 40px</span><span style="font-family:var(--msi-font-display);font-size:var(--msi-fs-h1);line-height:1.15">수업 활동지</span>
+      <span class="small">카드 제목 · 쿠키런 Bold 24px</span><span style="font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-card-title)">인공지능은 어떻게 내 낙서를 알아봤을까?</span>
+      <span class="small">단계 소제목 · 메이플 Bold 18px</span><span class="sub"><span class="sub__n">1</span>인공지능이란?</span>
+      <span class="small">본문 · 메이플 17px</span><span>많은 데이터를 보면서 스스로 패턴을 찾아 배우는 과정</span>
+      <span class="small">작은 안내 · 메이플 16px</span><span class="small">빈칸에 알맞은 낱말을 적어요.</span>
+      <span class="small">영문 라벨 · Silkscreen 16px</span><span class="card__label">ACTIVITY_1</span>
+      <span class="small">버튼 · 쿠키런 Bold 17px</span><span style="font-family:var(--msi-font-title);font-weight:700;font-size:var(--msi-fs-btn)">✅ 정답 확인</span>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>이름표 · 빈 칸 <span class="card__label">CHIP_DROP</span></h3>
+    <div class="spec-row">
+      <div class="spec-item"><span class="chip">학습</span><span class="small">평소</span></div>
+      <div class="spec-item"><span class="chip" style="transform:translateY(-2px);box-shadow:var(--msi-shadow-btn)">학습</span><span class="small">마우스 올림</span></div>
+      <div class="spec-item"><span class="chip is-pressed">학습</span><span class="small">누름(끄는 중)</span></div>
+      <div class="spec-item"><span class="chip show-focus">학습</span><span class="small">키보드 포커스</span></div>
+      <div class="spec-item"><span class="chip is-disabled">학습</span><span class="small">꺼짐</span></div>
+      <div class="spec-item"><span class="drop">DROP HERE</span><span class="small">빈 칸</span></div>
+      <div class="spec-item"><span class="drop is-filled"><span class="chip">학습</span></span><span class="small">이름표 들어감</span></div>
+      <div class="spec-item"><span class="drop is-filled"><span class="chip is-ok">✓ 학습</span></span><span class="small">채점 · 맞음</span></div>
+      <div class="spec-item"><span class="drop is-filled"><span class="chip is-no">✗ 학습</span></span><span class="small">채점 · 틀림</span></div>
+    </div>
+    <div class="spec-row"><div class="result is-ok" style="flex:1">✓ 3개 모두 맞았어요!</div><div class="result is-no" style="flex:1">✗ 3개 중 1개 맞았어요. 틀린 칸을 다시 놓아 봐요.</div></div>
+  </div>
+
+  <div class="spec-card">
+    <h3>일반 버튼 <span class="card__label">BUTTON</span></h3>
+    <div class="spec-row">
+      <div class="spec-item"><span class="btn btn--check">✅ 정답 확인</span><span class="small">평소</span></div>
+      <div class="spec-item"><span class="btn btn--check is-hover">✅ 정답 확인</span><span class="small">마우스 올림</span></div>
+      <div class="spec-item"><span class="btn btn--check is-pressed">✅ 정답 확인</span><span class="small">누름</span></div>
+      <div class="spec-item"><span class="btn btn--check show-focus">✅ 정답 확인</span><span class="small">키보드 포커스</span></div>
+      <div class="spec-item"><span class="btn is-disabled">✅ 정답 확인</span><span class="small">꺼짐</span></div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-item"><span class="btn">🔀 다시 섞기</span><span class="small">다시 섞기</span></div>
+      <div class="spec-item"><span class="btn btn--link">🔗 바깥 사이트 열기</span><span class="small">바깥 사이트</span></div>
+      <div class="spec-item"><span class="btn">▶ 움직이는 모습 보기</span><span class="small">그림 아래</span></div>
+      <div class="spec-item"><div class="ox-btns"><span class="ox">O</span><span class="ox">X</span></div><span class="small">O/X 평소</span></div>
+      <div class="spec-item"><div class="ox-btns"><span class="ox is-ok">O</span><span class="ox is-no">X</span></div><span class="small">O/X 맞음·틀림</span></div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>PDF로 저장하기 <span class="card__label">PDF_BTN</span></h3>
+    <div class="spec-row" style="justify-content:center">
+      <div class="spec-item"><span class="pdf-btn">📄 PDF로 저장하기</span><span class="small">평소</span></div>
+      <div class="spec-item"><span class="pdf-btn is-busy">⏳ 저장하는 중…</span><span class="small">처리 중</span></div>
+      <div class="spec-item"><span class="pdf-btn is-done">✓ 저장했어요</span><span class="small">저장했어요</span></div>
+      <div class="spec-item"><span class="pdf-btn is-error">✗ 다시 눌러 주세요</span><span class="small">다시 눌러 주세요</span></div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>진행률 카드 <span class="card__label">PROGRESS</span></h3>
+    <div class="spec-row">
+      <aside class="progress progress--static"><div class="progress__head">PROGRESS</div><div class="progress__body"><div class="progress__title">활동 진행률</div><div class="progress__num">0% <small>0/32</small></div><div class="bar"><i style="--pct:0%"></i></div></div></aside>
+      <aside class="progress progress--static"><div class="progress__head">PROGRESS</div><div class="progress__body"><div class="progress__title">활동 진행률</div><div class="progress__num">50% <small>16/32</small></div><div class="bar"><i style="--pct:50%"></i></div></div></aside>
+      <aside class="progress progress--static"><div class="progress__head">PROGRESS</div><div class="progress__body"><div class="progress__title">활동 진행률</div><div class="progress__num">100% <small>32/32</small></div><div class="bar"><i style="--pct:100%"></i></div></div></aside>
+      <div class="spec-item"><span class="progress-fab" style="display:inline-flex;position:static">📊 진행률</span><span class="small">폰 · 오른쪽 아래 버튼</span></div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <h3>안내 상자 · 키보드 포커스 <span class="card__label">CALLOUT_FOCUS</span></h3>
+    <div class="spec-row" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+      <div class="callout callout--tip"><b>📌 개념·기준</b><p>인공지능 소프트웨어는 데이터로 학습한 모델을 써서 스스로 판단해요.</p></div>
+      <div class="callout callout--reason"><b>💡 Tip</b><p>데이터의 질에는 레이블이 정확한지, 다양한지, 목적에 맞는지가 들어가요.</p></div>
+    </div>
+    <div class="spec-row"><span class="tab tab--sheet show-focus" aria-selected="true">✏️ 수업 활동지</span><input class="input show-focus" style="width:220px" value="포커스된 입력칸"><span class="ox show-focus">O</span><span class="small">Tab 키로 옮겨 다닐 때 — 분홍 3px 테두리, 3px 띄움</span></div>
+  </div>
+
+
+</section>
+</body>
+</html>

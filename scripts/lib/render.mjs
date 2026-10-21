@@ -22,6 +22,22 @@ function relFromPage(target, lesson) {
   return encodePath(path.posix.relative(pageDir, target));
 }
 
+// 차시 테마(2026-10-21, docs/rules/theme.md) — lesson.json 의 "theme": "<이름>" 이면 design/themes/<이름>/theme.css 를
+// </body> 바로 앞에 <style id="msi-theme"> 로 넣는다. 맨 끝이라 기본 토큰(:root)과 화면 프로그램이 나중에 붙이는 본문 CSS 를 모두 이긴다.
+// 테마가 없거나, PDF 저장(html2canvas 1.4.1)이 못 읽는 색 함수를 쓰면 빌드를 멈춘다.
+export const THEMES_DIR = path.join(ROOT, 'design', 'themes');
+export function themeBlock(meta, where = '') {
+  const name = meta && meta.theme;
+  if (!name) return '';
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) throw new Error(`${where}테마 이름은 영문 소문자·숫자·- 만: "${name}"`);
+  const file = path.join(THEMES_DIR, name, 'theme.css');
+  if (!fs.existsSync(file)) throw new Error(`${where}테마가 없어요: design/themes/${name}/theme.css (lesson.json 의 "theme")`);
+  const css = readText(file).trim();
+  const bad = css.replace(/\/\*[\s\S]*?\*\//g, '').match(/(?<![\w-])(color-mix|color|oklch|oklab|lab|lch|hwb)\(/);
+  if (bad) throw new Error(`${where}테마 ${name}: ${bad[1]}() 는 PDF 저장(html2canvas 1.4.1)이 못 읽어요 — #hex·rgba() 로 (docs/rules/theme.md)`);
+  return `<style id="msi-theme" data-theme="${name}">\n${css}\n</style>`;
+}
+
 function mustExist(file, marker, lesson) {
   if (!fs.existsSync(file)) {
     throw new Error(`[${lesson.id}] 표식이 가리키는 파일이 없어요: ${marker} → ${path.relative(ROOT, file)}`);
@@ -80,6 +96,8 @@ export function renderLesson(lesson, opts) {
   if (!raw) {
     const cfg = loadConfig();
     const inject = [];
+    const theme = themeBlock(lesson.meta, `[${lesson.id}] `);
+    if (theme) inject.push(swapMarkers(theme, lesson, variant, copies));   // 테마 그림도 msi-asset: 표식(저장소 루트 기준, 예: design/themes/<이름>/x.png)
     if (teacher) {
       // 교사용 규칙(2026-10-13 선생님 지시): 왼쪽 고정바는 절대 없다 — docs/rules/teacher.md
       //   알려진 것: 진행률 위젯(.sheet-progress) · 07 묶음(.sheet-side) · 09·10 도움말 카드(.guide-card)
@@ -132,7 +150,9 @@ export function renderPage(lesson, file) {
   const copies = new Map();
   let html = swapMarkers(readText(file), lesson, 'pages', copies);
   copies.set(MEMO_PATH, path.join(ROOT, MEMO_PATH));
-  const tag = `\n<script src="${relFromPage(MEMO_PATH, lesson)}"></script>\n`;
+  let theme = themeBlock(lesson.meta, `[${lesson.id}] `);   // 수업용 화면도 차시 테마 색을 따른다
+  if (theme) theme = swapMarkers(theme, lesson, 'pages', copies);
+  const tag = `\n${theme ? theme + '\n' : ''}<script src="${relFromPage(MEMO_PATH, lesson)}"></script>\n`;
   const i = html.lastIndexOf('</body>');
   html = i >= 0 ? html.slice(0, i) + tag + html.slice(i) : html + tag;
   return { html, copies: [...copies].map(([to, from]) => ({ to, from })) };

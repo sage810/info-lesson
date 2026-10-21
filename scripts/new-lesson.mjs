@@ -3,12 +3,14 @@
 //
 //   npm run new -- data-analysis/08 --title "새 차시 제목"            ← 기본: 새 차시 틀 _templates/order(= ai/01, 부품 규칙 docs/rules/parts.md) 그대로
 //   npm run new -- data-analysis/08 --from 07 --title "…"             ← 예전 차시를 복사할 때만
+//   npm run new -- ai/02 --theme summer-sea --title "…"               ← 차시 테마(design/themes/<이름>, docs/rules/theme.md) — lesson.json 에 "theme" 한 줄
 //
 // 만들어지는 것: lessons/<단원>/<차시>/ lesson.html(복사본) · assets/(복사본) · lesson.json(status: draft) · spec.md(빈 틀)
 // 그다음: Claude 에게 "/lesson-new 08" 로 기획부터, 또는 "/lesson-edit 08 …" 로 내용 교체를 부탁하면 된다.
 import fs from 'node:fs';
 import path from 'node:path';
 import { LESSONS_DIR, listLessons, pickLessons, writeText, rel } from './lib/common.mjs';
+import { THEMES_DIR } from './lib/render.mjs';
 
 const argv = process.argv.slice(2);
 const opt = {}; const pos = [];
@@ -33,6 +35,13 @@ try {
     ? { id: opt.from, dir: tpl, src: path.join(tpl, 'lesson.html'), meta: JSON.parse(fs.readFileSync(path.join(tpl, 'lesson.json'), 'utf8')) }
     : opt.from ? pickLessons([opt.from])[0] : all[all.length - 1];
 
+  // 차시 테마 — 있는 테마만. 테마 변수(--msi-shape-*·역할 색)는 틀(_templates/order)에서 만든 차시만 갖고 있다.
+  if (opt.theme !== undefined) {
+    if (typeof opt.theme !== 'string') throw new Error('--theme 다음에 테마 이름을 적어 주세요. 있는 테마: ' + (fs.existsSync(THEMES_DIR) ? fs.readdirSync(THEMES_DIR).filter((n) => fs.existsSync(path.join(THEMES_DIR, n, 'theme.css'))).join(', ') || '(없음)' : '(없음)'));
+    if (!fs.existsSync(path.join(THEMES_DIR, opt.theme, 'theme.css'))) throw new Error(`테마가 없어요: design/themes/${opt.theme}/theme.css`);
+    if (!tpl) console.warn('  ! 테마는 틀(_templates/order)에서 만든 차시에만 제대로 입혀져요 — 예전 차시 복사본은 색 일부만 바뀔 수 있어요.');
+  }
+
   fs.mkdirSync(dir, { recursive: true });
   fs.copyFileSync(from.src, path.join(dir, 'lesson.html'));
   const fromAssets = path.join(from.dir, 'assets');
@@ -40,7 +49,7 @@ try {
   const unitTitle = all.find((l) => l.unit === unit)?.meta.unitTitle || opt['unit-title'] || unit;
   writeText(path.join(dir, 'lesson.json'), JSON.stringify({
     unit, unitTitle, no, title: opt.title || `${no}차시 (제목 미정)`,
-    shell: from.meta.shell, status: 'draft', copiedFrom: from.id,
+    shell: from.meta.shell, ...(opt.theme ? { theme: opt.theme } : {}), status: 'draft', copiedFrom: from.id,
   }, null, 2) + '\n');
   writeText(path.join(dir, 'spec.md'), `# ${opt.title || no + '차시'} — 기획
 
@@ -66,7 +75,7 @@ try {
 ## 정답 · 채점 기준
 (빈칸 aria-label → 정답 은 answers.json 에)
 `);
-  console.log(`✔ ${rel(dir)} 만들었어요 (${from.id} 복사, status: draft — 목록 페이지에는 "준비 중"으로 보여요)`);
+  console.log(`✔ ${rel(dir)} 만들었어요 (${from.id} 복사${opt.theme ? ', 테마 ' + opt.theme : ''}, status: draft — 목록 페이지에는 "준비 중"으로 보여요)`);
   console.log('  다음: Claude 에게 "/lesson-new ' + no + '" 로 기획을 부탁하세요.');
 } catch (e) {
   console.error('✖ ' + e.message);

@@ -13,6 +13,7 @@ const PREFIX = {
   role: 'role-',   // 역할 → 색(카드 머리·몸통·탭·과목…) — 새 차시 틀이 씀. 아래 "역할 색" 참고
   glass: 'glass-', motion: 'motion-',   // 유리 층·움직임(2026-10-16) — 활동지 블록에도 들어감
   part: 'part-',   // 활동 부품 치수(ai/01, 2026-10-18) — 활동지 블록에도 들어감
+  shape: 'shape-', rgb: 'rgb-',   // 차시 테마가 바꾸는 모양·잉크 RGB(2026-10-21, docs/rules/theme.md) — 활동지 블록에도 들어감
 };
 const varName = (group, name) => `--msi-${PREFIX[group]}${name}`;
 const alias = (v) => String(v).replace(/\{([\w-]+)\.([\w-]+)\}/g, (_, g, n) => `var(${varName(g, n)})`);
@@ -147,7 +148,7 @@ console.log('✔ design/preview.html');
 //   <style id="msi-role-tokens">…</style> 를 이 스크립트가 tokens.json 값으로 다시 채운다(그 표식이 있는 차시·틀만).
 const ROOT = path.join(dir, '..');
 const roles = Object.entries(tokens.role).filter(([n]) => !n.startsWith('$'));
-const LESSON_GROUPS = ['glass', 'motion', 'size', 'part'];   // 활동지 블록에 role 과 함께 넣는 묶음(유리 층·움직임·손가락 크기, 2026-10-16)
+const LESSON_GROUPS = ['glass', 'motion', 'size', 'part', 'shape', 'rgb'];   // 활동지 블록에 role 과 함께 넣는 묶음(유리 층·움직임·손가락 크기, 2026-10-16)
 const extra = LESSON_GROUPS.flatMap((g) => Object.entries(tokens[g]).filter(([n]) => !n.startsWith('$')).map(([n, v]) => [g, n, v]));
 const roleBlock = `<style id="msi-role-tokens">/* 자동 생성 — design/tokens.json 의 role 을 고치고 node design/build.mjs (docs/rules/color-map.md) */
 :root{

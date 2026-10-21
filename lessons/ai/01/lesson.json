@@ -5,5 +5,6 @@
   "title": "인공지능이란?",
   "shell": "portal",
   "status": "live",
-  "copiedFrom": "_templates/order"
+  "copiedFrom": "_templates/order",
+  "theme": "sticker"
 }
