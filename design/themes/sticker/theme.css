@@ -275,3 +275,29 @@ a.glass-pill[target="_blank"]{ --gp-tint:#D4E6F7; }   /* ↗ 바깥 사이트 = 
 #pdfBtn[data-state="done"]{ box-shadow:0 10px 24px rgba(191,230,214,.7) !important; }
 #pdfBtn[data-state="error"]{ box-shadow:0 10px 24px rgba(246,180,174,.7) !important; }
 @media (prefers-reduced-motion:reduce){ .glass-pill:hover, .glass-chip:hover, .ca-chip:hover, .seq-chip:hover, #pdfBtn:hover{ transform:none; } }
+
+/* ── 수업용 화면(present.html, 2026-10-22) — #stage 는 수업용 화면에만 있다. 모양 숫자는 변수로 바꿔 둠(to-vars --file present.html) ── */
+body:has(> #stage){ background-image:radial-gradient(var(--msi-role-page-grid) 1.4px, rgba(0,0,0,0) 1.6px); background-size:22px 22px; }
+#stage{ border-radius:22px; --q-bg:var(--msi-role-base-blush-paper); }   /* 「?」 빈칸 = 분홍 종이 */
+#stage .glow{ display:none; }
+#stage .gp:hover{ transform:translateY(-2px); }
+#stage .cv-unit .u{ padding:2px 16px; border:var(--msi-shape-bw3) solid var(--msi-role-base-night-sky-ink); border-radius:var(--msi-shape-r-pill); background:var(--msi-role-goals-head); }
+/* 번호 동전 → 말풍선 · 순서 ①~④ → 말랑 네모 */
+#stage .coin{ border:0; border-radius:0; box-shadow:none; padding-bottom:6px; background:var(--msi-role-checkup-coin-shape) center / 52px 52px no-repeat; }
+#stage .goals .coin{ background:var(--msi-role-goals-coin-shape) center / 52px 52px no-repeat; }
+#stage .ss-num{ border-radius:16px; background:var(--msi-role-order-coin); }
+/* 장 머리 아이콘 · 오늘의 목표 아이콘 → 그림(활동지 카드와 같은 그림, ⌨️ 은 글자 그대로) */
+#bar .b-badge:is([data-ic="🎯"], [data-ic="✏️"], [data-ic="🎨"], [data-ic="🔎"], [data-ic="🧠"], [data-ic="🤖"], [data-ic="🌊"], [data-ic="🍚"], [data-ic="📝"], [data-ic="✅"]){
+  font-size:0; background:var(--msi-role-base-cream-paper) center / 88% no-repeat; }
+#stage .goals-hd [data-ic="🎯"]{ display:inline-block; width:44px; height:44px; margin:-6px 0; font-size:0; background:center / contain no-repeat; }
+#bar .b-badge[data-ic="🎯"], #stage .goals-hd [data-ic="🎯"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-target.png); }
+#bar .b-badge[data-ic="✏️"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-sheet.png); }
+#bar .b-badge[data-ic="🎨"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-palette.png); }
+#bar .b-badge[data-ic="🔎"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-search.png); }
+#bar .b-badge[data-ic="🧠"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-brain.png); }
+#bar .b-badge[data-ic="🤖"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-robot.png); }
+#bar .b-badge[data-ic="🌊"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-wave.png); }
+#bar .b-badge[data-ic="🍚"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-rice.png); }
+#bar .b-badge:is([data-ic="📝"], [data-ic="✅"]){ background-image:url(msi-asset:design/themes/sticker/icons/ic-check.png); }
+/* 타이머 고르기 칸 화살표도 갈색 잉크 */
+#stage .tm-sel{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%234A3B32' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }

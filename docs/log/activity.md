@@ -308,3 +308,4 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 빌드: 테마 CSS 의 `msi-asset:` 도 바꿈(`render.mjs` — 사이트는 파일, embed 는 data URI). PDF 는 id 를 지운 복제본(`.msi-pdf-clone`)을 찍으므로 카드 쪽 테마 규칙은 `:is(#sheetPrintArea, .msi-pdf-clone)`.
 - ai/01 에 입힘(내용은 그대로): 틀 줄을 숫자로 되돌려 같으면 틀 줄로 바꾸는 방식으로 234줄 → 테마 없이 4탭 × 1280/390 계산 스타일 전후 같음 → `"theme": "sticker"`. 규칙 `docs/rules/theme.md`.
 - 이 과정을 스킬 **`lesson-theme`** 으로 묶음(2026-10-22) — 도구 `references/`: 견본 캡처 · 아이콘 만들기 · PDF 리허설 · 숫자→변수(`to-vars`) · 전후 계산 스타일 비교(`style-compare`).
+- ai/01 수업용 화면도 스티커 모양으로(2026-10-22): `to-vars --file present.html` 65줄 → 테마 없이 25장 × 가림/열림 계산 스타일 전후 같음 → theme.css 「수업용 화면」 묶음 + 장 머리 아이콘 `data-ic`(스크립트). 비교 도구에 `--present` 를 더함.

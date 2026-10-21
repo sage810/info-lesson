@@ -33,7 +33,9 @@ description: >
    - 틀에서 만든 차시(`--msi-shape-*` 를 씀): `lesson.json` 에 `"theme": "<이름>"` 한 줄
    - 숫자 모양 차시(틀을 변수로 바꾸기 전에 복사한 차시): lesson.html 을 scratchpad 에 복사 → `references/to-vars.mjs <단원/차시>`
      → `references/style-compare.mjs <단원/차시> "<사본>"` 이 **✔ 전후 계산 스타일 같음**일 때만 테마 줄을 넣는다
-   - `npm run check -- <차시>` → 캡처 확인 → PDF 리허설. present.html 은 색만 따른다(캡처로 깨짐만 확인)
+   - 수업용 화면(present.html)이 있으면: 사본 → `references/to-vars.mjs <단원/차시> --file present.html` → `references/style-compare.mjs <단원/차시> "<사본>" --present`(모든 장 × 가림/열림)
+     → theme.css 「수업용 화면」 묶음(`#stage …`)으로 장식 · 아이콘. 모든 장을 캡처해 넘침 · 오류 0(`window.__present`)
+   - `npm run check -- <차시>` → 캡처 확인 → PDF 리허설
 7. **아이콘 그림**(피드백 「아이콘 변경」) — 원작 캐릭터·브랜드 그림이면 공개 사이트에 올라간다는 것을 먼저 알리고 묻는다(한 번 정하면 같은 종류는 따름).
    받은 파일을 scratchpad 로 복사 → `references/icon-make.mjs "<입력>" "design/themes/<이름>/icons/<이름>.png"`(128px, 단색 바탕 지움) → 색 바탕 위에서 Read 로 확인
    → theme.css 에 `[data-ic="<이모지>"]` 규칙(아래 함정 참고). 틀·차시의 이모지 자리에 `data-ic` 가 없으면 붙인다(테마 없을 때 화면 같은지 확인).
