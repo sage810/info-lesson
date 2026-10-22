@@ -1,0 +1,32 @@
+{
+  "_설명": "인공지능 2차시 정답(선생님 양식 2026-10-22, 활동 2·핵심 정리·형성평가는 Claude 초안). 활동 1은 따라 하기라 칸 없음. 활동 2 빈칸·붙여넣기는 학생마다 달라 정답 없음(비움). 하나 고르기 1·O/X 5(누르면 바로 채점)는 묶음 aria-label 로, 핵심 정리 이름표는 이름표 → 칸 → 확인.",
+  "name": "교사용 정답지",
+  "fill": {},
+  "click": [
+    "[aria-label='활동2 더 잘 맞히기 문제 보기'] button.glass-chip:has-text('더 다양하게'):visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='클래스']:visible",
+    "#sum-1:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='이름']:visible",
+    "#sum-2:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='학습 데이터']:visible",
+    "#sum-3:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='학습']:visible",
+    "#sum-4:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='테스트 데이터']:visible",
+    "#sum-5:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='새로운']:visible",
+    "#sum-6:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='학습 데이터']:visible",
+    "#sum-7:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='클래스']:visible",
+    "#sum-8:visible",
+    "[data-ca-group='sumca'] .ca-chip[data-v='확률']:visible",
+    "#sum-9:visible",
+    "#sumcaCheck:visible",
+    "[aria-label='1번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='2번 문장 O 또는 X 고르기'] button:text-is('X'):visible",
+    "[aria-label='3번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='4번 문장 O 또는 X 고르기'] button:text-is('O'):visible",
+    "[aria-label='5번 문장 O 또는 X 고르기'] button:text-is('X'):visible"
+  ]
+}

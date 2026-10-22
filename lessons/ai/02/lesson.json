@@ -1,0 +1,10 @@
+{
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "02",
+  "title": "이미지 분류 인공지능 모델 만들기",
+  "shell": "portal",
+  "status": "live",
+  "copiedFrom": "_templates/order",
+  "theme": "sticker"
+}
