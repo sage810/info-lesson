@@ -19,7 +19,7 @@
 - 제목줄 학교 아이콘 🏫 → `app-icon.png`(선생님 피드백 2026-10-21, 받은 그림을 128px 로 줄임). 틀의 `<span class="app-ic">` 를 글자 크기 0 + 배경 그림으로.
   치이카와 원작 캐릭터 그림 — 공개 사이트에 쓰는 것은 선생님이 정함(2026-10-21).
 - 아이콘 그림 `icons/`(선생님 피드백 2026-10-21, 받은 그림 → 분홍 바탕 지우기 · 자르기 · 128px) — 틀의 `data-ic` 자리:
-  메뉴 탭 📜·🕒 `tab-rules` · 🍚 `tab-meal` · ✏️ `tab-sheet` / 🎯 `ic-target` / 카드 🎨 `ic-palette` · 🔎 `ic-search` · 🧠 `ic-brain` · 🤖 `ic-robot` · 🌊 `ic-wave` · 🍚 `ic-rice` · 📝·✅ `ic-check`.
+  메뉴 탭 📜 `tab-rules` · 🕒 `tab-time`(2026-10-22) · 🍚 `tab-meal` · ✏️ `tab-sheet` / 🎯 `ic-target` / 카드 🎨 `ic-palette` · 🔎 `ic-search` · 🧠 `ic-brain` · 🤖 `ic-robot` · 🌊 `ic-wave` · 🍚 `ic-rice` · 📝·✅ `ic-check`.
   카드 아이콘 칸은 이 테마에서 30 → 40px.
 - 메뉴 탭: 분홍 트랙 안의 알약, 고른 탭은 흰 종이(견본 1b) — 네모 칩 시안(B)과 비교해 이쪽으로 선생님 결정(2026-10-22, 시안 A). 탭 모양은 `tabChip()` 인라인이라 `!important`. 폰(≤560px)은 2×2 라 트랙 모서리 18.
 - 단원 이름 버터 알약 · 번호 동전 말풍선(SVG data URI — PDF 에도 나옴) · 순서 ①~④ 말랑 네모 · 이름표 놓는 칸 알약

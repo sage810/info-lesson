@@ -213,7 +213,8 @@
    PDF 는 id 를 지운 복제본(.msi-pdf-clone)을 찍으므로 :is(#sheetPrintArea, .msi-pdf-clone).
    .m-badge.m-badge 두 번 = 틀의 「글자 16px 이상」 규칙(#sheetPrintArea :is(… .ai-ox .q .why …), 1·3·0)과 같은 세기 → 뒤에 있는 이쪽이 이김 */
 #appTitlebar .tab-chip [data-ic]{ display:inline-block; width:30px; height:30px; margin:-6px -2px -6px -6px; font-size:0 !important; background:center / contain no-repeat; }
-#appTitlebar .tab-chip [data-ic="📜"], #appTitlebar .tab-chip [data-ic="🕒"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-rules.png); }
+#appTitlebar .tab-chip [data-ic="📜"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-rules.png); }
+#appTitlebar .tab-chip [data-ic="🕒"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-time.png); }   /* 피드백 2026-10-22 */
 #appTitlebar .tab-chip [data-ic="🍚"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-meal.png); }
 #appTitlebar .tab-chip [data-ic="✏️"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-sheet.png); }
 :is(#sheetPrintArea, .msi-pdf-clone) .m-badge, :is(#sheetPrintArea, .msi-pdf-clone) div[data-ic="🎯"]{ width:40px !important; height:40px !important; }
