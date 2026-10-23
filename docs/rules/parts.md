@@ -16,7 +16,9 @@
 
 | 규칙 | 모양 | 근거(피드백) |
 |---|---|---|
-| 카드 제목은 **글자만** | `<div class="m-title-row"><div class="m-badge" data-ic="🎨">🎨</div><div class="m-title" role="heading" aria-level="2">…</div></div>` — 질문 스티커(`m-title--q`)는 쓰지 않는다. **이모지를 바꾸면 `data-ic` 도 같은 이모지로**(테마가 그 이모지를 그림으로 바꿈, `theme.md`) | 10-17 「텍스트만」 ×4 · 10-21 data-ic |
+| 카드 제목은 **글자만** | `<div class="m-title-row"><div class="m-badge" data-ic="🎨">🎨</div><div class="m-title" role="heading" aria-level="2">…</div></div>` — 질문 스티커(`m-title--q`)는 쓰지 않는다. `data-ic` 는 글자와 같은 이모지(테마가 그 이모지를 그림으로 바꿈, `theme.md`). **아이콘은 아래 「카드 아이콘은 자리마다 고정」 표대로** | 10-17 「텍스트만」 ×4 · 10-21 data-ic |
+| **카드 아이콘은 자리마다 고정** | 차시 내용과 상관없이 카드 자리로 정한다 — **TODAY_GOALS 🎯 · WARM_UP 🎨 · TODAY_TOPIC 🔎 · ACTIVITY_1 🧠 · ACTIVITY_2 🤖 · ACTIVITY_3 🌊 · ACTIVITY_4 🍚 · KEY_SUMMARY 📝 · CHECK_UP ✅**(틀 `_templates/order` 와 같음). 활동이 5개 이상이면 ACTIVITY_5 부터 🧠 🤖 🌊 🍚 를 차례로 다시. 다른 이모지를 고르지 않는다 — 스티커 테마는 이 이모지들만 캐릭터 그림으로 바꾼다(`design-sticker/README.md` §5) | 10-23 「아이콘은 꼭 이걸로 고정되도록 템플릿으로」 ×10 (ai/02 의 🖼️ 🛠️ 📋 → 🎨 🧠 🤖) |
+| **「N차시」는 귤빛 알약 태그로 고정** | TODAY_TOPIC 의 `<div class="unit-head"><span class="unit">단원</span><span class="no">N차시</span></div>` — 「· 」 없이 숫자+차시만. 모양은 틀의 `.unit-head .no {` 규칙(귤빛 `linear-gradient(135deg,#FFE3BD,#FFC992)` · 잉크 테두리 · 알약 모서리) 그대로, 차시마다 바꾸지 않는다(`design-sticker/README.md` ①) | 10-22 귤빛 B · 10-23 「알약 태그로 디자인 고정」(틀·ai/02·07 에도) |
 | 단계 소제목은 `1. 2. 3.` | `<div class="m-hd2">1. 인공지능이란?</div>` — 짧은 명사형도 됨. 지운 단계가 있으면 번호를 다시 매긴다 | 10-17 |
 | 설명 글 | 본문 `p.ord-p`, 작은 안내 `p.m-sub`, 가운데가 필요하면 `.ai-center` | 10-18 |
 | **부품 위 조작 안내 글은 쓰지 않는다** | 「빈칸에 알맞은 낱말을 적어요.」 「카드를 끌어다 ①~④ 자리에 놓아요. …」처럼 하는 법만 말하는 `p.m-sub` 는 넣지 않는다 — 단계 소제목(`m-hd2`)이 할 일을 말한다. 남기는 것: 규칙을 알려 주는 한 줄(이름표 모음 위 「같은 이름표를 두 번 써도 돼요」) | 10-20 「삭제」 ×2 (수업용 화면도 같음) |
