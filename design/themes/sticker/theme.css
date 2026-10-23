@@ -362,15 +362,18 @@ body:has(> #stage){ background-image:radial-gradient(var(--msi-role-page-grid) 1
 /* 장 머리 아이콘 · 오늘의 목표 아이콘 → 그림(활동지 카드와 같은 그림, ⌨️ 은 글자 그대로) */
 #bar .b-badge:is([data-ic="🎯"], [data-ic="✏️"], [data-ic="🎨"], [data-ic="🔎"], [data-ic="🧠"], [data-ic="🤖"], [data-ic="🌊"], [data-ic="🍚"], [data-ic="📝"], [data-ic="✅"]){
   font-size:0; background:var(--msi-role-base-cream-paper) center / 88% no-repeat; }
+/* 「✏️ 활동지에 적어요」 장의 본뜬 카드 아이콘 칸(.ws-ic, 2026-10-23) — 바탕은 장 머리색 그대로, 그림만 */
+#stage .ws-ic:is([data-ic="🎯"], [data-ic="✏️"], [data-ic="🎨"], [data-ic="🔎"], [data-ic="🧠"], [data-ic="🤖"], [data-ic="🌊"], [data-ic="🍚"], [data-ic="📝"], [data-ic="✅"]){
+  font-size:0; background-position:center; background-size:88%; background-repeat:no-repeat; }
 #stage .goals-hd [data-ic="🎯"]{ display:inline-block; width:44px; height:44px; margin:-6px 0; font-size:0; background:center / contain no-repeat; }
-#bar .b-badge[data-ic="🎯"], #stage .goals-hd [data-ic="🎯"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-target.png); }
-#bar .b-badge[data-ic="✏️"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-sheet.png); }
-#bar .b-badge[data-ic="🎨"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-palette.png); }
-#bar .b-badge[data-ic="🔎"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-search.png); }
-#bar .b-badge[data-ic="🧠"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-brain.png); }
-#bar .b-badge[data-ic="🤖"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-robot.png); }
-#bar .b-badge[data-ic="🌊"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-wave.png); }
-#bar .b-badge[data-ic="🍚"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-rice.png); }
-#bar .b-badge:is([data-ic="📝"], [data-ic="✅"]){ background-image:url(msi-asset:design/themes/sticker/icons/ic-check.png); }
+#bar .b-badge[data-ic="🎯"], #stage .goals-hd [data-ic="🎯"], #stage .ws-ic[data-ic="🎯"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-target.png); }
+#bar .b-badge[data-ic="✏️"], #stage .ws-ic[data-ic="✏️"]{ background-image:url(msi-asset:design/themes/sticker/icons/tab-sheet.png); }
+#bar .b-badge[data-ic="🎨"], #stage .ws-ic[data-ic="🎨"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-palette.png); }
+#bar .b-badge[data-ic="🔎"], #stage .ws-ic[data-ic="🔎"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-search.png); }
+#bar .b-badge[data-ic="🧠"], #stage .ws-ic[data-ic="🧠"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-brain.png); }
+#bar .b-badge[data-ic="🤖"], #stage .ws-ic[data-ic="🤖"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-robot.png); }
+#bar .b-badge[data-ic="🌊"], #stage .ws-ic[data-ic="🌊"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-wave.png); }
+#bar .b-badge[data-ic="🍚"], #stage .ws-ic[data-ic="🍚"]{ background-image:url(msi-asset:design/themes/sticker/icons/ic-rice.png); }
+#bar .b-badge:is([data-ic="📝"], [data-ic="✅"]), #stage .ws-ic:is([data-ic="📝"], [data-ic="✅"]){ background-image:url(msi-asset:design/themes/sticker/icons/ic-check.png); }
 /* 타이머 고르기 칸 화살표도 갈색 잉크 */
 #stage .tm-sel{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%234A3B32' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }

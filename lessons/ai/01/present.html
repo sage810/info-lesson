@@ -435,6 +435,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .ss .ss-a{visibility:hidden}
 .ss::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;color:var(--q);font:700 34px/1 var(--round)}
 .ss.is-open{border-style:solid;border-color:var(--ink);background:var(--msi-glass-top),var(--msi-glass-white),var(--ans,var(--msi-role-chip-ok));box-shadow:var(--msi-glass-inset),var(--sh-btn)}
+.seqv .ss[data-k="a1s2"]{--ans:#D4E6F7 !important}.seqv .ss[data-k="a1s3"]{--ans:var(--msi-role-checkup-coin) !important}.seqv .ss[data-k="a1s4"]{--ans:#F9C4D0 !important}   /* 「알아맞히기까지」 살구 · 베이비블루 · 버터 · 분홍(선생님 선택 C, 2026-10-23). 스크립트가 칸마다 --ans 를 넣어 !important */
 
 /* 이름표 끌어 놓기 — 문장 카드마다 정답 칸, 공개되면 분류 색 */
 .tray{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
@@ -527,6 +528,11 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .tbl--fill{flex:1}
 .tbl--sum td,.tbl--sum td:first-child{font-size:28px;padding:7px 16px}   /* 정리 표는 6줄이라 한 장에 들어가게 조금 작게 */
 .tbl--sum .lm-s--in{min-height:50px}
+/* 정리 = 낱말 표(이름표 모음 없이) + 표 아래 핵심 문장 한 장(피드백 2026-10-23, present.md §6) — 한 장에 들어가게 표 줄도 촘촘히 */
+.slide:has(.callout--sum) .tbl--sum td,.slide:has(.callout--sum) .tbl--sum td:first-child{padding-top:3px;padding-bottom:3px;line-height:1.4}
+.slide:has(.callout--sum) .tbl--sum .lm-s--in{min-height:46px}
+.callout--sum{font-size:30px;line-height:1.75;padding:14px 28px}
+.callout--sum .lm-s--in{width:150px;min-height:52px;font-size:29px}
 .tbl--big .lm-s--term{width:224px;font-size:26px}   /* 정리 표 첫 칸 낱말 = 이름표 빈칸(활동지와 같게) */
 .tray--many{gap:10px}
 .tray--many .lab{min-height:44px;padding:2px 18px;font-size:22px}
@@ -535,6 +541,20 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .mi-mock .bd{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:24px;padding:28px 30px 32px}
 .mi-f{display:flex;flex-direction:column;gap:12px}
 .mi-f b{font-size:32px}
+/* 「✏️ 활동지에 적어요」 — 활동지 카드를 그대로 본뜸(피드백 2026-10-23, docs/rules/present.md §6). 학생이 채울 빈칸은 분홍 점선 + ①② 번호.
+   카드 색은 장의 역할(data-role)을 따른다(--head · --card). 아이콘 칸 .ws-ic 의 data-ic 이모지는 테마가 그림으로 바꿈 */
+.ws-mock{width:1300px;margin:0 auto;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;overflow:hidden;background:var(--card);box-shadow:var(--sh-card)}
+.ws-mock .hd{display:flex;align-items:center;gap:12px;padding:10px 22px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--head);font:700 22px/1 var(--pixel);letter-spacing:.5px}
+.ws-mock .ph{padding:5px 12px;border:var(--msi-shape-bw2) solid var(--ink);border-radius:var(--msi-shape-r6);background:var(--white);font:700 20px/1 var(--round);letter-spacing:0}
+.ws-mock .bd{display:flex;flex-direction:column;gap:14px;padding:22px 32px 28px}
+.ws-mock .tt{display:flex;align-items:center;gap:14px;font:700 32px/1.3 var(--round)}
+.ws-ic{display:grid;place-items:center;width:54px;height:54px;flex:none;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--head);font-size:30px;line-height:1}
+.ws-mock .ds{margin:0;font:300 24px/1.6 var(--body);word-break:keep-all}
+.ws-mock .q{font:700 27px/1.4 var(--round);word-break:keep-all}
+.ws-mock .fl{display:flex;align-items:center;gap:12px;font:300 28px/1 var(--body)}
+.ws-blank{position:relative;display:inline-flex;align-items:center;min-width:120px;min-height:64px;padding:0 22px;border:4px dashed var(--msi-role-ui-focus-pink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 26px/1 var(--body);color:var(--msi-role-ui-placeholder)}
+.ws-blank--area{display:flex;min-height:104px;padding-left:28px}
+.ws-blank i{position:absolute;left:-18px;top:-18px;display:grid;place-items:center;width:40px;height:40px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;background:var(--msi-role-ui-focus-pink);color:#fff;font:700 22px/1 var(--round);font-style:normal}
 .mi-f span{display:flex;align-items:center;min-height:80px;padding:0 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 30px/1 var(--body);color:var(--msi-role-ui-placeholder)}
 .mon{display:block;width:100%;height:auto}
 .mon .cell{fill:var(--msi-role-base-cream-paper);stroke:var(--ink);stroke-width:3}
@@ -719,10 +739,24 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       <div class="mid" style="gap:30px">
         <p class="lead lead--big">Quick, Draw!는 제시어를 <b>20초 안에</b> 그리면<br>AI가 무엇을 그렸는지 알아맞히는 게임이에요.<br>제시어 <b>6개</b>를 그려보고, AI가 <b>몇 개를 맞혔는지</b> 선생님께 이야기해주세요!</p>
         <div class="links"><a class="gp gp--big" href="https://quickdraw.withgoogle.com" target="_blank" rel="noopener">↗ Quick, Draw! 열기</a></div>
-        <ol class="steps">
-          <li><span class="n">1</span><span>「시작하기」를 누르고 제시어 6개를 그려요. AI가 몇 개를 맞혔는지 적어요.</span></li>
-          <li><span class="n">2</span><span>컴퓨터는 어떻게 내 그림을 알아맞혔을까요? 내 생각을 적어 봐요.</span></li>
-        </ol>
+      </div>
+    </section>
+
+    <!-- ══ 2-1 · 도입 — 활동지 WARM_UP 빈칸 채우기(활동지 카드를 그대로 본뜸, 피드백 2026-10-23) ══ -->
+    <section class="slide" data-role="warmup" data-phase="도입" data-code="WARM_UP" data-badge="🎨" data-title="내 그림, AI가 몇 개나 알아맞힐까?" data-name="활동지 WARM_UP 빈칸 채우기">
+      <h2 class="h">✏️ 활동지에 적어요</h2>
+      <div class="mid" style="gap:26px">
+        <p class="lead center" style="font-size:34px">수업 활동지 <b>WARM_UP</b> 칸의 <b>빈칸 두 곳</b>을 채워요.</p>
+        <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">도입</span>WARM_UP</div>
+          <div class="bd">
+            <div class="tt"><span class="ws-ic" data-ic="🎨">🎨</span>내 낙서, AI가 몇 개나 알아맞힐까?</div>
+            <p class="ds">Quick, Draw!는 제시어를 20초 안에 그리면 AI가 무엇을 그렸는지 알아맞히는 게임이에요. 제시어 6개를 그려보고, AI가 몇 개를 맞혔는지 선생님께 이야기해주세요!</p>
+            <div class="q">1. 「시작하기」를 누르고 제시어 6개를 그려요. AI가 몇 개를 맞혔는지 적어요.</div>
+            <div class="fl">내 그림: <span class="ws-blank"><i>①</i></span>개 맞힘</div>
+            <div class="q">2. 컴퓨터는 어떻게 내 그림을 알아맞혔을까요? 내 생각을 적어 봐요.</div>
+            <div class="ws-blank ws-blank--area"><i>②</i>내 생각을 적어요</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -983,7 +1017,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <!-- ══ 17 · 정리 — 낱말 표 ══ -->
     <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 인공지능은 데이터로 배워요" data-name="오늘 배운 것 — 낱말">
       <h2 class="h">오늘 배운 것</h2>
-      <div class="tray tray--many" aria-label="이름표 모음(같은 이름표를 두 번 써도 돼요)"><span class="lab" data-v="인공지능 모델">인공지능 모델</span><span class="lab" data-v="학습">학습</span><span class="lab" data-v="테스트 데이터">테스트 데이터</span><span class="lab" data-v="새로운">새로운</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span><span class="lab" data-v="레이블">레이블</span><span class="lab" data-v="인공지능">인공지능</span><span class="lab" data-v="학습 데이터">학습 데이터</span><span class="lab" data-v="정답">정답</span><span class="lab" data-v="인공 신경망">인공 신경망</span></div>
       <table class="tbl tbl--big tbl--fill tbl--sum">
         <colgroup><col style="width:250px"><col style="width:790px"><col></colgroup>
         <thead><tr><th>낱말</th><th>뜻</th><th>오늘 만난 예</th></tr></thead>
@@ -996,15 +1029,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
           <tr><td><button type="button" class="lm-s lm-s--in lm-s--term" data-v="테스트 데이터"><span class="lm-a">테스트 데이터</span></button></td><td>학습에 쓰지 않은 <button type="button" class="lm-s lm-s--in" data-v="새로운"><span class="lm-a">새로운</span></button> 데이터로 모델의 성능을 확인해요</td><td>AI가 처음 본 바닷속 물체</td></tr>
         </tbody>
       </table>
-    </section>
-
-    <!-- ══ 18 · 정리 — 핵심 문장 ══ -->
-    <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 인공지능은 데이터로 배워요" data-name="인공지능은 데이터로 배워요">
-      <h2 class="h">인공지능은 데이터로 배워요</h2>
-      <div class="tray tray--many" aria-label="이름표 모음"><span class="lab" data-v="인공지능 모델">인공지능 모델</span><span class="lab" data-v="학습">학습</span><span class="lab" data-v="테스트 데이터">테스트 데이터</span><span class="lab" data-v="새로운">새로운</span><span class="lab" data-v="규칙">규칙</span><span class="lab" data-v="뉴런">뉴런</span><span class="lab" data-v="레이블">레이블</span><span class="lab" data-v="인공지능">인공지능</span><span class="lab" data-v="학습 데이터">학습 데이터</span><span class="lab" data-v="정답">정답</span><span class="lab" data-v="인공 신경망">인공 신경망</span></div>
-      <div class="mid">
-        <p class="callout callout--tip callout--big center">인공지능 소프트웨어는 데이터로 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>하고,<br>일반 소프트웨어는 사람이 정한 <button type="button" class="lm-s lm-s--in" data-v="규칙"><span class="lm-a">규칙</span></button>대로만 움직여요.</p>
-      </div>
+      <p class="callout callout--tip callout--sum center" style="margin:0">인공지능 소프트웨어는 데이터로 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>하고,<br>일반 소프트웨어는 사람이 정한 <button type="button" class="lm-s lm-s--in" data-v="규칙"><span class="lm-a">규칙</span></button>대로만 움직여요.</p>   <!-- 「인공지능은 데이터로 배워요」 장을 합침(피드백 2026-10-23) -->
     </section>
 
     <!-- ══ 19 · 정리 — 형성평가 O/X 1~3 ══ -->
@@ -1089,10 +1114,19 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 
   // 2) 칸 준비 — 「?」 칸은 정답 글자를 읽어 주지 않게 이름을 따로, 허용 답은 화면 아래 줄에 미리 만들어 둠
   // 열린 정답 칸 색 — 한 장 안에서 칸마다 돌아가며(노랑 · 살구 · 라일락 · 연두 · 물빛 · 분홍, 선생님 선택 2026-10-19)
-  var ANS = ['--msi-role-lunch-tue', '--msi-role-rule1-head', '--msi-role-checkup-coin', '--msi-role-lunch-wed', '--msi-role-lunch-thu', '--msi-role-view-month'];
-  slides.forEach(function (sl) {
-    [].forEach.call(sl.querySelectorAll('.qb, .ss'), function (el, i) { el.style.setProperty('--ans', 'var(' + ANS[i % ANS.length] + ')'); });
-  });
+  // 그 장의 머리색과 같은 색 · 앞 칸과 같은 색은 건너뛴다(테마에 따라 두 이름이 같은 색일 수 있음 — 피드백 2026-10-23 「이 슬라이드에서 쓰이지 않은 다른 색」).
+  // 값을 비교하려면 테마 CSS(</body> 앞)가 들어온 뒤라 DOMContentLoaded 에 칠한다. 한 장만 따로 정하려면 CSS 에 --ans:… !important.
+  var ANS = ['--msi-role-lunch-tue', '--msi-role-rule1-head', '--msi-role-checkup-coin', '--msi-role-lunch-wed', '--msi-role-lunch-thu', '--msi-role-view-month', '--msi-role-lunch-mon', '--msi-role-myinfo-head'];
+  function paintAns() {
+    var val = function (n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(); };
+    slides.forEach(function (sl) {
+      var head = val('--msi-role-' + sl.dataset.role + '-head'), seen = {};
+      var pool = ANS.filter(function (n) { var v = val(n); if (!v || v === head || seen[v]) return false; seen[v] = 1; return true; });
+      if (!pool.length) pool = ANS;
+      [].forEach.call(sl.querySelectorAll('.qb, .ss'), function (el, i) { el.style.setProperty('--ans', 'var(' + pool[i % pool.length] + ')'); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paintAns); else paintAns();
   slides.forEach(function (sl) {
     var alts = sl.querySelector('.alts');
     [].forEach.call(sl.querySelectorAll('.qb, .ss, .lm-s'), function (el, i) {
