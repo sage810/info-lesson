@@ -1,177 +1,248 @@
 /* sticker — 스케치북 스티커: 크림 종이 + 갈색 잉크 선 + 뽀얀 파스텔 스티커, 폭신한 그림자.
    원본: input/claude-design/sticker/ (Claude Design, 2026-10-21) · 설명: theme.md */
 :root{
-  /* 바탕 · 잉크 */
+  /* 자동 생성 — design-sticker/tokens.json 을 고치고 node design-sticker/build.mjs. 여기를 손으로 고치지 않는다(다음 빌드에 덮어씀). */
+  /* 잉크 RGB — 반투명 잉크(그림자·점선)가 rgba(var(--msi-rgb-ink),.3) 로 씀, 잉크와 같은 색 */
+  --msi-rgb-ink:74,59,50;
+
+  /* 역할 색 — 창·배경 */
   --msi-role-page-bg:#FAF2E1;
   --msi-role-page-grid:#E8D9C0;
-  --msi-role-base-night-sky-ink:#4A3B32;
-  --msi-rgb-ink:74,59,50;                 /* 잉크와 같은 색 */
-  --msi-role-base-button-ink:#4A3B32;
-  --msi-role-base-cream-paper:#FFFDF8;
-  --msi-role-base-white:#FFFDF8;
-  --msi-role-window-body:#FFFDF8;
-  --msi-role-base-blush-paper:#FEF2F5;
-  --msi-role-base-muted-violet:#7A6A60;
-  --msi-role-ui-placeholder:#857062;
-  --msi-role-base-placeholder-haze:#C9ADA1;   /* 빈 칸·이름표 모음 점선 */
-  --msi-role-titlebar-head:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 10px,rgba(255,255,255,0) 10px 20px) #FBE3E8;
-
-  /* 팔레트(base) — 벽지에서 뽑은 밀키 파스텔 */
-  --msi-role-base-apricot:#FBDCC8;
-  --msi-role-base-butter:#FBEFB4;
-  --msi-role-base-cotton-pink:#F9C4D0;
-  --msi-role-base-lavender:#DCD6EE;
-  --msi-role-base-lavender-desk:#FAF2E1;
-  --msi-role-base-lilac:#EFD0E6;
-  --msi-role-base-mint:#BFE6D6;
-  --msi-role-base-periwinkle:#CDD9F3;
-  --msi-role-base-periwinkle-strong:#B9D4F0;
-  --msi-role-base-salmon:#F8CFC4;
-  --msi-role-base-sand:#F3EAE0;
-  --msi-role-base-sky:#BFE1E6;
-  --msi-role-base-sprout:#D9E8B4;
-  --msi-role-base-grid-line:#E8D9C0;
-  --msi-role-base-live-violet:#B04A6C;        /* 「진행 중」 배지(크림 글자 5.2:1) */
-
-  /* 오로라 빛은 쓰지 않는다 — 색만 남겨 두고 투명도 판은 비움 */
   --msi-role-aurora-pink:#F9C4D0;
   --msi-role-aurora-sky:#D4E6F7;
   --msi-role-aurora-lavender:#DCD6EE;
-  --msi-role-aurora-pink-a20:rgba(0,0,0,0);  --msi-role-aurora-pink-a32:rgba(0,0,0,0);  --msi-role-aurora-pink-a60:rgba(0,0,0,0);
-  --msi-role-aurora-sky-a20:rgba(0,0,0,0);   --msi-role-aurora-sky-a32:rgba(0,0,0,0);   --msi-role-aurora-sky-a60:rgba(0,0,0,0);
-  --msi-role-aurora-lavender-a20:rgba(0,0,0,0); --msi-role-aurora-lavender-a28:rgba(0,0,0,0); --msi-role-aurora-lavender-a60:rgba(0,0,0,0);
+  --msi-role-aurora-lavender-a20:rgba(0,0,0,0);
+  --msi-role-aurora-lavender-a28:rgba(0,0,0,0);
+  --msi-role-aurora-lavender-a60:rgba(0,0,0,0);
+  --msi-role-aurora-pink-a20:rgba(0,0,0,0);   /* 오로라 빛은 쓰지 않는다 — 색만 남기고 투명도 판(-aNN)은 모두 비움 */
+  --msi-role-aurora-pink-a32:rgba(0,0,0,0);
+  --msi-role-aurora-pink-a60:rgba(0,0,0,0);
+  --msi-role-aurora-sky-a20:rgba(0,0,0,0);
+  --msi-role-aurora-sky-a32:rgba(0,0,0,0);
+  --msi-role-aurora-sky-a60:rgba(0,0,0,0);
+  --msi-role-window-body:#FFFDF8;
+  --msi-role-titlebar-head:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 10px,rgba(255,255,255,0) 10px 20px) #FBE3E8;
 
-  /* 카드 한 벌 — 위→아래로 따뜻함·차가움 교대 */
-  --msi-role-topic-head:#F9C4D0;    --msi-role-topic-body:#FEF2F5;
-  --msi-role-myinfo-head:#D4E6F7;   --msi-role-myinfo-body:#F2F7FC;
-  --msi-role-goals-head:#FBEFB4;    --msi-role-goals-body:#FFFBE9;    --msi-role-goals-coin:#F6A8BC;
-  --msi-role-warmup-head:#BFE6D6;   --msi-role-warmup-body:#EFF9F5;
-  --msi-role-intro-head:#FBDCC8;    --msi-role-intro-body:#FEF6F0;
-  --msi-role-act1-head:#DCD6EE;     --msi-role-act1-body:#F6F4FB;
-  --msi-role-act2-head:#EFD0E6;     --msi-role-act2-body:#FAF2F8;
-  --msi-role-act3-head:#BFE1E6;     --msi-role-act3-body:#EFF8F9;
-  --msi-role-act4-head:#F8CFC4;     --msi-role-act4-body:#FEF4F1;
-  --msi-role-summary-head:#D9E8B4;  --msi-role-summary-body:#F5F9EC;
-  --msi-role-checkup-head:#CDD9F3;  --msi-role-checkup-body:#F2F5FC;  --msi-role-checkup-coin:#FBEFB4;
-  --msi-role-progress-head:#FBE3E8; --msi-role-progress-body:#FFFDF8;
-  --msi-role-help-head:#F3EAE0;     --msi-role-help-body:#FFFDF8;
-  /* 번호 동전 말풍선 — data URI 안이라 var() 를 못 씀: 채움색(%23…)은 위 *-coin 과 같게 */
-  --msi-role-goals-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23F6A8BC' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
-  --msi-role-checkup-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23FBEFB4' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
-  --msi-role-order-coin:#D4E6F7;              /* 순서 배열 ①~④ 말랑 네모 */
-  --msi-role-tabbar-track:#F3C9D5;            /* 메뉴 탭 4개를 감싸는 분홍 트랙 */
+  /* 역할 색 — 메뉴 탭(고른 탭) */
+  --msi-role-tab-rules:#FFFDF8;
+  --msi-role-tab-time:#FFFDF8;
+  --msi-role-tab-meal:#FFFDF8;
+  --msi-role-tab-sheet:#FFFDF8;
+  --msi-role-tabbar-track:#F3C9D5;   /* 메뉴 탭 4개를 감싸는 분홍 트랙 */
 
-  /* 탭 · 버튼 */
-  --msi-role-tab-rules:#FFFDF8; --msi-role-tab-time:#FFFDF8; --msi-role-tab-meal:#FFFDF8; --msi-role-tab-sheet:#FFFDF8;
-  --msi-role-chip-glass:#FFFDF8;
-  --msi-role-chip-ok:#DDF2E6;
-  --msi-role-chip-no:#FBE0E0;
+  /* 역할 색 — 수업 활동지 카드 */
+  --msi-role-topic-head:#F9C4D0;   /* 카드 한 벌(머리·몸통) — 위→아래로 따뜻함·차가움 교대 */
+  --msi-role-topic-body:#FEF2F5;
+  --msi-role-myinfo-head:#D4E6F7;
+  --msi-role-myinfo-body:#F2F7FC;
+  --msi-role-goals-head:#FBEFB4;
+  --msi-role-goals-body:#FFFBE9;
+  --msi-role-goals-coin:#F6A8BC;
+  --msi-role-warmup-head:#BFE6D6;
+  --msi-role-warmup-body:#EFF9F5;
+  --msi-role-intro-head:#FBDCC8;
+  --msi-role-intro-body:#FEF6F0;
+  --msi-role-act1-head:#DCD6EE;
+  --msi-role-act1-body:#F6F4FB;
+  --msi-role-act2-head:#EFD0E6;
+  --msi-role-act2-body:#FAF2F8;
+  --msi-role-act3-head:#BFE1E6;
+  --msi-role-act3-body:#EFF8F9;
+  --msi-role-act4-head:#F8CFC4;
+  --msi-role-act4-body:#FEF4F1;
+  --msi-role-summary-head:#D9E8B4;
+  --msi-role-summary-body:#F5F9EC;
+  --msi-role-checkup-head:#CDD9F3;
+  --msi-role-checkup-body:#F2F5FC;
+  --msi-role-checkup-coin:#FBEFB4;
+  --msi-role-goals-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23F6A8BC' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");   /* 번호 동전 말풍선 SVG — data URI 안이라 var() 를 못 씀: 채움색(%23…)은 goals-coin 과 같게, 선은 잉크 */
+  --msi-role-checkup-coin-shape:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 4 C32 4 40 11 40 20 C40 29 32 36 22 36 C19 36 17 35.5 15 35 L8 40 L10 32 C6 29 4 25 4 20 C4 11 12 4 22 4 Z' fill='%23FBEFB4' stroke='%234A3B32' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");   /* 채움색은 checkup-coin 과 같게 */
+  --msi-role-order-coin:#D4E6F7;   /* 순서 배열 ①~④ 말랑 네모 */
+
+  /* 역할 색 — 왼쪽 고정 카드 */
+  --msi-role-progress-head:#FBE3E8;
+  --msi-role-progress-body:#FFFDF8;
+  --msi-role-help-head:#F3EAE0;
+  --msi-role-help-body:#FFFDF8;
+
+  /* 역할 색 — PDF 버튼 */
   --msi-role-pdf-btn:#F7AEC0;
   --msi-role-pdf-done:#BFE6D6;
   --msi-role-pdf-error:#F6B4AE;
 
-  /* 안내 · 채점 */
-  --msi-role-ui-callout-tip:#F1EEF9;
-  --msi-role-ui-callout-reason:#EEF7F2;
-  --msi-role-ui-callout-ask:#FFFBE9;
-  --msi-role-ui-callout-warn:#FEF4F1;
-  --msi-role-ui-feedback-ok-bg:#DDF2E6;  --msi-role-ui-feedback-ok-ink:#2F6B48;
-  --msi-role-ui-feedback-no-bg:#FBE0E0;  --msi-role-ui-feedback-no-ink:#A64A4A;
-  --msi-role-ui-focus-pink:#E56A8E;
-  --msi-role-ui-summary-th:#F3EAE0;           /* 표 머리 줄(사암) */
-  --msi-role-ui-stripe-cream:#FFFDF8;         /* 이름표 모음 — 줄무늬 없이 크림 */
-  --msi-role-ui-stripe-violet-a:#FEF2F5;      /* 빈 칸 — 줄무늬 없이 분홍 종이 */
-  --msi-role-ui-stripe-violet-b:#FEF2F5;
-  --msi-role-ui-busy-a:#FBEFB4;  --msi-role-ui-busy-b:#FFF6D6;
-  --msi-role-ui-ghost-hover:#F3EAE0;
-  --msi-role-ui-hl-lilac:#EFD0E6;
-  --msi-role-ui-pink-strong:#F6B4AE;
-  --msi-role-ui-periwinkle-press:#CDD9F3;
+  /* 역할 색 — 고르기 칩(분석 유형) */
+  --msi-role-chip-glass:#FFFDF8;
+  --msi-role-chip-ok:#DDF2E6;
+  --msi-role-chip-no:#FBE0E0;
 
-  /* 흐린 글자 — 작은 글자도 4.5:1 이상(#6B5B51 은 크림 위 6.5:1) */
-  --msi-role-ui-caption-violet:#6B5B51;
-  --msi-role-ui-badge-ink:#6B5B51;
-  --msi-role-ui-deep-violet:#6B5B51;
-  --msi-role-ui-paste-hint-ink:#6B5B51;
-  --msi-role-ui-date-ink:#4A3B32;
-  --msi-role-ui-footer-ink:#6B5B51;
-  --msi-role-ui-link-hover:#4A3B32;
-  --msi-role-ui-note-ink:#6B5B51;
-  --msi-role-ui-time-end-ink:#6B5B51;
+  /* 역할 색 — 이용 규칙 탭 */
+  --msi-role-howto-head:#FBDCC8;
+  --msi-role-howto-body:#FEF6F0;
+  --msi-role-rule1-head:#DCD6EE;
+  --msi-role-rule1-body:#F6F4FB;
+  --msi-role-rule2-head:#D9E8B4;
+  --msi-role-rule2-body:#F5F9EC;
+  --msi-role-rule3-head:#BFE1E6;
+  --msi-role-rule3-body:#EFF8F9;
+  --msi-role-message-head:#F8CFC4;
+  --msi-role-message-body:#FEF4F1;
+  --msi-role-loading-head:#CDD9F3;
+  --msi-role-loading-body:#F2F5FC;
 
-  /* 연한 칸 바탕 */
-  --msi-role-ui-soft-lavender:#F3EAE0;
-  --msi-role-ui-pale-violet:#FFFDF8;
-  --msi-role-ui-help-box:#FFFDF8;
-  --msi-role-ui-guide-body:#EFF9F5;
-  --msi-role-ui-help-btn-hover:#F3EAE0;
-  --msi-role-ui-help-btn-open:#FBE3E8;
-
-  /* 창 · 보기 버튼 */
+  /* 역할 색 — 보기 버튼(시간표·급식) */
   --msi-role-view-day:#F7E8DF;
   --msi-role-view-week:#E9E2F0;
   --msi-role-view-month:#E3EBE6;
 
-  /* 이용 규칙 */
-  --msi-role-howto-head:#FBDCC8;   --msi-role-howto-body:#FEF6F0;
-  --msi-role-rule1-head:#DCD6EE;   --msi-role-rule1-body:#F6F4FB;
-  --msi-role-rule2-head:#D9E8B4;   --msi-role-rule2-body:#F5F9EC;
-  --msi-role-rule3-head:#BFE1E6;   --msi-role-rule3-body:#EFF8F9;
-  --msi-role-message-head:#F8CFC4; --msi-role-message-body:#FEF4F1;
-  --msi-role-loading-head:#CDD9F3; --msi-role-loading-body:#F2F5FC;
-
-  /* 시간표 */
-  --msi-role-tt-grade-box:#FFFDF8;
+  /* 역할 색 — 시간표 탭 */
   --msi-role-tt-week-head:#F3EAE0;
-  --msi-role-tt-time-col:#F3EAE0;
   --msi-role-tt-month-head:#F3EAE0;
-  --msi-role-ui-live-row:#FEF2F5;
-  --msi-role-ui-status-past-bg:#EFE8DF;  --msi-role-ui-status-past-ink:#6B5B51;
-  --msi-role-ui-status-upcoming-ink:#857062; --msi-role-ui-status-upcoming-line:#C9ADA1;
-  --msi-role-ui-today-cell:#FFF6D6;
-  --msi-role-ui-empty-cell:#FAF2E1;  --msi-role-ui-empty-ink:#857062;
-  --msi-role-ui-purple-mut:#DCD6EE;   /* NOTE 동아리 활동 */
-  --msi-role-ui-aqua:#E6EEEA;         /* NOTE 동아리 시간 */
-  /* 과목 19 — 계열 5(언어 분홍 · 사회 피치·버터 · 예체능 민트·연두·아쿠아 · 수리·과학 하늘 · 창체 라벤더·라일락), 잉크 글자 7:1↑ */
-  --msi-role-subj-korean:#F9C4D0;  --msi-role-subj-english:#F7B8C8;  --msi-role-subj-hanmun:#FBD8DF;  --msi-role-subj-chinese:#F4CBDE;
-  --msi-role-subj-social:#FBDCC8;  --msi-role-subj-history:#F8CFC4;  --msi-role-subj-ethics:#FBEFB4;
-  --msi-role-subj-pe:#BFE6D6;      --msi-role-subj-art:#D9E8B4;      --msi-role-subj-music:#BFE1E6;
-  --msi-role-subj-math:#D4E6F7;    --msi-role-subj-science:#CDD9F3;  --msi-role-subj-info:#B9D4F0;    --msi-role-subj-tech-home:#DCE9F9;
-  --msi-role-subj-club:#DCD6EE;    --msi-role-subj-autonomy:#EFD0E6; --msi-role-subj-career:#E6D9F2;  --msi-role-subj-self:#E1D4F0;  --msi-role-subj-volunteer:#F2DDEB;
+  --msi-role-tt-time-col:#F3EAE0;
+  --msi-role-tt-grade-box:#FFFDF8;
 
-  /* 급식 */
-  --msi-role-lunch-head:#F8CFC4;   --msi-role-lunch-body:#FEF4F1;
+  /* 역할 색 — 오늘의 급식 탭 */
+  --msi-role-lunch-head:#F8CFC4;
+  --msi-role-lunch-body:#FEF4F1;
   --msi-role-lunch-total:#FBEFB4;
   --msi-role-lunch-month-head:#F3EAE0;
-  --msi-role-lunch-mon:#F9C4D0; --msi-role-lunch-tue:#FBDCC8; --msi-role-lunch-wed:#FBEFB4; --msi-role-lunch-thu:#BFE6D6; --msi-role-lunch-fri:#D4E6F7;
-  /* 알레르기 19 — 원래 계열 그대로, 연한 바탕 + 잉크 글자 7:1↑ */
-  --msi-role-allergen-1:#FDE3E1;  --msi-role-allergen-2:#FDE8D6;  --msi-role-allergen-3:#FBF3C8;  --msi-role-allergen-4:#FAEDB9;
-  --msi-role-allergen-5:#EEF5CF;  --msi-role-allergen-6:#DDF2E6;  --msi-role-allergen-7:#D8F1EE;  --msi-role-allergen-8:#DDEFF9;
-  --msi-role-allergen-9:#DCE6F8;  --msi-role-allergen-10:#DEE1F2; --msi-role-allergen-11:#EADFF5; --msi-role-allergen-12:#E6D8F0;
-  --msi-role-allergen-13:#F3DDEC; --msi-role-allergen-14:#FBE0EA; --msi-role-allergen-15:#FBDEDA; --msi-role-allergen-16:#F1E2D6;
-  --msi-role-allergen-17:#D6EEEA; --msi-role-allergen-18:#D7E2F6; --msi-role-allergen-19:#F6EACB;
+  --msi-role-lunch-mon:#F9C4D0;
+  --msi-role-lunch-tue:#FBDCC8;
+  --msi-role-lunch-wed:#FBEFB4;
+  --msi-role-lunch-thu:#BFE6D6;
+  --msi-role-lunch-fri:#D4E6F7;
 
-  /* 모양 — 모서리: 창 22 · 카드 18 · 상자·표·그림 14 · 입력칸 12 · 태그 8 */
-  --msi-shape-radius-k:1.35;
-  --msi-shape-r16:22px;
-  --msi-shape-r14:18px;
-  --msi-shape-r12:14px;
-  --msi-shape-r11:14px;
-  --msi-shape-r10:14px;
-  --msi-shape-r9:12px;
+  /* 역할 색 — 과목 색(시간표 19과목) */
+  --msi-role-subj-korean:#F9C4D0;   /* 과목 19 — 계열 5(언어 분홍 · 사회 피치·버터 · 예체능 민트·연두·아쿠아 · 수리·과학 하늘 · 창체 라벤더·라일락), 잉크 글자 7:1↑ */
+  --msi-role-subj-english:#F7B8C8;
+  --msi-role-subj-hanmun:#FBD8DF;
+  --msi-role-subj-chinese:#F4CBDE;
+  --msi-role-subj-social:#FBDCC8;
+  --msi-role-subj-history:#F8CFC4;
+  --msi-role-subj-ethics:#FBEFB4;
+  --msi-role-subj-pe:#BFE6D6;
+  --msi-role-subj-art:#D9E8B4;
+  --msi-role-subj-music:#BFE1E6;
+  --msi-role-subj-math:#D4E6F7;
+  --msi-role-subj-science:#CDD9F3;
+  --msi-role-subj-info:#B9D4F0;
+  --msi-role-subj-tech-home:#DCE9F9;
+  --msi-role-subj-club:#DCD6EE;
+  --msi-role-subj-autonomy:#EFD0E6;
+  --msi-role-subj-career:#E6D9F2;
+  --msi-role-subj-self:#E1D4F0;
+  --msi-role-subj-volunteer:#F2DDEB;
+
+  /* 역할 색 — 급식 알레르기 19가지 */
+  --msi-role-allergen-1:#FDE3E1;   /* 알레르기 19 — 원래 계열 그대로, 연한 바탕 + 잉크 글자 7:1↑ */
+  --msi-role-allergen-10:#DEE1F2;
+  --msi-role-allergen-11:#EADFF5;
+  --msi-role-allergen-12:#E6D8F0;
+  --msi-role-allergen-13:#F3DDEC;
+  --msi-role-allergen-14:#FBE0EA;
+  --msi-role-allergen-15:#FBDEDA;
+  --msi-role-allergen-16:#F1E2D6;
+  --msi-role-allergen-17:#D6EEEA;
+  --msi-role-allergen-18:#D7E2F6;
+  --msi-role-allergen-19:#F6EACB;
+  --msi-role-allergen-2:#FDE8D6;
+  --msi-role-allergen-3:#FBF3C8;
+  --msi-role-allergen-4:#FAEDB9;
+  --msi-role-allergen-5:#EEF5CF;
+  --msi-role-allergen-6:#DDF2E6;
+  --msi-role-allergen-7:#D8F1EE;
+  --msi-role-allergen-8:#DDEFF9;
+  --msi-role-allergen-9:#DCE6F8;
+
+  /* 역할 색 — 기본 색(DESIGN.md 팔레트) */
+  --msi-role-base-apricot:#FBDCC8;
+  --msi-role-base-blush-paper:#FEF2F5;
+  --msi-role-base-butter:#FBEFB4;
+  --msi-role-base-button-ink:#4A3B32;
+  --msi-role-base-cotton-pink:#F9C4D0;
+  --msi-role-base-cream-paper:#FFFDF8;
+  --msi-role-base-grid-line:#E8D9C0;
+  --msi-role-base-lavender:#DCD6EE;
+  --msi-role-base-lavender-desk:#FAF2E1;
+  --msi-role-base-lilac:#EFD0E6;
+  --msi-role-base-live-violet:#B04A6C;   /* 「진행 중」 배지 — 틀은 배지 글자가 크림이라 진한 장미(크림 글자 5.1:1) */
+  --msi-role-base-mint:#BFE6D6;
+  --msi-role-base-muted-violet:#7A6A60;
+  --msi-role-base-night-sky-ink:#4A3B32;
+  --msi-role-base-periwinkle:#CDD9F3;
+  --msi-role-base-periwinkle-strong:#B9D4F0;
+  --msi-role-base-placeholder-haze:#C9ADA1;   /* 빈 칸·이름표 모음 점선 */
+  --msi-role-base-salmon:#F8CFC4;
+  --msi-role-base-sand:#F3EAE0;
+  --msi-role-base-sky:#BFE1E6;
+  --msi-role-base-sprout:#D9E8B4;
+  --msi-role-base-white:#FFFDF8;
+
+  /* 역할 색 — 4탭 공통 화면(상태·칸·안내 상자 등) */
+  --msi-role-ui-aqua:#E6EEEA;   /* NOTE 동아리 시간 */
+  --msi-role-ui-badge-ink:#6B5B51;
+  --msi-role-ui-busy-a:#FBEFB4;
+  --msi-role-ui-busy-b:#FFF6D6;
+  --msi-role-ui-callout-ask:#FFFBE9;
+  --msi-role-ui-callout-reason:#EEF7F2;
+  --msi-role-ui-callout-tip:#F1EEF9;
+  --msi-role-ui-callout-warn:#FEF4F1;
+  --msi-role-ui-caption-violet:#6B5B51;   /* 흐린 글자 — 작은 글자도 4.5:1 이상(#6B5B51 은 크림 위 6.4:1) */
+  --msi-role-ui-date-ink:#4A3B32;
+  --msi-role-ui-deep-violet:#6B5B51;
+  --msi-role-ui-empty-cell:#FAF2E1;
+  --msi-role-ui-empty-ink:#857062;
+  --msi-role-ui-feedback-no-bg:#FBE0E0;
+  --msi-role-ui-feedback-no-ink:#A64A4A;
+  --msi-role-ui-feedback-ok-bg:#DDF2E6;
+  --msi-role-ui-feedback-ok-ink:#2F6B48;
+  --msi-role-ui-focus-pink:#E56A8E;
+  --msi-role-ui-footer-ink:#6B5B51;
+  --msi-role-ui-ghost-hover:#F3EAE0;
+  --msi-role-ui-guide-body:#EFF9F5;
+  --msi-role-ui-help-box:#FFFDF8;
+  --msi-role-ui-help-btn-hover:#F3EAE0;
+  --msi-role-ui-help-btn-open:#FBE3E8;
+  --msi-role-ui-hl-lilac:#EFD0E6;
+  --msi-role-ui-link-hover:#4A3B32;
+  --msi-role-ui-live-row:#FEF2F5;
+  --msi-role-ui-note-ink:#6B5B51;
+  --msi-role-ui-pale-violet:#FFFDF8;
+  --msi-role-ui-paste-hint-ink:#6B5B51;
+  --msi-role-ui-periwinkle-press:#CDD9F3;
+  --msi-role-ui-pink-strong:#F6B4AE;
+  --msi-role-ui-purple-mut:#DCD6EE;   /* NOTE 동아리 활동 */
+  --msi-role-ui-soft-lavender:#F3EAE0;
+  --msi-role-ui-status-past-bg:#EFE8DF;
+  --msi-role-ui-status-past-ink:#6B5B51;
+  --msi-role-ui-status-upcoming-ink:#857062;
+  --msi-role-ui-status-upcoming-line:#C9ADA1;
+  --msi-role-ui-stripe-cream:#FFFDF8;   /* 이름표 모음 — 줄무늬 없이 크림 */
+  --msi-role-ui-stripe-violet-a:#FEF2F5;   /* 빈 칸 — 줄무늬 없이 분홍 종이 */
+  --msi-role-ui-stripe-violet-b:#FEF2F5;
+  --msi-role-ui-summary-th:#F3EAE0;   /* 표 머리 줄(사암) */
+  --msi-role-ui-time-end-ink:#6B5B51;
+  --msi-role-ui-today-cell:#FFF6D6;
+  --msi-role-ui-placeholder:#857062;
+
+  /* 모양 — 모서리 · 테두리 · 그림자(아래로 번짐) */
+  --msi-shape-radius-k:1.35;   /* 둥글기 배율 — 모서리: 창 22 · 카드 18 · 상자·표·그림 14 · 입력칸 12 · 태그 8(아래 r16~r6 은 하나씩 덮어씀) */
   --msi-shape-r6:8px;
-  /* 테두리 — 창도 3px */
-  --msi-shape-bw4:3px;
-  /* 그림자 — 어긋난 그림자 대신 아래로 폭신하게 번짐 */
-  --msi-shape-sh8:0 14px 34px;
-  --msi-shape-sh6:0 10px 24px;
-  --msi-shape-sh5:0 8px 20px;
-  --msi-shape-sh4:0 4px 10px;
-  --msi-shape-sh3:0 3px 8px;
-  --msi-shape-sh2:0 2px 5px;
+  --msi-shape-r9:12px;
+  --msi-shape-r10:14px;
+  --msi-shape-r11:14px;
+  --msi-shape-r12:14px;
+  --msi-shape-r14:18px;
+  --msi-shape-r16:22px;
+  --msi-shape-bw4:3px;   /* 창 테두리도 3px */
   --msi-shape-sh1:0 1px 2px;
+  --msi-shape-sh2:0 2px 5px;
+  --msi-shape-sh3:0 3px 8px;
+  --msi-shape-sh4:0 4px 10px;
+  --msi-shape-sh5:0 8px 20px;
+  --msi-shape-sh6:0 10px 24px;
+  --msi-shape-sh8:0 14px 34px;   /* 그림자 — 어긋난 그림자 대신 아래로 폭신하게 번짐(오프셋 0 · Y · 블러) */
 
-  /* 유리 층은 끈다 — 스티커는 평평한 종이 */
+  /* 유리 층 — 스티커는 평평한 종이라 끔 */
   --msi-glass-top:none;
   --msi-glass-top-head:none;
   --msi-glass-sheen:none;
@@ -180,7 +251,8 @@
   --msi-glass-inset-big:0 0 0 0 rgba(0,0,0,0);
   --msi-glass-inset-head:0 0 0 0 rgba(0,0,0,0);
   --msi-glass-backdrop:none;
-  /* 움직임 — 올림 ↑2px, 누름 ↓1px */
+
+  /* 움직임 — 누르면 ↓1px */
   --msi-motion-press:translateY(1px);
   --msi-motion-press-big:translateY(1px);
 }

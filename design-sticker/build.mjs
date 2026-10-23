@@ -148,21 +148,10 @@ ${sizes}
 fs.writeFileSync(path.join(dir, 'preview.html'), preview);
 console.log('✔ design-sticker/preview.html');
 
-// ── 차시용 테마(design/themes/sticker/theme.css)와 값 비교 — 활동지는 그 파일을 쓰므로 둘이 같아야 한다 ──
 const ROOT = path.join(dir, '..');
 const roles = Object.entries(tokens.role).filter(([n]) => !n.startsWith('$'));
 const LESSON_GROUPS = ['glass', 'motion', 'size', 'part', 'shape', 'rgb'];
 const extra = LESSON_GROUPS.flatMap((g) => Object.entries(tokens[g]).filter(([n]) => !n.startsWith('$')).map(([n, v]) => [g, n, v]));
-const themeCss = fs.readFileSync(path.join(ROOT, 'design/themes/sticker/theme.css'), 'utf8');
-const themeRoot = themeCss.slice(themeCss.indexOf(':root{'), themeCss.indexOf('\n}', themeCss.indexOf(':root{')));
-const diff = [];
-for (const m of themeRoot.matchAll(/--msi-(role|shape|glass|motion|rgb)-([\w-]+):\s*([^;]+);/g)) {
-  const t = tokens[m[1]] && tokens[m[1]][m[2]];
-  if (!t) diff.push(`theme.css 에만 있음: --msi-${m[1]}-${m[2]}`);
-  else if (String(t.$value).trim() !== m[3].trim()) diff.push(`다름 --msi-${m[1]}-${m[2]}: tokens.json ${t.$value} · theme.css ${m[3].trim()}`);
-}
-if (diff.length) console.log('△ 차시용 theme.css 와 다른 값 ' + diff.length + '개 — 둘을 맞춘다:\n  ' + diff.join('\n  '));
-else console.log('✔ 차시용 design/themes/sticker/theme.css 와 값 같음');
 
 const GROUPS = [
   ['창·배경', /^(page|aurora|window|titlebar)/], ['메뉴 탭(고른 탭)', /^tab/],
@@ -194,3 +183,38 @@ md.push(`\n## 유리 · 움직임 · 손가락 크기 (색이 아닌 토큰 — 
 for (const [g, n, t] of extra) md.push(`| ${mdEsc(t.$description || n)} | \`${varName(g, n)}\` | \`${mdEsc(t.$value)}\` |`);
 fs.writeFileSync(path.join(dir, 'color-map.md'), md.join('\n') + '\n');
 console.log('✔ design-sticker/color-map.md');
+
+// ── 차시용 테마 design/themes/sticker/theme.css 의 :root{} 를 이 tokens.json 으로 다시 씀(2026-10-23 — 값은 여기 한 곳에서만 고친다) ──
+//   기본 토큰(design/tokens.json)과 값이 다른 것만 넣는다(role · shape · glass · motion · rgb). 같은 값은 기본 토큰 블록이 이미 갖고 있음.
+//   theme.css 의 :root 아래 선택자 규칙(장식)은 손으로 고치는 곳이라 건드리지 않는다.
+const BASE = JSON.parse(fs.readFileSync(path.join(ROOT, 'design/tokens.json'), 'utf8'));
+const THEME_GROUPS = ['rgb', 'role', 'shape', 'glass', 'motion'];
+const THEME_TITLE = { rgb: '잉크 RGB — 반투명 잉크(그림자·점선)가 rgba(var(--msi-rgb-ink),.3) 로 씀, 잉크와 같은 색', shape: '모양 — 모서리 · 테두리 · 그림자(아래로 번짐)', glass: '유리 층 — 스티커는 평평한 종이라 끔', motion: '움직임 — 누르면 ↓1px' };
+const themeLines = [];
+for (const g of THEME_GROUPS) {
+  const items = Object.entries(tokens[g]).filter(([n, t]) => !n.startsWith('$') && (!BASE[g][n] || String(BASE[g][n].$value) !== String(t.$value)));
+  if (!items.length) continue;
+  if (g === 'role') {
+    const done = new Set();   // 표 묶음(GROUPS) 순서로, 한 역할은 한 번만
+    for (const [title, re] of [...GROUPS, ['그 밖', /./]]) {
+      const rows = items.filter(([n]) => re.test(n) && !done.has(n));
+      if (!rows.length) continue;
+      themeLines.push(`\n  /* 역할 색 — ${title} */`);
+      for (const [n, t] of rows) { done.add(n); const note = t.$note || (BASE[g][n] ? '' : t.$description); themeLines.push(`  ${varName(g, n)}:${t.$value};${note ? `   /* ${note} */` : ''}`); }
+    }
+  } else {
+    themeLines.push(`\n  /* ${THEME_TITLE[g]} */`);
+    for (const [n, t] of items) themeLines.push(`  ${varName(g, n)}:${t.$value};${t.$note ? `   /* ${t.$note} */` : ''}`);
+  }
+}
+const themePath = path.join(ROOT, 'design/themes/sticker/theme.css');
+const themeSrc = fs.readFileSync(themePath, 'utf8');
+const nl = themeSrc.includes('\r\n') ? '\r\n' : '\n';
+const rs = themeSrc.indexOf(':root{'), re = themeSrc.indexOf(nl + '}', rs);
+if (rs < 0 || re < 0) throw new Error('theme.css 에서 :root{ … } 를 못 찾음');
+const block = (':root{\n  /* 자동 생성 — design-sticker/tokens.json 을 고치고 node design-sticker/build.mjs. 여기를 손으로 고치지 않는다(다음 빌드에 덮어씀). */' + themeLines.join('\n')).replace(/\n/g, nl);
+const themeOut = themeSrc.slice(0, rs) + block + themeSrc.slice(re);
+const nVars = themeLines.filter((l) => l.trim().startsWith('--msi-')).length;
+if (/color-mix\(|oklch\(|oklab\(|\blab\(|\blch\(|hwb\(|color\(/.test(block)) throw new Error('활동지 PDF 가 못 읽는 색 함수가 있음(#hex · rgba 만)');
+if (themeOut !== themeSrc) { fs.writeFileSync(themePath, themeOut); console.log(`✔ design/themes/sticker/theme.css :root 다시 씀 — 변수 ${nVars}개(기본과 다른 값)`); }
+else console.log(`✔ design/themes/sticker/theme.css :root 그대로 — 변수 ${nVars}개`);

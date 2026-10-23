@@ -23,7 +23,7 @@ description: >
    - 견본에 **마크업을 바꿔야 하는 장식**이 있으면(예: 단계 번호를 별 안에) 할지 말지 — 기본은 안 함
    - 메뉴 탭 모양(테마가 바꿀 수 있음, 2026-10-22) · 견본과 규칙이 어긋나는 곳
    - 차시 내용이 틀과 다를 때 **통째로 덮어쓰지 않는다** — 「내용은 그대로, 모양만」이 기본
-3. **theme.css 쓰기** — `:root` 변수 덮어쓰기가 중심(색 `--msi-role-*` · 잉크 바꾸면 `--msi-rgb-ink` · 모양 `--msi-shape-*` · 유리 `--msi-glass-*` · 움직임),
+3. **theme.css 쓰기** — (sticker 처럼 `design-<이름>/tokens.json` 이 있는 테마는 값을 거기서 고치고 `node design-<이름>/build.mjs` 가 `:root{}` 를 다시 씀 — 손으로는 아래 장식 규칙만) `:root` 변수 덮어쓰기가 중심(색 `--msi-role-*` · 잉크 바꾸면 `--msi-rgb-ink` · 모양 `--msi-shape-*` · 유리 `--msi-glass-*` · 움직임),
    변수로 안 되는 장식만 선택자 규칙. 견본 값 ↔ 우리 변수 대응은 sticker/theme.css 를 본보기로. 설명은 `design/themes/<이름>/theme.md`.
 4. **틀에서 보기** — `npm run template-preview -- order --theme <이름>` → http://127.0.0.1:8080/_preview/template-order/
    - `node scripts/template-capture.mjs order "<scratchpad>/shots" --theme <이름>`(20장) ↔ `references/shot-design.mjs "<견본.html>" "<폴더>"` 나란히 Read

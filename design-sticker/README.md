@@ -21,19 +21,26 @@
 | `components.css` | 기본 부품(`design/components.css` 본뜸, 스티커 값) + 맨 아래 **스티커 장식**(제목줄·탭·알약·말풍선·PDF 버튼·걷는 GIF…) |
 | `preview.html` | 브라우저로 열면 색·서체·부품을 한눈에 (자동 생성) |
 | `color-map.md` | 역할 → 색 표 (자동 생성) |
-| `build.mjs` | `node design-sticker/build.mjs` → `tokens.css` · `preview.html` · `color-map.md` 다시 만들기 + 차시용 테마와 값 비교 |
+| `build.mjs` | `node design-sticker/build.mjs` → `tokens.css` · `preview.html` · `color-map.md` 다시 만들기 + **차시용 `theme.css` 의 변수 묶음(`:root{}`)도 다시 씀** |
 | `fonts/` | GangwonEdu · CookieRun(400/700) · Maplestory(300/700) · Silkscreen(400/700) woff2 — 기본과 같은 서체 |
 | `assets/` | `app-icon.png`(제목줄 학교 아이콘) · `icons/`(탭 4 · 카드 8, 128px) · `topic-walk.gif`(걷는 캐릭터) · `pdf-pop.gif`(튀어나오는 캐릭터) |
 
-**두 곳에 같은 값이 있습니다 — 함께 고칩니다.**
+**스티커 값은 `tokens.json` 한 곳에서만 고칩니다**(선생님 결정 2026-10-23).
 
-| 쓰는 곳 | 원본 파일 | 어떻게 들어가나 |
+```text
+design-sticker/tokens.json ──node design-sticker/build.mjs──┬─▶ design-sticker/tokens.css · preview.html · color-map.md   (다른 웹앱)
+                                                             └─▶ design/themes/sticker/theme.css 의 :root{ } 변수 묶음       (활동지 차시)
+```
+
+| 쓰는 곳 | 불러오는 파일 | 어떻게 들어가나 |
 |---|---|---|
-| 정보 수업 **활동지(차시)** | `design/themes/sticker/theme.css` (+ 설명 `theme.md`, 그림 `icons/`·`app-icon.png`) | 차시 `lesson.json` 의 `"theme": "sticker"` → 빌드가 `</body>` 앞에 넣음 |
-| **다른 웹앱** · 시안 · 문서 | 이 폴더 `design-sticker/tokens.json` | `tokens.css` + `components.css` 를 불러옴 |
+| 정보 수업 **활동지(차시)** | `design/themes/sticker/theme.css` — 맨 위 `:root{}` 는 **자동 생성**(기본 토큰과 다른 값 218개), 그 아래 장식 규칙은 손으로 | 차시 `lesson.json` 의 `"theme": "sticker"` → 활동지 빌드가 `</body>` 앞에 넣음 |
+| **다른 웹앱** · 시안 · 문서 | `design-sticker/tokens.css` + `components.css` | `<link>` 또는 `import` |
 
-`node design-sticker/build.mjs` 가 두 파일의 값(색 역할 · 모양 · 유리 · 움직임 · 잉크 RGB)을 비교해
-`✔ 차시용 design/themes/sticker/theme.css 와 값 같음` 또는 `△ 다른 값 N개` 를 알려 줍니다.
+- `theme.css` 의 `:root{ … }` 안은 손으로 고치지 않습니다(다음 빌드에 덮어씀). 맨 위에 「자동 생성」 주석이 있습니다.
+- 들어가는 것: `role` · `shape` · `glass` · `motion` · `rgb` 중 **기본 `design/tokens.json` 과 값이 다른 것**(같은 값은 활동지의 기본 토큰 블록에 이미 있음). 순서는 `color-map.md` 묶음 순.
+- 설명 주석은 토큰의 `$note`(스티커 이유·주의) — `$description` 은 색 표의 이름 칸이라 건드리지 않습니다.
+- 색은 `#hex` · `rgba()` 만 — 다른 색 함수가 있으면 빌드가 멈춥니다(활동지 PDF 저장이 못 읽음).
 
 ---
 
@@ -248,8 +255,8 @@ import '../design-sticker/components.css';
 
 ## 7. 고칠 때
 
-- **값**: `design-sticker/tokens.json` 을 고치고 `node design-sticker/build.mjs` → 활동지에도 반영하려면 `design/themes/sticker/theme.css` 의 같은 변수도 고친다
-  (빌드가 `△ 다른 값` 으로 알려 줌). 그다음 스티커를 쓰는 차시 `npm run check -- ai/01 ai/02`.
+- **값**: `design-sticker/tokens.json` **만** 고치고 `node design-sticker/build.mjs` → `tokens.css` 와 차시용 `theme.css` 의 `:root{}` 가 함께 바뀐다.
+  그다음 스티커를 쓰는 차시 `npm run check -- ai/01 ai/02`. (새 변수를 더할 때도 tokens.json 에 — 기본 토큰에 없는 이름은 `$description` 에 쓰임을 적는다.)
 - **부품 모양**: `components.css`. 활동지 쪽 장식은 `theme.css` 의 선택자 규칙(`#appTitlebar …` · `:is(#sheetPrintArea, .msi-pdf-clone) …`).
 - **기본 토큰(`design/`)은 건드리지 않는다** — `node design/build.mjs` 는 기본 테마와 틀·ai/01·07 의 토큰 블록을 다시 채운다(스티커 값을 거기 넣으면 모든 차시가 바뀜).
 
@@ -261,3 +268,4 @@ import '../design-sticker/components.css';
 ## 8. 이력
 - 2026-10-21 Claude Design 견본(`input/claude-design/sticker/`) → 차시 테마 `design/themes/sticker/` · ai/01 에 입힘
 - 2026-10-22 ai/02 에도 입힘 · 시간표 탭 아이콘 · ai/01 피드백(걷는 GIF · PDF GIF · 귤빛 알약 · 저장 글자) · **이 폴더(design-sticker/) 만듦** — 기본 `design/` 은 그대로
+- 2026-10-23 값을 한 곳으로 — `tokens.json` 이 원본, 빌드가 차시용 `theme.css` 의 `:root{}` 를 다시 씀(바꾸기 전후 변수 218개 값 모두 같음 · ai/01 · ai/02 검사 통과)

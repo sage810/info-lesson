@@ -4,7 +4,7 @@
 원본: `input/claude-design/sticker/`(Claude Design, 2026-10-21 · 견본 `theme-sticker.html`, 값 표 `theme-sticker-tokens.md`·`theme-sticker-tabs-tokens.md`).
 
 - 쓰기: 차시 `lesson.json` 에 `"theme": "sticker"` · 미리보기 `npm run template-preview -- order --theme sticker` → http://127.0.0.1:8080/_preview/template-order/
-- **디자인 토큰 한 벌**: `design-sticker/`(2026-10-22 — 다른 웹앱용 tokens.css·부품·미리보기, 새 차시 쓰는 법, ai/01 에서만 넣은 장식 골라 쓰기). 여기 값을 고치면 `design-sticker/tokens.json` 도 같이.
+- **디자인 토큰 한 벌**: `design-sticker/`(2026-10-22 — 다른 웹앱용 tokens.css·부품·미리보기, 새 차시 쓰는 법, ai/01 에서만 넣은 장식 골라 쓰기). **값(색·모양·유리·움직임)은 `design-sticker/tokens.json` 한 곳에서만 고친다** → `node design-sticker/build.mjs` 가 이 테마 `theme.css` 의 `:root{}` 를 다시 씀(2026-10-23). `theme.css` 에서 손으로 고치는 곳은 그 아래 장식 규칙뿐.
 - 틀(`_templates/order`)과 거기서 만든 차시용. **ai/01 이 이 테마를 쓴다**(선생님 결정 2026-10-22 — 내용은 그대로, 모양만 변수로 바꿔 입힘).
 
 ## 변수로 바꾼 것

@@ -3,7 +3,7 @@
 - **바꾸는 것**: 색 + 모양(모서리 · 테두리 두께 · 그림자). **글꼴은 모든 차시가 같다**(DESIGN.md 의 네 글꼴).
 - **고르는 곳**: 차시 `lesson.json` 의 `"theme": "<이름>"` 한 줄. 줄이 없으면 기본 테마(DESIGN.md 「파스텔 레트로 OS」).
 - **테마 파일**: `design/themes/<이름>/theme.css`(+ 설명 `theme.md`). Claude Design 원본 자료는 `input/claude-design/<이름>/`.
-- **테마 디자인 토큰 한 벌**(다른 웹앱·새 차시 참고용): sticker → `design-sticker/`(`tokens.json` 원본 → `node design-sticker/build.mjs`, 2026-10-22). 값은 `theme.css` 와 같게 — 빌드가 어긋난 값을 알려 준다. ai/01 에서만 넣은 장식(걷는 GIF · PDF GIF · 차시 알약 · 저장 글자)도 그 `README.md` 「골라 쓰는 장식」.
+- **테마 디자인 토큰 한 벌**(다른 웹앱·새 차시 참고용): sticker → `design-sticker/`(`tokens.json` 원본 → `node design-sticker/build.mjs`, 2026-10-22). **sticker 의 값은 `design-sticker/tokens.json` 한 곳에서만 고친다** — 빌드가 `theme.css` 의 `:root{}` 를 다시 쓴다(2026-10-23, 아래 장식 규칙은 손으로). ai/01 에서만 넣은 장식(걷는 GIF · PDF GIF · 차시 알약 · 저장 글자)도 그 `README.md` 「골라 쓰는 장식」.
 - 지난 차시(data-analysis 01~10)는 줄이 없으니 지금 모양 그대로다. **ai/01 · ai/02 는 `sticker`**(선생님 결정 2026-10-22).
 
 ## 1. 어떻게 입혀지나

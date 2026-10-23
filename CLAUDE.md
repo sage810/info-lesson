@@ -27,6 +27,7 @@
 - **수업 PPT**(시안 A 카드, 캔바용 · 선생님 결정 2026-10-18): 차시 폴더의 `ppt.json`(장 구성) → `npm run ppt -- <단원>/<차시> --check`(PowerPoint 로 그려 넘침 검사) → `--page` 로 받는 링크(아티팩트) — 스킬 `lesson-ppt`, 순서·장 모양 `docs/rules/ppt.md`. 처음 한 번 `npm --prefix scripts/ppt install`.
 - **다른 웹앱용 디자인 토큰**: `design/` (`tokens.json` 원본 → `node design/build.mjs` → `tokens.css`·`preview.html`, 부품 `components.css`, 이름은 모두 `msi-`). 활동지 디자인 값을 바꾸면 여기도 맞춘다.
   **스티커 테마 한 벌은 `design-sticker/`**(2026-10-22 — ai/01 모양, `node design-sticker/build.mjs`, 새 차시·다른 웹앱 쓰는 법과 골라 쓰는 장식은 그 폴더 `README.md`). 기본 `design/` 은 그대로 둔다.
+  스티커 값(색·모양)은 **`design-sticker/tokens.json` 한 곳에서만** 고친다 — 빌드가 차시용 `design/themes/sticker/theme.css` 의 `:root{}` 를 다시 씀(그 아래 장식 규칙만 손으로).
 - **스킬 목록·사용법**: `.claude/README.md`(우리 스킬) · `.claude/external-skills.md`(가져온 외부 스킬) · 사람용 안내: `README.md`
 
 ## 꼭 지킬 것
