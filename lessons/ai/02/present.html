@@ -1,0 +1,1460 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>이미지 분류 인공지능 모델 만들기 수업용 화면</title>
+<meta name="description" content="정보 · 인공지능 1차시 「인공지능이란?」 — 선생님이 띄워 개념을 설명하고 빈칸 정답을 하나씩 공개하는 수업용 화면">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E🧠%3C/text%3E%3C/svg%3E">
+<style id="msi-role-tokens">/* 자동 생성 — design/tokens.json 의 role 을 고치고 node design/build.mjs (docs/rules/color-map.md) */
+:root{
+  --msi-role-page-bg: #e7e3f7;
+  --msi-role-page-grid: rgba(216,210,238,.75);
+  --msi-role-aurora-pink: #f7b3d6;
+  --msi-role-aurora-sky: #9fd3f7;
+  --msi-role-aurora-lavender: #c4b2f7;
+  --msi-role-aurora-lavender-a20: rgba(196,178,247,.2);
+  --msi-role-aurora-lavender-a28: rgba(196,178,247,.28);
+  --msi-role-aurora-lavender-a60: rgba(196,178,247,.6);
+  --msi-role-aurora-pink-a20: rgba(247,179,214,.2);
+  --msi-role-aurora-pink-a32: rgba(247,179,214,.32);
+  --msi-role-aurora-pink-a60: rgba(247,179,214,.6);
+  --msi-role-aurora-sky-a20: rgba(159,211,247,.2);
+  --msi-role-aurora-sky-a32: rgba(159,211,247,.32);
+  --msi-role-aurora-sky-a60: rgba(159,211,247,.6);
+  --msi-role-window-body: #fffdf7;
+  --msi-role-titlebar-head: linear-gradient(90deg,#f9cade 0%,#d6c4f5 55%,#c4d8f7 100%);
+  --msi-role-tab-rules: linear-gradient(135deg,#fff6d6 0%,#ffe6c7 55%,#ffd6d6 100%);
+  --msi-role-tab-time: linear-gradient(135deg,#e3f4ff 0%,#d9e2ff 55%,#e6d9ff 100%);
+  --msi-role-tab-meal: linear-gradient(135deg,#e8fbe9 0%,#d4f4ec 55%,#d6ecff 100%);
+  --msi-role-tab-sheet: linear-gradient(135deg,#fde1f3 0%,#e7dcff 50%,#d6f1ff 100%);
+  --msi-role-topic-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-topic-body: #f6f8fd;
+  --msi-role-myinfo-head: #fbe6a2;
+  --msi-role-myinfo-body: #fffdf7;
+  --msi-role-goals-head: #e8c4c4;
+  --msi-role-goals-body: #fcf5f5;
+  --msi-role-goals-coin: linear-gradient(135deg,#f8e6e6,#e8c4c4);
+  --msi-role-warmup-head: #c9e4dc;
+  --msi-role-warmup-body: #f3faf7;
+  --msi-role-intro-head: #d8f0c4;
+  --msi-role-intro-body: #f7fcf2;
+  --msi-role-act1-head: #c4d8f7;
+  --msi-role-act1-body: #f4f8fe;
+  --msi-role-act2-head: #bfe9dd;
+  --msi-role-act2-body: #f1fbf7;
+  --msi-role-act3-head: linear-gradient(90deg,#f1f8b8 0%,#d6f0a8 100%);
+  --msi-role-act3-body: #fbfdf0;
+  --msi-role-act4-head: #d6c4f5;
+  --msi-role-act4-body: #f8f4fe;
+  --msi-role-summary-head: #f7bfb2;
+  --msi-role-summary-body: #fff4f1;
+  --msi-role-checkup-head: #eec6ea;
+  --msi-role-checkup-body: #fdf5fc;
+  --msi-role-checkup-coin: linear-gradient(135deg,#f9e3f6,#eec6ea);
+  --msi-role-progress-head: #ffe0cc;
+  --msi-role-progress-body: #fffdf7;
+  --msi-role-help-head: #e8d9b8;
+  --msi-role-help-body: #fffdf7;
+  --msi-role-pdf-btn: linear-gradient(120deg,rgba(253,225,243,.75),rgba(231,220,255,.75) 50%,rgba(214,241,255,.75));
+  --msi-role-pdf-done: linear-gradient(135deg,#a8e6cf 0%,#7fd6c0 100%);
+  --msi-role-pdf-error: linear-gradient(135deg,#ffb3bd 0%,#f58a9b 100%);
+  --msi-role-chip-glass: linear-gradient(120deg,rgba(253,225,243,.75),rgba(231,220,255,.75) 50%,rgba(214,241,255,.75));
+  --msi-role-chip-ok: linear-gradient(135deg,#a8e6cf 0%,#7fd6c0 100%);
+  --msi-role-chip-no: linear-gradient(135deg,#ffb3bd 0%,#f58a9b 100%);
+  --msi-role-howto-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-howto-body: #f6f8fd;
+  --msi-role-rule1-head: linear-gradient(90deg,#ffe3d0,#ffd0c4);
+  --msi-role-rule1-body: #fff8f4;
+  --msi-role-rule2-head: linear-gradient(90deg,#f1f8b8,#d6f0a8);
+  --msi-role-rule2-body: #fbfdf0;
+  --msi-role-rule3-head: #bfe9dd;
+  --msi-role-rule3-body: #f2fbf7;
+  --msi-role-message-head: #d6c4f5;
+  --msi-role-message-body: #fffdf7;
+  --msi-role-loading-head: #fbe6a2;
+  --msi-role-loading-body: #fffdf7;
+  --msi-role-view-day: linear-gradient(135deg,#fbf1d2,#f1dfb6);
+  --msi-role-view-week: linear-gradient(135deg,#e7f1e4,#d2e5cc);
+  --msi-role-view-month: linear-gradient(135deg,#f6e1e6,#e8cad3);
+  --msi-role-tt-week-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-tt-month-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-tt-time-col: #f7f4fd;
+  --msi-role-tt-grade-box: #f7f4fd;
+  --msi-role-lunch-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-lunch-body: #fffdf7;
+  --msi-role-lunch-total: linear-gradient(90deg,#ffe3d0,#ffd0c4);
+  --msi-role-lunch-month-head: linear-gradient(90deg,#d6c4f5 0%,#c4d8f7 55%,#cfeaf5 100%);
+  --msi-role-lunch-mon: linear-gradient(135deg,#ffc9bf,#ffb3a7);
+  --msi-role-lunch-tue: linear-gradient(135deg,#ffe4a3,#ffd685);
+  --msi-role-lunch-wed: linear-gradient(135deg,#d9f2b4,#c2e89a);
+  --msi-role-lunch-thu: linear-gradient(135deg,#b5e8e4,#99dbd6);
+  --msi-role-lunch-fri: linear-gradient(135deg,#c9cbf7,#b3b6ef);
+  --msi-role-subj-korean: linear-gradient(135deg,#f8b8ca,#fca3be);
+  --msi-role-subj-english: linear-gradient(135deg,#fed5e0,#ffc3d4);
+  --msi-role-subj-hanmun: linear-gradient(135deg,#ffedff,#fddbfd);
+  --msi-role-subj-chinese: linear-gradient(135deg,#fef2f1,#ffe4e1);
+  --msi-role-subj-social: linear-gradient(135deg,#f2c19a,#f5b076);
+  --msi-role-subj-history: linear-gradient(135deg,#fed9c3,#fec9aa);
+  --msi-role-subj-ethics: linear-gradient(135deg,#fff4dd,#fde9be);
+  --msi-role-subj-pe: linear-gradient(135deg,#c6d59c,#b8cc79);
+  --msi-role-subj-art: linear-gradient(135deg,#e8e4b4,#e0d993);
+  --msi-role-subj-music: linear-gradient(135deg,#e4fde5,#d2f7d4);
+  --msi-role-subj-math: linear-gradient(135deg,#93ddce,#64d8c4);
+  --msi-role-subj-science: linear-gradient(135deg,#c2eecf,#a7e8bb);
+  --msi-role-subj-info: linear-gradient(135deg,#e1fbfe,#bdf7ff);
+  --msi-role-subj-tech-home: linear-gradient(135deg,#b0eef6,#8ae7f3);
+  --msi-role-subj-club: linear-gradient(135deg,#d4c2f8,#ccb1fe);
+  --msi-role-subj-autonomy: linear-gradient(135deg,#a0d3f8,#7ecaff);
+  --msi-role-subj-career: linear-gradient(135deg,#ecd8ff,#e5c8ff);
+  --msi-role-subj-self: linear-gradient(135deg,#d0e3fe,#bdd8fe);
+  --msi-role-subj-volunteer: linear-gradient(135deg,#f1f5fe,#e2ebff);
+  --msi-role-allergen-1: #ffd1d3;
+  --msi-role-allergen-10: #d1deff;
+  --msi-role-allergen-11: #dcd9fe;
+  --msi-role-allergen-12: #ead3ff;
+  --msi-role-allergen-13: #f7cdfe;
+  --msi-role-allergen-14: #fecfde;
+  --msi-role-allergen-15: #fed2ce;
+  --msi-role-allergen-16: #ffd3c4;
+  --msi-role-allergen-17: #95f2e7;
+  --msi-role-allergen-18: #d3ddff;
+  --msi-role-allergen-19: #f6dc98;
+  --msi-role-allergen-2: #fed4be;
+  --msi-role-allergen-3: #fdd899;
+  --msi-role-allergen-4: #ebe09a;
+  --msi-role-allergen-5: #ceeaa9;
+  --msi-role-allergen-6: #b9eeb9;
+  --msi-role-allergen-7: #9cf2da;
+  --msi-role-allergen-8: #98eefe;
+  --msi-role-allergen-9: #c6e1ff;
+  --msi-role-base-apricot: #ffe0cc;
+  --msi-role-base-blush-paper: #fdf6fa;
+  --msi-role-base-butter: #fbe6a2;
+  --msi-role-base-button-ink: #26224a;
+  --msi-role-base-cotton-pink: #f9cade;
+  --msi-role-base-cream-paper: #fffdf7;
+  --msi-role-base-grid-line: #d8d2ee;
+  --msi-role-base-lavender: #d6c4f5;
+  --msi-role-base-lavender-desk: #e7e3f7;
+  --msi-role-base-lilac: #eec6ea;
+  --msi-role-base-link-berry: #c96a97;
+  --msi-role-base-live-violet: #7b5cd6;
+  --msi-role-base-mint: #bfe9dd;
+  --msi-role-base-muted-violet: #6b5b93;
+  --msi-role-base-night-sky-ink: #4b3b6b;
+  --msi-role-base-periwinkle: #c4d8f7;
+  --msi-role-base-periwinkle-strong: #9db2f2;
+  --msi-role-base-placeholder-haze: #b3a8cc;
+  --msi-role-base-salmon: #f7bfb2;
+  --msi-role-base-sand: #e8d9b8;
+  --msi-role-base-sky: #cfeaf5;
+  --msi-role-base-sprout: #d8f0c4;
+  --msi-role-base-white: #ffffff;
+  --msi-role-ui-aqua: #a9dce4;
+  --msi-role-ui-badge-ink: #6b5b93;
+  --msi-role-ui-busy-a: #c4cce8;
+  --msi-role-ui-busy-b: #d6dcf3;
+  --msi-role-ui-callout-ask: #fff6e6;
+  --msi-role-ui-callout-reason: #eef9f3;
+  --msi-role-ui-callout-tip: #f3eefe;
+  --msi-role-ui-callout-warn: #fdf0ee;
+  --msi-role-ui-caption-violet: #6b5b93;
+  --msi-role-ui-date-ink: #5a4a86;
+  --msi-role-ui-deep-violet: #6b559b;
+  --msi-role-ui-empty-cell: #f1edf9;
+  --msi-role-ui-empty-ink: #b9aedb;
+  --msi-role-ui-feedback-no-bg: #fdf3f0;
+  --msi-role-ui-feedback-no-ink: #a65a86;
+  --msi-role-ui-feedback-ok-bg: #eaf8f2;
+  --msi-role-ui-feedback-ok-ink: #3d7f6c;
+  --msi-role-ui-focus-pink: #ee9dbf;
+  --msi-role-ui-footer-ink: #556485;
+  --msi-role-ui-ghost-hover: #fff1ee;
+  --msi-role-ui-green-mut: #c9e8b8;
+  --msi-role-ui-guide-body: #eef9f8;
+  --msi-role-ui-health-pink: #f5b7c8;
+  --msi-role-ui-help-box: #faf8ff;
+  --msi-role-ui-help-btn-hover: #f1eff7;
+  --msi-role-ui-help-btn-open: #e6def7;
+  --msi-role-ui-hl-lilac: #f6d3f0;
+  --msi-role-ui-link-hover: #5e498d;
+  --msi-role-ui-live-row: #f6f2ff;
+  --msi-role-ui-note-ink: #79632c;
+  --msi-role-ui-olive: #e3e0b0;
+  --msi-role-ui-pale-violet: #faf7ff;
+  --msi-role-ui-paste-hint-ink: #6b5b93;
+  --msi-role-ui-periwinkle-press: #8296e0;
+  --msi-role-ui-pink-strong: #f7a8c4;
+  --msi-role-ui-purple-mut: #c9c2ea;
+  --msi-role-ui-soft-lavender: #f7f4fd;
+  --msi-role-ui-status-past-bg: #ece9f3;
+  --msi-role-ui-status-past-ink: #6b5b93;
+  --msi-role-ui-status-upcoming-ink: #7b6ba8;
+  --msi-role-ui-status-upcoming-line: #cfc6e6;
+  --msi-role-ui-step-red: #c0392b;
+  --msi-role-ui-stripe-cream: #f8f1e2;
+  --msi-role-ui-stripe-violet-a: #fbf8ff;
+  --msi-role-ui-stripe-violet-b: #f1ecfb;
+  --msi-role-ui-summary-th: #f6e6e6;
+  --msi-role-ui-time-end-ink: #6b5b93;
+  --msi-role-ui-today-cell: #fdeaf3;
+  --msi-role-ui-total-ink: #8a4f36;
+  --msi-role-ui-placeholder: #746d85;
+  --msi-role-ui-label-general: #ffd685;
+  --msi-glass-top: radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%);
+  --msi-glass-top-head: radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.7),rgba(255,255,255,0) 62%);
+  --msi-glass-sheen: linear-gradient(100deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 58%);
+  --msi-glass-white: linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.14) 55%,rgba(255,255,255,.42));
+  --msi-glass-inset: inset 0 1.5px 0 rgba(255,255,255,.95), inset 0 -8px 14px -10px rgba(255,255,255,.9);
+  --msi-glass-inset-big: inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -10px 18px -12px rgba(255,255,255,.9);
+  --msi-glass-inset-head: inset 0 2px 0 rgba(255,255,255,.95), inset 0 -8px 12px -8px rgba(255,255,255,.95);
+  --msi-glass-backdrop: blur(14px) saturate(170%);
+  --msi-motion-ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --msi-motion-ease-out: cubic-bezier(.2,0,0,1);
+  --msi-motion-press: scale(1.04,.9);
+  --msi-motion-press-big: scale(1.03,.92);
+  --msi-size-content-max: 1080px;
+  --msi-size-doc-max: 980px;
+  --msi-size-touch-min: 44px;
+  --msi-size-text-min: 16px;
+  --msi-part-figure-max: 680px;
+  --msi-part-slot-min: 176px;
+  --msi-part-choice-radius: 22px;
+  --msi-part-ox-min: 56px;
+  --msi-part-gap: 10px;
+  --msi-part-figure-ratio: 680 / 300;
+  --msi-shape-radius-k: 1;
+  --msi-shape-r2: calc(2px * var(--msi-shape-radius-k));
+  --msi-shape-r4: calc(4px * var(--msi-shape-radius-k));
+  --msi-shape-r5: calc(5px * var(--msi-shape-radius-k));
+  --msi-shape-r6: calc(6px * var(--msi-shape-radius-k));
+  --msi-shape-r7: calc(7px * var(--msi-shape-radius-k));
+  --msi-shape-r8: calc(8px * var(--msi-shape-radius-k));
+  --msi-shape-r9: calc(9px * var(--msi-shape-radius-k));
+  --msi-shape-r10: calc(10px * var(--msi-shape-radius-k));
+  --msi-shape-r11: calc(11px * var(--msi-shape-radius-k));
+  --msi-shape-r12: calc(12px * var(--msi-shape-radius-k));
+  --msi-shape-r14: calc(14px * var(--msi-shape-radius-k));
+  --msi-shape-r16: calc(16px * var(--msi-shape-radius-k));
+  --msi-shape-r20: calc(20px * var(--msi-shape-radius-k));
+  --msi-shape-r-pill: 999px;
+  --msi-shape-bw1: 1px;
+  --msi-shape-bw2: 2px;
+  --msi-shape-bw3: 3px;
+  --msi-shape-bw4: 4px;
+  --msi-shape-shadow-k: 1;
+  --msi-shape-shadow-blur: 0px;
+  --msi-shape-sh1: calc(1px * var(--msi-shape-shadow-k)) calc(1px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh2: calc(2px * var(--msi-shape-shadow-k)) calc(2px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh3: calc(3px * var(--msi-shape-shadow-k)) calc(3px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh4: calc(4px * var(--msi-shape-shadow-k)) calc(4px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh5: calc(5px * var(--msi-shape-shadow-k)) calc(5px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh6: calc(6px * var(--msi-shape-shadow-k)) calc(6px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-shape-sh8: calc(8px * var(--msi-shape-shadow-k)) calc(8px * var(--msi-shape-shadow-k)) var(--msi-shape-shadow-blur);
+  --msi-rgb-ink: 75,59,107;
+}
+</style>
+<style>
+/* ── 수업용 화면(2026-10-19) — 1600×900 무대 한 장을 창 크기에 맞춰 키우고 줄인다. 색은 역할 토큰, 글꼴은 활동지와 같은 파일 ── */
+@font-face{font-family:'GangwonEdu';font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/GangwonEdu-400.woff2) format('woff2')}
+@font-face{font-family:'CookieRun';font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-700.woff2) format('woff2')}
+@font-face{font-family:'Maplestory';font-weight:300;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-300.woff2) format('woff2')}
+@font-face{font-family:'Maplestory';font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-700.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Silkscreen-700.woff2) format('woff2')}
+
+:root{
+  --ink:var(--msi-role-base-night-sky-ink); --muted:var(--msi-role-base-muted-violet); --white:var(--msi-role-base-white);
+  --q:var(--msi-role-ui-deep-violet); --q-bg:var(--msi-role-ui-callout-tip);          /* 「?」 칸 — 보라 점선 */
+  --display:'GangwonEdu',Apple SD Gothic Neo,Malgun Gothic,sans-serif;
+  --round:'CookieRun',Apple SD Gothic Neo,Malgun Gothic,sans-serif;
+  --body:'Maplestory',Apple SD Gothic Neo,Malgun Gothic,sans-serif;
+  --pixel:'Silkscreen',monospace;
+  --sh-card:var(--msi-shape-sh5) rgba(var(--msi-rgb-ink),.18); --sh-btn:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.28);
+}
+/* 카드 한 벌(머리 --head · 몸통 --card) — 활동지 카드와 같은 역할 색 */
+[data-role="help"]{--head:var(--msi-role-help-head);--card:var(--msi-role-help-body)}
+[data-role="topic"]{--head:var(--msi-role-topic-head);--card:var(--msi-role-topic-body)}
+[data-role="myinfo"]{--head:var(--msi-role-myinfo-head);--card:var(--msi-role-myinfo-body)}
+[data-role="warmup"]{--head:var(--msi-role-warmup-head);--card:var(--msi-role-warmup-body)}
+[data-role="intro"]{--head:var(--msi-role-intro-head);--card:var(--msi-role-intro-body)}
+[data-role="act1"]{--head:var(--msi-role-act1-head);--card:var(--msi-role-act1-body)}
+[data-role="act2"]{--head:var(--msi-role-act2-head);--card:var(--msi-role-act2-body)}
+[data-role="act3"]{--head:var(--msi-role-act3-head);--card:var(--msi-role-act3-body)}
+[data-role="act4"]{--head:var(--msi-role-act4-head);--card:var(--msi-role-act4-body)}
+[data-role="summary"]{--head:var(--msi-role-summary-head);--card:var(--msi-role-summary-body)}
+[data-role="checkup"]{--head:var(--msi-role-checkup-head);--card:var(--msi-role-checkup-body)}
+/* 이름표 분류 색 — 같은 낱말은 어느 장에서나 같은 색(인공지능 = 보라, 일반 = 청록 …) */
+[data-v="학습"]{--cat:var(--msi-role-base-lavender)}
+[data-v="인공지능 소프트웨어"]{--cat:var(--msi-role-base-lilac)}   /* 선생님 지정 #eec6ea(2026-10-19) */
+[data-v="규칙"]{--cat:var(--msi-role-base-mint)}
+[data-v="일반 소프트웨어"]{--cat:var(--msi-role-ui-label-general)}   /* 선생님 지정 #ffd685(2026-10-19) */
+[data-v="인공 신경망"],[data-v="뉴런"]{--cat:var(--msi-role-base-periwinkle)}
+[data-v="인공지능 모델"]{--cat:var(--msi-role-base-cotton-pink)}
+[data-v="인공지능"]{--cat:var(--msi-role-base-sprout)}
+[data-v="레이블"],[data-v="정답"]{--cat:var(--msi-role-base-butter)}
+[data-v="학습 데이터"]{--cat:var(--msi-role-base-sky)}
+[data-v="클래스"]{--cat:var(--msi-role-base-cotton-pink)}   /* ai/02 */
+[data-v="이름"]{--cat:var(--msi-role-base-butter)}   /* ai/02 */
+[data-v="테스트 데이터"],[data-v="새로운"]{--cat:var(--msi-role-base-apricot)}
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:var(--body);font-weight:300;color:var(--ink);background-color:var(--msi-role-page-bg);
+  background-image:linear-gradient(var(--msi-role-page-grid) 1px,transparent 1px),linear-gradient(90deg,var(--msi-role-page-grid) 1px,transparent 1px),
+    radial-gradient(42% 38% at 10% 20%,var(--msi-role-aurora-pink-a60),transparent 70%),
+    radial-gradient(46% 42% at 92% 28%,var(--msi-role-aurora-sky-a60),transparent 70%),
+    radial-gradient(44% 40% at 50% 92%,var(--msi-role-aurora-lavender-a60),transparent 70%);
+  background-size:28px 28px,28px 28px,100% 100%,100% 100%,100% 100%}
+b,strong{font-family:var(--round);font-weight:700}
+button{font:inherit;color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── 무대(창) ── */
+#stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;display:grid;grid-template-rows:76px minmax(0,1fr) 80px;
+  border:var(--msi-shape-bw4) solid var(--ink);border-radius:18px;overflow:hidden;background:var(--msi-role-window-body);box-shadow:var(--msi-shape-sh8) rgba(var(--msi-rgb-ink),.22)}
+body.is-fs #stage{border-radius:0;box-shadow:none}
+
+/* 위: 창 제목줄 — 단계 · 카드 이름 · 제목 · 진행 점 · n / 전체 */
+#bar{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:0 22px 0 18px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--head)}
+#bar::after,#ctl::after,.tm-hd::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;box-shadow:var(--msi-glass-inset-head);background:var(--msi-glass-top-head)}
+.b-ph{flex:none;padding:3px 12px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r8);background:var(--white);font:700 22px/1.2 var(--round)}
+.b-code{flex:none;font:700 18px/1 var(--pixel);letter-spacing:.5px}
+.b-sep{flex:none;width:3px;height:34px;border-radius:var(--msi-shape-r2);background:var(--ink);opacity:.45}
+.b-badge{flex:none;width:46px;height:46px;display:grid;place-items:center;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r11);background:var(--white);font-size:24px;line-height:1;box-shadow:var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.22)}
+.b-title{flex:1;min-width:0;font:700 28px/1.25 var(--round);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b-dots{flex:none;display:flex;align-items:center;gap:4px}
+.dot{width:12px;height:12px;padding:0;border:var(--msi-shape-bw2) solid var(--ink);border-radius:50%;background:var(--white);opacity:.6;cursor:pointer}
+.dot.is-past{background:var(--ink);opacity:.75}
+.dot.is-cur{width:18px;height:18px;border-width:var(--msi-shape-bw3);opacity:1;box-shadow:var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.3)}
+.dot.ph-start{margin-left:10px}
+.dot:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.b-count{flex:none;min-width:96px;text-align:right;font:700 26px/1 var(--round);font-variant-numeric:tabular-nums}
+
+/* 아래: 조작줄 */
+#ctl{position:relative;isolation:isolate;display:flex;align-items:center;gap:12px;padding:0 18px;border-top:var(--msi-shape-bw3) solid var(--ink);background:var(--msi-role-base-cream-paper)}
+.spacer{flex:1}
+
+/* 사용 안내(맨 앞 장) — 키보드 · 마우스 */
+.guide{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:26px;align-content:center}
+.guide-col{display:flex;flex-direction:column;gap:12px}
+.guide-col h3{margin:0 0 2px;font:700 30px/1.3 var(--round)}
+.gk{display:grid;grid-template-columns:200px minmax(0,1fr);align-items:center;gap:16px;padding:9px 18px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r14);background:var(--white);
+  box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.12);font:300 25px/1.4 var(--body);word-break:keep-all;text-wrap:pretty}
+.gk .k{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.gk b{font-size:25px}
+kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 12px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r10);background:var(--msi-role-base-cream-paper);
+  font:700 22px/1 var(--round);color:var(--ink);box-shadow:0 3px 0 rgba(var(--msi-rgb-ink),.35)}
+.gk .pill{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:2.5px dashed var(--q);border-radius:var(--msi-shape-r10);background:var(--q-bg);font:700 22px/1 var(--round);color:var(--q)}
+.guide-tip{margin:0;text-align:center;font:300 24px/1.5 var(--body);color:var(--muted)}
+
+/* 오로라 유리 알약(DESIGN.md The Aurora Pill Rule) — 조작 버튼 · 바깥 사이트 · 고르기 */
+.gp{--tint:var(--msi-role-chip-glass);display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 22px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r-pill);
+  color:var(--msi-role-base-button-ink);font:700 22px/1.2 var(--round);text-decoration:none;cursor:pointer;white-space:nowrap;
+  background:var(--msi-glass-top),var(--msi-glass-sheen),var(--msi-glass-white),var(--tint);background-size:100% 100%,300% 100%,100% 100%,100% 100%;
+  background-position:0 0,100% 0,0 0,0 0;background-repeat:no-repeat;box-shadow:var(--msi-glass-inset),var(--sh-btn);
+  transition:transform .45s var(--msi-motion-ease-spring),box-shadow .25s var(--msi-motion-ease-out),background-position 1s var(--msi-motion-ease-out)}
+.gp:hover{background-position:0 0,0% 0,0 0,0 0;box-shadow:var(--msi-glass-inset),var(--msi-shape-sh4) rgba(var(--msi-rgb-ink),.32)}
+.gp:active{transform:var(--msi-motion-press)}
+.gp:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.gp[aria-disabled="true"]{opacity:.42;cursor:default;transform:none}
+.gp--big{min-height:70px;padding:0 36px;border-width:var(--msi-shape-bw3);font-size:28px}
+.gp[data-s="ok"]{--tint:var(--msi-role-chip-ok)}
+.gp[data-s="no"]{--tint:var(--msi-role-chip-no)}
+.gp .ic:empty{display:none}
+
+/* ── 장(슬라이드) ── */
+#slides{position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;gap:18px;padding:24px 52px 24px;background:var(--card);overflow:hidden}
+.slide.is-on{display:flex;animation:slide-in .32s var(--msi-motion-ease-out)}
+@keyframes slide-in{from{opacity:0;transform:translateX(var(--dx,28px))}to{opacity:1;transform:none}}
+.h{margin:0;display:flex;align-items:center;gap:16px;font:700 44px/1.25 var(--round);letter-spacing:-.01em;word-break:keep-all}
+.h .n{flex:none;display:grid;place-items:center;width:58px;height:58px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:15px;background:var(--head);font:700 32px/1 var(--round);box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.22)}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.sub{margin:-6px 0 0;font:300 26px/1.5 var(--body);color:var(--muted);word-break:keep-all}
+.lead{margin:0;font:300 28px/1.65 var(--body);word-break:keep-all}
+.center{text-align:center}
+.links{display:flex;justify-content:center;gap:16px}
+.fill{flex:1;min-height:0}
+.mid{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:22px}   /* 크기가 바뀌지 않는 내용만 — 정답이 열려도 자리가 그대로 */
+.lead,.sub,.callout,.qcard,.lm-d,.oxq .t,.why,.tbl td,.ccard p,.steps li{text-wrap:pretty}
+.callout{margin:0;padding:16px 24px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r16);font:300 26px/1.65 var(--body);box-shadow:var(--msi-shape-sh4) rgba(var(--msi-rgb-ink),.14);word-break:keep-all}
+.callout .lbl{display:block;margin-bottom:4px;font:700 27px/1.4 var(--round)}
+.callout--tip{background:var(--msi-role-ui-callout-tip)}
+.callout--reason{background:var(--msi-role-ui-callout-reason)}
+.callout--ask{background:var(--msi-role-ui-callout-ask)}
+
+/* 글자 빈칸 「?」 — 칸 너비 = 정답 길이(글자는 숨겨 둔 채 자리만 차지). 누르면 그 칸만 보이고, 다시 누르면 가려짐 */
+.qb{position:relative;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-height:48px;margin:2px 3px;padding:2px 14px;
+  border:var(--msi-shape-bw3) dashed var(--q);border-radius:var(--msi-shape-r10);background:var(--q-bg);font:700 26px/1.3 var(--round);cursor:pointer;
+  transition:transform .35s var(--msi-motion-ease-spring)}
+.qb .qb-a{visibility:hidden;white-space:nowrap}
+.qb::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;color:var(--q);font:700 30px/1 var(--round)}
+.qb:hover{transform:translateY(-2px)}
+.qb:focus-visible,.ss:focus-visible,.lm-s:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.qb.is-open{border-style:solid;border-color:var(--ink);background:var(--msi-glass-top),var(--msi-glass-white),var(--ans,var(--msi-role-chip-ok));box-shadow:var(--msi-glass-inset),var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.25)}
+.qb.is-open .qb-a,.ss.is-open .ss-a,.lm-s.is-open .lm-a{visibility:visible;animation:pop .32s var(--msi-motion-ease-spring)}
+.qb.is-open::after,.ss.is-open::after,.lm-s.is-open::after{content:none}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.alts{margin-top:auto;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 28px;min-height:30px;font:300 21px/1.4 var(--body);color:var(--muted)}
+.alts span{visibility:hidden}
+.alts span.is-on{visibility:visible}
+
+/* 개념 표 */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r16);overflow:hidden;background:var(--white);box-shadow:var(--sh-card)}
+.tbl th,.tbl td{padding:9px 16px;border-right:var(--msi-shape-bw2) solid var(--ink);border-bottom:var(--msi-shape-bw2) solid var(--ink);vertical-align:middle;word-break:keep-all}
+.tbl th:last-child,.tbl td:last-child{border-right:0}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl th{background:var(--msi-role-ui-summary-th);font:700 24px/1.3 var(--round);text-align:center}
+.tbl td{font:300 26px/1.55 var(--body)}
+.tbl td:first-child{font:700 26px/1.4 var(--round);text-align:center;white-space:nowrap}
+
+/* 그림 + 영상(그림 자리에서 재생, 끝나면 그림으로) */
+.vf{margin:0;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.vf-box{position:relative;border-radius:var(--msi-shape-r12);overflow:hidden;background:var(--white);outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}   /* 활동지 .ai-fig 와 같게 — 그림 안에 잉크 칸이 있어 바깥 테두리는 겹침 */
+.vf-box img{display:block;width:100%;height:100%;object-fit:contain}
+.vf-box video{position:absolute;inset:0;display:none;width:100%;height:100%;object-fit:contain;background:var(--white)}
+.vf.has-video .vf-box img{cursor:pointer}
+.vf.is-playing .vf-box video{display:block}
+
+/* 순서 배열 — 왼쪽 섞인 카드, 오른쪽 ①~④ 칸 */
+.seqv{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:start;align-content:center;gap:0 8px}
+.seqv .seqv-arrow{align-self:center}
+.seqv-col{display:flex;flex-direction:column;gap:14px}
+.seqv-lbl{text-align:center;font:700 22px/1.2 var(--round);color:var(--muted)}
+.seqv-arrow{text-align:center;font:700 44px/1 var(--round);color:var(--muted)}
+.sc{position:relative;display:flex;align-items:center;min-height:100px;padding:12px 24px;border:2.5px solid var(--ink);border-radius:22px;
+  background:var(--msi-glass-top),var(--msi-glass-white),var(--msi-role-chip-glass);box-shadow:var(--msi-glass-inset),var(--sh-btn);
+  font:700 26px/1.45 var(--round);word-break:keep-all;transition:opacity .3s var(--msi-motion-ease-out)}
+.sc.is-used{opacity:.3}
+.sc .to{position:absolute;right:-14px;top:-16px;display:none;place-items:center;width:44px;height:44px;border:2.5px solid var(--ink);border-radius:50%;background:var(--head);font:700 24px/1 var(--round)}
+.sc.is-used .to{display:grid}
+.ss-row{display:flex;align-items:stretch;gap:12px}
+.ss-num{flex:none;display:grid;place-items:center;width:58px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;align-self:center;height:58px;background:var(--head);font:700 30px/1 var(--round);box-shadow:var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.25)}
+.ss{position:relative;flex:1;display:flex;align-items:center;min-height:100px;padding:12px 24px;border:var(--msi-shape-bw3) dashed var(--q);border-radius:22px;background:var(--q-bg);
+  font:700 26px/1.45 var(--round);text-align:left;word-break:keep-all;cursor:pointer}
+.ss .ss-a{visibility:hidden}
+.ss::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;color:var(--q);font:700 34px/1 var(--round)}
+.ss.is-open{border-style:solid;border-color:var(--ink);background:var(--msi-glass-top),var(--msi-glass-white),var(--ans,var(--msi-role-chip-ok));box-shadow:var(--msi-glass-inset),var(--sh-btn)}
+.seqv .ss[data-k="a1s2"]{--ans:#D4E6F7 !important}.seqv .ss[data-k="a1s3"]{--ans:var(--msi-role-checkup-coin) !important}.seqv .ss[data-k="a1s4"]{--ans:#F9C4D0 !important}   /* 「알아맞히기까지」 살구 · 베이비블루 · 버터 · 분홍(선생님 선택 C, 2026-10-23). 스크립트가 칸마다 --ans 를 넣어 !important */
+
+/* 이름표 끌어 놓기 — 문장 카드마다 정답 칸, 공개되면 분류 색 */
+.tray{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.lab{display:inline-flex;align-items:center;min-height:50px;padding:4px 22px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r-pill);
+  background:var(--msi-glass-top),var(--msi-glass-white),var(--cat,var(--white));box-shadow:var(--msi-glass-inset),var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.22);font:700 24px/1.2 var(--round);white-space:nowrap}
+.lm{display:flex;flex-direction:column;gap:10px}
+.lm-row{display:grid;grid-template-columns:minmax(0,1fr) var(--slot-w,300px);align-items:center;gap:18px;padding:7px 9px 7px 22px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r14);background:var(--white);box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.12)}
+.lm-d{font:300 26px/1.45 var(--body);text-align:center;word-break:keep-all}
+.lm-s{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:52px;width:100%;padding:2px 14px;border:var(--msi-shape-bw3) dashed var(--q);border-radius:var(--msi-shape-r-pill);background:var(--q-bg);
+  font:700 25px/1.2 var(--round);white-space:nowrap;cursor:pointer}
+.lm-s .lm-a{visibility:hidden}
+.lm-s::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;color:var(--q);font:700 30px/1 var(--round)}
+.lm-s.is-open{border-style:solid;border-color:var(--ink);background:var(--msi-glass-top),var(--msi-glass-white),var(--cat);box-shadow:var(--msi-glass-inset),var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.25)}
+.lm-s--in{width:132px;vertical-align:middle;margin:2px 4px}
+.lm--roomy{gap:16px}   /* 3줄짜리 — 자리가 남아 크게 */
+.lm--roomy .lm-row{padding-top:12px;padding-bottom:12px}
+.lm--roomy .lm-d{font-size:29px}
+.lm--roomy .lm-s{min-height:58px;font-size:27px}
+.lm--tight{gap:8px}   /* 8줄짜리(활동 2) — 한 장에 들어가게 줄 높이만 줄임 */
+.lm--tight .lm-row{padding-top:4px;padding-bottom:4px}
+.lm--tight .lm-s{min-height:46px}
+
+/* 하나 고르기 · O/X — 누르면 정답은 초록, 고른 오답은 빨강, 아래에 이유 */
+.qcard{margin:0;padding:18px 28px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--msi-role-ui-callout-ask);box-shadow:var(--sh-card);font:300 29px/1.6 var(--body);word-break:keep-all}
+.opts{display:flex;justify-content:center;flex-wrap:wrap;gap:20px}
+.opts--col{flex-direction:column;align-items:center;gap:14px}
+.po{min-height:68px;padding:8px 32px;font-size:27px;line-height:1.35;white-space:normal}
+.opts--col .po{width:1060px;justify-content:flex-start;text-align:left;border-radius:26px}
+.why{margin:0;padding:12px 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r14);font:700 25px/1.55 var(--round);word-break:keep-all}
+.why[hidden]{display:none}
+.why[data-s="ok"]{background:var(--msi-role-ui-feedback-ok-bg)}
+.why[data-s="no"]{background:var(--msi-role-ui-feedback-no-bg)}
+.why p{margin:0}
+.why .is-no{color:var(--msi-role-ui-feedback-no-ink)}
+.why .is-ok{color:var(--msi-role-ui-feedback-ok-ink)}
+.oxl{display:flex;flex-direction:column;gap:18px}
+.oxq{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px 20px;padding:16px 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card)}
+.oxq .t{font:300 29px/1.5 var(--body);word-break:keep-all}
+.oxq .why,.oxq .why[data-s]{grid-column:2 / -1;padding:10px 0 0;border:0;border-top:var(--msi-shape-bw2) dashed rgba(var(--msi-rgb-ink),.28);border-radius:0;background:none}   /* 카드 안 상자 대신 점선 + 색 글(활동지 O/X 와 같게) */
+.oxb{display:flex;gap:14px}
+.ob{min-width:92px;min-height:68px;padding:0 20px;font-size:34px}
+.coin{flex:none;display:inline-grid;place-items:center;width:52px;height:52px;border:2.5px solid var(--ink);border-radius:50%;background:var(--msi-role-checkup-coin);
+  font:700 26px/1 var(--round);box-shadow:var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.25)}
+
+
+/* 개념 카드 3장 */
+.cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.ccard{display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card);text-align:center;word-break:keep-all}
+.ccard .ic{font-size:46px;line-height:1.1}
+.ccard .t{font:700 32px/1.25 var(--round)}
+.ccard p{margin:0;font:300 26px/1.7 var(--body)}
+.ccard p.ex{margin-top:auto;width:100%;padding:10px 12px;border-radius:var(--msi-shape-r12);background:var(--msi-role-ui-callout-reason);font-size:25px;line-height:1.6}
+.ccard .t .lm-s{width:250px;font-size:26px}   /* 카드 이름 = 이름표 빈칸(활동지와 같게, 2026-10-20) */
+
+/* 단계 목록(동기유발) */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.steps li{display:flex;align-items:center;gap:18px;padding:14px 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r16);background:var(--white);box-shadow:var(--sh-card);font:300 28px/1.5 var(--body);word-break:keep-all}
+.steps .n{flex:none;display:grid;place-items:center;width:52px;height:52px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r14);background:var(--head);font:700 28px/1 var(--round)}
+
+/* 표지 · 학습 주제 — 오로라 빛 */
+.glow{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.glow i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.42;animation:drift 14s ease-in-out infinite alternate}
+.glow i:nth-child(1){left:3%;top:6%;width:36%;height:62%;background:var(--msi-role-aurora-pink)}
+.glow i:nth-child(2){right:3%;bottom:2%;width:40%;height:64%;background:var(--msi-role-aurora-sky);animation-delay:-5s}
+.glow i:nth-child(3){left:32%;top:-8%;width:36%;height:54%;background:var(--msi-role-aurora-lavender);animation-delay:-9s}
+@keyframes drift{from{transform:translate3d(-14px,-8px,0) scale(1)}to{transform:translate3d(16px,10px,0) scale(1.08)}}
+.slide.cover,.slide.topic{isolation:isolate;justify-content:center;align-items:center}
+.cv-unit{display:flex;align-items:baseline;gap:14px}
+.cv-unit .u{padding:0 8px;background:linear-gradient(transparent 55%,var(--msi-role-base-lavender) 55%);font:700 40px/1.3 var(--round)}
+.cv-unit .no{font:700 30px/1.3 var(--round);color:var(--muted)}
+.cv-title{margin:-4px 0 12px;font:400 132px/1.08 var(--display)}
+.goals{width:1160px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;overflow:hidden;background:var(--msi-role-goals-body);box-shadow:var(--sh-card)}
+.goals-hd{position:relative;isolation:isolate;display:flex;align-items:center;gap:12px;padding:10px 22px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--msi-role-goals-head);font:700 30px/1.3 var(--round)}
+.goals ol{list-style:none;margin:0;padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.goals li{display:flex;align-items:center;gap:18px;padding:12px 20px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r14);background:var(--msi-role-base-cream-paper);font:300 31px/1.45 var(--body)}
+.goals .coin{background:var(--msi-role-goals-coin)}
+.tp-card{position:relative;isolation:isolate;width:1240px;padding:44px 56px 48px;border:var(--msi-shape-bw4) solid var(--ink);border-radius:22px;overflow:hidden;
+  background:linear-gradient(150deg,rgba(255,255,255,.62),rgba(255,255,255,.28) 55%,rgba(255,255,255,.5));box-shadow:var(--msi-shape-sh6) rgba(var(--msi-rgb-ink),.2);text-align:center}
+.tp-card .h{justify-content:center;font-size:54px;margin-bottom:22px}
+.tp-card .lead{font-size:32px;line-height:1.75}
+
+/* 피드백 2026-10-19 — 큰 표 · 내 정보 · 아기 비유 · 몬스터 그림 · 30개 안내 · 반반 나누기 */
+.tbl--big th{font-size:28px;padding:12px 18px}
+.tbl--big td,.tbl--big td:first-child{font-size:30px;line-height:1.5;padding:12px 18px}
+.tbl--big .qb{min-height:58px;padding:2px 16px;font-size:32px}
+.tbl--big .qb::after{font-size:36px}
+.tbl--big .lm-s--in{width:150px;min-height:56px;font-size:29px}
+.callout--big{font-size:42px;line-height:2.1;padding:36px 40px}   /* 정리 핵심 문장 — 한 문장만 남아 장 가운데 크게(2026-10-21) */
+.callout--big .lm-s--in{width:180px;min-height:68px;font-size:38px}
+.tbl--fill{flex:1}
+.tbl--sum td,.tbl--sum td:first-child{font-size:28px;padding:7px 16px}   /* 정리 표는 6줄이라 한 장에 들어가게 조금 작게 */
+.tbl--sum .lm-s--in{min-height:50px}
+/* 정리 = 낱말 표(이름표 모음 없이) + 표 아래 핵심 문장 한 장(피드백 2026-10-23, present.md §6) — 한 장에 들어가게 표 줄도 촘촘히 */
+.slide:has(.callout--sum) .tbl--sum td,.slide:has(.callout--sum) .tbl--sum td:first-child{padding-top:3px;padding-bottom:3px;line-height:1.4}
+.slide:has(.callout--sum) .tbl--sum .lm-s--in{min-height:46px}
+.callout--sum{font-size:30px;line-height:1.75;padding:14px 28px}
+.callout--sum .lm-s--in{width:150px;min-height:52px;font-size:29px}
+.tbl--big .lm-s--term{width:224px;font-size:26px}   /* 정리 표 첫 칸 낱말 = 이름표 빈칸(활동지와 같게) */
+.tray--many{gap:10px}
+.tray--many .lab{min-height:44px;padding:2px 18px;font-size:22px}
+.mi-mock{width:1240px;margin:0 auto;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;overflow:hidden;background:var(--msi-role-myinfo-body);box-shadow:var(--sh-card)}
+.mi-mock .hd{padding:12px 24px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--msi-role-myinfo-head);font:700 22px/1 var(--pixel);letter-spacing:.5px}
+.mi-mock .bd{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:24px;padding:28px 30px 32px}
+.mi-f{display:flex;flex-direction:column;gap:12px}
+.mi-f b{font-size:32px}
+/* 「✏️ 활동지에 적어요」 — 활동지 카드를 그대로 본뜸(피드백 2026-10-23, docs/rules/present.md §6). 학생이 채울 빈칸은 분홍 점선 + ①② 번호.
+   카드 색은 장의 역할(data-role)을 따른다(--head · --card). 아이콘 칸 .ws-ic 의 data-ic 이모지는 테마가 그림으로 바꿈 */
+.ws-mock{width:1300px;margin:0 auto;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;overflow:hidden;background:var(--card);box-shadow:var(--sh-card)}
+.ws-mock .hd{display:flex;align-items:center;gap:12px;padding:10px 22px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--head);font:700 22px/1 var(--pixel);letter-spacing:.5px}
+.ws-mock .ph{padding:5px 12px;border:var(--msi-shape-bw2) solid var(--ink);border-radius:var(--msi-shape-r6);background:var(--white);font:700 20px/1 var(--round);letter-spacing:0}
+.ws-mock .bd{display:flex;flex-direction:column;gap:14px;padding:22px 32px 28px}
+.ws-mock .tt{display:flex;align-items:center;gap:14px;font:700 32px/1.3 var(--round)}
+.ws-ic{display:grid;place-items:center;width:54px;height:54px;flex:none;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--head);font-size:30px;line-height:1}
+.ws-mock .ds{margin:0;font:300 24px/1.6 var(--body);word-break:keep-all}
+.ws-mock .q{font:700 27px/1.4 var(--round);word-break:keep-all}
+.ws-mock .fl{display:flex;align-items:center;gap:12px;font:300 28px/1 var(--body)}
+.ws-blank{position:relative;display:inline-flex;align-items:center;min-width:120px;min-height:64px;padding:0 22px;border:4px dashed var(--msi-role-ui-focus-pink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 26px/1 var(--body);color:var(--msi-role-ui-placeholder)}
+.ws-blank--area{display:flex;min-height:104px;padding-left:28px}
+.ws-blank i{position:absolute;left:-18px;top:-18px;display:grid;place-items:center;width:40px;height:40px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;background:var(--msi-role-ui-focus-pink);color:var(--ink);font:700 22px/1 var(--round);font-style:normal}
+.mi-f span{display:flex;align-items:center;min-height:80px;padding:0 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 30px/1 var(--body);color:var(--msi-role-ui-placeholder)}
+.mon{display:block;width:100%;height:auto}
+.mon .cell{fill:var(--msi-role-base-cream-paper);stroke:var(--ink);stroke-width:3}
+.mon .zone{fill:var(--msi-role-base-salmon)}
+.mon .card{fill:var(--msi-role-base-butter);stroke:var(--ink);stroke-width:3}
+.mon .line{stroke:var(--ink);stroke-width:3;fill:none}
+.mon text{font-family:var(--round);font-weight:700;fill:var(--ink)}
+.mon .emo{font-weight:400}
+.must{align-self:center;margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 36px;border:var(--msi-shape-bw4) solid var(--ink);border-radius:18px;background:var(--msi-role-base-butter);
+  font:700 42px/1.2 var(--round);box-shadow:var(--msi-shape-sh6) rgba(var(--msi-rgb-ink),.28)}
+.must b{padding:0 6px;background:linear-gradient(transparent 56%,var(--msi-role-base-salmon) 56%)}
+.halves{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:0}
+.half{display:flex;flex-direction:column;gap:16px;min-height:0;padding-top:4px}
+.half + .half{padding-top:22px;border-top:var(--msi-shape-bw2) dashed rgba(var(--msi-rgb-ink),.28)}
+.fork{display:flex;flex-direction:column;align-items:stretch;gap:16px}   /* 「학습했나?」 갈림길(시안 C) */
+.fork .q{align-self:center;padding:12px 40px;border:var(--msi-shape-bw4) solid var(--ink);border-radius:22px;background:var(--msi-glass-top),var(--msi-glass-white),var(--msi-role-topic-head);font:700 44px/1.2 var(--round);box-shadow:var(--msi-shape-sh5) rgba(var(--msi-rgb-ink),.25)}   /* 시안 A(2026-10-19) */
+.fork .q::before{content:"🔍";margin-right:10px}
+.fork .br{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:center;gap:14px}
+.fork .yn{text-align:center;font:700 30px/1.2 var(--round)}
+.fork .ans{padding:14px 18px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r16);background:var(--white);font:300 26px/1.45 var(--body);box-shadow:var(--sh-card);word-break:keep-all}   /* 배경 없이, 이름에 형광펜(2026-10-19) */
+.fork .ans b{display:block;margin-bottom:4px;font-size:30px}
+.fork .ans mark{padding:0 4px;color:inherit;background:linear-gradient(transparent 52%,var(--hl) 52%)}
+.fork .ans[data-v="인공지능 소프트웨어"]{--hl:var(--msi-role-base-lilac)}
+.fork .ans[data-v="일반 소프트웨어"]{--hl:var(--msi-role-base-salmon)}   /* 이 장에 안 쓰인 색 */
+/* 아기 ↔ 인공 신경망 두 줄 흐름(시안 A) — ① 열만 보이고 스페이스마다 다음 열(.colrv 표식이 열림 칸 노릇) */
+.tl{flex:1;min-height:0;display:grid;grid-template-columns:180px minmax(0,1fr) 44px minmax(0,1fr) 44px minmax(0,1fr);gap:16px 6px;align-content:center;align-items:stretch}
+.tl .hd{text-align:center;padding:8px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r-pill);background:var(--head);font:700 28px/1.2 var(--round)}
+.tl .ar{display:grid;place-items:center;font:700 34px var(--round);color:var(--muted)}
+.tl .who{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:700 26px/1.2 var(--round);text-align:center}
+.tl .who svg{width:120px;height:120px}
+.tl .c{display:grid;place-items:center;padding:18px 14px;border:2.5px solid var(--ink);border-radius:var(--msi-shape-r16);text-align:center;font:300 25px/1.45 var(--body);word-break:keep-all;box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.12)}
+.tl .c.baby{background:var(--msi-role-rule1-body)}
+.tl .c.ann{background:var(--msi-role-topic-body)}
+.tl small{display:block;margin-top:4px;font-size:22px;color:var(--muted)}
+.tl [data-col]{transition:opacity .35s var(--msi-motion-ease-out)}
+.tl:not(:has(.colrv[data-col="2"].is-open)) [data-col="2"],
+.tl:not(:has(.colrv[data-col="3"].is-open)) [data-col="3"]{visibility:hidden;opacity:0}
+.colrv{display:none}
+.pic .skin{fill:var(--msi-role-base-apricot);stroke:var(--ink);stroke-width:3}
+.pic .ink{fill:var(--ink)}
+.pic .cheek{fill:var(--msi-role-base-cotton-pink)}
+.pic .line{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.pic .wire{stroke:var(--msi-role-base-muted-violet);stroke-width:2.5;opacity:.7}
+.pic .node{fill:var(--msi-role-base-periwinkle);stroke:var(--ink);stroke-width:3}
+.pic .out{fill:var(--msi-role-base-mint);stroke:var(--ink);stroke-width:3}
+/* 바다 생물 질문 — 🤖 말풍선(시안 B) */
+.say{display:grid;grid-template-columns:120px minmax(0,1fr);gap:22px;align-items:center}
+.say .bot{display:grid;place-items:center;width:120px;height:120px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;background:var(--msi-role-lunch-thu);font-size:64px;box-shadow:var(--sh-card)}
+.say .bub{position:relative;margin:0;padding:18px 26px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:22px;background:var(--white);box-shadow:var(--sh-card);font:300 29px/1.55 var(--body);word-break:keep-all}
+.say .bub::before{content:"";position:absolute;left:-17px;top:42px;width:28px;height:28px;background:var(--white);border:var(--msi-shape-bw3) solid var(--ink);border-right:0;border-top:0;transform:rotate(45deg)}
+.say .bub strong{display:block;margin-top:6px;font-size:36px}
+/* 게임 비유 — 3단 그림 카드(시안 A) */
+.lv{display:grid;grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr) 50px minmax(0,1fr);align-items:center;gap:6px}
+.lv .c{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card);font:700 26px/1.3 var(--round)}
+.lv .c i{font-style:normal;font-size:50px;line-height:1}
+.lv .c small{font:300 22px/1.3 var(--body);color:var(--muted)}
+.lv .ar{text-align:center;font:700 34px var(--round);color:var(--muted)}
+.lm--mid .lm-row{padding-top:6px;padding-bottom:6px}
+/* 게임 비유 장 — 아래 빈칸 없이 크게 채움(피드백 2026-10-21) */
+.mid--fill{justify-content:space-between;padding:6px 0 4px}
+.mid--fill .lv .c{padding:26px 16px;gap:8px;font-size:34px}
+.mid--fill .lv .c i{font-size:68px}
+.mid--fill .lv .c small{font-size:27px}
+.mid--fill .lab{min-height:58px;padding:4px 28px;font-size:30px}
+.mid--fill .lm{gap:20px}
+.mid--fill .lm .lm-row{padding-top:18px;padding-bottom:18px}
+.mid--fill .lm .lm-d{font-size:32px}
+.mid--fill .lm .lm-s{min-height:68px;font-size:31px}
+/* 영상 장 — 큰 영상 + 재생·일시정지 알약(2026-10-20) */
+.vp{margin:0;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.vp-box{position:relative;border-radius:var(--msi-shape-r12);overflow:hidden;background:var(--white);outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+.vp-box video{display:block;width:100%;height:100%;object-fit:contain;background:var(--white)}
+.vp-ctl{display:flex;justify-content:center;gap:18px}
+.lead--big{font-size:36px;font-weight:700;line-height:1.7;text-align:center}   /* 동기유발 설명(시안 B) */
+.lead--big b{padding:0 3px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
+
+/* ── 따라 하기 단계 — 캡처마다 한 장(ai/02 활동 1 「엔트리 따라 하기」, 선생님 2026-10-25 「각 이미지마다 슬라이드」) ── */
+.sec1{align-self:flex-start;display:inline-flex;align-items:center;margin-bottom:-6px;padding:4px 16px;border:var(--msi-shape-bw2) solid var(--ink);border-radius:var(--msi-shape-r-pill);background:var(--head);font:700 22px/1.3 var(--round)}
+.shot1{margin:0;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.shot1 img{display:block;max-width:100%;height:auto;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--white);box-shadow:var(--sh-card)}
+/* 장이 45장이라 위 진행 점을 작게 — 바 제목이 잘리지 않게 */
+#bar .b-dots{gap:3px} #bar .dot{width:9px;height:9px;border-width:var(--msi-shape-bw2)} #bar .dot.is-cur{width:15px;height:15px} #bar .dot.ph-start{margin-left:7px}
+/* ── ⏱ 타이머(2026-10-20 선생님 결정: 가운데 크게 · 슬라이드는 흐리게 하지 않음 · 장을 넘겨도 계속) ── */
+#cTimer[aria-pressed="true"]{--tint:var(--msi-role-base-lavender);box-shadow:var(--msi-glass-inset),inset 0 -4px 0 var(--ink),var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.3)}
+.tm{position:absolute;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none}   /* 카드 밖은 슬라이드를 그대로 누를 수 있게 */
+.tm[hidden],.tm-bd[hidden],.tm .gp[hidden]{display:none}
+.tm-card{--tm-fill:var(--msi-role-base-periwinkle);pointer-events:auto;width:900px;border:var(--msi-shape-bw4) solid var(--ink);border-radius:24px;overflow:hidden;background:var(--msi-role-base-cream-paper);box-shadow:var(--msi-shape-sh8) rgba(var(--msi-rgb-ink),.22);animation:pop .3s var(--msi-motion-ease-spring)}
+.tm-hd{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:var(--msi-shape-bw3) solid var(--ink);background:var(--msi-role-topic-head)}
+.tm-k{font:700 18px/1 var(--pixel);letter-spacing:.5px}
+.tm-title{font:700 28px/1.2 var(--round)}
+.tm-bd{display:flex;align-items:center;justify-content:center;gap:44px;padding:34px 36px}
+.tm-col{display:flex;flex-direction:column;align-items:center;gap:22px}
+.tm-row{display:flex;align-items:center;gap:14px}
+.tm-sel{appearance:none;-webkit-appearance:none;padding:6px 56px 6px 24px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r14);cursor:pointer;color:var(--ink);font:700 54px/1.2 var(--round);font-variant-numeric:tabular-nums;box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.18);
+  background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%234b3b6b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center/30px}
+.tm-sel:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.tm-unit{font:700 44px/1 var(--round)}
+.tm-warn{margin:0;font:700 24px/1.4 var(--round);color:var(--msi-role-ui-feedback-no-ink)}
+.tm-dg{font:700 150px/1 var(--round);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.tm-disc{flex:none;width:260px;height:260px}
+.tm-disc .shd{fill:rgba(var(--msi-rgb-ink),.18)}
+.tm-disc .face{fill:var(--white);stroke:var(--ink);stroke-width:3}
+.tm-disc .wedge{fill:var(--tm-fill)}
+.tm-disc .hand{stroke:var(--ink);stroke-width:3.5;stroke-linecap:round}
+.tm-disc .pin{fill:var(--ink)}
+.tm-card.is-soon{--tm-fill:var(--msi-role-base-butter)}
+.tm-card.is-soon .tm-hd{background:var(--msi-role-base-butter)}
+.tm-card.is-done .tm-hd{background:var(--msi-role-chip-no)}
+.tm-card.is-done .tm-dg{color:var(--msi-role-ui-feedback-no-ink)}
+.tm-card.is-paused .tm-dg{opacity:.5}
+
+@media (prefers-reduced-motion:reduce){
+  .tm-card{animation:none}
+  .slide.is-on,.qb.is-open .qb-a,.ss.is-open .ss-a,.lm-s.is-open .lm-a{animation:none}
+  .glow i{animation:none}
+  .gp,.qb,.sc,.tl [data-col]{transition:none}
+  .gp:active{transform:none}
+}
+</style>
+</head>
+<body>
+<div id="stage" data-role="topic">
+  <header id="bar">
+    <span class="b-ph" id="bPh">도입</span>
+    <span class="b-code" id="bCode">TODAY_GOALS</span>
+    <span class="b-sep" aria-hidden="true"></span>
+    <span class="b-badge" id="bBadge" data-ic="🎯" aria-hidden="true">🎯</span>
+    <span class="b-title" id="bTitle">이미지 분류 인공지능 모델 만들기</span>
+    <nav class="b-dots" id="bDots" aria-label="장 고르기"></nav>
+    <span class="b-count" id="bCount" aria-hidden="true">1 / 20</span>
+  </header>
+
+  <main id="slides">
+
+    <!-- ══ 1 · 표지(제목 + 오늘의 목표) ══ -->
+    <section class="slide cover" data-role="topic" data-phase="도입" data-code="TODAY_GOALS" data-badge="🎯" data-title="이미지 분류 인공지능 모델 만들기" data-name="표지 · 오늘의 목표">
+      <div class="glow" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="cv-unit"><span class="u">인공지능</span><span class="no">· 2차시</span></div>
+      <h1 class="cv-title" style="font-size:110px;text-align:center">이미지 분류<br>인공지능 모델 만들기</h1>
+      <div class="goals">
+        <div class="goals-hd"><span data-ic="🎯" aria-hidden="true">🎯</span>오늘의 목표</div>
+        <ol>
+          <li><span class="coin">1</span>학습 데이터로 이미지 분류 인공지능 모델을 학습시키는 과정을 설명할 수 있어요.</li>
+          <li><span class="coin">2</span>엔트리로 내가 고른 두 가지 이미지를 구분하는 인공지능 모델을 만들 수 있어요.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══ 1-1 · 활동지에 내 정보 적기 ══ -->
+    <section class="slide" data-role="myinfo" data-phase="도입" data-code="MY_INFO" data-badge="✏️" data-title="활동지에 내 정보를 적어요" data-name="활동지에 내 정보 적기">
+      <h2 class="h">활동지에 내 정보를 적어요</h2>
+      <div class="mid" style="gap:36px">
+        <p class="lead center" style="font-size:34px">수업 활동지의 <b>MY_INFO</b> 칸에 <b>학년 · 반 · 번호 · 이름</b>을 먼저 적어요.</p>
+        <div class="mi-mock" aria-hidden="true"><div class="hd">MY_INFO</div>
+          <div class="bd"><div class="mi-f"><b>학년</b><span>2</span></div><div class="mi-f"><b>반</b><span></span></div><div class="mi-f"><b>번호</b><span></span></div><div class="mi-f"><b>이름</b><span>이름을 적어요</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 1-2 · 사용 안내(선생님용) — 단축키·누르기 ══ -->
+    <section class="slide" data-role="help" data-phase="안내" data-code="HOW_TO_USE" data-badge="⌨️" data-title="수업용 화면 쓰는 법" data-name="사용 안내">
+      <h2 class="h">수업용 화면 쓰는 법</h2>
+      <div class="guide">
+        <div class="guide-col">
+          <h3>⌨️ 키보드</h3>
+          <div class="gk"><span class="k"><kbd>Space</kbd></span><span><b>정답 하나씩</b> 보기 — 위에서부터, 왼쪽부터<br>다 보이면 다음 장으로</span></div>
+          <div class="gk"><span class="k"><kbd>←</kbd><kbd>→</kbd></span><span>이전 장 · 다음 장 (정답은 열지 않고 넘김)</span></div>
+          <div class="gk"><span class="k"><kbd>Home</kbd><kbd>End</kbd></span><span>처음 장 · 마지막 장</span></div>
+          <div class="gk"><span class="k"><kbd>A</kbd></span><span>이 화면 정답 <b>모두 보기</b></span></div>
+          <div class="gk"><span class="k"><kbd>R</kbd></span><span>이 화면 정답 <b>다시 가리기</b></span></div>
+          <div class="gk"><span class="k"><kbd>F</kbd></span><span><b>전체화면</b> 켜기·끄기 (Esc 로도 나가요)</span></div>
+        </div>
+        <div class="guide-col">
+          <h3>🖱️ 마우스</h3>
+          <div class="gk"><span class="k"><span class="pill">?</span></span><span>누르면 그 칸만 정답, 다시 누르면 가려요</span></div>
+          <div class="gk"><span class="k"><b>보기 · O/X</b></span><span>학생이 말한 답을 누르면 정답은 초록, 고른 오답은 빨강 + 이유</span></div>
+          <div class="gk"><span class="k"><b>위 진행 점</b></span><span>누르면 그 장으로 바로 가요</span></div>
+          <div class="gk"><span class="k"><b>아래 버튼</b></span><span>◀ 이전 · 다음 ▶ · ⛶ 전체화면 · ⏱ 타이머<br>👀 모두 보기 · 🙈 가리기</span></div>
+        </div>
+      </div>
+      <p class="guide-tip">한글 입력 상태여도 A · R · F 가 돼요. 다음 장(▶ 또는 Space)은 동기유발이에요.</p>
+    </section>
+
+    <!-- ══ 2 · 도입 · 동기유발 — 오늘 완성할 모델 예시 ══ -->
+    <section class="slide" data-role="warmup" data-phase="도입" data-code="WARM_UP" data-badge="🎨" data-title="내가 원하는 이미지를 구분해주는 인공지능 모델" data-name="오늘 완성할 인공지능 모델 예시">
+      <h2 class="h">내가 원하는 이미지를 구분해주는 인공지능 모델</h2>
+      <p class="lead center" style="margin:0;font-size:32px">오늘 완성할 <b>인공지능 모델</b> 예시</p>
+      <figure class="vf">
+        <div class="vf-box" style="width:840px;aspect-ratio:1038 / 657"><img src="msi-asset:./assets/warmup-model.png" width="1038" height="657" alt="엔트리 이미지 분류 모델 화면. 왼쪽 데이터 입력에 카리나 사진 8개와 장원영 사진 8개, 가운데 학습 100% 완료, 오른쪽 결과에 새 사진을 올리자 분류한 클래스 장원영(카리나 17.43%, 장원영 82.56%)이 나온다."></div>
+      </figure>
+    </section>
+
+    <!-- ══ 3 · 도입 · 학습주제 제시 ══ -->
+    <section class="slide topic" data-role="intro" data-phase="도입" data-code="TODAY_TOPIC" data-badge="🔎" data-title="엔트리로 이미지 분류 인공지능 모델 만들기" data-name="엔트리로 이미지 분류 인공지능 모델 만들기">
+      <div class="glow" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="tp-card">
+        <h2 class="h"><span aria-hidden="true">🔎</span>엔트리로 이미지 분류 인공지능 모델 만들기</h2>
+        <p class="lead">지난 시간에 인공지능은 데이터로 학습해서 모델을 만든다는 것을 배웠어요.<br>오늘은 엔트리에서 내가 고른 두 가지 이미지를 모아 학습시키고,<br>처음 보는 사진으로 시험해 내 손으로 이미지 분류 인공지능 모델을 완성해요.</p>
+      </div>
+    </section>
+
+    <!-- ══ 4 · 활동 1 — 엔트리 따라 하기: 단계(캡처)마다 한 장(선생님 2026-10-25 「각 이미지마다 슬라이드」) ══ -->
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="1. 엔트리에 들어가요.">
+      <span class="sec1">1. 엔트리 과제 열기</span>
+      <h2 class="h"><span class="n">1</span><span>엔트리에 들어가요.</span></h2>
+      <figure class="shot1"><a class="gp gp--big" href="https://playentry.org/" target="_blank" rel="noopener">↗ 엔트리 열기</a></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="2. 로그인 클릭">
+      <span class="sec1">1. 엔트리 과제 열기</span>
+      <h2 class="h"><span class="n">2</span><span>로그인 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s02.png" width="171" height="92" style="width:513px" alt="엔트리 첫 화면 오른쪽 위의 로그인 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="3. (1) 로고 클릭 (2) 나의 학급 클릭">
+      <span class="sec1">1. 엔트리 과제 열기</span>
+      <h2 class="h"><span class="n">3</span><span>(1) 로고 클릭 (2) 나의 학급 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s03.png" width="270" height="425" style="width:337px" alt="① 오른쪽 위 내 프로필 그림 클릭, ② 펼쳐진 메뉴에서 나의 학급 클릭"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="4. (1) 우리반 학습 클릭 (2) 제목 클릭">
+      <span class="sec1">1. 엔트리 과제 열기</span>
+      <h2 class="h"><span class="n">4</span><span>(1) 우리반 학습 클릭 (2) 제목 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s04.png" width="627" height="471" style="width:706px" alt="학급 화면에서 ① 우리 반 학습 탭, ② 과제 제목 「이미지 분류 인공지능 모델 만들기」 클릭"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="5. 과제 시작하기 클릭">
+      <span class="sec1">1. 엔트리 과제 열기</span>
+      <h2 class="h"><span class="n">5</span><span>과제 시작하기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s05.png" width="337" height="125" style="width:1011px" alt="초록색 과제 시작하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="6. (1) 인공지능 클릭 (2) 인공지능 모델 학습하기 클릭">
+      <span class="sec1">2. 이미지 분류 모델 만들기</span>
+      <h2 class="h"><span class="n">6</span><span>(1) 인공지능 클릭 (2) 인공지능 모델 학습하기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s06.png" width="265" height="417" style="width:299px" alt="블록 꾸러미 맨 아래 ① 인공지능, ② 인공지능 모델 학습하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="7. (1) 새로 만들기 클릭 (2) 분류: 이미지 클릭">
+      <span class="sec1">2. 이미지 분류 모델 만들기</span>
+      <h2 class="h"><span class="n">7</span><span>(1) 새로 만들기 클릭 (2) 분류: 이미지 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s07.png" width="282" height="467" style="width:320px" alt="① 새로 만들기 탭, ② 분류: 이미지 카드"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="8. 맨 위 오른쪽에 학습하기 클릭">
+      <span class="sec1">2. 이미지 분류 모델 만들기</span>
+      <h2 class="h"><span class="n">8</span><span>맨 위 오른쪽에 학습하기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s08.png" width="237" height="157" style="width:711px" alt="오른쪽 위 파란 학습하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="9. 내가 구분시킬 것 2개 적어주기. 000과 000 이미지 구분">
+      <span class="sec1">2. 이미지 분류 모델 만들기</span>
+      <h2 class="h"><span class="n">9</span><span>내가 구분시킬 것 2개 적어주기. 000과 000 이미지 구분하는 인공지능 모델. (아무거나 내 마음대로)</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s09.png" width="422" height="177" style="width:1121px" alt="모델 이름 칸에 「카리나와 장원영 이미지 구분하는 인공지능모델」이라고 적은 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="10. 구분할 것 이름 적어주기">
+      <span class="sec1">2. 이미지 분류 모델 만들기</span>
+      <h2 class="h"><span class="n">10</span><span>구분할 것 이름 적어주기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s10.png" width="415" height="416" style="width:529px" alt="데이터 입력의 두 칸에 카리나, 장원영이라고 적은 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="11. (1) 구글 들어가기 (2) 내가 원하는 거 검색 (3) 이미">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">11</span><span>(1) 구글 들어가기 (2) 내가 원하는 거 검색 (3) 이미지 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s11.png" width="422" height="130" style="width:1266px" alt="① 구글, ② 검색 칸에 카리나 입력, ③ 이미지 탭"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="12. 원하는 이미지 클릭">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">12</span><span>원하는 이미지 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s12.png" width="447" height="580" style="width:408px" alt="구글 이미지 검색 결과"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="13. 옆에 크게 뜨면, Windows + Shift + S 눌러서 ">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">13</span><span>옆에 크게 뜨면, <b>Windows + Shift + S</b> 눌러서 캡처하기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s13.png" width="812" height="842" style="width:453px" alt="고른 사진이 오른쪽에 크게 뜬 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="14. (1) 폴더 클릭 (2) 사진 클릭 (3) 스크린샷 클릭">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">14</span><span>(1) 폴더 클릭 (2) 사진 클릭 (3) 스크린샷 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s14.png" width="382" height="482" style="width:372px" alt="① 작업 표시줄의 파일 탐색기, ② 사진, ③ 스크린샷 폴더"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="15. 스크린샷 파일 생겼는지 확인">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">15</span><span>스크린샷 파일 생겼는지 확인</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s15.png" width="361" height="321" style="width:596px" alt="스크린샷 폴더에 캡처한 사진 파일이 생긴 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="16. 엔트리 다시 들어가서, 해당 부분 클릭">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">16</span><span>엔트리 다시 들어가서, 해당 부분 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s16.png" width="415" height="173" style="width:1245px" alt="카리나 칸 아래 「클릭해서 데이터를 입력해 주세요」 부분"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="17. (1) 파일 업로드 클릭 (2) 사진 클릭 (3) 스크린샷 클">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">17</span><span>(1) 파일 업로드 클릭 (2) 사진 클릭 (3) 스크린샷 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s17.png" width="450" height="391" style="width:541px" alt="① 파일 업로드, ② 사진, ③ 스크린샷 폴더"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="18. (1) 원하는 사진 클릭 (2) 열기 클릭">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">18</span><span>(1) 원하는 사진 클릭 (2) 열기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s18.png" width="546" height="387" style="width:748px" alt="① 넣을 사진 파일, ② 열기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="19. 이렇게 사진이 들어가면 성공">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">19</span><span>이렇게 사진이 들어가면 성공</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s19.png" width="398" height="307" style="width:687px" alt="카리나 칸에 사진 1개가 들어간 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="20. 이렇게 구분할 것마다 사진을 5개 이상 넣어 주세요. (예: ">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">20</span><span>이렇게 구분할 것마다 사진을 5개 이상 넣어 주세요. (예: 카리나 사진 5개 이상, 장원영 사진 5개 이상)</span></h2>
+      <figure class="shot1"><div class="must"><span>⚠️ 구분할 것마다 사진 <b>5개 이상</b></span><span style="font-size:30px;font-weight:300;font-family:var(--body)">예: 카리나 사진 5개 이상, 장원영 사진 5개 이상</span></div></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="21. 5개 이상 준비!!!">
+      <span class="sec1">3. 학습 데이터 모으기</span>
+      <h2 class="h"><span class="n">21</span><span>5개 이상 준비!!!</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s20.png" width="417" height="540" style="width:409px" alt="카리나 8개, 장원영 8개 사진이 들어간 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="22. 다 됐다면 학습하기 클릭해서 인공지능 모델 학습시키기">
+      <span class="sec1">4. 모델 학습시키기</span>
+      <h2 class="h"><span class="n">22</span><span>다 됐다면 학습하기 클릭해서 인공지능 모델 학습시키기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s21.png" width="713" height="612" style="width:617px" alt="데이터 입력 오른쪽 학습 칸의 학습하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="23. 100% 완료될 동안, 테스트할 때 쓸 데이터를 구글에서 캡처">
+      <span class="sec1">5. 테스트하기</span>
+      <h2 class="h"><span class="n">23</span><span>100% 완료될 동안, 테스트할 때 쓸 데이터를 구글에서 캡처하기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s22.png" width="1047" height="721" style="width:683px" alt="테스트에 쓸 사진을 구글에서 크게 띄운 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="24. 100% 완료됐다면, 파일 업로드 클릭">
+      <span class="sec1">5. 테스트하기</span>
+      <h2 class="h"><span class="n">24</span><span>100% 완료됐다면, 파일 업로드 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s23.png" width="597" height="478" style="width:662px" alt="학습 100% 완료, 오른쪽 결과 칸의 파일 업로드"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="25. (1) 사진 클릭 (2) 스크린샷 클릭">
+      <span class="sec1">5. 테스트하기</span>
+      <h2 class="h"><span class="n">25</span><span>(1) 사진 클릭 (2) 스크린샷 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s14.png" width="382" height="482" style="width:420px" alt="① 사진, ② 스크린샷 폴더"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="26. (1) 테스트에 쓸 사진 클릭 (2) 열기 클릭">
+      <span class="sec1">5. 테스트하기</span>
+      <h2 class="h"><span class="n">26</span><span>(1) 테스트에 쓸 사진 클릭 (2) 열기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s18.png" width="546" height="387" style="width:748px" alt="① 테스트에 쓸 사진 파일, ② 열기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="27. 인공지능 모델 완성">
+      <span class="sec1">5. 테스트하기</span>
+      <h2 class="h"><span class="n">27</span><span>인공지능 모델 완성</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/warmup-model.png" width="1038" height="657" style="width:837px" alt="결과 칸에 분류한 클래스 장원영, 카리나 17.43%, 장원영 82.56%가 나온 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="28. 맨 위 오른쪽에 적용하기 누르기">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">28</span><span>맨 위 오른쪽에 적용하기 누르기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s25.png" width="232" height="97" style="width:696px" alt="오른쪽 위 파란 적용하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="29. 블록 만들기">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">29</span><span>블록 만들기</span></h2>
+      <figure class="shot1"><p class="callout callout--reason center" style="margin:0;padding:10px 24px"><span class="lbl" style="display:inline;margin:0 8px 0 0">💡 Tip</span>엔트리 화면은 아무 것도 꾸미지 않아도 돼요.</p><img src="msi-asset:./assets/s26.png" width="855" height="412" style="width:955px" alt="블록 6개: 시작하기 버튼을 클릭했을 때, 계속 반복하기 안에 「구분하고 싶은 이미지를 업로드하세요」을(를) 4초 동안 말하기, 학습한 모델로 분류하기, 분류 결과 을(를) 4초 동안 말하기"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="30. 다 만들고 시작하기 누르기">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">30</span><span>다 만들고 시작하기 누르기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s27.png" width="245" height="82" style="width:735px" alt="실행 화면의 시작하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="31. 파일 업로드 클릭">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">31</span><span>파일 업로드 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s28.png" width="303" height="300" style="width:535px" alt="데이터 입력 창의 파일 업로드"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="32. (1) 사진 더블 클릭 (2) 스크린샷 더블 클릭">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">32</span><span>(1) 사진 더블 클릭 (2) 스크린샷 더블 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s29.png" width="307" height="312" style="width:522px" alt="① 사진, ② 스크린샷 폴더"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="33. 적용하기 클릭">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">33</span><span>적용하기 클릭</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s30.png" width="307" height="288" style="width:565px" alt="사진이 들어간 데이터 입력 창의 적용하기 버튼"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="34. 완성">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">34</span><span>완성</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s31.png" width="215" height="225" style="width:506px" alt="엔트리봇이 「장원영」이라고 말하는 화면"></figure>
+    </section>
+
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="35. 맨 위에 과제 제출 버튼 누르기">
+      <span class="sec1">6. 블록 만들고 제출하기</span>
+      <h2 class="h"><span class="n">35</span><span>맨 위에 과제 제출 버튼 누르기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s32.png" width="230" height="87" style="width:690px" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></figure>
+    </section>
+
+    <!-- ══ 5 · 활동 2 — 활동지 ACTIVITY_2 빈칸 채우기(카드를 본뜸 — 칸이 많아 1번 · 2번 두 장) ══ -->
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 1. 내가 만든 모델">
+      <h2 class="h">✏️ 활동지에 적어요</h2>
+      <div class="mid" style="gap:26px">
+        <p class="lead center" style="font-size:34px">수업 활동지 <b>ACTIVITY_2</b> 칸 <b>1번</b>의 <b>빈칸 네 곳</b>을 채워요.</p>
+        <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
+          <div class="bd">
+            <div class="tt"><span class="ws-ic" data-ic="🤖">🤖</span>내 모델 결과 기록하기</div>
+            <div class="q">1. 내가 만든 모델</div>
+            <div class="fl">내가 만든 모델: <span class="ws-blank"><i>①</i></span>와(과) <span class="ws-blank"><i>②</i></span>를 구분하는 인공지능 모델</div>
+            <div class="fl">학습 데이터는 각각 <span class="ws-blank"><i>③</i></span>개, <span class="ws-blank"><i>④</i></span>개를 수집해 학습시킴</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 2. 테스트 결과">
+      <h2 class="h">✏️ 활동지에 적어요</h2>
+      <div class="mid" style="gap:22px">
+        <p class="lead center" style="font-size:34px">수업 활동지 <b>ACTIVITY_2</b> 칸 <b>2번</b>의 <b>빈칸 세 곳</b>을 채우고 <b>결과 화면</b>을 붙여넣어요.</p>
+        <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
+          <div class="bd">
+            <div class="q">2. 테스트 결과</div>
+            <div class="fl">테스트 데이터로 인공지능 모델에게 준 것: <span class="ws-blank" style="min-width:200px"><i>⑤</i></span></div>
+            <div class="fl">인공지능 모델이 분류한 결과: <span class="ws-blank"><i>⑥</i></span></div>
+            <div class="fl">확률: <span class="ws-blank"><i>⑦</i></span>%</div>
+            <div class="ws-blank ws-blank--area"><i>⑧</i>📷 결과 화면(분류한 클래스와 %)을 캡처해 Ctrl + V 로 붙여넣어요</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6 · 활동 2 — 더 잘 맞히게 하려면?(하나 고르기) ══ -->
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="3. 더 잘 맞히게 하려면?">
+      <h2 class="h"><span class="n">3</span>더 잘 맞히게 하려면 어떻게 해야 할까요?</h2>
+      <div class="pick" data-a="클래스마다 학습 데이터를 더 많이, 더 다양하게 넣고 다시 학습시킨다" data-why="모델은 본 데이터만큼 배워요. 여러 모습의 사진을 볼수록 처음 보는 사진도 잘 맞혀요." style="display:flex;flex-direction:column;gap:22px">
+        <div class="say"><div class="bot" aria-hidden="true">🤖</div><p class="bub">모델이 테스트 사진을 틀리게 분류했어요.<strong>더 잘 맞히게 하려면 어떻게 해야 할까요?</strong></p></div>
+        <div class="opts opts--col">
+          <button type="button" class="gp po" data-v="테스트 사진을 학습 데이터에 넣었던 사진으로 바꾼다" data-w="이미 본 사진으로 시험하면 진짜 실력을 알 수 없어요. 테스트는 처음 보는 사진으로 해요."><span class="ic" aria-hidden="true"></span>테스트 사진을 학습 데이터에 넣었던 사진으로 바꾼다</button>
+          <button type="button" class="gp po" data-v="클래스마다 학습 데이터를 더 많이, 더 다양하게 넣고 다시 학습시킨다"><span class="ic" aria-hidden="true"></span>클래스마다 학습 데이터를 더 많이, 더 다양하게 넣고 다시 학습시킨다</button>
+          <button type="button" class="gp po" data-v="학습하기 버튼을 여러 번 누른다" data-w="같은 데이터로 다시 학습해도 배운 내용은 같아요. 데이터를 바꿔야 해요."><span class="ic" aria-hidden="true"></span>학습하기 버튼을 여러 번 누른다</button>
+        </div>
+        <div class="why" hidden role="status"></div>
+      </div>
+    </section>
+
+    <!-- ══ 7 · 정리 — 낱말 표(이름표 모음 없이 눌러서 공개) ══ -->
+    <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 모델은 학습 데이터로 배워요" data-name="오늘 배운 것 — 낱말">
+      <h2 class="h">오늘 배운 것 — 모델은 학습 데이터로 배워요</h2>
+      <table class="tbl tbl--big tbl--fill">
+        <colgroup><col style="width:330px"><col></colgroup>
+        <thead><tr><th>낱말</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td><button type="button" class="lm-s lm-s--in lm-s--term" data-v="클래스"><span class="lm-a">클래스</span></button></td><td>모델이 사진을 나누어 담는 무리의 <button type="button" class="lm-s lm-s--in" data-v="이름"><span class="lm-a">이름</span></button></td></tr>
+          <tr><td><button type="button" class="lm-s lm-s--in lm-s--term" data-v="학습 데이터"><span class="lm-a">학습 데이터</span></button></td><td>모델을 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>시키려고 클래스마다 넣어 준 사진</td></tr>
+          <tr><td><button type="button" class="lm-s lm-s--in lm-s--term" data-v="테스트 데이터"><span class="lm-a">테스트 데이터</span></button></td><td>학습에 쓰지 않은 <button type="button" class="lm-s lm-s--in" data-v="새로운"><span class="lm-a">새로운</span></button> 사진으로, 모델이 잘 맞히는지 확인해요</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ══ 8 · 정리 — 형성평가 O/X 1~3 ══ -->
+    <section class="slide" data-role="checkup" data-phase="정리" data-code="CHECK_UP" data-badge="✅" data-title="형성평가 — O / X" data-name="형성평가 1~3">
+      <h2 class="h">형성평가 — O / X</h2>
+      <div class="oxl mid">
+        <div class="oxq" data-a="X" data-why="이미 본 사진은 맞히기 쉬워서 진짜 실력을 알 수 없어요. 처음 보는 사진으로 시험해요."><span class="coin">1</span><span class="t">테스트할 때는 학습 데이터로 넣었던 사진을 그대로 쓰는 것이 가장 좋다.</span><span class="oxb" role="group" aria-label="1번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
+        <div class="oxq" data-a="O" data-why="카리나 17%, 장원영 83%처럼 확률이 더 높은 쪽으로 분류해요."><span class="coin">2</span><span class="t">분류 결과에 나오는 %는 모델이 그 클래스라고 생각하는 정도(확률)이다.</span><span class="oxb" role="group" aria-label="2번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
+        <div class="oxq" data-a="O" data-why="여러 모습을 보고 배운 모델일수록 새 사진의 특징도 잘 찾아요."><span class="coin">3</span><span class="t">학습 데이터가 많고 다양할수록 처음 보는 사진도 잘 맞힐 가능성이 높다.</span><span class="oxb" role="group" aria-label="3번 O 또는 X"><button type="button" class="gp ob" data-v="O">O</button><button type="button" class="gp ob" data-v="X">X</button></span><div class="why" hidden role="status"></div></div>
+      </div>
+    </section>
+
+    <!-- ⏱ 타이머 카드 — ⏱ 버튼으로 열고 닫음. 장(.slide)이 아니라서 장을 넘겨도 계속 보이고 흐름 -->
+    <div class="tm" id="timer" role="region" aria-label="타이머" hidden>
+      <div class="tm-card">
+        <div class="tm-hd"><span class="tm-k">TIMER</span><b class="tm-title" id="tmTitle">⏱ 타이머</b></div>
+        <div class="tm-bd" id="tmSetup">
+          <div class="tm-col">
+            <div class="tm-row"><select class="tm-sel" id="tmMin" aria-label="분"></select><span class="tm-unit" aria-hidden="true">분</span><select class="tm-sel" id="tmSec" aria-label="초"></select><span class="tm-unit" aria-hidden="true">초</span></div>
+            <button type="button" class="gp gp--big" id="tmStart">▶ 시작</button>
+            <p class="tm-warn" id="tmWarn" hidden>10초 이상 골라 주세요.</p>
+          </div>
+        </div>
+        <div class="tm-bd" id="tmRun" hidden>
+          <svg class="tm-disc" viewBox="0 0 100 100" aria-hidden="true"><circle class="shd" cx="52" cy="52" r="46"/><circle class="face" cx="50" cy="50" r="46"/><path class="wedge" id="tmWedge" d=""/><line class="hand" id="tmHand" x1="50" y1="50" x2="50" y2="14"/><circle class="pin" cx="50" cy="50" r="5"/></svg>
+          <div class="tm-col">
+            <span class="tm-dg" id="tmDg" role="timer" aria-label="남은 시간">05:00</span>
+            <div class="tm-row"><button type="button" class="gp gp--big" id="tmPause">⏸ 멈춤</button><button type="button" class="gp gp--big" id="tmMute" style="--tint:var(--msi-role-chip-no)" hidden>🔕 소리 끄기</button><button type="button" class="gp gp--big" id="tmReset">↺ 다시</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="ctl">
+    <button type="button" class="gp" id="cPrev">◀ 이전</button>
+    <button type="button" class="gp" id="cAll">👀 이 화면 정답 모두 보기</button>
+    <button type="button" class="gp" id="cHide">🙈 다시 가리기</button>
+    <span class="spacer" aria-hidden="true"></span>
+    <button type="button" class="gp" id="cTimer" aria-pressed="false" aria-controls="timer">⏱ 타이머</button>
+    <button type="button" class="gp" id="cFs"><span aria-hidden="true">⛶</span><span class="t">전체화면</span></button>
+    <button type="button" class="gp" id="cNext">다음 ▶</button>
+  </footer>
+</div>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script>
+/* 수업용 화면 동작 — 넘기기 · 정답 공개(칸마다 / 이 화면 모두) · 영상 · 전체화면. 바깥 라이브러리 없음 */
+(function () {
+  'use strict';
+  var W = 1600, H = 900;
+  var stage = document.getElementById('stage');
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var N = slides.length, cur = -1;
+  var byId = function (id) { return document.getElementById(id); };
+  var bar = { ph: byId('bPh'), code: byId('bCode'), badge: byId('bBadge'), title: byId('bTitle'), dots: byId('bDots'), count: byId('bCount') };
+  var btn = { prev: byId('cPrev'), all: byId('cAll'), hide: byId('cHide'), fs: byId('cFs'), next: byId('cNext') };
+  var live = byId('live');
+  var REVEAL = '.colrv, .qb, .ss, .lm-s, .pick, .oxq';
+
+  // 1) 무대를 창 크기에 맞춤 — 스크롤 없음. 전체화면이면 여백 0
+  function fit() {
+    var full = !!document.fullscreenElement, pad = full ? 0 : 14;
+    var s = Math.min((innerWidth - pad * 2) / W, (innerHeight - pad * 2) / H);
+    var x = (innerWidth - W * s) / 2, y = (innerHeight - H * s) / 2;
+    stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ')';
+    document.body.classList.toggle('is-fs', full);
+    btn.fs.querySelector('.t').textContent = full ? '창으로' : '전체화면';
+  }
+  addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', fit);
+  fit();
+
+  // 2) 칸 준비 — 「?」 칸은 정답 글자를 읽어 주지 않게 이름을 따로, 허용 답은 화면 아래 줄에 미리 만들어 둠
+  // 열린 정답 칸 색 — 한 장 안에서 칸마다 돌아가며(노랑 · 살구 · 라일락 · 연두 · 물빛 · 분홍, 선생님 선택 2026-10-19)
+  // 그 장의 머리색과 같은 색 · 앞 칸과 같은 색은 건너뛴다(테마에 따라 두 이름이 같은 색일 수 있음 — 피드백 2026-10-23 「이 슬라이드에서 쓰이지 않은 다른 색」).
+  // 값을 비교하려면 테마 CSS(</body> 앞)가 들어온 뒤라 DOMContentLoaded 에 칠한다. 한 장만 따로 정하려면 CSS 에 --ans:… !important.
+  var ANS = ['--msi-role-lunch-tue', '--msi-role-rule1-head', '--msi-role-checkup-coin', '--msi-role-lunch-wed', '--msi-role-lunch-thu', '--msi-role-view-month', '--msi-role-lunch-mon', '--msi-role-myinfo-head'];
+  function paintAns() {
+    var val = function (n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(); };
+    slides.forEach(function (sl) {
+      var head = val('--msi-role-' + sl.dataset.role + '-head'), seen = {};
+      var pool = ANS.filter(function (n) { var v = val(n); if (!v || v === head || seen[v]) return false; seen[v] = 1; return true; });
+      if (!pool.length) pool = ANS;
+      [].forEach.call(sl.querySelectorAll('.qb, .ss'), function (el, i) { el.style.setProperty('--ans', 'var(' + pool[i % pool.length] + ')'); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paintAns); else paintAns();
+  slides.forEach(function (sl) {
+    var alts = sl.querySelector('.alts');
+    [].forEach.call(sl.querySelectorAll('.qb, .ss, .lm-s'), function (el, i) {
+      el.setAttribute('aria-pressed', 'false');
+      el.setAttribute('aria-label', '빈칸 — 눌러서 정답 보기');
+      if (el.dataset.alt && alts) {
+        var a = document.createElement('span');
+        a.textContent = '※ ' + el.textContent.trim() + ' — ' + el.dataset.alt;
+        alts.appendChild(a);
+        el._alt = a;
+      }
+    });
+  });
+
+  // 3) 진행 점(누르면 그 장으로) — 단계(도입·전개·정리)가 바뀌는 곳에 틈
+  slides.forEach(function (sl, i) {
+    var d = document.createElement('button');
+    d.type = 'button';
+    d.className = 'dot' + (i && slides[i - 1].dataset.phase !== sl.dataset.phase ? ' ph-start' : '');
+    d.title = (i + 1) + '. ' + sl.dataset.name;
+    d.setAttribute('aria-label', (i + 1) + '장 — ' + sl.dataset.phase + ' · ' + sl.dataset.name);
+    d.addEventListener('click', function (e) { go(i); if (e.detail) d.blur(); });
+    bar.dots.appendChild(d);
+  });
+
+  function setDis(b, on) { b.setAttribute('aria-disabled', on ? 'true' : 'false'); }
+
+  function go(i) {
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    var dir = i > cur ? 1 : -1;
+    if (cur >= 0) { stopVideos(slides[cur]); slides[cur].classList.remove('is-on'); }
+    cur = i;
+    var sl = slides[cur], d = sl.dataset;
+    sl.style.setProperty('--dx', (dir * 28) + 'px');
+    sl.classList.add('is-on');
+    stage.setAttribute('data-role', d.role);
+    bar.ph.textContent = d.phase; bar.code.textContent = d.code; bar.badge.textContent = d.badge; bar.badge.setAttribute('data-ic', d.badge); bar.title.textContent = d.title;
+    bar.count.textContent = (cur + 1) + ' / ' + N;
+    [].forEach.call(bar.dots.children, function (el, k) {
+      el.classList.toggle('is-past', k < cur); el.classList.toggle('is-cur', k === cur);
+      if (k === cur) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
+    });
+    setDis(btn.prev, cur === 0); setDis(btn.next, cur === N - 1);
+    var has = !!sl.querySelector(REVEAL);
+    setDis(btn.all, !has); setDis(btn.hide, !has);
+    try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {}
+    live.textContent = (cur + 1) + ' / ' + N + ' · ' + d.phase + ' · ' + d.name;
+  }
+
+  // 4) 정답 공개
+  function setOpen(el, on) {
+    el.classList.toggle('is-open', on);
+    el.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) el.removeAttribute('aria-label'); else el.setAttribute('aria-label', '빈칸 — 눌러서 정답 보기');
+    if (el._alt) el._alt.classList.toggle('is-on', on);
+    if (el.classList.contains('ss')) {   // 순서 칸이 열리면 왼쪽의 같은 카드가 흐려짐
+      var card = el.closest('.seqv').querySelector('.sc[data-k="' + el.dataset.k + '"]');
+      if (card) card.classList.toggle('is-used', on);
+    }
+  }
+  function line(cls, text) { var p = document.createElement('p'); p.className = cls; p.textContent = text; return p; }
+  // 하나 고르기·O/X — 고른 것(picked)과 「모두 보기」(all)로 그림. 정답은 초록 ✓, 고른 오답은 빨강 ✗
+  function render(box) {
+    var ox = box.classList.contains('oxq');
+    var picked = box.dataset.picked || '', all = box.dataset.all === '1', a = box.dataset.a, why = box.dataset.why;
+    var shown = !!picked || all;
+    [].forEach.call(box.querySelectorAll(ox ? '.ob' : '.po'), function (o) {
+      var v = o.dataset.v, s = v === a && shown ? 'ok' : (v === picked ? 'no' : '');
+      if (s) o.setAttribute('data-s', s); else o.removeAttribute('data-s');
+      o.setAttribute('aria-pressed', v === picked ? 'true' : 'false');
+      var ic = o.querySelector('.ic'); if (ic) ic.textContent = s === 'ok' ? '✓' : s === 'no' ? '✗' : '';
+    });
+    var w = box.querySelector('.why');
+    w.textContent = '';
+    if (!shown) { w.hidden = true; w.removeAttribute('data-s'); return; }
+    w.hidden = false;
+    var wrong = picked && picked !== a;
+    w.setAttribute('data-s', wrong ? 'no' : 'ok');
+    if (ox) {
+      if (wrong) w.appendChild(line('is-no', '❌ 정답은 ' + a + '예요. ' + why));
+      else w.appendChild(line('is-ok', (picked ? '⭕ 정답이에요! ' : '⭕ 정답은 ' + a + '예요. ') + why));
+      return;
+    }
+    if (wrong) {
+      var opt = box.querySelector('.po[data-v="' + picked + '"]'), ww = opt && opt.dataset.w || '';
+      w.appendChild(line('is-no', '❌ ' + ww));
+      if (why !== ww) w.appendChild(line('is-ok', '⭕ ' + why));
+    } else {
+      w.appendChild(line('is-ok', (picked ? '⭕ 정답이에요! ' : '⭕ ') + why));
+    }
+  }
+  // 스페이스 — 아직 가린 정답 하나를 위에서부터·왼쪽에서부터(문서 순서) 열고, 다 열려 있으면 false
+  function revealNext() {
+    var list = slides[cur].querySelectorAll(REVEAL);
+    for (var i = 0; i < list.length; i++) {
+      var el = list[i];
+      if (el.classList.contains('pick') || el.classList.contains('oxq')) {
+        if (el.dataset.all === '1' || el.dataset.picked) continue;
+        el.dataset.all = '1'; render(el); return true;
+      }
+      if (!el.classList.contains('is-open')) { setOpen(el, true); return true; }
+    }
+    return false;
+  }
+  function revealAll(on) {
+    var sl = slides[cur];
+    [].forEach.call(sl.querySelectorAll('.colrv, .qb, .ss, .lm-s'), function (el) { setOpen(el, on); });
+    [].forEach.call(sl.querySelectorAll('.pick, .oxq'), function (b) {
+      b.dataset.all = on ? '1' : '';
+      if (!on) b.dataset.picked = '';
+      render(b);
+    });
+  }
+
+  // 5) 영상 — 그림 자리에서 재생, 끝나면 그림으로
+  function vfBtn(vf, playing) { var b = vf.querySelector('.vf-btn'); if (b) b.textContent = playing ? '◼ 그림으로 돌아가기' : '▶ 움직이는 모습 보기'; }
+  function play(vf) {
+    var v = vf.querySelector('video'); if (!v) return;
+    vf.classList.add('is-playing'); vfBtn(vf, true);
+    try { v.currentTime = 0; } catch (e) {}
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  function stop(vf) { var v = vf.querySelector('video'); if (v) v.pause(); vf.classList.remove('is-playing'); vfBtn(vf, false); }
+  function stopVideos(sl) { [].forEach.call(sl.querySelectorAll('.vf.is-playing'), stop); [].forEach.call(sl.querySelectorAll('.vp video'), function (v) { v.pause(); }); }
+  // 영상 장(.vp) — 재생 중엔 「일시정지」만, 멈췄으면 「재생」만 또렷하게
+  function vpSync(v) { var vp = v.closest('.vp'); if (!vp) return; setDis(vp.querySelector('.vp-play'), !v.paused); setDis(vp.querySelector('.vp-pause'), v.paused); }
+  ['play', 'pause', 'ended'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && e.target.closest('.vp')) vpSync(e.target); }, true); });
+  document.addEventListener('ended', function (e) { var vf = e.target.closest && e.target.closest('.vf'); if (vf) stop(vf); }, true);
+
+  // 6) 누르기
+  stage.addEventListener('click', function (e) {
+    var t = e.target, el, box;
+    if (!t.closest) return;
+    if ((el = t.closest('.qb, .ss, .lm-s'))) setOpen(el, !el.classList.contains('is-open'));
+    else if ((el = t.closest('.po, .ob'))) {
+      box = el.closest('.pick, .oxq');
+      box.dataset.picked = box.dataset.picked === el.dataset.v ? '' : el.dataset.v;   // 같은 보기를 다시 누르면 가림
+      if (!box.dataset.picked) box.dataset.all = '';
+      render(box);
+    }
+    else if ((el = t.closest('.vp-play, .vp-pause'))) {
+      var vv = el.closest('.vp').querySelector('video');
+      if (el.classList.contains('vp-play')) { var pp = vv.play(); if (pp && pp.catch) pp.catch(function () {}); } else vv.pause();
+    }
+    else if ((el = t.closest('.vf-btn'))) { box = el.closest('.vf'); if (box.classList.contains('is-playing')) stop(box); else play(box); }
+    else if ((el = t.closest('.vf.has-video .vf-box img'))) play(el.closest('.vf'));
+    else if ((el = t.closest('#cPrev'))) { if (el.getAttribute('aria-disabled') !== 'true') go(cur - 1); }
+    else if ((el = t.closest('#cNext'))) { if (el.getAttribute('aria-disabled') !== 'true') go(cur + 1); }
+    else if ((el = t.closest('#cAll'))) { if (el.getAttribute('aria-disabled') !== 'true') revealAll(true); }
+    else if ((el = t.closest('#cHide'))) { if (el.getAttribute('aria-disabled') !== 'true') revealAll(false); }
+    else if ((el = t.closest('#cFs'))) toggleFs();
+    else return;
+    if (e.detail && el.blur) el.blur();   // 마우스로 누른 뒤에도 스페이스가 「다음」으로 가게
+  });
+
+  function toggleFs() {
+    if (document.fullscreenElement) { if (document.exitFullscreen) document.exitFullscreen(); }
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function () {});
+  }
+
+  // 7) 단축키 — 한글 입력 상태에서도 되게 e.code 로 본다
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var tag = e.target && e.target.tagName, c = e.code, k = e.key;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (c === 'Space' && e.target.closest && e.target.closest('#timer')) return;   // 타이머 단추에 초점이 있으면 스페이스 = 그 단추
+    if (c === 'Space' && tag === 'VIDEO') return;   // 영상에 초점이 있으면 스페이스 = 재생·멈춤
+    if (c === 'Space') { e.preventDefault(); if (!revealNext()) go(cur + 1); }   // 정답 하나씩 → 다 보이면 다음 장
+    else if (k === 'ArrowRight' || k === 'PageDown') { e.preventDefault(); go(cur + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(N - 1); }
+    else if (c === 'KeyA') revealAll(true);
+    else if (c === 'KeyR') revealAll(false);
+    else if (c === 'KeyF') toggleFs();
+  });
+
+  // 첫 장(안내)에 안 쓰는 글꼴도 미리 받아 둠 — 표지로 넘어갈 때 글꼴이 바뀌며 깜박이지 않게
+  if (document.fonts && document.fonts.load) ['400 1em GangwonEdu', '700 1em Maplestory'].forEach(function (f) { document.fonts.load(f, '가'); });
+  var start = parseInt((location.hash || '').slice(1), 10);
+  go(start >= 1 && start <= N ? start - 1 : 0);
+  window.__present = { go: go, revealAll: revealAll, count: N, current: function () { return cur; } };   // 점검 스크립트용
+})();
+</script>
+<script>
+/* ⏱ 타이머 — 분 0~30 · 초 10초 단위(고른 값은 이 기기에 기억), 마지막 1분(전체의 20% 이하) 노랑, 끝나면 부저 3번 + 연어색. 흐르는 동안 째깍 소리(아래 「소리」, 2026-10-21).
+   ⏱ 를 다시 누르면 멈추고 사라짐(선생님 결정 2026-10-20). 시간은 끝나는 시각으로 계산하고 소리는 오디오 시계에 예약(참고 github.com/sage810/timer) */
+(function () {
+  'use strict';
+  var byId = function (id) { return document.getElementById(id); };
+  var btn = byId('cTimer'), box = byId('timer'), card = box.querySelector('.tm-card'), live = byId('live');
+  var el = { title: byId('tmTitle'), setup: byId('tmSetup'), run: byId('tmRun'), min: byId('tmMin'), sec: byId('tmSec'), start: byId('tmStart'), warn: byId('tmWarn'),
+    dg: byId('tmDg'), wedge: byId('tmWedge'), hand: byId('tmHand'), pause: byId('tmPause'), mute: byId('tmMute'), reset: byId('tmReset') };
+  var KEY = 'msi-present-timer';
+  var S = { phase: 'setup', total: 0, endAt: 0, remain: 0, paused: false };
+  var raf = 0, finT = 0, ringT = 0;
+
+  function fill(sel, lo, hi, step) { for (var i = lo; i <= hi; i += step) { var o = document.createElement('option'); o.value = String(i); o.textContent = (i < 10 ? '0' : '') + i; sel.appendChild(o); } }
+  fill(el.min, 0, 30, 1); fill(el.sec, 0, 50, 10);
+  var saved = null; try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  el.min.value = String(saved && saved.m >= 0 && saved.m <= 30 ? saved.m : 5);
+  el.sec.value = String(saved && saved.s >= 0 && saved.s <= 50 && saved.s % 10 === 0 ? saved.s : 0);
+  if (!el.min.value) el.min.value = '5';
+  if (!el.sec.value) el.sec.value = '0';
+
+  // 소리(선생님 결정 2026-10-21) — 흐르는 동안 매초 「째깍-똑딱」, 「곧 끝나요」가 되는 순간 「띵」,
+  //   마지막 10~6초 나무 째깍, 5~1초 「삐」(같은 높이), 0초 부저 3번(4초 간격). 파일 없이 만든 소리.
+  //   30분이면 째깍이 1,800번이라 앞 2초 안의 소리만 오디오 시계에 예약한다(시각은 끝나는 시각 기준). 🔕 로 모두 끔.
+  var ac = null, snd = [], muted = false, nextK = -1, dingDone = false, buzzDone = false, planT = 0, tickBuf = null;
+  function audio(after) {
+    try {
+      if (!ac) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ac = new AC(); }
+      if (!ac) return;
+      if (ac.state === 'running') { if (after) after(); }
+      else { var p = ac.resume(); if (p && p.then) p.then(function () { if (after) after(); }).catch(function () {}); }
+    } catch (e) {}
+  }
+  function keep(n) { snd.push(n); n.onended = function () { var i = snd.indexOf(n); if (i >= 0) snd.splice(i, 1); }; }
+  function tone(t, f, dur, type, vol) {
+    try {
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + dur + 0.05); keep(o);
+    } catch (e) {}
+  }
+  function tick(t, f, q) {   // 짧은 잡음을 걸러 낸 「딱」
+    try {
+      if (!tickBuf) { var len = Math.floor(ac.sampleRate * 0.04), d; tickBuf = ac.createBuffer(1, len, ac.sampleRate); d = tickBuf.getChannelData(0); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 6); }
+      var s = ac.createBufferSource(), bp = ac.createBiquadFilter();
+      s.buffer = tickBuf; bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = q;
+      s.connect(bp); bp.connect(ac.destination); s.start(t); keep(s);
+    } catch (e) {}
+  }
+  var SND = {
+    tickTock: function (t, k) { tick(t, k % 2 ? 1700 : 2600, 7); },                                  // 2-나 째깍-똑딱
+    tickWood: function (t) { tick(t, 2500, 6); },                                                     // 2-가 나무 째깍
+    beep: function (t) { tone(t, 880, 0.22, 'square', 0.06); tone(t, 880, 0.22, 'sine', 0.12); },     // 3-나 삐(같은 높이)
+    ding: function (t) { tone(t, 1319, 1.6, 'sine', 0.22); tone(t, 2637, 0.8, 'sine', 0.05); },       // 1-가 띵
+    buzzer: function (t) { [0, 4, 8].forEach(function (d) { tone(t + d, 440, 1.2, 'square', 0.07); tone(t + d, 445, 1.2, 'sawtooth', 0.05); }); }   // 부저 3번
+  };
+  function cancelSnd() { snd.forEach(function (n) { try { n.onended = null; n.stop(); } catch (e) {} }); snd = []; }
+  function soonMs() { return Math.min(60000, S.total * 0.2); }
+  function plan() {   // 앞 2초 안의 소리를 예약 — 남은 k초가 되는 순간(끝나는 시각 - k초)마다
+    clearTimeout(planT);
+    if (S.phase !== 'run' || S.paused) return;
+    if (!muted && ac && ac.state === 'running') {
+      var now = Date.now(), until = now + 2000, at = function (ms) { return ac.currentTime + Math.max(0, ms - now) / 1000; };
+      for (; nextK >= 0 && S.endAt - nextK * 1000 <= until; nextK--) {
+        var w = S.endAt - nextK * 1000;
+        if (w < now - 30) continue;   // 이미 지난 순간(끈 동안 등)은 건너뜀
+        if (nextK === 0) { SND.buzzer(at(w)); buzzDone = true; }
+        else if (nextK <= 5) SND.beep(at(w));
+        else if (nextK <= 10) SND.tickWood(at(w));
+        else SND.tickTock(at(w), nextK);
+      }
+      var dw = S.endAt - soonMs();
+      if (!dingDone && dw <= until) { if (dw >= now - 30) SND.ding(at(dw)); dingDone = true; }
+    }
+    planT = setTimeout(plan, 250);
+  }
+  function soundFrom(ms) { nextK = Math.ceil(ms / 1000) - 1; dingDone = ms <= soonMs(); buzzDone = false; cancelSnd(); audio(plan); plan(); }
+
+  // 화면 꺼짐 막기(타이머가 흐르는 동안)
+  var wake = null;
+  function wakeOn() { try { if ('wakeLock' in navigator && !wake && document.visibilityState === 'visible') navigator.wakeLock.request('screen').then(function (w) { wake = w; w.addEventListener('release', function () { wake = null; }); }).catch(function () {}); } catch (e) {} }
+  function wakeOff() { try { if (wake) wake.release(); } catch (e) {} wake = null; }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && S.phase === 'run' && !S.paused) { wakeOn(); loop(); } });
+
+  // 그리기
+  function remaining() { return S.paused ? S.remain : Math.max(0, S.endAt - Date.now()); }
+  function fmt(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60), r = s % 60; return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r; }
+  function pt(r, a) { var rad = a * Math.PI / 180; return [(50 + r * Math.sin(rad)).toFixed(2), (50 - r * Math.cos(rad)).toFixed(2)]; }
+  function wedge(f) {
+    if (f >= 0.9995) return 'M50 10 A40 40 0 1 1 50 90 A40 40 0 1 1 50 10 Z';
+    if (f <= 0.0005) return '';
+    var p = pt(40, f * 360); return 'M50 50 L50 10 A40 40 0 ' + (f > 0.5 ? 1 : 0) + ' 1 ' + p[0] + ' ' + p[1] + ' Z';
+  }
+  var lastSec = -1;
+  function render() {
+    var rem = S.phase === 'done' ? 0 : remaining(), f = S.total ? Math.min(1, Math.max(0, rem / S.total)) : 0;
+    el.wedge.setAttribute('d', wedge(f));
+    var h = pt(36, f * 360); el.hand.setAttribute('x2', h[0]); el.hand.setAttribute('y2', h[1]);
+    var soon = S.phase === 'run' && rem <= Math.min(60000, S.total * 0.2);
+    card.classList.toggle('is-soon', soon); card.classList.toggle('is-done', S.phase === 'done'); card.classList.toggle('is-paused', S.phase === 'run' && S.paused);
+    el.title.textContent = S.phase === 'setup' ? '⏱ 타이머' : S.phase === 'done' ? '⏰ 시간 끝!' : S.paused ? '⏸ 멈춤' : soon ? '곧 끝나요' : '남은 시간';
+    el.setup.hidden = S.phase !== 'setup'; el.run.hidden = S.phase === 'setup';
+    el.pause.hidden = S.phase !== 'run'; el.pause.textContent = S.paused ? '▶ 계속' : '⏸ 멈춤';
+    if (S.phase === 'run') { el.mute.hidden = false; el.mute.textContent = muted ? '🔔 소리 켜기' : '🔕 소리 끄기'; }
+    var s = Math.ceil(rem / 1000);
+    if (s !== lastSec) { el.dg.textContent = fmt(rem); el.dg.setAttribute('aria-label', '남은 시간 ' + Math.floor(s / 60) + '분 ' + (s % 60) + '초'); lastSec = s; }
+  }
+  function loop() {
+    cancelAnimationFrame(raf);
+    var step = function () { if (S.phase !== 'run' || S.paused || box.hidden) return; if (remaining() <= 0) { finish(); return; } render(); raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  }
+  function armFinish() { clearTimeout(finT); if (S.phase === 'run' && !S.paused) finT = setTimeout(function () { if (S.phase === 'run' && !S.paused && remaining() <= 0) finish(); else armFinish(); }, Math.max(0, S.endAt - Date.now()) + 40); }
+
+  // 동작
+  function start(ms) {
+    S.phase = 'run'; S.total = ms; S.remain = ms; S.endAt = Date.now() + ms; S.paused = false; lastSec = -1;
+    soundFrom(ms);
+    wakeOn(); render(); armFinish(); loop();
+  }
+  function pause() { S.remain = remaining(); S.paused = true; clearTimeout(finT); clearTimeout(planT); cancelSnd(); render(); }
+  function resume() { S.endAt = Date.now() + S.remain; S.paused = false; soundFrom(S.remain); render(); armFinish(); loop(); }
+  function stopRing() { clearTimeout(planT); cancelSnd(); clearTimeout(ringT); el.mute.hidden = true; }
+  function finish() {
+    clearTimeout(finT); clearTimeout(planT); cancelAnimationFrame(raf); wakeOff();
+    S.phase = 'done'; S.paused = false; render();
+    if (!buzzDone && !muted) audio(function () { SND.buzzer(ac.currentTime + 0.05); });   // 미리 예약하지 못했으면 지금 울림
+    buzzDone = false;
+    el.mute.textContent = '🔕 소리 끄기'; el.mute.hidden = muted; clearTimeout(ringT); ringT = setTimeout(function () { el.mute.hidden = true; }, 9600);
+    if (live) live.textContent = '타이머 — 시간이 다 됐어요';
+  }
+  function toSetup() { clearTimeout(finT); cancelAnimationFrame(raf); stopRing(); wakeOff(); S.phase = 'setup'; S.paused = false; render(); }
+  function open() { box.hidden = false; btn.setAttribute('aria-pressed', 'true'); toSetup(); }
+  function close() { toSetup(); box.hidden = true; btn.setAttribute('aria-pressed', 'false'); el.warn.hidden = true; }
+
+  var blurAfter = function (fn) { return function (e) { fn(); if (e.detail && e.currentTarget.blur) e.currentTarget.blur(); }; };   // 마우스로 누른 뒤에도 스페이스가 「정답 하나씩」으로 가게
+  btn.addEventListener('click', blurAfter(function () { if (box.hidden) open(); else close(); }));
+  el.start.addEventListener('click', blurAfter(function () {
+    var m = Number(el.min.value), s = Number(el.sec.value), ms = (m * 60 + s) * 1000;
+    if (ms <= 0) { el.warn.hidden = false; el.min.focus(); return; }
+    el.warn.hidden = true;
+    try { localStorage.setItem(KEY, JSON.stringify({ m: m, s: s })); } catch (e) {}
+    start(ms);
+  }));
+  [el.min, el.sec].forEach(function (x) { x.addEventListener('change', function () { el.warn.hidden = true; }); });
+  el.pause.addEventListener('click', blurAfter(function () { if (S.paused) resume(); else pause(); }));
+  el.mute.addEventListener('click', blurAfter(function () {
+    if (S.phase !== 'run') { stopRing(); return; }   // 끝난 뒤 = 부저 멈춤
+    muted = !muted; if (muted) cancelSnd(); else soundFrom(remaining()); render();
+  }));
+  el.reset.addEventListener('click', blurAfter(toSetup));
+  render();
+  window.__timer = { open: open, close: close, start: start, state: function () { return { open: !box.hidden, phase: S.phase, paused: S.paused, remain: remaining(), soon: card.classList.contains('is-soon'), title: el.title.textContent, digits: el.dg.textContent }; } };   // 점검 스크립트용
+})();
+</script>
+</body>
+</html>
