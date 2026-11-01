@@ -69,6 +69,7 @@
 5. **[2026-09-29] 4탭 활동지 시간표·급식이 "–"로 빔 = NEIS 스냅샷 기간이 끝난 것**
    (인증키 없는 실시간 조회는 pIndex 를 무시하고 샘플 5행만 줘서 스냅샷을 못 메움)
    Do instead: `pwsh scripts/fetch-neis.ps1 -TimetableWeeks 8` → `npm run neis` → check → push.
+   (2026-11-01) 이 PC 의 pwsh 7 은 `$env:LOCALAPPDATA\Microsoft\WindowsApps\pwsh.exe`(winget). 「ERROR-290 인증키가 유효하지 않습니다」면 `neis.local.ps1` 키 따옴표 안 빈칸부터 확인. Apps Script 프록시엔 NEIS_KEY 가 없어 5줄만 옴.
    급식은 한 달치씩 덮어쓰므로 새 달이 시작된 뒤에 받는다. 근본 해결은 Apps Script 프록시(`neisProxy`).
 6. **[2026-09-30] SVG 그림에 width·height 가 없으면 "PDF로 저장하기"(html2canvas)에서 빈 칸**
    Do instead: `<svg width="96" height="96" viewBox="0 0 96 96">` 처럼 크기를 적고, 정답지 PDF 를 쪽 그림으로 뽑아 확인.
