@@ -123,6 +123,21 @@
     var t = e.target;
     if (!t || !t.closest) return;
 
+    // 📎 파일 첨부: 그림 파일을 골라 옆 칸에 넣기(칸에 그림이 있으면 교체)
+    var fb = t.closest('.pz-file');
+    if (fb) {
+      var zf = siblingZone(fb);
+      if (!zf) return;
+      var inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*';
+      inp.onchange = function () {
+        if (inp.files && inp.files[0] && readImageFile(inp.files[0], zf)) lastZone = zf;
+      };
+      inp.click();
+      return;
+    }
+
     var clr = t.closest('.pz-clear');
     if (clr) {
       var zc = siblingZone(clr);

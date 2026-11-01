@@ -703,18 +703,18 @@
   .glass-chip[data-s="ok"] { --gc-tint: var(--msi-role-chip-ok); }
   .glass-chip[data-s="no"] { --gc-tint: var(--msi-role-chip-no); }
   .glass-chip .gc-ic:empty { display: none; }
-  /* 🗑 지우기(그래프 칸 아래)도 같은 유리 알약(2026-10-16 피드백) — .pz-controls button 규칙보다 한 단계 구체적으로 */
-  .pz-controls button.pz-clear { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: var(--msi-size-touch-min); box-sizing: border-box;
+  /* 🗑 지우기·📎 파일 첨부(그래프 칸 아래)도 같은 유리 알약(2026-10-16 피드백) — .pz-controls button 규칙보다 한 단계 구체적으로 */
+  .pz-controls button:is(.pz-clear,.pz-file) { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: var(--msi-size-touch-min); box-sizing: border-box;
     padding: 0 18px; border: var(--msi-shape-bw2) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r-pill); color: var(--msi-role-base-button-ink);
     font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 14px;
     background: var(--msi-glass-top), var(--msi-glass-sheen), var(--msi-glass-white), var(--msi-role-chip-glass); background-size: 100% 100%, 300% 100%, 100% 100%, 100% 100%; background-position: 0 0, 100% 0, 0 0, 0 0; background-repeat: no-repeat;
     box-shadow: var(--msi-glass-inset), var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.28);
     transition: transform .45s var(--msi-motion-ease-spring), box-shadow .25s var(--msi-motion-ease-out), background-position 1s var(--msi-motion-ease-out); }
-  .pz-controls button.pz-clear:hover { transform: none; background: var(--msi-glass-top), var(--msi-glass-sheen), var(--msi-glass-white), var(--msi-role-chip-glass); background-size: 100% 100%, 300% 100%, 100% 100%, 100% 100%; background-position: 0 0, 0% 0, 0 0, 0 0; background-repeat: no-repeat;
+  .pz-controls button:is(.pz-clear,.pz-file):hover { transform: none; background: var(--msi-glass-top), var(--msi-glass-sheen), var(--msi-glass-white), var(--msi-role-chip-glass); background-size: 100% 100%, 300% 100%, 100% 100%, 100% 100%; background-position: 0 0, 0% 0, 0 0, 0 0; background-repeat: no-repeat;
     box-shadow: var(--msi-glass-inset), var(--msi-shape-sh4) rgba(var(--msi-rgb-ink),.32); }
-  .pz-controls button.pz-clear:active { transform: var(--msi-motion-press); box-shadow: var(--msi-glass-inset), var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.28); }
-  .pz-controls button.pz-clear:disabled { opacity: .6; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .pz-controls button.pz-clear { transition: none; } .pz-controls button.pz-clear:active { transform: none; } }
+  .pz-controls button:is(.pz-clear,.pz-file):active { transform: var(--msi-motion-press); box-shadow: var(--msi-glass-inset), var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.28); }
+  .pz-controls button:is(.pz-clear,.pz-file):disabled { opacity: .6; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .pz-controls button:is(.pz-clear,.pz-file) { transition: none; } .pz-controls button:is(.pz-clear,.pz-file):active { transform: none; } }
   .msi-pdf-clone .glass-chip { background: var(--gc-tint) !important; box-shadow: var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.28) !important; }   /* PDF 캡처는 겹 배경·inset 을 흰 판으로 그림 */
   @media (prefers-reduced-motion: reduce) { .glass-chip { transition: none; } .glass-chip:active { transform: none; } }
   .unit-head { display: flex; align-items: baseline; justify-content: center; gap: 10px; flex-wrap: wrap; }   /* 가운데 정렬(피드백) */
@@ -1597,11 +1597,11 @@
                 <div class="m-hd2">2. 테스트 결과</div>
                 <p class="ai-fill">테스트 데이터로 인공지능 모델에게 준 것: <textarea class="blank blank--inline" rows="1" style="width:160px" aria-label="활동2 테스트 데이터"></textarea></p>
                 <p class="ai-fill">인공지능 모델이 분류한 결과: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 분류 결과"></textarea></p>
-                <p class="ai-fill">확률: <textarea class="blank blank--inline" rows="1" style="width:76px" aria-label="활동2 분류 확률"></textarea>%</p>
                 <div class="paste-zone" data-zone="a2-result" role="button" tabindex="0" aria-label="활동2 결과 화면 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 결과 화면(분류한 클래스와 %)을 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
                 <div class="pz-controls">
+                  <button type="button" class="glass-pill pz-file">📎 파일 첨부</button>
                   <button type="button" class="glass-pill pz-clear">🗑 지우기</button>
                 </div>
 
