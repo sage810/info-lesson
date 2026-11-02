@@ -286,10 +286,6 @@
 [data-role="summary"]{--head:var(--msi-role-summary-head);--card:var(--msi-role-summary-body)}
 [data-role="checkup"]{--head:var(--msi-role-checkup-head);--card:var(--msi-role-checkup-body)}
 /* 이름표 분류 색 — 같은 낱말은 어느 장에서나 같은 색(인공지능 = 보라, 일반 = 청록 …) */
-[data-v="인공지능"]{--cat:var(--msi-role-base-sky)}   /* 정리 장 머리(연두)와 겹치지 않게 */
-[data-v="인공지능 모델"]{--cat:var(--msi-role-base-lavender)}
-[data-v="인공지능 시스템"]{--cat:var(--msi-role-base-salmon)}
-[data-v="해결"]{--cat:var(--msi-role-base-apricot)}
 [data-v="데이터 입력"]{--cat:var(--msi-role-base-periwinkle)}   /* 4단계 — 흐름 그림(a2-steps.svg) 칸 색과 같게 */
 [data-v="학습"]{--cat:var(--msi-role-base-butter)}
 [data-v="예측"]{--cat:var(--msi-role-base-mint)}
@@ -681,8 +677,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .chk .n{flex:none;font:700 32px/1 var(--round)}
 .chk small{display:block;margin-top:4px;font-size:25px;color:var(--muted)}
 .chk b{padding:0 4px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
-.where{display:flex;justify-content:center;gap:24px}
-.where span{padding:10px 30px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r-pill);background:var(--head);font:700 32px/1.2 var(--round);box-shadow:var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.2)}
 /* 4단계 해부 — 단계 카드 + 길잡이 질문 */
 .st4{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);align-items:center}
 .st4 .c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:500px;padding:26px 16px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card);text-align:center;word-break:keep-all}
@@ -706,7 +700,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .ws-tbl--4 td{padding-top:7px;padding-bottom:7px}
 /* 정리 핵심 문장 — 낱말이 긴 칸 */
 .callout--big .lm-s--w{width:290px}
-.slide[data-name="오늘 배운 것 — 인공지능 시스템"] .callout--big{font-size:40px;line-height:2.2;white-space:nowrap}
 
 /* ── ⏱ 타이머(2026-10-20 선생님 결정: 가운데 크게 · 슬라이드는 흐리게 하지 않음 · 장을 넘겨도 계속) ── */
 #cTimer[aria-pressed="true"]{--tint:var(--msi-role-base-lavender);box-shadow:var(--msi-glass-inset),inset 0 -4px 0 var(--ink),var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.3)}
@@ -1025,8 +1018,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <section class="slide" data-role="act3" data-phase="전개" data-code="ACTIVITY_3" data-badge="🌊" data-title="오늘은 내가 AI 해결사!" data-name="2. 문제 정의서">
       <h2 class="h"><span class="n">2</span>이제 진짜 해결사가 될 차례!</h2>
       <div class="mid" style="gap:30px">
-        <p class="lead lead--big">학교생활 · 게임 · SNS에서 <b>AI로 해결할 수 있는 문제</b>를 찾아<br>「문제 정의서」를 써요.</p>
-        <div class="where"><span>🏫 학교생활</span><span>🎮 게임</span><span>📱 SNS</span></div>
+        <p class="lead lead--big">학교생활 등 우리 주변에서 <b>AI로 해결할 수 있는 문제</b>를 찾아<br>「문제 정의서」를 써요.</p>
         <ol class="steps">
           <li><span class="n">1</span>누가 어떤 어려움을 겪나요?</li>
           <li><span class="n">2</span>AI가 무엇을 보고·듣고·읽어서 판단하나요? (사진·소리·글)</li>
@@ -1043,7 +1035,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
         <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_3</div>
           <div class="bd">
             <div class="tt"><span class="ws-ic" data-ic="🌊">🌊</span>오늘은 내가 AI 해결사!</div>
-            <div class="q">2. 학교생활·게임·SNS에서 AI로 해결할 수 있는 문제를 찾아 「문제 정의서」를 써요.</div>
+            <div class="q">2. 학교생활 등 우리 주변에서 AI로 해결할 수 있는 문제를 찾아 「문제 정의서」를 써요.</div>
             <table class="ws-tbl">
               <thead><tr><th>질문</th><th>문제 1</th></tr></thead>
               <tbody>
@@ -1090,14 +1082,6 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
             </table>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ══ 16 · 정리 — 핵심 문장(인공지능 · 모델 · 시스템) ══ -->
-    <section class="slide" data-role="summary" data-phase="정리" data-code="KEY_SUMMARY" data-badge="📝" data-title="오늘 배운 것 — 인공지능 시스템은 4단계로 문제를 풀어요" data-name="오늘 배운 것 — 인공지능 시스템">
-      <h2 class="h">오늘 배운 것</h2>
-      <div class="mid">
-        <p class="callout callout--tip callout--big center"><button type="button" class="lm-s lm-s--in lm-s--w" data-v="인공지능"><span class="lm-a">인공지능</span></button> 기술로 데이터를 <button type="button" class="lm-s lm-s--in" data-v="학습"><span class="lm-a">학습</span></button>해 만든 「두뇌」가<br><button type="button" class="lm-s lm-s--in lm-s--w" data-v="인공지능 모델"><span class="lm-a">인공지능 모델</span></button>이고, 이 모델에 입력과 출력을 연결해<br>실제 문제를 <button type="button" class="lm-s lm-s--in" data-v="해결"><span class="lm-a">해결</span></button>하도록 만든 전체가 <button type="button" class="lm-s lm-s--in lm-s--w" data-v="인공지능 시스템"><span class="lm-a">인공지능 시스템</span></button>이에요.</p>
       </div>
     </section>
 

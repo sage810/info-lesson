@@ -556,6 +556,9 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .ws-mock .fl{display:flex;align-items:center;gap:12px;font:300 28px/1 var(--body)}
 .ws-blank{position:relative;display:inline-flex;align-items:center;min-width:120px;min-height:64px;padding:0 22px;border:4px dashed var(--msi-role-ui-focus-pink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 26px/1 var(--body);color:var(--msi-role-ui-placeholder)}
 .ws-blank--area{display:flex;min-height:104px;padding-left:28px}
+.ws-tip{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:12px 20px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--msi-role-ui-callout-reason);font:300 26px/1.5 var(--body);word-break:keep-all}   /* 본뜬 카드 안 Tip(2026-11-02) */
+.ws-tip .lbl{font:700 26px/1 var(--round)}
+.ws-tip img{height:58px;width:auto;border-radius:var(--msi-shape-r6)}
 .ws-blank i{position:absolute;left:-18px;top:-18px;display:grid;place-items:center;width:40px;height:40px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;background:var(--msi-role-ui-focus-pink);color:var(--ink);font:700 22px/1 var(--round);font-style:normal}
 .mi-f span{display:flex;align-items:center;min-height:80px;padding:0 22px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 30px/1 var(--body);color:var(--msi-role-ui-placeholder)}
 .mon{display:block;width:100%;height:auto}
@@ -963,13 +966,27 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       <figure class="shot1"><img src="msi-asset:./assets/s31.png" width="215" height="225" style="width:506px" alt="엔트리봇이 「장원영」이라고 말하는 화면"></figure>
     </section>
 
-    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="35. 맨 위에 과제 제출 버튼 누르기">
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="이미지 분류 인공지능 모델" data-name="35. 동작하는지 확인하기">
       <span class="sec1">6. 블록 만들고 제출하기</span>
-      <h2 class="h"><span class="n">35</span><span>맨 위에 과제 제출 버튼 누르기</span></h2>
-      <figure class="shot1"><img src="msi-asset:./assets/s32.png" width="230" height="87" style="width:690px" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></figure>
+      <h2 class="h"><span class="n">35</span><span>동작하는지 확인하기</span></h2>
+      <figure class="shot1"><p class="must"><span>⚠️ 아직 <b>엔트리를 끄지</b> 마세요!!!</span></p></figure>
     </section>
 
-    <!-- ══ 5 · 활동 2 — 활동지 ACTIVITY_2 빈칸 채우기(카드를 본뜸 — 칸이 많아 1번 · 2번 두 장) ══ -->
+    <!-- ══ 5 · 활동 2 — 활동지 ACTIVITY_2 채우기(카드를 본뜸 — 붙여넣기 · 1번 · 2번 세 장, 2026-11-02 붙여넣기 칸이 맨 위로) ══ -->
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 결과 화면 붙여넣기">
+      <h2 class="h">✏️ 활동지에 적어요</h2>
+      <div class="mid" style="gap:22px">
+        <p class="lead center" style="font-size:34px">캡처한 <b>결과 화면</b>을 수업 활동지 <b>ACTIVITY_2</b> 칸 맨 위에 붙여넣어요.</p>
+        <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
+          <div class="bd">
+            <div class="tt"><span class="ws-ic" data-ic="🤖">🤖</span>내 모델 결과 기록하기</div>
+            <div class="ws-blank ws-blank--area"><i>①</i>📷 결과 화면(분류한 클래스와 %)을 캡처해 Ctrl + V 로 붙여넣어요</div>
+            <div class="ws-tip"><span class="lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img src="msi-asset:./assets/s32.png" width="230" height="87" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 1. 내가 만든 모델">
       <h2 class="h">✏️ 활동지에 적어요</h2>
       <div class="mid" style="gap:26px">
@@ -978,8 +995,8 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
           <div class="bd">
             <div class="tt"><span class="ws-ic" data-ic="🤖">🤖</span>내 모델 결과 기록하기</div>
             <div class="q">1. 내가 만든 모델</div>
-            <div class="fl">내가 만든 모델: <span class="ws-blank"><i>①</i></span>와(과) <span class="ws-blank"><i>②</i></span>를 구분하는 인공지능 모델</div>
-            <div class="fl">학습 데이터는 각각 <span class="ws-blank"><i>③</i></span>개, <span class="ws-blank"><i>④</i></span>개를 수집해 학습시킴</div>
+            <div class="fl">내가 만든 모델: <span class="ws-blank"><i>②</i></span>와(과) <span class="ws-blank"><i>③</i></span>를 구분하는 인공지능 모델</div>
+            <div class="fl">학습 데이터는 각각 <span class="ws-blank"><i>④</i></span>개, <span class="ws-blank"><i>⑤</i></span>개를 수집해 학습시킴</div>
           </div>
         </div>
       </div>
@@ -988,14 +1005,12 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 2. 테스트 결과">
       <h2 class="h">✏️ 활동지에 적어요</h2>
       <div class="mid" style="gap:22px">
-        <p class="lead center" style="font-size:34px">수업 활동지 <b>ACTIVITY_2</b> 칸 <b>2번</b>의 <b>빈칸 세 곳</b>을 채우고 <b>결과 화면</b>을 붙여넣어요.</p>
+        <p class="lead center" style="font-size:34px">수업 활동지 <b>ACTIVITY_2</b> 칸 <b>2번</b>의 <b>빈칸 두 곳</b>을 채워요.</p>
         <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
           <div class="bd">
             <div class="q">2. 테스트 결과</div>
-            <div class="fl">테스트 데이터로 인공지능 모델에게 준 것: <span class="ws-blank" style="min-width:200px"><i>⑤</i></span></div>
-            <div class="fl">인공지능 모델이 분류한 결과: <span class="ws-blank"><i>⑥</i></span></div>
-            <div class="fl">확률: <span class="ws-blank"><i>⑦</i></span>%</div>
-            <div class="ws-blank ws-blank--area"><i>⑧</i>📷 결과 화면(분류한 클래스와 %)을 캡처해 Ctrl + V 로 붙여넣어요</div>
+            <div class="fl">테스트 데이터로 인공지능 모델에게 준 것은? (예: 카리나 or 장원영) <span class="ws-blank" style="min-width:200px"><i>⑥</i></span></div>
+            <div class="fl">인공지능 모델이 분류한 결과: <span class="ws-blank"><i>⑦</i></span></div>
           </div>
         </div>
       </div>

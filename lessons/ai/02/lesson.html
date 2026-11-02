@@ -765,6 +765,7 @@
   .ai-step { display: flex; flex-direction: column; gap: 10px; padding: 10px 14px; border: var(--msi-shape-bw2) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r10); background: var(--msi-role-base-white); }
   .ai-step__t { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; line-height: 1.6; word-break: keep-all; }
   .num-coin--act { background: var(--msi-role-act1-head); }
+  .callout .ai-shot { margin-top: 8px; }   /* 활동2 Tip 안 과제 제출 버튼 캡처(2026-11-02) */
   .paste-zone .paste-empty, .paste-zone .paste-empty .sm { font-size: var(--msi-size-text-min); }   /* 붙여넣기 칸 안내도 16px 이상(design.md §2.2) */
   .ai-shot { display: block; max-width: min(100%, var(--msi-part-figure-max)); height: auto; margin: 0 auto; border-radius: var(--msi-shape-r8); outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px; }
   /* 활동1 그림을 누르면 영상(neural-motion.mp4) — 그림은 그대로 두고 그 위에 영상, PDF 에는 그림만(no-pdf) */
@@ -1574,7 +1575,7 @@
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">32</span><span>(1) 사진 더블 클릭 (2) 스크린샷 더블 클릭</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s29.png" width="307" height="312" loading="lazy" alt="① 사진, ② 스크린샷 폴더"></li>
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">33</span><span>적용하기 클릭</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s30.png" width="307" height="288" loading="lazy" alt="사진이 들어간 데이터 입력 창의 적용하기 버튼"></li>
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">34</span><span>완성</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s31.png" width="215" height="225" loading="lazy" alt="엔트리봇이 「장원영」이라고 말하는 화면"></li>
-                  <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">35</span><span>맨 위에 과제 제출 버튼 누르기</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s32.png" width="230" height="87" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></li>
+                  <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">35</span><span>동작하는지 확인하기 <b>(아직 엔트리 끄지 마세요!!!)</b></span></div></li>
                 </ol>
               </div>
             </div>
@@ -1590,13 +1591,6 @@
                   <div class="m-title" role="heading" aria-level="2">내 모델 결과 기록하기</div>
                 </div>
 
-                <div class="m-hd2">1. 내가 만든 모델</div>
-                <p class="ai-fill">내가 만든 모델: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 1"></textarea>와(과) <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 2"></textarea>를 구분하는 인공지능 모델</p>
-                <p class="ai-fill">학습 데이터는 각각 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동2 학습 데이터 수 1"></textarea>개, <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동2 학습 데이터 수 2"></textarea>개를 수집해 학습시킴</p>
-
-                <div class="m-hd2">2. 테스트 결과</div>
-                <p class="ai-fill">테스트 데이터로 인공지능 모델에게 준 것: <textarea class="blank blank--inline" rows="1" style="width:160px" aria-label="활동2 테스트 데이터"></textarea></p>
-                <p class="ai-fill">인공지능 모델이 분류한 결과: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 분류 결과"></textarea></p>
                 <div class="paste-zone" data-zone="a2-result" role="button" tabindex="0" aria-label="활동2 결과 화면 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 결과 화면(분류한 클래스와 %)을 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
@@ -1604,6 +1598,15 @@
                   <button type="button" class="glass-pill pz-file">📎 파일 첨부</button>
                   <button type="button" class="glass-pill pz-clear">🗑 지우기</button>
                 </div>
+                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img class="ai-shot no-pdf" src="msi-asset:./assets/s32.png" width="230" height="87" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
+
+                <div class="m-hd2">1. 내가 만든 모델</div>
+                <p class="ai-fill">내가 만든 모델: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 1"></textarea>와(과) <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 2"></textarea>를 구분하는 인공지능 모델</p>
+                <p class="ai-fill">학습 데이터는 각각 <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동2 학습 데이터 수 1"></textarea>개, <textarea class="blank blank--inline" rows="1" style="width:64px" aria-label="활동2 학습 데이터 수 2"></textarea>개를 수집해 학습시킴</p>
+
+                <div class="m-hd2">2. 테스트 결과</div>
+                <p class="ai-fill">테스트 데이터로 인공지능 모델에게 준 것은? (예: 카리나 or 장원영) <textarea class="blank blank--inline" rows="1" style="width:160px" aria-label="활동2 테스트 데이터"></textarea></p>
+                <p class="ai-fill">인공지능 모델이 분류한 결과: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 분류 결과"></textarea></p>
 
                 <div class="m-hd2">3. 모델이 테스트 사진을 틀리게 분류했어요. 더 잘 맞히게 하려면 어떻게 해야 할까요?</div>
                 <div class="ai-pick" role="group" aria-label="활동2 더 잘 맞히기 문제 보기">

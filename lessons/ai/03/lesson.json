@@ -1,0 +1,10 @@
+{
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "03",
+  "title": "글자를 읽는 인공지능 모델 만들기",
+  "shell": "portal",
+  "theme": "sticker",
+  "status": "draft",
+  "copiedFrom": "ai/02"
+}
