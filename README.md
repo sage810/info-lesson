@@ -13,7 +13,7 @@
 |---|---|---|
 | `lessons/<단원>/<차시>/` | **차시 하나의 모든 것**: `lesson.html`(소스) · `assets/`(그 차시 그림) · `answers.json`(정답) · `spec.md`(기획) · `lesson.json`(제목·상태) | ✅ 여기만 고쳐요 |
 | `lessons/units.json` | 첫 화면 "수업 활동지"의 **단원 순서·이름·예정 차시 수** (예정인데 아직 없는 차시는 "준비 중" 칸으로 보여요). 새 단원 폴더 이름: 데이터 분석 `data-analysis` · 인공지능 `ai` · 정보 윤리 `ethics` | 단원·차시 수가 바뀔 때 |
-| `materials/` | 첫 화면 "수업 자료"에 올릴 파일(PDF·슬라이드 등). 넣기만 하면 카드가 생기고, 제목·설명·순서는 `materials.json` 에 `[{ "file": "파일.pdf", "title": "…", "desc": "…" }]` (안 적으면 파일 이름이 제목). PDF·그림은 새 탭에서 열리고 나머지는 내려받기. 한 파일 100MB 까지 | ✅ 자료를 올릴 때 |
+| `materials/` | 첫 화면 "수업 자료"에 올릴 파일(PDF·슬라이드 등). 넣기만 하면 카드가 생기고, 제목·설명·순서는 `materials.json` 에 `[{ "file": "파일.pdf", "title": "…", "desc": "…" }]` (안 적으면 파일 이름이 제목). 같이 쓰는 파일 여러 개를 한 카드에 버튼 여러 개로: `{ "files": [{ "file": "T.txt", "label": "T 데이터 내려받기" }, …], "title": "…" }`. PDF·그림은 새 탭에서 열리고 나머지는 내려받기. 한 파일 100MB 까지 | ✅ 자료를 올릴 때 |
 | `shared/` | 여러 차시가 같이 쓰는 것: `fonts/` · `vendor/`(React·jsPDF 등 라이브러리) · `partials/`(순서배열·붙여넣기 칸 등 동작 스크립트) · `images/` · `runtime/msi-hook.js`(제출·NEIS 연결) | 가끔 (바꾸면 모든 차시에 반영) |
 | `docs/rules/` | 규칙: 디자인(`design.md`) · 활동 유형(`components.md`) · PDF 버튼(`pdf.md`) · 임베드(`embed.md`) · 4탭 탭 명세(`portal/`) · 4탭으로 옮기기(`shell-porting.md`) | 규칙이 바뀔 때 |
 | `docs/log/` | 작업 이력(구현 노트·활동 설계 기록) | 새 활동 유형을 만들면 한 절 추가 |

@@ -65,6 +65,8 @@ export function loadUnits() {
 
 // materials/ 의 수업 자료 파일. materials.json 에 적은 순서·제목·설명이 먼저, 안 적은 파일은 파일 이름 순으로 뒤에 붙는다.
 //   materials.json: [{ "file": "개념정리.pdf", "title": "데이터 분석 개념 정리", "desc": "1~4차시 핵심" }]
+//   같이 쓰는 파일 여러 개를 한 카드에(내려받기 버튼 여러 개, 2026-11-02 ai/03 T·F 데이터):
+//   { "files": [{ "file": "T.txt", "label": "T 데이터 내려받기" }, { "file": "F.txt", "label": "F 데이터 내려받기" }], "title": "…", "desc": "…" }
 export function listMaterials() {
   if (!fs.existsSync(MATERIALS_DIR)) return [];
   const files = fs.readdirSync(MATERIALS_DIR).sort()
@@ -72,14 +74,22 @@ export function listMaterials() {
   const metaPath = path.join(MATERIALS_DIR, 'materials.json');
   const meta = fs.existsSync(metaPath) ? JSON.parse(readText(metaPath)) : [];
   const out = [];
+  const used = new Set();
   for (const m of meta) {
-    if (files.includes(m.file)) out.push(m);
-    else console.warn(`△ materials.json 에 적은 파일이 materials/ 에 없어요: ${m.file}`);
+    const group = (m.files || [m]).filter((x) => {
+      if (files.includes(x.file)) return true;
+      console.warn(`△ materials.json 에 적은 파일이 materials/ 에 없어요: ${x.file}`); return false;
+    });
+    if (!group.length) continue;
+    group.forEach((x) => used.add(x.file));
+    out.push(m.files ? { ...m, files: group } : m);
   }
-  for (const f of files) if (!meta.some((m) => m.file === f)) out.push({ file: f });
+  for (const f of files) if (!used.has(f)) out.push({ file: f });
+  const one = (x) => { const src = path.join(MATERIALS_DIR, x.file); return { ...x, size: fs.statSync(src).size, src }; };
   return out.map((m) => {
-    const src = path.join(MATERIALS_DIR, m.file);
-    return { ...m, title: m.title || path.parse(m.file).name, size: fs.statSync(src).size, src };
+    if (!m.files) return { ...one(m), title: m.title || path.parse(m.file).name };
+    const fl = m.files.map(one);
+    return { ...m, files: fl, title: m.title || fl.map((x) => path.parse(x.file).name).join(' · '), size: fl.reduce((a, x) => a + x.size, 0) };
   });
 }
 

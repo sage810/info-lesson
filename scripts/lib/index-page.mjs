@@ -48,15 +48,20 @@ export function renderIndex(lessons, units = [], materials = []) {
   let n = 0;
 
   const fileCards = materials.map((m) => {
-    const ext = (m.file.match(/\.([^.]+)$/)?.[1] || '').toLowerCase();
-    const inTab = OPENS_IN_TAB.has(ext);
+    const list = m.files || [m];   // files = 같이 쓰는 파일 여러 개를 한 카드에, 버튼은 파일마다(2026-11-02)
+    const extOf = (f) => (f.match(/\.([^.]+)$/)?.[1] || '').toLowerCase();
+    const ext = [...new Set(list.map((x) => extOf(x.file)))].join(' · ');
+    const btn = (x) => {
+      const inTab = OPENS_IN_TAB.has(extOf(x.file));
+      return `<a class="btn" href="materials/${esc(encodeURIComponent(x.file))}"${inTab ? ' target="_blank" rel="noopener"' : ' download'}>${esc(x.label || (inTab ? '열기' : '내려받기'))}</a>`;
+    };
     return `
         <li class="card" style="--accent:${ACCENTS[n++ % ACCENTS.length]}">
           <div class="head"><span class="tag">${esc(ext.toUpperCase() || 'FILE')}</span><span class="size">${fileSize(m.size)}</span></div>
           <div class="body">
             <p class="title">${esc(m.title)}</p>${m.desc ? `
             <p class="desc">${esc(m.desc)}</p>` : ''}
-            <p class="links"><a class="btn" href="materials/${esc(encodeURIComponent(m.file))}"${inTab ? ' target="_blank" rel="noopener"' : ' download'}>${inTab ? '열기' : '내려받기'}</a></p>
+            <p class="links">${list.map(btn).join('')}</p>
           </div>
         </li>`;
   }).join('');

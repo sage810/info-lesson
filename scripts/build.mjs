@@ -68,10 +68,10 @@ export function build(args = []) {
     const pagesDir = path.join(DIST_DIR, 'pages');
     const materials = listMaterials();
     writeText(path.join(pagesDir, 'index.html'), renderIndex(listLessons(), loadUnits(), materials));
-    for (const m of materials) {
-      const to = path.join(pagesDir, 'materials', m.file);
+    for (const x of materials.flatMap((m) => m.files || [m])) {   // 한 카드에 파일 여러 개(files)도
+      const to = path.join(pagesDir, 'materials', x.file);
       fs.mkdirSync(path.dirname(to), { recursive: true });
-      fs.copyFileSync(m.src, to);
+      fs.copyFileSync(x.src, to);
     }
     writeText(path.join(pagesDir, '.nojekyll'), '');
     for (const f of ['CookieRun-700.woff2', 'Maplestory-300.woff2', 'Maplestory-700.woff2']) {
