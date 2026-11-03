@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
-import { ROOT, listLessons, pickLessons } from './lib/common.mjs';
+import { ROOT, listLessons, pickLessons, tailscaleIPs } from './lib/common.mjs';
 
 const args = process.argv.slice(2);
 const base = 'http://127.0.0.1:8080';
@@ -43,5 +43,12 @@ const fb = await fetch(base + '/__feedback').then((r) => r.ok).catch(() => false
 if (!fb) console.log('△ 켜져 있는 미리보기 서버가 옛 버전이라 "보내기"가 안 돼요(복사 방식으로 동작). 서버(node)를 끄고 다시 `npm run memo` 하세요.');
 if (process.platform === 'win32') spawn('cmd', ['/c', 'start', '""', url], { detached: true, stdio: 'ignore', windowsHide: true }).unref();
 console.log(`✔ 메모 켰어요${started ? ' (미리보기 서버도 새로 켬)' : ''}: ${url}`);
+// 원격(선생님의 다른 Tailscale 기기)에서 열 주소 — 서버가 Tailscale 주소로도 열려 있을 때만
+for (const ip of await tailscaleIPs()) {
+  const remote = `http://${ip}:8080/${lesson.unit}/${lesson.no}/?memo=1`;
+  const ok = await fetch(`http://${ip}:8080/__feedback`, { signal: AbortSignal.timeout(1500) }).then((r) => r.ok).catch(() => false);
+  console.log(ok ? `  원격(Tailscale 기기)에서: ${remote}`
+    : `△ 원격 주소(${ip})로는 아직 안 열려요 — 옛 서버예요. 서버(node)를 끄고 다시 \`npm run memo\` 하세요.`);
+}
 console.log(fb ? '  글을 드래그 → 오른쪽 아래 📝 메모 → 요청 적기 → 📤 보내기 (.claude/feedback.md 에 쌓임) → Claude 에 "피드백 처리해줘"'
   : '  글을 드래그 → 오른쪽 아래 📝 메모 → 목록에 담기 → 전체 복사 → Claude 에 붙여넣기');

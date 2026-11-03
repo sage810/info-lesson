@@ -766,6 +766,7 @@
   .ai-step__t { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; line-height: 1.6; word-break: keep-all; }
   .num-coin--act { background: var(--msi-role-act1-head); }
   .callout .ai-shot { margin-top: 8px; }   /* 활동2 Tip 안 과제 제출 버튼 캡처(2026-11-02) */
+  .ai-shot.ai-shot--13 { max-width: min(100%, calc(var(--msi-part-figure-max) / 3)); }   /* 활동2 Tip 캡처 예시는 원래 보이던 크기의 1/3(피드백 2026-11-03) */
   .paste-zone .paste-empty, .paste-zone .paste-empty .sm { font-size: var(--msi-size-text-min); }   /* 붙여넣기 칸 안내도 16px 이상(design.md §2.2) */
   .ai-shot { display: block; max-width: min(100%, var(--msi-part-figure-max)); height: auto; margin: 0 auto; border-radius: var(--msi-shape-r8); outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px; }
   /* 활동1 그림을 누르면 영상(neural-motion.mp4) — 그림은 그대로 두고 그 위에 영상, PDF 에는 그림만(no-pdf) */
@@ -1591,6 +1592,8 @@
                   <div class="m-title" role="heading" aria-level="2">내 모델 결과 기록하기</div>
                 </div>
 
+                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>이 사진과 같이 캡처해주세요.<img class="ai-shot ai-shot--13 no-pdf" src="msi-asset:./assets/warmup-model.png" width="346" height="219" loading="lazy" alt="캡처 예시: 왼쪽 데이터 입력, 가운데 학습 100% 완료, 오른쪽 결과에 분류한 클래스 장원영(카리나 17.43%, 장원영 82.56%)이 모두 보이는 엔트리 화면"></div>
+
                 <div class="paste-zone" data-zone="a2-result" role="button" tabindex="0" aria-label="활동2 결과 화면 붙여넣기 칸">
                   <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 결과 화면(분류한 클래스와 %)을 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
@@ -1598,7 +1601,7 @@
                   <button type="button" class="glass-pill pz-file">📎 파일 첨부</button>
                   <button type="button" class="glass-pill pz-clear">🗑 지우기</button>
                 </div>
-                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img class="ai-shot no-pdf" src="msi-asset:./assets/s32.png" width="230" height="87" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
+                <div class="callout callout--reason">결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img class="ai-shot no-pdf" src="msi-asset:./assets/s32.png" width="230" height="87" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
 
                 <div class="m-hd2">1. 내가 만든 모델</div>
                 <p class="ai-fill">내가 만든 모델: <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 1"></textarea>와(과) <textarea class="blank blank--inline" rows="1" style="width:120px" aria-label="활동2 구분한 것 2"></textarea>를 구분하는 인공지능 모델</p>

@@ -16,6 +16,9 @@
 
 - 끄기: 주소 끝을 `?memo=0` 으로 바꿔 연다. 서버는 끌 필요 없다.
 - 한 번 `?memo=1` 로 열면 그 브라우저가 기억해서 다른 차시에서도 켜져 있다.
+- **원격에서**(2026-11-03): 다른 곳의 내 Tailscale 기기에서 `http://<이 PC Tailscale 주소>:8080/<단원>/<차시>/?memo=1`(지금 `100.79.39.49`) — `npm run memo` 가 이 주소도 함께 찍는다. 📤 보내기도 그대로 된다.
+  안 열리면 Windows 방화벽(Tailscale = 개인 네트워크)이 8080 을 막는 것 — 선생님 허락을 받고 Tailscale 주소(100.64.0.0/10)에서 오는 8080 만 여는 규칙을 둔다.
+  이 PC 에는 규칙 「MSI preview 8080 (Tailscale)」(TCP 8080 · 원격 주소 100.64.0.0/10 · 모든 프로필)을 넣어 두었다(2026-11-03, 선생님 허락).
 
 ## 2. 쓰는 법
 
@@ -62,11 +65,11 @@ GitHub Pages 주소에서 켜면 "📤 보내기" 대신 **➕ 목록에 담기 
 | 파일 | 역할 |
 |---|---|
 | `shared/runtime/msi-memo.js` | 화면 쪽. `?memo=1` 일 때만 켜짐. 요소 고르기·글 선택·위치 찾기·보내기/복사. GitHub Pages 배포본(pages)에만 붙고 구글 사이트용(embed)·정답지 PDF 에는 안 들어간다(`scripts/lib/render.mjs`) |
-| `scripts/serve.mjs` | 미리보기 서버. `/__feedback` — GET 처리 전 목록(`?lesson=` 차시별) · POST 추가 · DELETE 처리 전 항목 지우기. 다른 웹사이트가 글을 끼워 넣지 못하게 주소는 127.0.0.1·localhost 만, Origin 은 같은 곳만, 쓰기는 JSON 만 받는다(아니면 403·415) |
+| `scripts/serve.mjs` | 미리보기 서버. `/__feedback` — GET 처리 전 목록(`?lesson=` 차시별) · POST 추가 · DELETE 처리 전 항목 지우기. 다른 웹사이트가 글을 끼워 넣지 못하게 주소는 127.0.0.1·localhost·이 PC 의 Tailscale 주소(IP·MagicDNS 이름)만, Origin 은 같은 곳만, 쓰기는 JSON 만 받는다(아니면 403·415) |
 | `scripts/memo.mjs` | `npm run memo` — 빌드·서버 켜기·브라우저 열기. 켜진 서버가 옛 버전이면 알림 |
-| `scripts/lib/common.mjs` | `serveStatic(dir, port, handle)` — `handle` 이 true 를 돌려주면 파일 대신 응답 |
+| `scripts/lib/common.mjs` | `serveStatic(dir, port, handle, extraHosts)` — `handle` 이 true 를 돌려주면 파일 대신 응답, `extraHosts` 주소로도 같은 포트로 연다 · `tailscaleIPs()` |
 
-화면은 `127.0.0.1`·`localhost` 에서 열렸을 때만 `/__feedback` 을 찾아보고, 응답이 있으면 "📤 보내기"로 바뀐다. 없으면 복사 방식 그대로다.
+화면은 GitHub Pages(`*.github.io`)가 아닌 http 주소에서 열렸을 때 `/__feedback` 을 찾아보고, 응답이 있으면 "📤 보내기"로 바뀐다. 없으면 복사 방식 그대로다.
 
 ## 6. 문제 해결
 

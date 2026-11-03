@@ -134,13 +134,22 @@ export async function launchBrowser() {
     + 'MSI_BROWSER_PATH 환경변수로 브라우저 실행 파일 경로를 지정하세요.\n' + lastErr?.message);
 }
 
+// 이 PC 의 Tailscale 주소(100.64.0.0/10) — 원격(내 Tailscale 기기)에서 미리보기를 열 때 쓴다(scripts/serve.mjs)
+export async function tailscaleIPs() {
+  const os = await import('node:os');
+  return Object.values(os.networkInterfaces()).flat()
+    .filter((a) => a && a.family === 'IPv4' && /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(a.address))
+    .map((a) => a.address);
+}
+
 // dist/pages 를 잠깐 띄우는 정적 서버 (검사용)
-export async function serveStatic(dir, port = 0, handle = null) {   // handle(req, res) 가 true 를 돌려주면 파일 대신 그쪽이 응답
+// extraHosts: 127.0.0.1 말고도 같은 포트로 더 열 주소(serve.mjs 의 Tailscale 주소). 못 열면 건너뛰고 extra 에 안 넣음.
+export async function serveStatic(dir, port = 0, handle = null, extraHosts = []) {   // handle(req, res) 가 true 를 돌려주면 파일 대신 그쪽이 응답
   const http = await import('node:http');
   const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css',
     '.json': 'application/json', '.txt': 'text/plain; charset=utf-8', '.csv': 'text/csv; charset=utf-8', '.pdf': 'application/pdf',
     ...MIME_BY_EXT };
-  const server = http.createServer((req, res) => {
+  const onRequest = (req, res) => {
     if (handle && handle(req, res)) return;
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (p.endsWith('/')) p += 'index.html';
@@ -148,7 +157,15 @@ export async function serveStatic(dir, port = 0, handle = null) {   // handle(re
     if (!f.startsWith(dir) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
     res.writeHead(200, { 'content-type': types[path.extname(f).toLowerCase()] || 'application/octet-stream' });
     fs.createReadStream(f).pipe(res);
-  });
-  await new Promise((r, j) => { server.once('error', j); server.listen(port, '127.0.0.1', r); });
-  return { url: `http://127.0.0.1:${server.address().port}`, close: () => new Promise((r) => server.close(r)) };
+  };
+  const listen = (srv, p, host) => new Promise((r, j) => { srv.once('error', j); srv.listen(p, host, r); });
+  const server = http.createServer(onRequest);
+  await listen(server, port, '127.0.0.1');
+  const servers = [server], extra = [];
+  for (const host of extraHosts) {
+    const s2 = http.createServer(onRequest);
+    try { await listen(s2, server.address().port, host); servers.push(s2); extra.push(`http://${host}:${server.address().port}`); } catch {}
+  }
+  return { url: `http://127.0.0.1:${server.address().port}`, extra,
+    close: () => Promise.all(servers.map((s) => new Promise((r) => s.close(r)))) };
 }

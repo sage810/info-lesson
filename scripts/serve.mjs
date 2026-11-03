@@ -5,9 +5,11 @@
 //   GET    /__feedback?lesson=data-analysis/03 → { ok, file, open, entries }  (그 차시의 처리 전 항목, 오래된 것부터)
 //   POST   /__feedback  { lesson, title, note, text, element, where, field, viewport } → 항목 추가
 //   DELETE /__feedback  { key }  → 처리 전 항목 지우기 (key = 제목줄 "시각 · 차시 「제목」")
+// 원격(선생님의 다른 Tailscale 기기)에서도 열리게 이 PC 의 Tailscale 주소(100.x)로도 같이 연다 → http://100.x.x.x:8080/… (2026-11-03)
 import path from 'node:path';
 import fs from 'node:fs';
-import { ROOT, DIST_DIR, serveStatic } from './lib/common.mjs';
+import os from 'node:os';
+import { ROOT, DIST_DIR, serveStatic, tailscaleIPs } from './lib/common.mjs';
 
 const dir = path.join(DIST_DIR, 'pages');
 if (!fs.existsSync(path.join(dir, 'index.html'))) {
@@ -16,6 +18,8 @@ if (!fs.existsSync(path.join(dir, 'index.html'))) {
 }
 
 const FILE = path.join(ROOT, '.claude', 'feedback.md');
+const TS_IPS = await tailscaleIPs();
+const HOSTNAME = os.hostname().toLowerCase();
 const HEADER = `# 화면 피드백
 
 활동지 미리보기(\`npm run memo\`, ?memo=1)의 "📤 보내기"로 쌓인 수정 요청. 처리하면 \`[ ]\` 를 \`[x]\` 로 바꾸고 한 줄로 무엇을 했는지 적는다.
@@ -50,8 +54,10 @@ function feedback(req, res) {
   if (url.pathname !== '/__feedback') return false;
   const json = (code, obj) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(obj)); };
   // 다른 웹사이트가 이 PC 의 미리보기 서버로 글을 끼워 넣지 못하게 한다(feedback.md 는 Claude 가 수정 지시로 읽는다):
-  // 주소는 127.0.0.1·localhost 로만, Origin 이 붙으면 같은 곳만, 쓰기는 JSON 으로만(다른 사이트의 JSON 요청은 사전 확인에서 막힘).
-  const isLocal = (h) => h === '127.0.0.1' || h === 'localhost';
+  // 주소는 127.0.0.1·localhost·이 PC 의 Tailscale 주소(IP·MagicDNS 이름)로만, Origin 이 붙으면 같은 곳만,
+  // 쓰기는 JSON 으로만(다른 사이트의 JSON 요청은 사전 확인에서 막힘).
+  const isLocal = (h) => h === '127.0.0.1' || h === 'localhost' || TS_IPS.includes(h)
+    || h === HOSTNAME || (h.startsWith(HOSTNAME + '.') && h.endsWith('.ts.net'));
   let sameOrigin = true;
   if (req.headers.origin) { try { const o = new URL(req.headers.origin); sameOrigin = isLocal(o.hostname) && o.host === req.headers.host; } catch { sameOrigin = false; } }
   if (!isLocal((req.headers.host || '').replace(/:\d+$/, '')) || !sameOrigin) { json(403, { ok: false, error: '이 PC 미리보기 화면에서만 쓸 수 있어요.' }); return true; }
@@ -88,5 +94,6 @@ function feedback(req, res) {
   return true;
 }
 
-const s = await serveStatic(dir, 8080, feedback).catch(() => serveStatic(dir, 0, feedback)); // 8080 이 쓰는 중이면 빈 포트로
+const s = await serveStatic(dir, 8080, feedback, TS_IPS).catch(() => serveStatic(dir, 0, feedback, TS_IPS)); // 8080 이 쓰는 중이면 빈 포트로
 console.log(`▶ ${s.url}/  (끄려면 Ctrl + C)`);
+for (const u of s.extra) console.log(`  원격(Tailscale 기기): ${u}/`);

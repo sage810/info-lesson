@@ -1,6 +1,6 @@
 /* 수정 요청 메모(피드백 모드) — 선생님 전용. 설명서: docs/feedback-mode.md
  * 활동지 화면에서 글을 드래그하거나 "🎯 요소 고르기"로 요소를 클릭해 고르고, 요청을 적어 보낸다. 두 가지 방식:
- *   - 이 PC 미리보기(npm run memo, 127.0.0.1): "📤 보내기" → scripts/serve.mjs 가 .claude/feedback.md 에 쌓는다.
+ *   - 이 PC 미리보기(npm run memo, 127.0.0.1 · 원격은 Tailscale 주소 100.x:8080): "📤 보내기" → scripts/serve.mjs 가 .claude/feedback.md 에 쌓는다.
  *   - 그 밖(GitHub Pages): "목록에 담기" → "전체 복사" → Claude 대화에 붙여넣기. 목록은 이 브라우저(localStorage)에만 있다.
  * 켜기: 주소 끝에 ?memo=1 (그 브라우저에 기억됨) / 끄기: ?memo=0.  켜지 않으면 아무것도 하지 않는다 → 학생 화면에는 안 보임.
  * GitHub Pages 배포본(pages)에만 붙는다(render.mjs). 구글 사이트용(embed)·정답지 PDF 에는 들어가지 않는다. */
@@ -263,7 +263,8 @@
     root.appendChild(panel); root.appendChild(toastEl); root.appendChild(btn);
     document.body.appendChild(root);
     renderList(); showQuote();
-    if (/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
+    // GitHub Pages 가 아니면 서버가 있는지 물어본다(127.0.0.1·Tailscale 주소 등) — 없으면 조용히 복사 방식
+    if (/^https?:$/.test(location.protocol) && !/\.github\.io$/.test(location.hostname)) {
       api('GET').then(function (j) {
         server = true; sent = j.entries || [];
         addB.textContent = '📤 보내기'; row2.style.display = 'none';
