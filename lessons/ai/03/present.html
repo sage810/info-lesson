@@ -278,6 +278,9 @@
 [data-role="topic"]{--head:var(--msi-role-topic-head);--card:var(--msi-role-topic-body)}
 [data-role="myinfo"]{--head:var(--msi-role-myinfo-head);--card:var(--msi-role-myinfo-body)}
 [data-role="warmup"]{--head:var(--msi-role-warmup-head);--card:var(--msi-role-warmup-body)}
+/* [ai/03] 동기유발 T·F 이름표(2026-11-03) — 활동지 문장 옆 칸과 같게, T 파랑 · F 분홍 */
+.slide[data-name="친구의 대답은 T일까 F일까"] [data-v="T"]{--cat:var(--msi-role-base-periwinkle-strong)}
+.slide[data-name="친구의 대답은 T일까 F일까"] [data-v="F"]{--cat:var(--msi-role-base-cotton-pink)}
 [data-role="intro"]{--head:var(--msi-role-intro-head);--card:var(--msi-role-intro-body)}
 [data-role="act1"]{--head:var(--msi-role-act1-head);--card:var(--msi-role-act1-body)}
 [data-role="act2"]{--head:var(--msi-role-act2-head);--card:var(--msi-role-act2-body)}
@@ -650,6 +653,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .ws-mock--tight .bd{gap:10px;padding:14px 32px 22px}   /* 표 + 문장 칸이 한 장에 들어가게 */
 .ws-mock--tight .ws-tbl th,.ws-mock--tight .ws-tbl td{padding:6px 22px}
 .ws-mock--tight .ws-blank{min-height:50px}
+.shot-row{display:flex;align-items:center;justify-content:center;gap:48px}   /* [ai/03] 한 장에 캡처 두 장 나란히(7번, 2026-11-03) */
 .shot1 img{display:block;max-width:100%;height:auto;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--white);box-shadow:var(--sh-card)}
 /* 장이 45장이라 위 진행 점을 작게 — 바 제목이 잘리지 않게 */
 #bar .b-dots{gap:3px} #bar .dot{width:9px;height:9px;border-width:var(--msi-shape-bw2)} #bar .dot.is-cur{width:15px;height:15px} #bar .dot.ph-start{margin-left:7px}
@@ -755,7 +759,31 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     </section>
 
 
-    <!-- ══ 2 · 도입 · 동기유발 — 오늘 완성할 모델 예시 ══ -->
+    <!-- ══ 2 · 도입 · 동기유발 — 섞은 문장 4개에 T·F 이름표(2026-11-03 피드백) ══ -->
+    <section class="slide" data-role="warmup" data-phase="도입" data-code="WARM_UP" data-badge="🎨" data-title="무엇을 보면 T·F를 알 수 있을까?" data-name="친구의 대답은 T일까 F일까">
+      <h2 class="h">친구가 「나 시험 망쳤어」라고 하면? — 친구의 대답은 T일까, F일까?</h2>
+      <div class="mid">
+        <div class="tray" aria-label="이름표 모음"><span class="lab" data-v="T">T</span><span class="lab" data-v="F">F</span></div>
+        <div class="lm lm--roomy" style="--slot-w:220px">
+          <div class="lm-row"><span class="lm-d">「헐 ㅠㅠ 많이 속상하겠다」</span><button type="button" class="lm-s" data-v="F"><span class="lm-a">F</span></button></div>
+          <div class="lm-row"><span class="lm-d">「몇 점 나왔어?」</span><button type="button" class="lm-s" data-v="T"><span class="lm-a">T</span></button></div>
+          <div class="lm-row"><span class="lm-d">「괜찮아, 너 열심히 했잖아」</span><button type="button" class="lm-s" data-v="F"><span class="lm-a">F</span></button></div>
+          <div class="lm-row"><span class="lm-d">「어디서 틀렸어? 오답노트 써 봐」</span><button type="button" class="lm-s" data-v="T"><span class="lm-a">T</span></button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · 도입 · 동기유발 — 인공지능도 구분할 수 있을까요?(활동지 안내 상자를 크게) ══ -->
+    <section class="slide" data-role="warmup" data-phase="도입" data-code="WARM_UP" data-badge="🎨" data-title="무엇을 보면 T·F를 알 수 있을까?" data-name="인공지능도 구분할 수 있을까요?">
+      <h2 class="h">💡 인공지능도 구분할 수 있을까요?</h2>
+      <div class="mid" style="gap:30px">
+        <p class="lead lead--big">우리는 「몇 점」「틀렸어」처럼 <b>따져 묻는 말</b>과<br>「속상하겠다」「괜찮아」처럼 <b>마음을 살피는 말</b>을 보고<br>T와 F를 구분했어요.</p>
+        <p class="lead lead--big">인공지능도 T 문장과 F 문장을 많이 보고 <b>학습</b>하면,<br>처음 보는 문장도 T인지 F인지 구분할 수 있어요.</p>
+        <p class="lead center" style="font-size:32px">오늘은 문장 600개로 이런 인공지능 모델을 직접 만들어 봐요!</p>
+      </div>
+    </section>
+
+    <!-- ══ 4 · 도입 · 동기유발 — 오늘 완성할 모델 예시 ══ -->
     <section class="slide" data-role="warmup" data-phase="도입" data-code="WARM_UP" data-badge="🎨" data-title="나는 MBTI T일까? F일까?" data-name="오늘 완성할 인공지능 모델 예시">
       <h2 class="h">나는 MBTI T일까? F일까?</h2>
       <p class="lead center" style="margin:0;font-size:32px">글자를 읽고 <b>MBTI 테스트</b>를 해주는 인공지능 모델 — 오늘 완성할 예시</p>
@@ -805,7 +833,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="글자를 읽고 T와 F로 분류해주는 인공지능 모델" data-name="7. (1) 새로 만들기 클릭 (2) 분류: 텍스트 클릭">
       <span class="sec1">2. 인공지능 모델 만들기</span>
       <h2 class="h"><span class="n">7</span><span>(1) 새로 만들기 클릭 (2) 분류: 텍스트 클릭</span></h2>
-      <figure class="shot1"><img src="msi-asset:./assets/s07.png" width="507" height="654" style="width:411px" alt="모델 종류 중 분류: 텍스트 카드(직접 작성하거나 파일로 업로드한 텍스트를 분류하는 모델)"></figure>
+      <figure class="shot1"><div class="shot-row"><img src="msi-asset:./assets/s07a.png" width="312" height="202" style="width:624px" alt="학습할 모델 선택하기 창에서 「새로 만들기」 탭에 빨간 상자와 「클릭」 표시"><img src="msi-asset:./assets/s07.png" width="507" height="654" style="width:411px" alt="모델 종류 중 분류: 텍스트 카드(직접 작성하거나 파일로 업로드한 텍스트를 분류하는 모델)"></div></figure>
     </section>
 
     <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="글자를 읽고 T와 F로 분류해주는 인공지능 모델" data-name="8. 맨 위 오른쪽에 학습하기 클릭">
@@ -940,16 +968,22 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
       <figure class="shot1"><p class="must"><span>⚠️ 아직 <b>엔트리를 끄지</b> 마세요!!!</span></p></figure>
     </section>
 
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="글자를 읽고 T와 F로 분류해주는 인공지능 모델" data-name="25. 맨 위에 과제 제출 버튼 누르기">
+      <span class="sec1">6. 인공지능 시스템 만들기</span>
+      <h2 class="h"><span class="n">25</span><span>결과 화면을 캡처했다면, 맨 위에 과제 제출 버튼 누르기</span></h2>
+      <figure class="shot1"><img src="msi-asset:./assets/s28.png" width="230" height="87" style="width:690px" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></figure>
+    </section>
+
     <!-- ══ 4 · 활동 2 — 활동지 ACTIVITY_2 채우기(카드를 본뜸 — 붙여넣기 · 대답 표 두 장) ══ -->
     <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 결과 화면 붙여넣기">
       <h2 class="h">✏️ 활동지에 적어요</h2>
       <div class="mid" style="gap:22px">
-        <p class="lead center" style="font-size:34px">20번에서 캡처한 <b>결과 화면</b>을 수업 활동지 <b>ACTIVITY_2</b> 칸에 붙여넣어요.</p>
+        <p class="lead center" style="font-size:34px">인공지능이 <b>「너는 T야」 · 「너는 F야」</b>라고 말한 화면을 캡처해 <b>ACTIVITY_2</b> 칸에 붙여넣어요.</p>
         <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
           <div class="bd">
             <div class="tt"><span class="ws-ic" data-ic="🤖">🤖</span>내 모델 결과 기록하기</div>
-            <div class="ws-blank ws-blank--area"><i>①</i>📷 이 칸을 클릭한 뒤 Ctrl + V 로 캡처한 결과 화면(20번)을 붙여넣어요</div>
-            <div class="ws-tip"><span class="lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img src="msi-asset:./assets/s28.png" width="230" height="87" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
+            <div class="ws-tip"><span class="lbl">💡 Tip</span>인공지능이 <b>「너는 T야」</b> 또는 <b>「너는 F야」</b>라고 말한 화면을 캡처해서 아래 칸에 붙여넣어요.<img src="msi-asset:./assets/a2-tip.png" width="407" height="266" style="height:170px;margin:0 auto" alt="엔트리 실행 화면 예시: 캐릭터가 「너는 T야」라고 말하고, 왼쪽에 T점수 2 · F점수 1"></div>
+            <div class="ws-blank ws-blank--area"><i>①</i>📷 이 칸을 클릭한 뒤 Ctrl + V 로 캡처한 결과 화면(24번 — 너는 T야 / 너는 F야)을 붙여넣어요</div>
           </div>
         </div>
       </div>

@@ -774,7 +774,8 @@
   .ai-qa__q { display: flex; gap: 10px; align-items: center; word-break: keep-all; }
   .ai-qa__q .num-coin { align-self: center; }
   .callout .ai-shot { margin-top: 8px; }
-  .ai-tf .glass-chip { min-width: var(--msi-part-ox-min); justify-content: center; font-size: 18px; }   /* [ai/03] 동기유발 T/F 고르기 — O/X 버튼 폭 */
+  .ai-shot-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; }   /* [ai/03] 한 단계에 캡처 두 장 나란히(7번, 피드백 2026-11-03) */
+  .ai-shot-row .ai-shot { margin: 0; }
   @media (max-width: 560px) {   /* 폰: 질문 위 · 대답 아래로 쌓고 줄마다 띄움, 설명 줄 들여쓰기 없음 */
     .ai-qa, .ai-qa tbody, .ai-qa tr, .ai-qa td { display: block; width: auto; }
     .ai-qa thead { display: none; }
@@ -1511,24 +1512,25 @@
                 <span class="mono"><span class="ph-tag">도입</span>WARM_UP</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row"><div class="m-badge" data-ic="🎨" style="background:var(--msi-role-warmup-head)">🎨</div><div class="m-title" role="heading" aria-level="2">ChatGPT는 T일까? F일까?</div></div>
-                <p class="ord-p">친구가 <b>「나 시험 망쳤어」</b>라고 하면 뭐라고 대답할 건가요? 똑같은 말을 ChatGPT와 Gemini에게 해 봤어요.</p>
-                <div class="m-hd2">1. 두 AI는 T일까요, F일까요? 대답을 읽고 골라 보세요.</div>
-                <p class="ord-p ai-center"><b>ChatGPT의 대답</b></p>
-                <img class="ai-fig" src="msi-asset:./assets/w-chatgpt.png" width="1197" height="538" alt="ChatGPT 대화 화면. 「나 시험 망쳤어」에 「아이고… 어떡해 ㅠㅠ 진짜 속상하겠다. 열심히 준비했는데 생각보다 못 본 거야? 일단 지금은 너무 자책하지 않았으면 좋겠어. 괜찮으니까 나한테 다 털어놔도 돼. 무슨 시험이었어? 얼마나 망친 것 같아?」라고 대답한다.">
-                <div class="ai-pick ai-pick--row ai-tf" role="group" aria-label="동기유발 ChatGPT는 T일까 F일까">
-                  <sc-for list="{{ tfGpt }}" as="o" hint-placeholder-count="2">
-                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.v }}</button>
-                  </sc-for>
+                <div class="m-title-row"><div class="m-badge" data-ic="🎨" style="background:var(--msi-role-warmup-head)">🎨</div><div class="m-title" role="heading" aria-level="2">무엇을 보면 T·F를 알 수 있을까?</div></div>
+                <p class="ord-p">친구가 <b>「나 시험 망쳤어」</b>라고 했을 때, 친구들은 이렇게 대답했어요.</p>
+                <div class="m-hd2">1. 친구의 대답은 T일까요, F일까요?</div>
+                <div class="ai-match" data-ca-group="wuca" data-ca-check="button">
+                  <div class="ca-tray" aria-label="이름표 모음">
+                    <span class="ca-chip" draggable="true" data-v="T" role="button" tabindex="0" aria-pressed="false">T</span>
+                    <span class="ca-chip" draggable="true" data-v="F" role="button" tabindex="0" aria-pressed="false">F</span>
+                  </div>
+                  <div class="ai-row"><span class="ai-desc">「헐 ㅠㅠ 많이 속상하겠다」</span><span class="ca-slot" id="wuca-1" data-answer="F" role="button" tabindex="0" aria-label="동기유발 1번 문장 T·F 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">「몇 점 나왔어?」</span><span class="ca-slot" id="wuca-2" data-answer="T" role="button" tabindex="0" aria-label="동기유발 2번 문장 T·F 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">「괜찮아, 너 열심히 했잖아」</span><span class="ca-slot" id="wuca-3" data-answer="F" role="button" tabindex="0" aria-label="동기유발 3번 문장 T·F 칸"></span></div>
+                  <div class="ai-row"><span class="ai-desc">「어디서 틀렸어? 오답노트 써 봐」</span><span class="ca-slot" id="wuca-4" data-answer="T" role="button" tabindex="0" aria-label="동기유발 4번 문장 T·F 칸"></span></div>
+                  <div class="ai-ctl">
+                    <button type="button" class="glass-pill ca-check" id="wucaCheck">✅ 정답 확인</button>
+                    <button type="button" class="glass-pill ca-reset">🔀 다시 섞기</button>
+                    <span class="ca-result" role="status" aria-live="polite"></span>
+                  </div>
                 </div>
-                <p class="ord-p ai-center"><b>Gemini의 대답</b></p>
-                <img class="ai-fig" src="msi-asset:./assets/w-gemini.png" width="1126" height="546" alt="Gemini 대화 화면. 「나 시험 망쳤어」에 「시험을 망쳤다고 하니 마음이 정말 속상하고 허탈하시겠어요. 오늘 하루는 나 자신을 탓하기보다 힘들었던 마음을 먼저 따뜻하게 토닥여주면 좋겠어요. 괜찮으시다면 어떤 시험이었는지 이야기해 주실 수 있나요? 위로도 해드리고 앞으로 어떻게 하면 좋을지 함께 고민해 드릴게요.」라고 대답한다.">
-                <div class="ai-pick ai-pick--row ai-tf" role="group" aria-label="동기유발 Gemini는 T일까 F일까">
-                  <sc-for list="{{ tfGem }}" as="o" hint-placeholder-count="2">
-                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.v }}</button>
-                  </sc-for>
-                </div>
-                <div class="callout callout--reason"><span class="c-lbl">💡 AI는 어떻게 사람처럼 대답할까요?</span>사람들이 쓴 글을 아주 많이 읽고, 어떤 말 다음에 어떤 말이 오는지 패턴을 학습했어요. 그래서 ChatGPT는 다음에 올 낱말을 하나씩 <b>골라서</b> 대답을 만들어요. 오늘 우리는 문장 600개로 <b>T와 F 중에서 고르는</b> 작은 인공지능 모델을 만들어 볼 거예요. ChatGPT는 수조 개의 낱말로 배웠답니다!</div>
+                <div class="callout callout--reason"><span class="c-lbl">💡 인공지능도 구분할 수 있을까요?</span>우리는 「몇 점」「틀렸어」처럼 <b>따져 묻는 말</b>과 「속상하겠다」「괜찮아」처럼 <b>마음을 살피는 말</b>을 보고 T와 F를 구분했어요. 인공지능도 T 문장과 F 문장을 많이 보고 <b>학습</b>하면, 처음 보는 문장도 T인지 F인지 구분할 수 있어요. 오늘은 문장 600개로 이런 인공지능 모델을 직접 만들어 봐요!</div>
                 <p class="ord-p ai-center"><b>글자를 읽고 MBTI 테스트를 해주는 인공지능 모델</b><br>오늘 완성할 인공지능 모델 예시</p>
                 <img class="ai-fig" src="msi-asset:./assets/s01.png" width="1788" height="1106" alt="엔트리 텍스트 분류 모델 「T와 F 구분하는 인공지능」 화면. 왼쪽 데이터 입력에 T 클래스 300개(몇 점인데, 몇 점 나왔어 …)와 F 클래스 300개(헐 괜찮아, 많이 속상하겠다 …), 가운데 학습 100% 완료, 오른쪽 결과에 「응 잘했어」를 넣자 분류한 클래스 F가 나온다.">
               </div>
@@ -1557,7 +1559,7 @@
                 <div class="m-hd2">2. 인공지능 모델 만들기</div>
                 <ol class="ai-steps" aria-label="2. 인공지능 모델 만들기 단계">
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">6</span><span>(1) 인공지능 클릭 (2) 인공지능 모델 학습하기 클릭</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s06.png" width="133" height="209" loading="lazy" alt="블록 꾸러미 맨 아래 ① 인공지능, ② 인공지능 모델 학습하기 버튼"></li>
-                  <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">7</span><span>(1) 새로 만들기 클릭 (2) 분류: 텍스트 클릭</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s07.png" width="254" height="327" loading="lazy" alt="모델 종류 중 분류: 텍스트 카드(직접 작성하거나 파일로 업로드한 텍스트를 분류하는 모델)"></li>
+                  <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">7</span><span>(1) 새로 만들기 클릭 (2) 분류: 텍스트 클릭</span></div><div class="ai-shot-row no-pdf"><img class="ai-shot" src="msi-asset:./assets/s07a.png" width="156" height="101" loading="lazy" alt="학습할 모델 선택하기 창에서 「새로 만들기」 탭에 빨간 상자와 「클릭」 표시"><img class="ai-shot" src="msi-asset:./assets/s07.png" width="254" height="327" loading="lazy" alt="모델 종류 중 분류: 텍스트 카드(직접 작성하거나 파일로 업로드한 텍스트를 분류하는 모델)"></div></li>
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">8</span><span>맨 위 오른쪽에 학습하기 클릭</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s08.png" width="119" height="79" loading="lazy" alt="오른쪽 위 파란 학습하기 버튼"></li>
                 </ol>
                 <div class="m-hd2">3. 학습 데이터 업로드하기</div>
@@ -1598,6 +1600,7 @@
                   </li>
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">23</span><span>다 만들고 시작하기 누르기</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s27.png" width="221" height="74" loading="lazy" alt="실행 화면의 파란 시작하기 버튼"></li>
                   <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">24</span><span>동작하는지 확인하기 <b>(아직 엔트리 끄지 마세요!!!)</b></span></div></li>
+                  <li class="ai-step"><div class="ai-step__t"><span class="num-coin num-coin--act" aria-hidden="true">25</span><span>결과 화면을 캡처했다면, 맨 위에 <b>과제 제출</b> 버튼 누르기</span></div><img class="ai-shot no-pdf" src="msi-asset:./assets/s28.png" width="115" height="44" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></li>
                 </ol>
               </div>
             </div>
@@ -1613,14 +1616,14 @@
                   <div class="m-title" role="heading" aria-level="2">내 모델 결과 기록하기</div>
                 </div>
 
+                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>인공지능이 <b>「너는 T야」</b> 또는 <b>「너는 F야」</b>라고 말한 화면을 캡처해서 아래 칸에 붙여넣어요.<img class="ai-shot no-pdf" src="msi-asset:./assets/a2-tip.png" width="407" height="266" loading="lazy" alt="엔트리 실행 화면 예시: 캐릭터가 「너는 T야」라고 말하고, 왼쪽에 T점수 2 · F점수 1"></div>
                 <div class="paste-zone" data-zone="a2-result" role="button" tabindex="0" aria-label="활동2 결과 화면 붙여넣기 칸">
-                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 결과 화면(20번)을 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
+                  <div class="paste-empty"><span class="pz-caret" aria-hidden="true"></span>📷 이 칸을 <span class="kbd">클릭</span>한 뒤 <span class="kbd">Ctrl + V</span> 로 캡처한 결과 화면(24번 — 너는 T야 / 너는 F야)을 붙여넣어요<br><span class="sm">(그림 파일을 이 칸으로 끌어다 놓아도 돼요 · 지우기: 아래 🗑 버튼 또는 Delete 키)</span></div>
                 </div>
                 <div class="pz-controls">
                   <button type="button" class="glass-pill pz-file">📎 파일 첨부</button>
                   <button type="button" class="glass-pill pz-clear">🗑 지우기</button>
                 </div>
-                <div class="callout callout--reason"><span class="c-lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img class="ai-shot no-pdf" src="msi-asset:./assets/s28.png" width="230" height="87" loading="lazy" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
 
                 <div class="m-hd2">1. 내가 질문 3개에 대답했던 말을 적어보세요</div>
                 <p class="ord-p">오늘 우리가 만든 모델은 내가 하는 말을 보고, MBTI T인지 F인지 판단해주는 인공지능 모델이에요.</p>
@@ -1829,7 +1832,7 @@ class Component extends DCLogic {
     tab: 'rules', timeView: 'day', mealView: 'day',
     grade: 3, cls: 2, dayIdx: 2,
     fGrade: '', fClass: '', fNum: '', fName: '',
-    fq: [null, null],   // [ai/03] 동기유발 T/F 고르기 2개(ChatGPT·Gemini, 정답 없음 — 선생님 결정 2026-11-03). O/X 없음(정리 카드 뺌 2026-11-02)
+    fq: [],   // [ai/03] 하나 고르기·O/X 없음 — 동기유발 T·F 는 이름표 끌어 놓기(묶음 wuca, 진행률은 칸이 다 차면 1 — 선생님 결정 2026-11-03)
     q1Pick: '', prog2: '', a3: [null, null, null], ox: [], reflect: '', checks: [false, false, false, false],
     saved: false, savedName: '', sheetTick: 0,
     tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', mealDay: '', mealWeek: '', mealMonth: '', neisErr: ''
@@ -1847,7 +1850,7 @@ class Component extends DCLogic {
     } catch (e) {}
     if (this._keep.t && this._keep.s) {
       const k = this._keep.s;
-      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) && k.fq.length === 2 ? k.fq : this.state.fq, ox: this.state.ox });
+      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) && k.fq.length === this.state.fq.length ? k.fq : this.state.fq, ox: this.state.ox });
     }
     const MINE = ['학년', '반', '번호', '이름'];   // 이 네 칸은 화면 상태(state)라 탭을 바꿔도 남음
     const visibleArea = () => Array.prototype.find.call(document.querySelectorAll('#sheetPrintArea'), (a) => a.offsetParent !== null) || null;
@@ -2499,10 +2502,6 @@ class Component extends DCLogic {
       };
     });
 
-    // ── [ai/03] 동기유발 T/F 고르기(ChatGPT·Gemini) — 정답·채점 없이 고른 것만 표시, 진행률은 fq 2칸(선생님 결정 2026-11-03) ──
-    const tfPick = (i, v) => () => this.setState(st => { const a = (st.fq || []).slice(); a[i] = v; return { fq: a }; });
-    const tfOpts = (i) => ['T', 'F'].map(v => { const on = (s.fq || [])[i] === v; return { v: v, pick: tfPick(i, v), pressed: String(on), state: on ? 'on' : '' }; });
-    const tfGpt = tfOpts(0), tfGem = tfOpts(1);
 
     void s.sheetTick;   // DOM 활동(빈칸·붙여넣기) 변화 시 _watchSheetActivities 가 sheetTick 을 올려 리렌더
     const _p = this._progressParts();
@@ -2516,7 +2515,6 @@ class Component extends DCLogic {
 
     return {
       sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria, sheetWidgetDisplay,
-      tfGpt, tfGem,
       isRules: s.tab === 'rules', isTime: s.tab === 'time', isMeal: s.tab === 'meal', isSheet: s.tab === 'sheet',
       goRules: () => this.setState({ tab: 'rules' }), goTime: () => this.setState({ tab: 'time' }),
       goMeal: () => this.setState({ tab: 'meal' }), goSheet: () => this.setState({ tab: 'sheet' }),
