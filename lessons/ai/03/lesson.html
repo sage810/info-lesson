@@ -774,6 +774,7 @@
   .ai-qa__q { display: flex; gap: 10px; align-items: center; word-break: keep-all; }
   .ai-qa__q .num-coin { align-self: center; }
   .callout .ai-shot { margin-top: 8px; }
+  .ai-tf .glass-chip { min-width: var(--msi-part-ox-min); justify-content: center; font-size: 18px; }   /* [ai/03] 동기유발 T/F 고르기 — O/X 버튼 폭 */
   @media (max-width: 560px) {   /* 폰: 질문 위 · 대답 아래로 쌓고 줄마다 띄움, 설명 줄 들여쓰기 없음 */
     .ai-qa, .ai-qa tbody, .ai-qa tr, .ai-qa td { display: block; width: auto; }
     .ai-qa thead { display: none; }
@@ -1510,7 +1511,24 @@
                 <span class="mono"><span class="ph-tag">도입</span>WARM_UP</span>
               </div>
               <div class="m-body">
-                <div class="m-title-row"><div class="m-badge" data-ic="🎨" style="background:var(--msi-role-warmup-head)">🎨</div><div class="m-title" role="heading" aria-level="2">나는 MBTI T일까? F일까?</div></div>
+                <div class="m-title-row"><div class="m-badge" data-ic="🎨" style="background:var(--msi-role-warmup-head)">🎨</div><div class="m-title" role="heading" aria-level="2">ChatGPT는 T일까? F일까?</div></div>
+                <p class="ord-p">친구가 <b>「나 시험 망쳤어」</b>라고 하면 뭐라고 대답할 건가요? 똑같은 말을 ChatGPT와 Gemini에게 해 봤어요.</p>
+                <div class="m-hd2">1. 두 AI는 T일까요, F일까요? 대답을 읽고 골라 보세요.</div>
+                <p class="ord-p ai-center"><b>ChatGPT의 대답</b></p>
+                <img class="ai-fig" src="msi-asset:./assets/w-chatgpt.png" width="1197" height="538" alt="ChatGPT 대화 화면. 「나 시험 망쳤어」에 「아이고… 어떡해 ㅠㅠ 진짜 속상하겠다. 열심히 준비했는데 생각보다 못 본 거야? 일단 지금은 너무 자책하지 않았으면 좋겠어. 괜찮으니까 나한테 다 털어놔도 돼. 무슨 시험이었어? 얼마나 망친 것 같아?」라고 대답한다.">
+                <div class="ai-pick ai-pick--row ai-tf" role="group" aria-label="동기유발 ChatGPT는 T일까 F일까">
+                  <sc-for list="{{ tfGpt }}" as="o" hint-placeholder-count="2">
+                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.v }}</button>
+                  </sc-for>
+                </div>
+                <p class="ord-p ai-center"><b>Gemini의 대답</b></p>
+                <img class="ai-fig" src="msi-asset:./assets/w-gemini.png" width="1126" height="546" alt="Gemini 대화 화면. 「나 시험 망쳤어」에 「시험을 망쳤다고 하니 마음이 정말 속상하고 허탈하시겠어요. 오늘 하루는 나 자신을 탓하기보다 힘들었던 마음을 먼저 따뜻하게 토닥여주면 좋겠어요. 괜찮으시다면 어떤 시험이었는지 이야기해 주실 수 있나요? 위로도 해드리고 앞으로 어떻게 하면 좋을지 함께 고민해 드릴게요.」라고 대답한다.">
+                <div class="ai-pick ai-pick--row ai-tf" role="group" aria-label="동기유발 Gemini는 T일까 F일까">
+                  <sc-for list="{{ tfGem }}" as="o" hint-placeholder-count="2">
+                    <button type="button" class="glass-chip" data-s="{{ o.state }}" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.v }}</button>
+                  </sc-for>
+                </div>
+                <div class="callout callout--reason"><span class="c-lbl">💡 AI는 어떻게 사람처럼 대답할까요?</span>사람들이 쓴 글을 아주 많이 읽고, 어떤 말 다음에 어떤 말이 오는지 패턴을 학습했어요. 그래서 ChatGPT는 다음에 올 낱말을 하나씩 <b>골라서</b> 대답을 만들어요. 오늘 우리는 문장 600개로 <b>T와 F 중에서 고르는</b> 작은 인공지능 모델을 만들어 볼 거예요. ChatGPT는 수조 개의 낱말로 배웠답니다!</div>
                 <p class="ord-p ai-center"><b>글자를 읽고 MBTI 테스트를 해주는 인공지능 모델</b><br>오늘 완성할 인공지능 모델 예시</p>
                 <img class="ai-fig" src="msi-asset:./assets/s01.png" width="1788" height="1106" alt="엔트리 텍스트 분류 모델 「T와 F 구분하는 인공지능」 화면. 왼쪽 데이터 입력에 T 클래스 300개(몇 점인데, 몇 점 나왔어 …)와 F 클래스 300개(헐 괜찮아, 많이 속상하겠다 …), 가운데 학습 100% 완료, 오른쪽 결과에 「응 잘했어」를 넣자 분류한 클래스 F가 나온다.">
               </div>
@@ -1811,7 +1829,7 @@ class Component extends DCLogic {
     tab: 'rules', timeView: 'day', mealView: 'day',
     grade: 3, cls: 2, dayIdx: 2,
     fGrade: '', fClass: '', fNum: '', fName: '',
-    fq: [],   // [ai/03] 하나 고르기·O/X 없음(정리 카드 뺌 — 선생님 결정 2026-11-02)
+    fq: [null, null],   // [ai/03] 동기유발 T/F 고르기 2개(ChatGPT·Gemini, 정답 없음 — 선생님 결정 2026-11-03). O/X 없음(정리 카드 뺌 2026-11-02)
     q1Pick: '', prog2: '', a3: [null, null, null], ox: [], reflect: '', checks: [false, false, false, false],
     saved: false, savedName: '', sheetTick: 0,
     tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', mealDay: '', mealWeek: '', mealMonth: '', neisErr: ''
@@ -1829,7 +1847,7 @@ class Component extends DCLogic {
     } catch (e) {}
     if (this._keep.t && this._keep.s) {
       const k = this._keep.s;
-      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) ? k.fq : this.state.fq, ox: this.state.ox });
+      this.setState({ fGrade: k.fGrade || '', fClass: k.fClass || '', fNum: k.fNum || '', fName: k.fName || '', fq: Array.isArray(k.fq) && k.fq.length === 2 ? k.fq : this.state.fq, ox: this.state.ox });
     }
     const MINE = ['학년', '반', '번호', '이름'];   // 이 네 칸은 화면 상태(state)라 탭을 바꿔도 남음
     const visibleArea = () => Array.prototype.find.call(document.querySelectorAll('#sheetPrintArea'), (a) => a.offsetParent !== null) || null;
@@ -2481,6 +2499,11 @@ class Component extends DCLogic {
       };
     });
 
+    // ── [ai/03] 동기유발 T/F 고르기(ChatGPT·Gemini) — 정답·채점 없이 고른 것만 표시, 진행률은 fq 2칸(선생님 결정 2026-11-03) ──
+    const tfPick = (i, v) => () => this.setState(st => { const a = (st.fq || []).slice(); a[i] = v; return { fq: a }; });
+    const tfOpts = (i) => ['T', 'F'].map(v => { const on = (s.fq || [])[i] === v; return { v: v, pick: tfPick(i, v), pressed: String(on), state: on ? 'on' : '' }; });
+    const tfGpt = tfOpts(0), tfGem = tfOpts(1);
+
     void s.sheetTick;   // DOM 활동(빈칸·붙여넣기) 변화 시 _watchSheetActivities 가 sheetTick 을 올려 리렌더
     const _p = this._progressParts();
     const sheetDone = _p.done;
@@ -2493,6 +2516,7 @@ class Component extends DCLogic {
 
     return {
       sheetDone, sheetTotal, sheetPct, sheetFillStyle, sheetSaved, sheetAria, sheetWidgetDisplay,
+      tfGpt, tfGem,
       isRules: s.tab === 'rules', isTime: s.tab === 'time', isMeal: s.tab === 'meal', isSheet: s.tab === 'sheet',
       goRules: () => this.setState({ tab: 'rules' }), goTime: () => this.setState({ tab: 'time' }),
       goMeal: () => this.setState({ tab: 'meal' }), goSheet: () => this.setState({ tab: 'sheet' }),
