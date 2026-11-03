@@ -678,6 +678,14 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .chk small{display:block;margin-top:4px;font-size:25px;color:var(--muted)}
 .chk b{padding:0 4px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
 /* 4단계 해부 — 단계 카드 + 길잡이 질문 */
+/* [ai/04] 활동 3 예시 장(말동무 AI 로봇, 2026-11-03) — 답 칸은 긴 문장이라 「?」 칸을 칸 너비로 펴고 줄바꿈 */
+.ex .ex-who{margin:0;text-align:center;font:700 32px/1.4 var(--round)}
+.ex .ex-who b{padding:0 3px;background:linear-gradient(transparent 56%,var(--msi-role-ui-hl-lilac) 56%)}
+.ex .tbl td:first-child{white-space:normal}
+.ex .tbl td mark{padding:0 4px;color:inherit;background:linear-gradient(transparent 52%,var(--cat) 52%)}
+.ex .qb{display:flex;justify-content:flex-start;width:100%;box-sizing:border-box;margin:0;padding:8px 18px;text-align:left;font:300 28px/1.5 var(--body)}
+.ex .qb .qb-a{white-space:normal}
+.ex .qb b{font-weight:700}
 .st4{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);align-items:center}
 .st4 .c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:500px;padding:26px 16px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:18px;background:var(--white);box-shadow:var(--sh-card);text-align:center;word-break:keep-all}
 .st4 .c b{font-size:38px}
@@ -1022,6 +1030,41 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
           <li><span class="n">2</span>AI가 무엇을 보고·듣고·읽어서 판단하나요? (사진·소리·글)</li>
           <li><span class="n">3</span>사람이나 일반 프로그램으로 하기 어려운 까닭은?</li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ══ 14-0 · 활동 3 — 예시: 말동무 AI 로봇의 문제 정의서(2026-11-03 선생님 요청). 답 칸은 스페이스로 한 줄씩 ══ -->
+    <section class="slide ex" data-role="act3" data-phase="전개" data-code="ACTIVITY_3" data-badge="🌊" data-title="오늘은 내가 AI 해결사!" data-name="예시 — 말동무 AI 로봇의 문제 정의서">
+      <h2 class="h">💡 예시 — 이렇게 써요: 문제 정의서</h2>
+      <div class="mid" style="gap:20px">
+        <p class="ex-who">🤖👵 혼자 계신 할머니·할아버지의 <b>말동무가 되어 주는 말하는 AI 로봇</b></p>
+        <table class="tbl tbl--big">
+          <colgroup><col style="width:500px"><col></colgroup>
+          <thead><tr><th>질문</th><th>말동무 AI 로봇</th></tr></thead>
+          <tbody>
+            <tr><td>누가 어떤 어려움을 겪나요?</td><td><span class="qb"><span class="qb-a">혼자 사시는 할머니·할아버지가 이야기를 나눌 사람이 없어 외로워요.</span></span></td></tr>
+            <tr><td>AI가 무엇을 보고·듣고·읽어서 판단하나요?</td><td><span class="qb"><span class="qb-a">할머니·할아버지의 <b>목소리(말소리)</b>를 듣고, 무슨 말인지와 기분을 판단해요.</span></span></td></tr>
+            <tr><td>사람이나 일반 프로그램으로<br>하기 어려운 까닭은?</td><td><span class="qb"><span class="qb-a">사람이 하루 종일 곁에서 말동무를 해 드리기 어렵고, 말은 너무 다양해서 정해진 규칙만으로는 대화할 수 없어요.</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ 14-0b · 활동 3 — 예시: 말동무 AI 로봇을 4단계로 해부(2026-11-03 선생님 요청 — 문제 정의서 예시 바로 뒤로) ══ -->
+    <section class="slide ex" data-role="act3" data-phase="전개" data-code="ACTIVITY_3" data-badge="🌊" data-title="오늘은 내가 AI 해결사!" data-name="예시 — 말동무 AI 로봇을 4단계로 해부">
+      <h2 class="h">💡 예시 — 이렇게 써요: 4단계 해부</h2>
+      <div class="mid" style="gap:18px">
+        <p class="ex-who">🤖👵 혼자 계신 할머니·할아버지의 <b>말동무가 되어 주는 말하는 AI 로봇</b></p>
+        <table class="tbl tbl--big">
+          <colgroup><col style="width:300px"><col></colgroup>
+          <thead><tr><th>단계</th><th>말동무 AI 로봇에서는</th></tr></thead>
+          <tbody>
+            <tr><td data-v="데이터 입력"><mark>① 데이터 입력</mark></td><td><span class="qb"><span class="qb-a">사람들이 나눈 대화 문장과 목소리, 그때의 기분(기쁨·슬픔·아픔)을 많이 모아요.</span></span></td></tr>
+            <tr><td data-v="학습"><mark>② 학습</mark></td><td><span class="qb"><span class="qb-a">어떤 말에 어떤 대답이 어울리는지, 어떤 말투가 슬프거나 아픈 기분인지 <b>패턴</b>을 찾아요.</span></span></td></tr>
+            <tr><td data-v="예측"><mark>③ 예측</mark></td><td><span class="qb"><span class="qb-a">「오늘 무릎이 쑤시네」라는 말을 들으면, 아프고 속상한 기분이라고 판단해요.</span></span></td></tr>
+            <tr><td data-v="결과 활용"><mark>④ 결과 활용</mark></td><td><span class="qb"><span class="qb-a">「많이 아프세요? 따뜻하게 찜질해 보세요」라고 다정하게 대답하고, 아프다는 말이 계속되면 가족에게 알려요.</span></span></td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 

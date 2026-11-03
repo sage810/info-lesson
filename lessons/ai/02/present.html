@@ -557,6 +557,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .ws-blank{position:relative;display:inline-flex;align-items:center;min-width:120px;min-height:64px;padding:0 22px;border:4px dashed var(--msi-role-ui-focus-pink);border-radius:var(--msi-shape-r12);background:var(--msi-role-base-blush-paper);font:300 26px/1 var(--body);color:var(--msi-role-ui-placeholder)}
 .ws-blank--area{display:flex;min-height:104px;padding-left:28px}
 .ws-tip{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:12px 20px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r12);background:var(--msi-role-ui-callout-reason);font:300 26px/1.5 var(--body);word-break:keep-all}   /* 본뜬 카드 안 Tip(2026-11-02) */
+.ws-tip__sub{margin-left:12px}   /* [ai/02] Tip 안 소제목(활동지 2026-11-03 피드백과 같게) */
 .ws-tip .lbl{font:700 26px/1 var(--round)}
 .ws-tip img{height:58px;width:auto;border-radius:var(--msi-shape-r6)}
 .ws-blank i{position:absolute;left:-18px;top:-18px;display:grid;place-items:center;width:40px;height:40px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:50%;background:var(--msi-role-ui-focus-pink);color:var(--ink);font:700 22px/1 var(--round);font-style:normal}
@@ -976,12 +977,13 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="내 모델 결과 기록하기" data-name="활동지에 적어요 · 결과 화면 붙여넣기">
       <h2 class="h">✏️ 활동지에 적어요</h2>
       <div class="mid" style="gap:22px">
-        <p class="lead center" style="font-size:34px">캡처한 <b>결과 화면</b>을 수업 활동지 <b>ACTIVITY_2</b> 칸 맨 위에 붙여넣어요.</p>
+        <p class="lead center" style="font-size:34px">예시처럼 캡처한 <b>결과 화면</b>을 수업 활동지 <b>ACTIVITY_2</b> 칸에 붙여넣어요.</p>
         <div class="ws-mock" aria-hidden="true"><div class="hd"><span class="ph">전개</span>ACTIVITY_2</div>
           <div class="bd">
             <div class="tt"><span class="ws-ic" data-ic="🤖">🤖</span>내 모델 결과 기록하기</div>
+            <div class="ws-tip"><span class="lbl">💡 Tip</span>이 사진과 같이 캡처해주세요.<img src="msi-asset:./assets/warmup-model.png" width="1038" height="657" style="height:96px" alt="캡처 예시: 데이터 입력 · 학습 100% · 분류한 클래스가 모두 보이는 엔트리 화면"><span class="ws-tip__sub"><b>인공지능 모델 캡처하러 가는 방법</b></span><img src="msi-asset:./assets/repeat1.png" width="332" height="340" style="height:96px" alt="① 인공지능 클릭, ② 인공지능 모델 학습하기 클릭"><img src="msi-asset:./assets/repeat2.png" width="267" height="270" style="height:96px" alt="③ 학습하기 클릭"></div>
             <div class="ws-blank ws-blank--area"><i>①</i>📷 결과 화면(분류한 클래스와 %)을 캡처해 Ctrl + V 로 붙여넣어요</div>
-            <div class="ws-tip"><span class="lbl">💡 Tip</span>결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img src="msi-asset:./assets/s32.png" width="230" height="87" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
+            <div class="ws-tip">결과 화면을 캡처했다면, 엔트리 맨 위에 <b>과제 제출</b> 버튼을 먼저 눌러주세요.<img src="msi-asset:./assets/s32.png" width="230" height="87" alt="맨 위 초록 막대의 노란 과제 제출 버튼"></div>
           </div>
         </div>
       </div>
