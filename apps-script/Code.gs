@@ -8,7 +8,7 @@
  *                                          (수행평가는 학생 정보·칸별 답·저장 시각·그래프 작은 사본도 함께 — 출처 "웹"/"PDF")
  *   선생님 전용(TEACHER_KEY 가 맞을 때만):
  *   POST {"action":"setKey", key, lesson, rows} → "정답 <차시>" 탭 쓰기 (이 PC 의 npm run exam-key 가 보냄. 정답은 이 코드에 없다)
- *   GET  ?action=teacher&key=…            → 채점 도우미 페이지(채점하기 · 반별 그래프·논술 모아보기 · 직접 점수 입력)
+ *   GET  ?action=teacher&key=…            → 채점 도우미 페이지(채점하기 · 반별 그래프·논술 모아보기 · 직접 점수 입력 · 보정 값 n·x·y)
  *
  * 설정: 왼쪽 ⚙ 프로젝트 설정 → 스크립트 속성 (모두 선택 사항)
  *   NEIS_KEY      NEIS 인증키. 넣으면 시간표·급식을 5줄씩 나눠 받지 않고 한 번에 받음
@@ -16,6 +16,7 @@
  *   FOLDER_ID     제출 PDF 를 모을 드라이브 폴더 ID. 비우면 "정보수업 제출" 폴더를 자동으로 만듦
  *   SHEET_ID      제출 기록 시트 ID. 비우면 위 폴더 안에 "정보수업 제출 기록" 시트를 자동으로 만듦
  *   TEACHER_KEY   선생님만 아는 긴 문자열(저장소에 적지 않는다). 정답 보내기·채점 도우미에 필요. 비우면 그 기능은 꺼짐
+ *   ADJUST        보정 값 {"n":0,"x":"","y":""} — 채점 도우미의 「적용」이 씀(손으로 넣지 않아도 됨)
  *
  * 처음 한 번: 위쪽 함수 목록에서 setup 을 골라 ▶ 실행 → 권한 허용. (폴더·시트가 만들어지고 로그에 주소가 찍힘)
  * 배포 방법은 같은 폴더의 README.md 참고.
@@ -123,13 +124,17 @@ function submit_(b) {
 }
 
 // ---------------------------------------------------------------- 수행평가 채점 (선생님 전용 — TEACHER_KEY)
-// 탭 이름: "정답 <차시>"(npm run exam-key 가 씀) · "채점 <차시>" · "직접 점수 <차시>" · "문항 분석 <차시>"
+// 탭 이름: "정답 <차시>"(npm run exam-key 가 씀) · "채점 <차시>" · "직접 점수 <차시>" · "문항 분석 <차시>" · "결과"(09·10 모음)
+// 채점 탭 F열 「보정 총점」(2026-11-04) = 총점 + n, x 보다 작으면 x · y 보다 크면 y — 코드가 숫자로 쓴다(수식 아님). n·x·y 는 채점 도우미에서, 모든 차시 공통.
+// 결과 탭 = RESULT_LESSONS 채점 탭의 학년 반 번호 이름 총점 보정 총점을 모아 학년→반→번호 순(채점하기·점수·보정 때마다 다시 씀, 숫자만).
 // <차시> 는 제출 시트의 "차시" 칸과 같은 모양(data-analysis-09).
 // 칸 종류(kind): one 하나 고르기 · set 여러 개 고르기(순서 무관) · order 순서 · text 글자(앞뒤 공백·대소문자 무시, 허용 답 목록)
 //               · graph 그래프 · essay 논술 — 이 둘은 선생님이 직접 채점(2026-11-04 essay 추가). 논술의 "정답" 칸에는 채점 기준이 들어온다.
 // 직접 점수 탭: 예전에 만든 "그래프 점수 <차시>" 탭이 있으면 그대로 쓴다(09 의 점수가 남게).
 
 const MANUAL_KINDS = ['graph', 'essay'];
+const RESULT_LESSONS = ['data-analysis-09', 'data-analysis-10'];   // 결과 탭에 모으는 차시(데이터분석 수행평가 A형·B형)
+const RESULT_TAB = '결과';
 function manual_(k) { return MANUAL_KINDS.indexOf(k.kind) >= 0; }
 function manualTabName_(ss, lesson) { return ss.getSheetByName('그래프 점수 ' + lesson) ? '그래프 점수 ' + lesson : '직접 점수 ' + lesson; }
 
@@ -257,10 +262,10 @@ function grade_(lesson) {
   const sh = tab_(ss, '채점 ' + lesson);
   sh.clear();
   // 총점은 이름 바로 옆(E열)에 — 칸별 ○/✕ 를 넘겨 보지 않아도 점수가 한눈에 보이게(2026-10-12)
-  const head = ['학년', '반', '번호', '이름', '총점', '저장 시각', '출처', 'PDF']
+  const head = ['학년', '반', '번호', '이름', '총점', '보정 총점', '저장 시각', '출처', 'PDF']
     .concat(keyRows.map((k) => manual_(k) ? k.unit + ' (직접)' : k.unit))
     .concat(['자동 점수(' + g.autoMax + ')', '직접 점수', '확인', '학생 키']);
-  const nU = keyRows.length, cAuto = 9 + nU, cKey = cAuto + 3;
+  const nU = keyRows.length, cAuto = 10 + nU, cKey = cAuto + 3;
   const colA1 = (c) => { let s = ''; while (c > 0) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
   const rows = [], bgs = [];
   g.students.forEach((st, i) => {
@@ -268,18 +273,18 @@ function grade_(lesson) {
     const manualCells = [];
     const cells = st.marks.map((m, j) => {
       if (m.ok === null) {
-        manualCells.push(colA1(9 + j) + r);
+        manualCells.push(colA1(10 + j) + r);
         const gc = mHead.indexOf(m.unit) + 1;   // 직접 점수 탭에서 이 칸의 열(머리글로 찾음 — 칸이 나중에 덧붙어도 맞게)
         return '=IFERROR(INDEX(' + sName + '!' + colA1(gc) + ':' + colA1(gc) + ',MATCH($' + colA1(cKey) + r + ',' + sName + '!A:A,0)),"")';
       }
       return (m.ok ? '○ ' : '✕ ') + (m.value || '(안 씀)');
     });
     const pdf = s.pdf ? '=HYPERLINK("' + String(s.pdf).replace(/"/g, '') + '","PDF")' : '';
-    rows.push([s.grade, s.cls, s.no, s.name, '=' + colA1(cAuto) + r + '+N(' + colA1(cAuto + 1) + r + ')',
+    rows.push([s.grade, s.cls, s.no, s.name, '=' + colA1(cAuto) + r + '+N(' + colA1(cAuto + 1) + r + ')', '',
       s.savedAt || s.submittedAt, s.source || '웹', pdf].concat(cells).concat([
       st.score, manualCells.length ? '=SUM(' + manualCells.join(',') + ')' : 0,
       st.flags.join(', '), st.key]));
-    bgs.push(new Array(8).fill(st.flags.length ? '#fff4c2' : null)
+    bgs.push(new Array(9).fill(st.flags.length ? '#fff4c2' : null)
       .concat(st.marks.map((m) => m.ok === null ? '#eef0fb' : m.ok ? '#e3f4e1' : '#fbe3e3'))
       .concat([null, null, st.flags.length ? '#fff4c2' : null, null]));
   });
@@ -288,9 +293,11 @@ function grade_(lesson) {
     sh.getRange(2, 1, rows.length, head.length).setValues(rows);
     sh.getRange(2, 1, rows.length, head.length).setBackgrounds(bgs);
   }
-  if (rows.length) sh.getRange(2, 5, rows.length, 1).setFontWeight('bold');   // 총점
-  sh.setFrozenRows(1); sh.setFrozenColumns(5);
+  if (rows.length) sh.getRange(2, 5, rows.length, 2).setFontWeight('bold');   // 총점 · 보정 총점
+  sh.setFrozenRows(1); sh.setFrozenColumns(6);
   sh.hideColumns(cKey);
+  fillAdjusted_(sh, readAdjust_());
+  if (RESULT_LESSONS.indexOf(lesson) >= 0) rebuildResult_(ss);
 
   const an = tab_(ss, '문항 분석 ' + lesson);
   an.clear();
@@ -302,6 +309,47 @@ function grade_(lesson) {
   return { lesson: lesson, students: n, autoMax: g.autoMax,
     autoAvg: n ? Math.round(g.students.reduce((t, s) => t + s.score, 0) / n * 10) / 10 : 0,
     flagged: g.students.filter((s) => s.flags.length).length, url: ss.getUrl() + '#gid=' + sh.getSheetId() };
+}
+
+// ---- 보정 총점(F열) · 결과 탭 — 수식 없이 숫자로 ----
+function readAdjust_() {
+  let a = {};
+  try { a = JSON.parse(prop_('ADJUST') || '{}') || {}; } catch (e) { a = {}; }
+  const num = (v) => (v === '' || v == null || isNaN(Number(v)) ? '' : Number(v));
+  return { n: Number(a.n) || 0, x: num(a.x), y: num(a.y) };
+}
+function clamp_(t, a) {
+  let v = (Number(t) || 0) + a.n;
+  if (a.x !== '' && v < a.x) v = a.x;
+  if (a.y !== '' && v > a.y) v = a.y;
+  return Math.round(v * 100) / 100;
+}
+/** 채점 탭의 F열(보정 총점)을 E열(총점 — 수식이 계산한 값)로 다시 씀. row 를 주면 그 줄만 */
+function fillAdjusted_(sh, adj, row) {
+  if (!sh || String(sh.getRange(1, 6).getValue()) !== '보정 총점') return;   // 보정 열이 생기기 전 채점 탭(채점하기를 다시 누르면 생김)
+  SpreadsheetApp.flush();
+  const last = sh.getLastRow();
+  if (last < 2) return;
+  const r0 = row || 2, n = row ? 1 : last - 1;
+  const totals = sh.getRange(r0, 5, n, 1).getValues();
+  sh.getRange(r0, 6, n, 1).setValues(totals.map((t) => [clamp_(t[0], adj)]));
+}
+/** 결과 탭 — RESULT_LESSONS 채점 탭의 앞 6열을 모아 학년→반→번호 순으로 통째로 다시 씀 */
+function rebuildResult_(ss) {
+  SpreadsheetApp.flush();
+  let rows = [];
+  RESULT_LESSONS.forEach((l) => {
+    const g = ss.getSheetByName('채점 ' + l);
+    if (!g || g.getLastRow() < 2 || String(g.getRange(1, 6).getValue()) !== '보정 총점') return;
+    rows = rows.concat(g.getRange(2, 1, g.getLastRow() - 1, 6).getValues());
+  });
+  const n = (v) => (digits_(v) ? Number(digits_(v)) : Infinity);   // 빈 학년·반·번호는 맨 뒤
+  rows.sort((p, q) => n(p[0]) - n(q[0]) || n(p[1]) - n(q[1]) || n(p[2]) - n(q[2]) || String(p[3]).localeCompare(String(q[3]), 'ko'));
+  const sh = tab_(ss, RESULT_TAB);
+  sh.clear();
+  sh.getRange(1, 1, 1, 6).setValues([['학년', '반', '번호', '이름', '총점', '보정 총점']]).setFontWeight('bold');
+  if (rows.length) sh.getRange(2, 1, rows.length, 6).setValues(rows.map((r) => r.map((v, i) => (i >= 4 ? Number(v) || 0 : v))));
+  sh.setFrozenRows(1);
 }
 
 // ---- 채점 도우미 페이지(google.script.run 으로 부르는 함수 — 모두 열쇠 확인) ----
@@ -358,8 +406,33 @@ function teacherScore(key, lesson, skey, unit, score, info) {
     let r = keys.indexOf(String(skey)) + 2;
     if (r < 2) { r = sh.getLastRow() + 1; sh.getRange(r, 1, 1, 5).setValues([[skey, info.grade || '', info.cls || '', info.no || '', info.name || '']]); }
     sh.getRange(r, c + 1).setValue(score === '' || score == null ? '' : Number(score));
+    // 채점 탭이 있으면 그 학생의 보정 총점(F열)도 바로 — 총점(E열)은 수식이라 저절로 바뀜
+    const g = ss.getSheetByName('채점 ' + lesson);
+    if (g && g.getLastRow() >= 2) {
+      const gh = g.getRange(1, 1, 1, g.getLastColumn()).getValues()[0].map(String), kc = gh.indexOf('학생 키');
+      const gr = kc >= 0 ? g.getRange(2, kc + 1, g.getLastRow() - 1, 1).getValues().map((x) => String(x[0])).indexOf(String(skey)) : -1;
+      if (gr >= 0) fillAdjusted_(g, readAdjust_(), gr + 2);
+      if (RESULT_LESSONS.indexOf(lesson) >= 0) rebuildResult_(ss);
+    }
   } finally { lock.releaseLock(); }
   return true;
+}
+function teacherAdjustGet(key) { guard_(key); return readAdjust_(); }
+/** 보정 값 저장 → 모든 채점 탭의 보정 총점(F열) + 결과 탭 다시 씀 */
+function teacherAdjust(key, n, x, y) {
+  guard_(key);
+  const toNum = (v, blank) => (v === '' || v == null ? blank : Number(v));
+  const a = { n: toNum(n, 0) || 0, x: toNum(x, ''), y: toNum(y, '') };
+  if ((a.x !== '' && isNaN(a.x)) || (a.y !== '' && isNaN(a.y)) || isNaN(a.n)) throw new Error('숫자로 적어 주세요');
+  const lock = LockService.getScriptLock();
+  lock.tryLock(20000);
+  try {
+    PropertiesService.getScriptProperties().setProperty('ADJUST', JSON.stringify(a));
+    const ss = book_();
+    ss.getSheets().forEach((t) => { if (t.getName().indexOf('채점 ') === 0) fillAdjusted_(t, a); });
+    rebuildResult_(ss);
+    return { adjust: a, url: ss.getUrl() + '#gid=' + ss.getSheetByName(RESULT_TAB).getSheetId() };
+  } finally { lock.releaseLock(); }
 }
 
 const TEACHER_HTML = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><style>
@@ -368,7 +441,7 @@ h1{margin:0 0 12px;font-size:20px} .bar{display:flex;flex-wrap:wrap;gap:8px;alig
 select,button{font:inherit;padding:6px 12px;border:2px solid #4b3b6b;border-radius:8px;background:#fff;color:#4b3b6b;cursor:pointer}
 button.main{background:#c4cce8;font-weight:700} button:disabled{opacity:.5;cursor:wait}
 #msg{margin:0 0 12px;padding:10px 12px;border:2px solid #4b3b6b;border-radius:10px;background:#fff}
-#msg:empty{display:none} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+#msg:empty{display:none} .adj{padding:8px 12px;border:2px dashed #b9b0d3;border-radius:10px;background:#fff} .adj input{font:inherit;width:70px;padding:4px 8px;border:2px solid #4b3b6b;border-radius:8px} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
 .card{padding:10px;border:2px solid #4b3b6b;border-radius:12px;background:#fff}
 .card h3{margin:0 0 6px;font-size:15px} .g{margin-top:8px} .g b{display:block;font-size:13px}
 .g img{display:block;width:100%;min-height:60px;border:1px solid #d8d2ee;border-radius:6px;background:#faf9fd}
@@ -383,6 +456,11 @@ button.main{background:#c4cce8;font-weight:700} button:disabled{opacity:.5;curso
 <div class="bar"><label>차시 <select id="lesson"></select></label>
 <button class="main" id="gradeBtn">채점하기</button>
 <label>반 <select id="cls"></select></label> <button id="loadBtn">직접 채점 보기</button></div>
+<div class="bar adj">기본 점수 보정(모든 차시 공통) —
+<label>더할 점수 n <input id="an" type="number" step="1"></label>
+<label>최저 x <input id="ax" type="number" step="1"></label>
+<label>최고 y <input id="ay" type="number" step="1"></label>
+<button id="adjBtn">적용</button> <small>보정 총점(채점 탭 F열) = 총점 + n, x 이하는 x · y 이상은 y (x·y 를 비우면 제한 없음)</small></div>
 <p id="msg"></p><div class="grid" id="grid"></div>
 <script>
 var KEY = __KEY__, $ = function (id) { return document.getElementById(id); };
@@ -391,13 +469,22 @@ function run(fn, args, ok) {
   r[fn].apply(r, [KEY].concat(args));
 }
 function say(t, html) { if (html) $('msg').innerHTML = t; else $('msg').textContent = t; }
-function busy(b) { ['gradeBtn', 'loadBtn'].forEach(function (id) { $(id).disabled = b; }); }
+function busy(b) { ['gradeBtn', 'loadBtn', 'adjBtn'].forEach(function (id) { $(id).disabled = b; }); }
 function opt(sel, list, cur) { sel.innerHTML = ''; list.forEach(function (v) { var o = document.createElement('option'); o.value = v; o.textContent = v === '?' ? '반 없음' : v; if (v === cur) o.selected = true; sel.appendChild(o); }); }
 run('teacherLessons', [], function (list) {
   if (!list.length) { say('정답 탭이 없어요. 이 PC 에서 npm run exam-key -- <차시> --send 로 정답을 먼저 보내 주세요.'); return; }
   opt($('lesson'), list, list[0]); load('');
 });
 $('lesson').onchange = function () { load(''); };
+function setAdj(a) { $('an').value = a.n; $('ax').value = a.x; $('ay').value = a.y; }
+run('teacherAdjustGet', [], setAdj);
+$('adjBtn').onclick = function () {
+  busy(true); say('보정 총점을 다시 계산하는 중…');
+  run('teacherAdjust', [$('an').value, $('ax').value, $('ay').value], function (r) {
+    busy(false); setAdj(r.adjust);
+    say('✔ 보정 값을 적용했어요(모든 채점 탭 F열 · 결과 탭). <a href="' + r.url + '" target="_blank">결과 탭 열기</a>', true);
+  });
+};
 $('gradeBtn').onclick = function () {
   busy(true); say('채점하는 중…');
   run('teacherGrade', [$('lesson').value], function (r) {

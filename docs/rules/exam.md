@@ -1,7 +1,7 @@
 # 수행평가(시험지) — 규칙과 자동 제출·채점(A+B)
 
 수행평가 시험지를 만들고, 학생 답을 **자동으로 모아(A) · PDF 로도 꺼내(B) · 시트 한 곳에서 채점**하는 방법.
-본보기는 `lessons/data-analysis/09`(데이터분석 수행평가 A형, 2026-10-02~04) · 논술형은 `lessons/ai/exam`(인공지능 수행평가, 2026-11-04). 순서대로 만들 때는 스킬 **`lesson-exam`** 을 쓴다.
+본보기는 `lessons/data-analysis/09`(데이터분석 수행평가 A형, 2026-10-02~04) · 논술형은 `lessons/ai/exam-a`·`exam-b`(인공지능 수행평가 A형·B형, 2026-11-04 — 형마다 차시 폴더·시트 탭이 따로). 순서대로 만들 때는 스킬 **`lesson-exam`** 을 쓴다.
 
 ```
 학생 "PDF로 저장하기"
@@ -51,7 +51,7 @@
 | `order` 순서 | `.order[data-unit]` 안 `.os` 칸, 고르는 `.oc[data-v]` | `c,d,a,b` | 순서까지 같아야 ○ |
 | `text` 글자 | `textarea.blank[data-unit][aria-label]` | 적은 글 | 앞뒤 공백·대소문자 무시, 정답 또는 허용 답 중 하나 |
 | `graph` 그래프 | `.pz[data-unit]` (role=button) | 넣었으면 `그래프` | 선생님이 직접 |
-| `essay` 논술 | `[data-essay][data-unit][aria-label]` 안 `textarea.blank` 하나 이상(칸마다 고유 `aria-label`, 여럿이면 `data-part`) | 글 그대로 · 칸이 여럿이면 `[part] 글` 줄 | 선생님이 직접(채점 도우미 0.5점 단위, 기준은 answers.json `_채점_기준`) |
+| `essay` 논술 | `[data-essay][data-unit][aria-label]` 안 `textarea.blank` 하나 이상(칸마다 고유 `aria-label`, 여럿이면 `data-part`) | 글 그대로 · 칸이 여럿이면 `[part] 글` 줄 | 선생님이 직접(채점 도우미 점수 단추 — 예전 시트 0.5점, 인공지능 전용 시트 1점 단위 · 기준은 answers.json `_채점_기준`) |
 
 - 학생 정보 칸: `textarea[aria-label="학년|반|번호|이름"]` (data-unit 없음).
 - 버튼·줄: `#pdfBtn` · `#saveStatus` · `#submitStatus`.
@@ -64,8 +64,8 @@
   `window.MSI_EXAM = { lesson, key, fileTitle }`(차시 이름 · 보관 열쇠 · PDF 파일 이름 끝)만 둔다. 논술 칸 아래 글자 수(「N자」)는 저절로 붙는다.
   PDF 는 한 쪽보다 긴 글을 줄 사이에서 나누고, 여러 줄 묶음은 `.row-cut` 경계에서도 나눈다.
   **원고지 칸**: `textarea.blank` 에 `wongoji` 클래스 + `shared/partials/wongoji.js`(exam.js **앞**에) — 투명 textarea 위에 원고지 칸을 그려 한 칸에 한 글자,
-  커서·클릭·↑↓·Home/End 는 원고지 줄 기준, PDF 는 원고지를 그대로 찍고 원고지 줄 사이에서 쪽을 나눈다(ai/exam, 2026-11-04). 칸 CSS 는 ai/exam `lesson.html` 의 `.wg` 묶음.
-  **바꾸면 09 와 ai/exam 이 같이 바뀐다** — 둘 다 `npm run check` + 학생처럼 저장 시험.
+  커서·클릭·↑↓·Home/End 는 원고지 줄 기준, PDF 는 원고지를 그대로 찍고 원고지 줄 사이에서 쪽을 나눈다(ai/exam-a·b, 2026-11-04). 칸 CSS 는 ai/exam-a `lesson.html` 의 `.wg` 묶음.
+  **바꾸면 09 와 ai/exam-a·b 가 같이 바뀐다** — 둘 다 `npm run check` + 학생처럼 저장 시험.
 
 ## 4. 답 기록(msi-answers v1) — A 와 B 가 같은 모양
 
@@ -101,6 +101,7 @@
 | `scripts/exam-key.mjs` | `npm run exam-key -- <차시> [--send]` 정답 표 확인·보내기(선생님 열쇠 필요) |
 | `scripts/exam-pdf.mjs` | `npm run exam-pdf -- <폴더> [--send]` USB PDF 의 숨은 답 확인·보내기 |
 | `apps-script/teacher.local.json` | `{"teacherKey":"…"}` — 이 PC 에만(gitignore) |
+| `apps-script-ai-exam/` | 인공지능 수행평가 전용 Apps Script(제출·채점 도우미·보정, 수식 없는 5탭 시트) · `teacher.local.json`(gitignore) |
 
 ## 7. 채점 (시트)
 
@@ -108,6 +109,8 @@
 - **같은 학생**(학년·반·번호·이름)은 **저장 시각이 가장 늦은 것** 하나. 웹·PDF 어느 쪽이든 같다(같은 PDF 를 두 번 보내도 한 번).
 - 채점 탭: **학년·반·번호 순**, **총점은 이름 옆 E열**, 칸마다 `○ 값`/`✕ 값`, 자동 점수, 그래프 칸은 그래프 점수 탭을 읽는 수식. **반·번호 없음**·**같은 이름**은 노란 줄.
 - 다시 "채점하기"를 눌러도 그래프 점수는 남는다(따로 탭).
+- **F열 「보정 총점」·「결과」 탭**(2026-11-04, 예전 시트): F열 = 총점 + n 을 x~y 로 자른 **숫자**(수식 아님, 코드가 채점하기·점수·보정 때 다시 씀). n·x·y 는 채점 도우미 「기본 점수 보정」 칸(모든 차시 공통, 스크립트 속성 ADJUST). 「결과」 탭 = 09·10 채점 탭의 학년 반 번호 이름 총점 보정 총점을 학년→반→번호 순으로 모음(Code.gs 의 RESULT_LESSONS).
+- **인공지능 수행평가(ai/exam-a·b)는 따로**(2026-11-04): 새 Apps Script `apps-script-ai-exam/`·새 시트 「인공지능 수행평가 채점」 — 탭 5개(제출 · 채점 A형 · 채점 B형 · 결과 — 두 형을 학년→반→번호 순으로 모음 · 설정), **수식 없음**(점수·총점·보정 총점을 코드가 숫자로). 보정 총점 = 총점 + n 을 x~y 로 자름, n·x·y 는 채점 도우미에서. 차시 `lesson.json` 의 `"apiUrl"`·`"teacherKeyFile"` 로 그 차시만 새 주소를 쓴다(`"apiUrl": ""` 이면 제출 꺼짐). 올리는 법 `apps-script-ai-exam/README.md`.
 - 채점 규칙은 `Code.gs` 의 순수 함수(`scoreUnit_`·`pickLatest_`·`buildGrade_`) — 고치면 Node `vm` 으로 불러 가짜 정답·가짜 학생으로 시험한다.
 
 ## 8. 선생님 체크리스트

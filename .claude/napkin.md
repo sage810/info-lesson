@@ -66,8 +66,8 @@
    Do instead: 표식은 그대로 두고, 그림은 `assets/` 에 넣고 `msi-asset:./assets/이름.png` 로 참조.
 3. **[2026-09-24] 진행률 계산 방식이 차시마다 다름(05 `_progressParts` · 04 `sheetProgress` · 06 `sheetChecklist`)**
    Do instead: 빈칸·퀴즈를 추가하면 그 차시 방식에 맞춰 진행률도 함께 고친다. 새 차시는 05 방식.
-4. **[2026-09-24] 외부 디자인 스킬(better-colors 등)은 새 팔레트·새 스타일을 제안할 수 있음**
-   Do instead: `docs/rules/design.md` 토큰이 우선. 토큰 밖 색·서체는 제안만 하고 적용하지 않는다.
+4. **[2026-11-04] 구글 시트는 「1-1」「3-1」 같은 칸 이름을 날짜(1월 1일)로 바꿔 씀 → 머리글로 칸을 못 찾음(가짜 시트 시험으론 안 드러남)**
+   Do instead: Apps Script 에서 머리글·칸 이름 열은 `.setNumberFormat('@').setValues(…)` 로 쓴다. 가짜 시트(vm 시험)도 서식 없는 「숫자-숫자」를 Date 로 바꾸게 만들어 둔다.
 5. **[2026-09-29] 4탭 활동지 시간표·급식이 "–"로 빔 = NEIS 스냅샷 기간이 끝난 것**
    (인증키 없는 실시간 조회는 pIndex 를 무시하고 샘플 5행만 줘서 스냅샷을 못 메움)
    Do instead: `pwsh scripts/fetch-neis.ps1 -TimetableWeeks 8` → `npm run neis` → check → push.

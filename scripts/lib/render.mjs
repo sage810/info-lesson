@@ -112,15 +112,19 @@ export function renderLesson(lesson, opts) {
         + 'if(window.MutationObserver)new MutationObserver(later).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:["style","class"]});'
         + 'sweep();})();</script>');
     }
-    if (hook && cfg.apiUrl) { // Apps Script 주소가 없으면 아무것도 덧붙이지 않는다 → 예전 배포본과 똑같음
+    // 차시 lesson.json 에 "apiUrl" 이 있으면 그 차시만 그 주소로(인공지능 수행평가 전용 Apps Script, 2026-11-04).
+    // 빈 문자열이면 제출을 끈다(새 주소를 넣기 전에 옛 주소로 새지 않게). NEIS 프록시는 사이트 주소에만.
+    const own = Object.prototype.hasOwnProperty.call(lesson.meta, 'apiUrl');
+    const apiUrl = own ? String(lesson.meta.apiUrl || '') : cfg.apiUrl;
+    if (hook && apiUrl) { // Apps Script 주소가 없으면 아무것도 덧붙이지 않는다 → 예전 배포본과 똑같음
       const runtime = {
         lesson: lesson.id,
         title: lesson.meta.title || '',
         teacher,
-        apiUrl: cfg.apiUrl || '',
+        apiUrl: apiUrl || '',
         submit: (!!cfg.submit || !!lesson.meta.submit) && !teacher,   // lesson.json 의 "submit": true 면 그 차시만 켬(09 수행평가)
-        neisProxy: !!cfg.neisProxy,
-        token: cfg.submitToken || '',
+        neisProxy: !own && !!cfg.neisProxy,
+        token: own ? String(lesson.meta.submitToken || '') : cfg.submitToken || '',
       };
       inject.push(`<script id="msi-config">window.MSI_CONFIG=${JSON.stringify(runtime)};</script>`);
       const hookFile = path.join(ROOT, HOOK_PATH);

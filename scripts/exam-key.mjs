@@ -5,7 +5,7 @@
 //   npm run exam-key -- 09            정답 표를 화면에 보여 준다(보내지 않음)
 //   npm run exam-key -- 09 --send     Apps Script 로 보낸다
 //
-// 선생님 열쇠(TEACHER_KEY 와 같은 값): apps-script/teacher.local.json {"teacherKey":"…"} 또는 환경변수 MSI_TEACHER_KEY
+// 선생님 열쇠(TEACHER_KEY 와 같은 값): apps-script/teacher.local.json {"teacherKey":"…"}(lesson.json 의 "teacherKeyFile" 이 있으면 그 파일) 또는 환경변수 MSI_TEACHER_KEY
 // 정답 표는 시험지에 answers.json 의 답을 실제로 채운 뒤, 학생 제출과 똑같은 방법(window.MSI_SUBMIT)으로 읽어 만든다 → 모양이 어긋나지 않는다.
 // answers.json 에서 쓰는 것: fill · click(정답지와 같음) · _채점_허용답 {"<칸 aria-label>": [...]} · _채점_배점 {"기본": 1, "<칸>": 점수}
 //   · _채점_기준 {"<논술 칸>": "채점 기준 글"} — 논술(essay)·그래프는 선생님이 직접 채점, 시트의 "정답" 칸에 이 기준이 들어간다(채점 도우미에 보임)
@@ -70,13 +70,16 @@ const empty = rows.filter((r) => !MANUAL.includes(r.kind) && !r.answer);
 if (empty.length) { console.error(`✖ 정답이 비어 있는 칸: ${empty.map((r) => r.unit).join(', ')} — answers.json 의 fill/click 을 확인하세요.`); process.exit(1); }
 
 if (!send) { console.log('\n(보내지 않았어요. 시트로 보내려면 끝에 --send)'); process.exit(0); }
+// 차시 lesson.json 의 "apiUrl"·"teacherKeyFile" 이 있으면 그 Apps Script 로(인공지능 수행평가 전용, 2026-11-04)
 let key = process.env.MSI_TEACHER_KEY || '';
-const keyFile = path.join(ROOT, 'apps-script', 'teacher.local.json');
+const keyFile = path.join(ROOT, lesson.meta.teacherKeyFile || path.join('apps-script', 'teacher.local.json'));
 if (!key && fs.existsSync(keyFile)) key = JSON.parse(readText(keyFile)).teacherKey || '';
-if (!key) { console.error('✖ 선생님 열쇠가 없어요. apps-script/teacher.local.json 에 {"teacherKey":"…"} 를 만들어 주세요(TEACHER_KEY 와 같은 값).'); process.exit(1); }
+if (!key) { console.error(`✖ 선생님 열쇠가 없어요. ${path.relative(ROOT, keyFile)} 에 {"teacherKey":"…"} 를 만들어 주세요(TEACHER_KEY 와 같은 값).`); process.exit(1); }
 const cfg = loadConfig();
-if (!cfg.apiUrl) { console.error('✖ site.config.json 의 apiUrl 이 비어 있어요.'); process.exit(1); }
-const res = await fetch(cfg.apiUrl, { method: 'POST', body: JSON.stringify({ action: 'setKey', key, lesson: lesson.id, rows }) });
+const ownUrl = Object.prototype.hasOwnProperty.call(lesson.meta, 'apiUrl');
+const apiUrl = ownUrl ? lesson.meta.apiUrl : cfg.apiUrl;
+if (!apiUrl) { console.error(`✖ 보낼 주소가 비어 있어요(${ownUrl ? lesson.id + ' 의 lesson.json "apiUrl"' : 'site.config.json 의 apiUrl'}).`); process.exit(1); }
+const res = await fetch(apiUrl, { method: 'POST', body: JSON.stringify({ action: 'setKey', key, lesson: lesson.id, rows }) });
 const j = await res.json().catch(() => null);
 if (!j || !j.ok) { console.error('✖ 보내지 못했어요:', (j && j.error) || res.status); process.exit(1); }
-console.log(`✔ 시트 "정답 ${j.lesson}" 탭에 ${j.rows}칸 · ${j.points}점을 썼어요.`);
+console.log(`✔ 시트 "${j.tab || '정답 ' + j.lesson}" 탭에 ${j.rows}칸 · ${j.points}점을 썼어요.`);

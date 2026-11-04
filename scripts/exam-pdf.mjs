@@ -46,20 +46,25 @@ console.log(`PDF ${files.length}개 중 숨은 답이 있는 것 ${found.length}
 if (!send || !found.length) { if (!send) console.log('(보내지 않았어요. 시트로 보내려면 끝에 --send)'); process.exit(0); }
 
 const cfg = loadConfig();
-if (!cfg.apiUrl) { console.error('✖ site.config.json 의 apiUrl 이 비어 있어요.'); process.exit(1); }
-const titles = Object.fromEntries(listLessons().map((l) => [l.id, l.meta.title || '']));
+const metas = Object.fromEntries(listLessons().map((l) => [l.id, l.meta]));
+const titles = Object.fromEntries(Object.entries(metas).map(([id, m]) => [id, m.title || '']));
+// 차시 lesson.json 에 "apiUrl" 이 있으면 그 주소로(인공지능 수행평가 전용 Apps Script, 2026-11-04)
+const own = (id) => !!metas[id] && Object.prototype.hasOwnProperty.call(metas[id], 'apiUrl');
+const urlOf = (id) => (own(id) ? metas[id].apiUrl : cfg.apiUrl) || '';
+const tokenOf = (id) => (own(id) ? metas[id].submitToken : cfg.submitToken) || '';
 let ok = 0;
 for (const { file, rec } of found) {
   const body = JSON.stringify({
-    action: 'submit', token: cfg.submitToken || '', source: 'pdf',
+    action: 'submit', token: tokenOf(rec.lesson), source: 'pdf',
     lesson: rec.lesson, title: titles[rec.lesson] || '', filename: path.basename(file),
     pdf: fs.readFileSync(file).toString('base64'),
     answers: rec.answers || {}, student: rec.student || {}, savedAt: rec.savedAt || '',
   });
-  let msg = '';
-  for (let t = 0; t < 3; t++) {
+  const url = urlOf(rec.lesson);
+  let msg = url ? '' : `보낼 주소가 비어 있어요(${rec.lesson})`;
+  for (let t = 0; t < 3 && url; t++) {
     try {
-      const res = await fetch(cfg.apiUrl, { method: 'POST', body });
+      const res = await fetch(url, { method: 'POST', body });
       const j = await res.json();
       if (j && j.ok) { msg = ''; break; }
       msg = (j && j.error) || String(res.status);

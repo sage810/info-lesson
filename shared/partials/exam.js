@@ -1,9 +1,9 @@
 /* 수행평가(시험지) 공용 동작 — 고르기 · 순서 · 그래프 칸 · 논술 칸 · 답 보관 · 붙여넣기 막기 · 나가기 경고 · 채점용 기록 · PDF 저장.
    채점·맞음 표시는 하지 않는다. 이 스크립트에는 답이 들어 있지 않다.
-   규칙·구조 약속: docs/rules/exam.md §3. 쓰는 시험지: data-analysis/09 · ai/exam (2026-11-04 09 안의 코드를 옮겨 옴)
+   규칙·구조 약속: docs/rules/exam.md §3. 쓰는 시험지: data-analysis/09 · ai/exam-a · ai/exam-b (2026-11-04 09 안의 코드를 옮겨 옴)
 
    시험지는 이 파일 앞의 작은 script 에 설정을 둔다(이 주석에 script 닫는 태그를 쓰면 페이지에 넣을 때 스크립트가 끊긴다):
-     window.MSI_EXAM = { lesson: 'ai/exam', key: 'msi-exam:ai/exam', fileTitle: '인공지능 수행평가' };
+     window.MSI_EXAM = { lesson: 'ai/exam-a', key: 'msi-exam:ai/exam-a', fileTitle: '인공지능 수행평가 A형' };
      그다음 줄에 data-msi-src="shared/partials/exam.js" 표식
      lesson    채점 기록의 차시 이름(시트 "차시" 칸)
      key       이 컴퓨터에 답을 보관하는 localStorage 열쇠
