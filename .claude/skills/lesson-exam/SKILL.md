@@ -16,9 +16,9 @@ description: >
 1. **문항·결정 받기.** 문항(**`docs/templates/수행평가 양식.docx`** 를 채운 것 · PDF · 글 — 아래 "수행평가 양식" 참고)을 받고, 정해야 할 것을 **선택지와 추천을 붙여 묻는다**(CLAUDE.md "결정은 묻는다"):
    배점(문항당/소문항당), 부분 점수, 글자 답의 허용 범위, 필수 칸(09 는 이름만), 그래프 칸 여부, 답 보관 시간(09 는 45분).
 2. **비공개부터.** 차시 폴더를 만들기 **전에** `.gitignore` 에 차시 폴더 줄과 `answers.json` 줄을 넣고 `git check-ignore` 로 확인한다.
-3. **틀 만들기.** 09 `lesson.html` 을 복사해 문항을 바꾼다. 구조 약속(`data-unit`·kind 별 마크업, exam.md §3)을 그대로 지킨다.
-   - **두 번째 시험지라면 먼저**: 09 안의 `MSI_SUBMIT`·기록·PDF 숨기기·제출 상태 코드를 `shared/partials/exam.js` 로 빼서
-     두 시험지가 같이 쓰게 할지 선생님께 묻는다(exam.md §3 끝). 빼지 않으면 `record()` 의 차시 이름과 보관 키(`KEY`)를 꼭 바꾼다.
+3. **틀 만들기.** 객관식·그래프는 09, 논술형은 `ai/exam` 의 `lesson.html` 을 복사해 문항을 바꾼다. 구조 약속(`data-unit`·kind 별 마크업, exam.md §3)을 그대로 지킨다.
+   - 동작은 공용 `shared/partials/exam.js` — 시험지 끝 `window.MSI_EXAM = { lesson, key, fileTitle }` 세 값만 그 차시로 바꾼다.
+   - 공용 파일을 고치면 09·ai/exam 둘 다 검사한다. 그 파일 주석에 script 닫는 태그를 쓰지 않는다(페이지에 넣을 때 끊김).
    - `lesson.json`: `"shell": "standalone"`, `"status": "draft"`, **`"submit": true`**.
    - `spec.md`: 결정 표와 채점 설계 — **정답은 적지 않는다**("answers.json 에만").
 4. **answers.json.** `fill`·`click`(선택자 문자열만, 순서 문항은 누를 차례대로)·`_채점_허용답`·`_채점_배점`(exam.md §5).

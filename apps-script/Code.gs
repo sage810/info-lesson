@@ -8,7 +8,7 @@
  *                                          (수행평가는 학생 정보·칸별 답·저장 시각·그래프 작은 사본도 함께 — 출처 "웹"/"PDF")
  *   선생님 전용(TEACHER_KEY 가 맞을 때만):
  *   POST {"action":"setKey", key, lesson, rows} → "정답 <차시>" 탭 쓰기 (이 PC 의 npm run exam-key 가 보냄. 정답은 이 코드에 없다)
- *   GET  ?action=teacher&key=…            → 채점 도우미 페이지(채점하기 · 반별 그래프 모아보기 · 그래프 점수 입력)
+ *   GET  ?action=teacher&key=…            → 채점 도우미 페이지(채점하기 · 반별 그래프·논술 모아보기 · 직접 점수 입력)
  *
  * 설정: 왼쪽 ⚙ 프로젝트 설정 → 스크립트 속성 (모두 선택 사항)
  *   NEIS_KEY      NEIS 인증키. 넣으면 시간표·급식을 5줄씩 나눠 받지 않고 한 번에 받음
@@ -123,9 +123,15 @@ function submit_(b) {
 }
 
 // ---------------------------------------------------------------- 수행평가 채점 (선생님 전용 — TEACHER_KEY)
-// 탭 이름: "정답 <차시>"(npm run exam-key 가 씀) · "채점 <차시>" · "그래프 점수 <차시>" · "문항 분석 <차시>"
+// 탭 이름: "정답 <차시>"(npm run exam-key 가 씀) · "채점 <차시>" · "직접 점수 <차시>" · "문항 분석 <차시>"
 // <차시> 는 제출 시트의 "차시" 칸과 같은 모양(data-analysis-09).
-// 칸 종류(kind): one 하나 고르기 · set 여러 개 고르기(순서 무관) · order 순서 · text 글자(앞뒤 공백·대소문자 무시, 허용 답 목록) · graph 직접 채점
+// 칸 종류(kind): one 하나 고르기 · set 여러 개 고르기(순서 무관) · order 순서 · text 글자(앞뒤 공백·대소문자 무시, 허용 답 목록)
+//               · graph 그래프 · essay 논술 — 이 둘은 선생님이 직접 채점(2026-11-04 essay 추가). 논술의 "정답" 칸에는 채점 기준이 들어온다.
+// 직접 점수 탭: 예전에 만든 "그래프 점수 <차시>" 탭이 있으면 그대로 쓴다(09 의 점수가 남게).
+
+const MANUAL_KINDS = ['graph', 'essay'];
+function manual_(k) { return MANUAL_KINDS.indexOf(k.kind) >= 0; }
+function manualTabName_(ss, lesson) { return ss.getSheetByName('그래프 점수 ' + lesson) ? '그래프 점수 ' + lesson : '직접 점수 ' + lesson; }
 
 function teacherOk_(key) { const k = prop_('TEACHER_KEY'); return !!k && String(key || '') === k; }
 function lessonName_(s) { return clean_(String(s || '').replace(/\//g, '-'), 60); }
@@ -151,9 +157,9 @@ function norm_(s) { return String(s == null ? '' : s).trim().toLowerCase(); }
 function digits_(s) { return String(s == null ? '' : s).replace(/[^0-9]/g, ''); }
 function studentKey_(s) { return [digits_(s.grade), digits_(s.cls), digits_(s.no), String(s.name || '').trim()].join('|'); }
 
-/** 한 칸 채점: true 맞음 · false 틀림/빈칸 · null 직접 채점(graph) */
+/** 한 칸 채점: true 맞음 · false 틀림/빈칸 · null 직접 채점(graph · essay) */
 function scoreUnit_(k, value) {
-  if (k.kind === 'graph') return null;
+  if (manual_(k)) return null;
   const v = norm_(value);
   if (!v) return false;
   if (k.kind === 'set') {
@@ -184,7 +190,7 @@ function buildGrade_(keyRows, subs) {
     String(a.name).localeCompare(String(b.name), 'ko'));
   const nameCount = {};
   sorted.forEach((s) => { const n = String(s.name || '').trim(); nameCount[n] = (nameCount[n] || 0) + 1; });
-  const auto = keyRows.filter((k) => k.kind !== 'graph');
+  const auto = keyRows.filter((k) => !manual_(k));
   const stats = keyRows.map(() => ({ right: 0, tried: 0 }));
   const students = sorted.map((s) => {
     const marks = keyRows.map((k, i) => {
@@ -201,7 +207,7 @@ function buildGrade_(keyRows, subs) {
   });
   const analysis = keyRows.map((k, i) => ({ unit: k.unit, kind: k.kind, points: Number(k.points) || 0,
     right: stats[i].right, tried: stats[i].tried, total: students.length,
-    rate: k.kind === 'graph' || !students.length ? '' : Math.round(stats[i].right / students.length * 100) }));
+    rate: manual_(k) || !students.length ? '' : Math.round(stats[i].right / students.length * 100) }));
   return { students: students, analysis: analysis, autoMax: auto.reduce((t, k) => t + (Number(k.points) || 0), 0) };
 }
 
@@ -227,10 +233,14 @@ function readSubs_(ss, lesson) {
   }));
 }
 function scoreTab_(ss, lesson, graphUnits) {
-  const sh = tab_(ss, '그래프 점수 ' + lesson);
+  const sh = tab_(ss, manualTabName_(ss, lesson));
   if (sh.getLastRow() === 0) {
     sh.getRange(1, 1, 1, 5 + graphUnits.length).setValues([['학생 키', '학년', '반', '번호', '이름'].concat(graphUnits)]).setFontWeight('bold');
     sh.setFrozenRows(1);
+  } else {   // 정답 표에 직접 채점 칸이 새로 생겼으면 머리글 뒤에 덧붙인다
+    const head = sh.getRange(1, 1, 1, Math.max(1, sh.getLastColumn())).getValues()[0].map(String);
+    const add = graphUnits.filter((u) => head.indexOf(u) < 0);
+    if (add.length) sh.getRange(1, head.length + 1, 1, add.length).setValues([add]).setFontWeight('bold');
   }
   return sh;
 }
@@ -239,15 +249,16 @@ function grade_(lesson) {
   const ss = book_();
   const keyRows = readKey_(ss, lesson);
   const g = buildGrade_(keyRows, pickLatest_(readSubs_(ss, lesson)));
-  const graphUnits = keyRows.filter((k) => k.kind === 'graph').map((k) => k.unit);
-  scoreTab_(ss, lesson, graphUnits);
-  const sName = "'그래프 점수 " + lesson + "'";
+  const graphUnits = keyRows.filter(manual_).map((k) => k.unit);
+  const mTab = scoreTab_(ss, lesson, graphUnits);
+  const mHead = mTab.getRange(1, 1, 1, mTab.getLastColumn()).getValues()[0].map(String);
+  const sName = "'" + mTab.getName() + "'";
 
   const sh = tab_(ss, '채점 ' + lesson);
   sh.clear();
   // 총점은 이름 바로 옆(E열)에 — 칸별 ○/✕ 를 넘겨 보지 않아도 점수가 한눈에 보이게(2026-10-12)
   const head = ['학년', '반', '번호', '이름', '총점', '저장 시각', '출처', 'PDF']
-    .concat(keyRows.map((k) => k.kind === 'graph' ? k.unit + ' (직접)' : k.unit))
+    .concat(keyRows.map((k) => manual_(k) ? k.unit + ' (직접)' : k.unit))
     .concat(['자동 점수(' + g.autoMax + ')', '직접 점수', '확인', '학생 키']);
   const nU = keyRows.length, cAuto = 9 + nU, cKey = cAuto + 3;
   const colA1 = (c) => { let s = ''; while (c > 0) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
@@ -258,8 +269,8 @@ function grade_(lesson) {
     const cells = st.marks.map((m, j) => {
       if (m.ok === null) {
         manualCells.push(colA1(9 + j) + r);
-        const gi = graphUnits.indexOf(m.unit);
-        return '=IFERROR(INDEX(' + sName + '!' + colA1(6 + gi) + ':' + colA1(6 + gi) + ',MATCH($' + colA1(cKey) + r + ',' + sName + '!A:A,0)),"")';
+        const gc = mHead.indexOf(m.unit) + 1;   // 직접 점수 탭에서 이 칸의 열(머리글로 찾음 — 칸이 나중에 덧붙어도 맞게)
+        return '=IFERROR(INDEX(' + sName + '!' + colA1(gc) + ':' + colA1(gc) + ',MATCH($' + colA1(cKey) + r + ',' + sName + '!A:A,0)),"")';
       }
       return (m.ok ? '○ ' : '✕ ') + (m.value || '(안 씀)');
     });
@@ -285,7 +296,7 @@ function grade_(lesson) {
   an.clear();
   an.getRange(1, 1, 1, 6).setValues([['칸', '종류', '배점', '맞은 학생', '학생 수', '정답률(%)']]).setFontWeight('bold');
   if (g.analysis.length) an.getRange(2, 1, g.analysis.length, 6).setValues(g.analysis.map((a) =>
-    [a.unit, a.kind === 'graph' ? '직접' : a.kind, a.points, a.kind === 'graph' ? '' : a.right, a.total, a.rate]));
+    [a.unit, MANUAL_KINDS.indexOf(a.kind) >= 0 ? '직접' : a.kind, a.points, MANUAL_KINDS.indexOf(a.kind) >= 0 ? '' : a.right, a.total, a.rate]));
 
   const n = g.students.length;
   return { lesson: lesson, students: n, autoMax: g.autoMax,
@@ -310,7 +321,7 @@ function teacherGallery(key, lesson, cls) {
   lesson = lessonName_(lesson);
   const ss = book_();
   const keyRows = readKey_(ss, lesson);
-  const manual = keyRows.filter((k) => k.kind === 'graph').map((k) => ({ unit: k.unit, points: k.points }));
+  const manual = keyRows.filter(manual_).map((k) => ({ unit: k.unit, points: k.points, kind: k.kind, label: k.label, rubric: k.kind === 'essay' ? k.answer : '' }));
   const latest = pickLatest_(readSubs_(ss, lesson));
   const classes = Array.from(new Set(latest.map((s) => digits_(s.cls) || '?'))).sort((a, b) => (Number(a) || 999) - (Number(b) || 999));
   const sh = scoreTab_(ss, lesson, manual.map((m) => m.unit));
@@ -319,7 +330,11 @@ function teacherGallery(key, lesson, cls) {
   const want = String(cls || classes[0] || '');
   const list = latest.filter((s) => (digits_(s.cls) || '?') === want)
     .sort((a, b) => (Number(digits_(a.no)) || 999) - (Number(digits_(b.no)) || 999) || String(a.name).localeCompare(String(b.name), 'ko'))
-    .map((s) => ({ key: studentKey_(s), grade: s.grade, cls: s.cls, no: s.no, name: s.name, pdf: s.pdf, graphs: s.graphs || {}, scores: scores[studentKey_(s)] || {} }));
+    .map((s) => {
+      const texts = {};
+      manual.forEach((m) => { if (m.kind === 'essay') texts[m.unit] = String((s.answers || {})[m.unit] == null ? '' : s.answers[m.unit]); });
+      return { key: studentKey_(s), grade: s.grade, cls: s.cls, no: s.no, name: s.name, pdf: s.pdf, graphs: s.graphs || {}, texts: texts, scores: scores[studentKey_(s)] || {} };
+    });
   return { lesson: lesson, manual: manual, classes: classes, cls: want, students: list };
 }
 function teacherImage(key, id) {
@@ -331,11 +346,11 @@ function teacherScore(key, lesson, skey, unit, score, info) {
   guard_(key);
   lesson = lessonName_(lesson);
   const ss = book_();
-  const manual = readKey_(ss, lesson).filter((k) => k.kind === 'graph').map((k) => k.unit);
+  const manual = readKey_(ss, lesson).filter(manual_).map((k) => k.unit);
   const sh = scoreTab_(ss, lesson, manual);
   const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(String);
   const c = head.indexOf(unit);
-  if (c < 0) throw new Error('그래프 점수 탭에 "' + unit + '" 칸이 없어요');
+  if (c < 0) throw new Error(sh.getName() + ' 탭에 "' + unit + '" 칸이 없어요');
   const lock = LockService.getScriptLock();
   lock.tryLock(10000);
   try {
@@ -360,11 +375,14 @@ button.main{background:#c4cce8;font-weight:700} button:disabled{opacity:.5;curso
 .none{padding:12px;border:1px dashed #b9b0d3;border-radius:6px;font-size:13px;color:#6b5b93}
 .sc{display:flex;gap:6px;margin-top:6px} .sc button{min-width:40px;padding:4px 10px}
 .sc button.on{background:#4b3b6b;color:#fff} a{color:#6b5b93}
+.essay{margin-top:4px;padding:8px 10px;border:1px solid #d8d2ee;border-radius:6px;background:#faf9fd;white-space:pre-wrap;word-break:break-word;font-size:14px;max-height:340px;overflow:auto}
+.essay.empty{color:#6b5b93;border-style:dashed} .rub{margin-top:4px;font-size:13px} .rub summary{cursor:pointer;color:#6b5b93}
+.rub div{margin-top:4px;padding:6px 8px;border-radius:6px;background:#fff8e1;white-space:pre-wrap} .wide .grid{grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
 </style></head><body>
 <h1>수행평가 채점 도우미</h1>
 <div class="bar"><label>차시 <select id="lesson"></select></label>
 <button class="main" id="gradeBtn">채점하기</button>
-<label>반 <select id="cls"></select></label> <button id="loadBtn">그래프 보기</button></div>
+<label>반 <select id="cls"></select></label> <button id="loadBtn">직접 채점 보기</button></div>
 <p id="msg"></p><div class="grid" id="grid"></div>
 <script>
 var KEY = __KEY__, $ = function (id) { return document.getElementById(id); };
@@ -394,6 +412,7 @@ function load(cls) {
   run('teacherGallery', [$('lesson').value, cls], function (d) {
     busy(false); opt($('cls'), d.classes, d.cls);
     if (!d.students.length) { say('이 반에 제출한 학생이 없어요.'); return; }
+    document.body.classList.toggle('wide', d.manual.some(function (m) { return m.kind === 'essay'; }));
     say(d.cls + '반 ' + d.students.length + '명 · 점수를 누르면 바로 시트에 저장돼요(채점 탭 총점에 바로 반영).');
     d.students.forEach(function (s) { $('grid').appendChild(card(d, s)); });
   });
@@ -404,12 +423,19 @@ function card(d, s) {
   d.manual.forEach(function (m) {
     var g = document.createElement('div'); g.className = 'g';
     var b = document.createElement('b'); b.textContent = m.unit + ' (' + m.points + '점)'; g.appendChild(b);
-    var id = s.graphs[m.unit];
-    if (id) { var im = document.createElement('img'); im.alt = s.name + ' ' + m.unit + ' 그래프'; g.appendChild(im);
+    if (m.kind === 'essay') {   // 논술 — 채점 기준(접기) + 학생 글
+      if (m.rubric) { var rb = document.createElement('details'); rb.className = 'rub'; var su = document.createElement('summary'); su.textContent = '채점 기준';
+        var rd = document.createElement('div'); rd.textContent = m.rubric; rb.appendChild(su); rb.appendChild(rd); g.appendChild(rb); }
+      var tx = document.createElement('div'), t = s.texts[m.unit] || '';
+      tx.className = 'essay' + (t ? '' : ' empty'); tx.textContent = t || '(안 씀)'; g.appendChild(tx);
+    }
+    var id = m.kind === 'essay' ? '' : s.graphs[m.unit];
+    if (m.kind === 'essay') { /* 글은 위에 */ } else if (id) { var im = document.createElement('img'); im.alt = s.name + ' ' + m.unit + ' 그래프'; g.appendChild(im);
       run('teacherImage', [id], function (url) { im.src = url; }); }
     else { var n = document.createElement('div'); n.className = 'none'; n.innerHTML = '그래프 사본 없음' + (s.pdf ? ' · <a target="_blank" href="' + s.pdf + '">PDF 열기</a>' : ''); g.appendChild(n); }
     var sc = document.createElement('div'); sc.className = 'sc';
-    for (var p = 0; p <= m.points; p++) (function (p) {
+    var step = m.kind === 'essay' ? 0.5 : 1;   // 논술은 0.5점 단위
+    for (var p = 0; p <= m.points + 1e-9; p = Math.round((p + step) * 10) / 10) (function (p) {
       var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = p + '점';
       if (String(s.scores[m.unit]) === String(p)) bt.className = 'on';
       bt.onclick = function () {

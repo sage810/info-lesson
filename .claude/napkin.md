@@ -30,6 +30,8 @@
    메뉴 탭·창 단추·PDF 버튼은 인라인 style(`tabChip()` 등)·`!important` 규칙이라 theme.css 선택자에도 `!important`. 유리·오로라는 `--msi-glass-*: none`·`aurora-*-aNN: rgba(0,0,0,0)` 로 끔. SVG data URI 배경(말풍선 동전)은 PDF 에도 나옴(sticker, 2026-10-21).
 
 ## Shell & Command Reliability
+0. **[2026-11-04] `shared/partials/*.js` 주석·글에 `</script>` 를 쓰면 빌드가 그 파일을 `<script>` 안에 넣을 때 거기서 끊겨 「Invalid or unexpected token」**
+   Do instead: 주석에는 「script 닫는 태그」처럼 말로 쓴다. 공용 파일을 고치면 쓰는 차시마다 `window.MSI_SUBMIT` 이 살아 있는지(pageerror 0) 본다.
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**
    Do instead: 개편 전 원본도 똑같이 뜨는 기존 경고 — 무시(`npm run check` 도 걸러냄).
 2. **[2026-09-24] 헤드리스 브라우저로 PDF 버튼을 누르면 받은 파일 이름이 `download` 로 나옴**
