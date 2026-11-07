@@ -11,7 +11,7 @@
  *   설정 : 보정 값(n·x·y — 채점 도우미에서 바꿈) · 칸·배점·정답·채점 기준(이 PC 의 npm run exam-key 가 보냄)
  *
  * 채점: 고르기 칸(kind one)은 제출할 때 자동으로, 글자 칸(kind essay)·결과 화면 캡처(kind graph)는 채점 도우미에서 직접. 배점 0 칸은 채점 열 없음.
- * 엔트리 과제 제출 점수는 이 시트에 없다 — 선생님이 엔트리 학급에서 확인해 따로 기록한다.
+ * 5번 엔트리 과제 제출(kind check)은 학생 답이 없다 — 선생님이 엔트리 학급에서 확인하고 채점 도우미에서 누른다.
  *
  *   GET  ?action=ping 또는 주소만        → 살아 있는지 확인
  *   GET  ?action=teacher&key=…           → 채점 도우미(반 고르기 → 학생 글·캡처 보며 점수 누르기 · 보정 값 적용)
@@ -193,8 +193,8 @@ function upsertGrade_(ss, s, answers) {
   } else {
     const old = String(sh.getRange(r, col('저장 시각')).getValue());
     if ((Date.parse(s.savedAt) || 0) < (Date.parse(old) || 0)) return;   // 더 예전 기록이면 그대로(같은 PDF 를 또 보낸 경우 등)
-    // 직접 채점한 점수가 있을 때만 확인 표시(자동 점수는 항상 차 있고 저절로 다시 매겨진다)
-    const scored = units.filter((u) => !u.auto).some((u) => col(u.unit) > 0 && sh.getRange(r, col(u.unit)).getValue() !== '');
+    // 직접 채점한 점수가 있을 때만 확인 표시(자동 점수는 항상 차 있고 저절로 다시 매겨진다, 5번은 학생 답과 상관없어 뺀다)
+    const scored = units.filter((u) => !u.auto && u.kind !== 'check').some((u) => col(u.unit) > 0 && sh.getRange(r, col(u.unit)).getValue() !== '');
     if (scored && s.savedAt !== old) flags.push('다시 냄 — 점수 확인');
     sh.getRange(r, col('저장 시각'), 1, 2).setValues([[s.savedAt, s.source]]);
     sh.getRange(r, col('확인')).setValue(flags.join(', '));
@@ -419,7 +419,7 @@ function load(cls, pre) {
     busy(false); opt($('cls'), d.classes, d.cls); $('sheet').href = d.url;
     if (!d.units.length) { say((pre || '') + '칸·배점이 아직 없어요. 이 PC 에서 npm run exam-key -- ai/exam-entry --send 를 먼저 해 주세요.'); return; }
     if (!d.students.length) { say((pre || '') + (d.cls ? d.cls + '반에 ' : '') + '제출한 학생이 없어요.'); return; }
-    say((pre || '') + d.cls + '반 ' + d.students.length + '명 · 결과 화면·글자 칸은 점수를 누르면 바로 시트에 저장돼요(누른 점수를 한 번 더 누르면 지워져요). 고르기 칸은 자동으로 채점돼요.');
+    say((pre || '') + d.cls + '반 ' + d.students.length + '명 · 직접 채점 칸은 점수를 누르면 바로 시트에 저장돼요(누른 점수를 한 번 더 누르면 지워져요). 고르기 칸은 자동으로 채점돼요.');
     d.students.forEach(function (s) { $('grid').appendChild(card(d, s)); });
   });
 }
@@ -436,7 +436,7 @@ function card(d, s) {
   function showSum(t, adj) { sum.textContent = '총점 ' + (t === '' ? 0 : t) + '점 · 보정 총점 ' + (adj === '' ? '-' : adj) + '점'; }
   d.units.forEach(function (u) {
     var g = document.createElement('div'); g.className = 'g';
-    var b = document.createElement('b'); b.textContent = (/^[0-9]+$/.test(u.unit) ? u.unit + '번' : u.unit) + ' (' + u.points + '점' + (u.auto ? ', 자동' : '') + ')'; g.appendChild(b);
+    var b = document.createElement('b'); b.textContent = (/^[0-9]+$/.test(u.unit) ? u.unit + '번' : u.unit) + (u.kind === 'check' && u.label ? ' ' + u.label : '') + ' (' + u.points + '점' + (u.auto ? ', 자동' : '') + ')'; g.appendChild(b);
     var t = (s.texts || {})[u.unit] || '';
     if (u.auto) {
       var au = document.createElement('div'); au.className = 'auto';
@@ -446,7 +446,9 @@ function card(d, s) {
     }
     if (u.rubric) { var rb = document.createElement('details'); rb.className = 'rub'; var su = document.createElement('summary'); su.textContent = '채점 기준';
       var rd = document.createElement('div'); rd.textContent = u.rubric; rb.appendChild(su); rb.appendChild(rd); g.appendChild(rb); }
-    if (u.kind !== 'graph') {   // 결과 화면은 카드 맨 위 캡처를 보고 채점한다
+    if (u.kind === 'check') {   // 5번은 학생 답이 없다
+      var ck = document.createElement('div'); ck.className = 'auto'; ck.textContent = '학생 답이 없는 칸이에요. 엔트리 학급에서 확인하고 점수를 눌러 주세요.'; g.appendChild(ck);
+    } else if (u.kind !== 'graph') {   // 결과 화면은 카드 맨 위 캡처를 보고 채점한다
       var tx = document.createElement('div');
       tx.className = 'essay' + (t ? '' : ' empty'); tx.textContent = t || '(안 씀)'; g.appendChild(tx);
     }

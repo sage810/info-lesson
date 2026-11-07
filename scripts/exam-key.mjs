@@ -9,6 +9,7 @@
 // 정답 표는 시험지에 answers.json 의 답을 실제로 채운 뒤, 학생 제출과 똑같은 방법(window.MSI_SUBMIT)으로 읽어 만든다 → 모양이 어긋나지 않는다.
 // answers.json 에서 쓰는 것: fill · click(정답지와 같음) · _채점_허용답 {"<칸 aria-label>": [...]} · _채점_배점 {"기본": 1, "<칸>": 점수}
 //   · _채점_기준 {"<논술 칸>": "채점 기준 글"} — 논술(essay)·그래프는 선생님이 직접 채점, 시트의 "정답" 칸에 이 기준이 들어간다(채점 도우미에 보임)
+//   · _채점_추가칸 [{"unit":"5","kind":"check","label":"…"}] — 시험지에 답 칸이 없는 칸. 선생님이 직접 확인, 배점은 _채점_배점(check 를 아는 Apps Script 에서만: apps-script-ai-entry)
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -25,7 +26,7 @@ const ans = JSON.parse(readText(ansPath));
 const accept = ans._채점_허용답 || {};
 const points = ans._채점_배점 || { 기본: 1 };
 const rubric = ans._채점_기준 || {};
-const MANUAL = ['graph', 'essay'];
+const MANUAL = ['graph', 'essay', 'check'];
 
 // 제출 훅 없이(=아무 데도 보내지 않게) 학생용 화면을 만들어 정답을 채운다 — 정답지(teacher.mjs)와 같은 방식
 const { html } = renderLesson(lesson, { variant: 'embed', hook: false });
@@ -53,15 +54,18 @@ try {
     accept: accept[u.label] || [],
     points: points[u.unit] != null ? points[u.unit] : points.기본 != null ? points.기본 : 1,
   }));
+  for (const x of ans._채점_추가칸 || []) {
+    rows.push({ unit: String(x.unit), kind: x.kind, label: x.label || '', answer: String(rubric[x.unit] || ''), accept: [], points: points[x.unit] != null ? points[x.unit] : points.기본 != null ? points.기본 : 1 });
+  }
 } finally {
   await browser.close();
   fs.rmSync(tmp, { force: true });
 }
 
-const kindName = { one: '하나 고르기', set: '여러 개', order: '순서', text: '글자', graph: '그래프(직접)', essay: '논술(직접)' };
+const kindName = { one: '하나 고르기', set: '여러 개', order: '순서', text: '글자', graph: '그래프(직접)', essay: '논술(직접)', check: '확인(직접)' };
 console.log(`정답 표 — ${lesson.id} (칸 ${rows.length}개)`);
 for (const r of rows) {
-  console.log(`  ${r.unit.padEnd(7)} ${kindName[r.kind].padEnd(8)} ${String(r.points).padStart(2)}점  ${r.kind === 'graph' && !r.answer ? '—' : MANUAL.includes(r.kind) ? (r.answer ? '(채점 기준 ' + r.answer.length + '자)' : '(채점 기준 없음)') : r.answer}${r.accept.length ? '  (허용: ' + r.accept.join(' · ') + ')' : ''}`);
+  console.log(`  ${r.unit.padEnd(7)} ${kindName[r.kind].padEnd(8)} ${String(r.points).padStart(2)}점  ${(r.kind === 'graph' || r.kind === 'check') && !r.answer ? '—' : MANUAL.includes(r.kind) ? (r.answer ? '(채점 기준 ' + r.answer.length + '자)' : '(채점 기준 없음)') : r.answer}${r.accept.length ? '  (허용: ' + r.accept.join(' · ') + ')' : ''}`);
 }
 const total = rows.reduce((t, r) => t + Number(r.points), 0);
 const auto = rows.filter((r) => !MANUAL.includes(r.kind)).reduce((t, r) => t + Number(r.points), 0);
