@@ -30,6 +30,10 @@
    메뉴 탭·창 단추·PDF 버튼은 인라인 style(`tabChip()` 등)·`!important` 규칙이라 theme.css 선택자에도 `!important`. 유리·오로라는 `--msi-glass-*: none`·`aurora-*-aNN: rgba(0,0,0,0)` 로 끔. SVG data URI 배경(말풍선 동전)은 PDF 에도 나옴(sticker, 2026-10-21).
 
 ## Shell & Command Reliability
+0. **[2026-11-07] Bash 에 `gh` 가 없음(command not found) · 비공개 저장소는 GitHub API 가 404**
+   Do instead: 공개 저장소는 Node `fetch` 로 api.github.com 을 읽고, 비공개는 `git clone --no-checkout` 뒤 `git show HEAD:<파일>`(git 자격 증명은 있음).
+0. **[2026-11-07] 한글·따옴표가 많은 긴 스크립트를 Bash heredoc 으로 넘기면 「unexpected EOF while looking for matching」으로 통째로 실패(인용 heredoc 이어도)**
+   Do instead: Write 도구로 scratchpad 에 .mjs 로 저장한 뒤 `node <파일> "$PWD"` 로 돌린다.
 0. **[2026-11-04] `shared/partials/*.js` 주석·글에 `</script>` 를 쓰면 빌드가 그 파일을 `<script>` 안에 넣을 때 거기서 끊겨 「Invalid or unexpected token」**
    Do instead: 주석에는 「script 닫는 태그」처럼 말로 쓴다. 공용 파일을 고치면 쓰는 차시마다 `window.MSI_SUBMIT` 이 살아 있는지(pageerror 0) 본다.
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**

@@ -1,6 +1,6 @@
 /* 수행평가(시험지) 공용 동작 — 고르기 · 순서 · 그래프 칸 · 논술 칸 · 답 보관 · 붙여넣기 막기 · 나가기 경고 · 채점용 기록 · PDF 저장.
    채점·맞음 표시는 하지 않는다. 이 스크립트에는 답이 들어 있지 않다.
-   규칙·구조 약속: docs/rules/exam.md §3. 쓰는 시험지: data-analysis/09 · ai/exam-a · ai/exam-b (2026-11-04 09 안의 코드를 옮겨 옴)
+   규칙·구조 약속: docs/rules/exam.md §3. 쓰는 시험지: data-analysis/09 · ai/exam-a · ai/exam-b · ai/exam-entry (2026-11-04 09 안의 코드를 옮겨 옴)
 
    시험지는 이 파일 앞의 작은 script 에 설정을 둔다(이 주석에 script 닫는 태그를 쓰면 페이지에 넣을 때 스크립트가 끊긴다):
      window.MSI_EXAM = { lesson: 'ai/exam-a', key: 'msi-exam:ai/exam-a', fileTitle: '인공지능 수행평가 A형' };
@@ -10,6 +10,7 @@
      fileTitle PDF 파일 이름 끝(「학년반번호 이름 <fileTitle>.pdf」)
      keepMin   보관 시간(분, 기본 45)
      pdfFont   PDF 글 상자 글꼴(기본 Maplestory)
+     pzWord    붙여넣기 칸(.pz)이 받는 것의 이름(기본 그래프) — 안내·알림 글에 쓴다(ai/exam-entry 는 결과 화면)
 
    칸 종류(kind) — 채점하는 칸마다 data-unit 하나
      one   [data-unit] 안 button[data-group][data-v]          set  위 + 버튼에 data-multi
@@ -25,7 +26,9 @@
   var root = document.getElementById('sheetPrintArea');
   var $ = function (sel, el) { return (el || root).querySelector(sel); };
   var $$ = function (sel, el) { return Array.prototype.slice.call((el || root).querySelectorAll(sel)); };
-  var EMPTY_PZ = '<span>이 칸을 클릭한 뒤 <b>Ctrl + V</b>로 캡처한 그래프를 붙여넣어요<br><small>그림 파일을 끌어다 놓거나 아래 ‘파일로 넣기’를 눌러도 돼요</small></span>';
+  var PZ = CFG.pzWord || '그래프';
+  var pzJong = (PZ.charCodeAt(PZ.length - 1) - 0xAC00) % 28 > 0;   // 끝 글자 받침 → 을/를 · 은/는
+  var EMPTY_PZ = '<span>이 칸을 클릭한 뒤 <b>Ctrl + V</b>로 캡처한 ' + PZ + (pzJong ? '을' : '를') + ' 붙여넣어요<br><small>그림 파일을 끌어다 놓거나 아래 ‘파일로 넣기’를 눌러도 돼요</small></span>';
   var restoring = false, savedSinceChange = false, warnedBig = false;
 
   var toastEl = document.getElementById('toast'), toastT;
@@ -81,7 +84,7 @@
   }
   function pzFill(z, url, keep) {
     z.innerHTML = '';
-    var im = document.createElement('img'); im.alt = '붙여넣은 그래프'; im.src = url; z.appendChild(im);
+    var im = document.createElement('img'); im.alt = '붙여넣은 ' + PZ; im.src = url; z.appendChild(im);
     z.classList.add('is-filled'); z.classList.remove('is-over'); z._img = url; z._keep = keep || null;
     if (!keep) shrink(url, function (k) { if (z._img === url) { z._keep = k; store(); } });
   }
@@ -120,7 +123,7 @@
     e.preventDefault();
     var items = (e.clipboardData && e.clipboardData.items) || [];
     for (var i = 0; i < items.length; i++) if (items[i].type.indexOf('image/') === 0) { readFile(items[i].getAsFile(), z); return; }
-    toast('그래프 칸에는 캡처한 그림만 붙여넣을 수 있어요.');
+    toast(PZ + ' 칸에는 캡처한 그림만 붙여넣을 수 있어요.');
   }, true);
   document.addEventListener('beforeinput', function (e) {
     if (/^insertFrom(Paste|Drop|PasteAsQuotation)$/.test(e.inputType || '') && isAnswerField(e.target)) { e.preventDefault(); toast('답 칸에는 붙여넣기를 할 수 없어요. 직접 입력해 주세요.'); }
@@ -165,7 +168,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(collect(true))); }
     catch (e) {
       try { localStorage.setItem(KEY, JSON.stringify(collect(false))); } catch (e2) { return; }
-      if (!warnedBig) { warnedBig = true; toast('그래프는 용량이 커서 자동 보관하지 못했어요. 저장하기 전에 창을 닫지 마세요.'); }
+      if (!warnedBig) { warnedBig = true; toast(PZ + (pzJong ? '은' : '는') + ' 용량이 커서 자동 보관하지 못했어요. 저장하기 전에 창을 닫지 마세요.'); }
     }
   }
   function forget() { startedAt = 0; try { localStorage.removeItem(KEY); } catch (e) {} }
@@ -270,7 +273,7 @@
   };
 
   // ── PDF 저장 ──
-  function unitLabel(u) { var k = u.getAttribute('data-unit'); return /^\d+$/.test(k) ? k + '번' : k + (u.classList.contains('pz') ? ' 그래프' : ''); }
+  function unitLabel(u) { var k = u.getAttribute('data-unit'); return /^\d+$/.test(k) ? k + '번' : k + (u.classList.contains('pz') && k !== PZ ? ' ' + PZ : ''); }
   document.getElementById('pdfBtn').addEventListener('click', function () {
     var name = info('이름');
     if (!name) { window.alert('이름을 적어 주세요.'); $('textarea[aria-label="이름"]').focus(); return; }
@@ -330,7 +333,7 @@
         + 'background:#fff;font-family:' + (CFG.pdfFont || "'Maplestory'") + ",'Apple SD Gothic Neo','Malgun Gothic',sans-serif;");
       ta.parentNode.replaceChild(box, ta); boxes.push(box);
     });
-    $$('.pz', clone).forEach(function (z) { if (!z.querySelector('img')) z.innerHTML = '<span>(붙여넣은 그래프 없음)</span>'; z.style.minHeight = '70px'; });
+    $$('.pz', clone).forEach(function (z) { if (!z.querySelector('img')) z.innerHTML = '<span>(붙여넣은 ' + PZ + ' 없음)</span>'; z.style.minHeight = '70px'; });
     $$('[id]', clone).forEach(function (el) { el.removeAttribute('id'); });
     clone.removeAttribute('id');
     clone.classList.add('msi-pdf-clone');
@@ -340,7 +343,8 @@
     // 쪽 나눔은 문항·카드 사이에서 — 한 문항이 두 쪽으로 잘리지 않게.
     // 한 쪽보다 긴 논술 답은 글 줄 사이에서도 나눌 수 있게 줄 경계를 후보로 더한다(글자가 반으로 잘리지 않게, 2026-11-04)
     var top0 = clone.getBoundingClientRect().top;
-    var cuts = $$('.q, .subq, .card, .part-head, .row-cut, .wg-row', clone).map(function (el) { return el.getBoundingClientRect().top - top0; });
+    // .no-cut 문항 위에서는 나누지 않는다 — 카드 머리 바로 아래 첫 문항에 붙이면 머리가 앞 쪽 끝에 홀로 남지 않는다(ai/exam-entry)
+    var cuts = $$('.q:not(.no-cut), .subq, .card, .part-head, .row-cut, .wg-row', clone).map(function (el) { return el.getBoundingClientRect().top - top0; });
     boxes.forEach(function (b) {
       var cs = getComputedStyle(b), lh = parseFloat(cs.lineHeight), r = b.getBoundingClientRect();
       if (!(lh > 0) || r.height < lh * 3) return;

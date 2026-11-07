@@ -49,7 +49,7 @@ try {
   const got = await page.evaluate(() => window.MSI_SUBMIT.collect().then((d) => ({ units: window.MSI_SUBMIT.describe(), answers: d.record.answers })));
   rows = got.units.map((u) => ({
     unit: u.unit, kind: u.kind, label: u.label,
-    answer: u.kind === 'graph' ? '' : u.kind === 'essay' ? String(rubric[u.unit] || '') : got.answers[u.unit] || '',
+    answer: MANUAL.includes(u.kind) ? String(rubric[u.unit] || '') : got.answers[u.unit] || '',
     accept: accept[u.label] || [],
     points: points[u.unit] != null ? points[u.unit] : points.기본 != null ? points.기본 : 1,
   }));
@@ -61,7 +61,7 @@ try {
 const kindName = { one: '하나 고르기', set: '여러 개', order: '순서', text: '글자', graph: '그래프(직접)', essay: '논술(직접)' };
 console.log(`정답 표 — ${lesson.id} (칸 ${rows.length}개)`);
 for (const r of rows) {
-  console.log(`  ${r.unit.padEnd(7)} ${kindName[r.kind].padEnd(8)} ${String(r.points).padStart(2)}점  ${r.kind === 'graph' ? '—' : r.kind === 'essay' ? (r.answer ? '(채점 기준 ' + r.answer.length + '자)' : '(채점 기준 없음)') : r.answer}${r.accept.length ? '  (허용: ' + r.accept.join(' · ') + ')' : ''}`);
+  console.log(`  ${r.unit.padEnd(7)} ${kindName[r.kind].padEnd(8)} ${String(r.points).padStart(2)}점  ${r.kind === 'graph' && !r.answer ? '—' : MANUAL.includes(r.kind) ? (r.answer ? '(채점 기준 ' + r.answer.length + '자)' : '(채점 기준 없음)') : r.answer}${r.accept.length ? '  (허용: ' + r.accept.join(' · ') + ')' : ''}`);
 }
 const total = rows.reduce((t, r) => t + Number(r.points), 0);
 const auto = rows.filter((r) => !MANUAL.includes(r.kind)).reduce((t, r) => t + Number(r.points), 0);
