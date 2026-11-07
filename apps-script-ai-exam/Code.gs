@@ -30,6 +30,11 @@ const TAIL = ['저장 시각', '출처', 'PDF', '확인', '학생 키'];       /
 // 칸 이름 「1-1」「3-1」은 시트가 날짜(1월 1일)로 바꿔 버린다 → 머리글·칸 열은 글자 서식(@)으로 쓴다(2026-11-04 리허설에서 발견)
 const SET_KEY_ROW = 7;                                             // 설정 탭: 6행 머리글, 7행부터 칸·배점·기준
 const MAX_PDF_BYTES = 20 * 1024 * 1024;
+// 잠금(차례): 시트에 쓰는 동안 한 사람씩. 못 받으면 쓰지 않는다
+const LOCK_WAIT_SUBMIT = 60000;   // 제출 — 한 명 저장에 몇 초 걸려 수업 끝에 몰리면 오래 기다려야 한다
+const LOCK_WAIT = 20000;          // 선생님 쪽(점수·보정 등)
+const BUSY = '사람이 몰려 저장하지 못했어요. 잠시 뒤 다시 해 주세요.';
+const VERSION = '2026-11-07-lock';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
 
 function tabGrade_(f) { return '채점 ' + f + '형'; }
 function formOf_(lesson) { return FORMS[String(lesson || '')] || ''; }
@@ -37,7 +42,7 @@ function formOf_(lesson) { return FORMS[String(lesson || '')] || ''; }
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'teacher') return teacherPage_(p.key);
-  return json_({ ok: true, service: 'ai-exam', time: new Date().toISOString() });
+  return json_({ ok: true, service: 'ai-exam', version: VERSION, time: new Date().toISOString() });
 }
 
 function doPost(e) {
@@ -68,7 +73,10 @@ function submit_(b) {
     savedAt: b.savedAt ? String(b.savedAt).slice(0, 40) : new Date().toISOString(), source: b.source === 'pdf' ? 'PDF' : '웹', pdf: file.getUrl() };
 
   const lock = LockService.getScriptLock();
-  lock.tryLock(20000);
+  if (!lock.tryLock(LOCK_WAIT_SUBMIT)) {   // 실패로 돌려주면 학생 화면이 자동으로 다시 보낸다 — 파일이 겹치지 않게 휴지통으로
+    try { file.setTrashed(true); } catch (err) { /* 파일 정리가 실패해도 제출 실패로 알리는 것이 먼저 */ }
+    return json_({ ok: false, error: BUSY });
+  }
   try {
     const ss = book_();
     const sh = ss.getSheetByName(TAB_SUB);
@@ -100,7 +108,7 @@ function setKey_(b) {
   const rows = (b.rows || []).map((r) => [form, String(r.unit), String(r.kind), Number(r.points) || 0, String(r.label || ''), String(r.answer == null ? '' : r.answer)]);
   if (!rows.length) return json_({ ok: false, error: '칸이 비어 있어요' });
   const lock = LockService.getScriptLock();
-  lock.tryLock(20000);
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
     const ss = book_(), sh = ss.getSheetByName(TAB_SET), last = sh.getLastRow();
     const keep = last >= SET_KEY_ROW ? sh.getRange(SET_KEY_ROW, 1, last - SET_KEY_ROW + 1, 6).getValues().filter((r) => r[0] && r[0] !== form) : [];
@@ -240,8 +248,7 @@ function teacherInit(key) {
   guard_(key);
   const ss = book_();
   const lock = LockService.getScriptLock();   // 결과 탭이 없던 시트(예전 배포)도 도우미를 열면 생긴다
-  lock.tryLock(20000);
-  try { rebuildResult_(ss); } finally { lock.releaseLock(); }
+  if (lock.tryLock(LOCK_WAIT)) { try { rebuildResult_(ss); } finally { lock.releaseLock(); } }
   return { forms: ['A', 'B'], adjust: readAdjust_(ss), url: ss.getUrl() };
 }
 
@@ -284,7 +291,7 @@ function teacherData(key, form, cls) {
 function teacherScore(key, form, skey, unit, score) {
   guard_(key);
   const lock = LockService.getScriptLock();
-  lock.tryLock(20000);
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
     const ss = book_(), sh = gradeTab_(ss, form), head = headOf_(sh);
     const r = rowOfKey_(sh, head, skey), c = head.indexOf(unit) + 1;
@@ -304,7 +311,7 @@ function teacherAdjust(key, n, x, y) {
   const a = { n: toNum(n, 0) || 0, x: toNum(x, ''), y: toNum(y, '') };
   if ((a.x !== '' && isNaN(a.x)) || (a.y !== '' && isNaN(a.y)) || isNaN(a.n)) throw new Error('숫자로 적어 주세요');
   const lock = LockService.getScriptLock();
-  lock.tryLock(20000);
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
     const ss = book_();
     ss.getSheetByName(TAB_SET).getRange(2, 2, 3, 1).setValues([[a.n], [a.x], [a.y]]);

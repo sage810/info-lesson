@@ -29,12 +29,17 @@ const SHEET_NAME = '정보수업 제출 기록';
 const HEADER = ['제출 시각', '차시', '활동지 제목', '학년', '반', '번호', '이름', '파일 이름', 'PDF 링크', '빈칸 답(JSON)',
   '저장 시각', '출처', '그래프(JSON)'];   // 뒤 3칸은 수행평가 채점용(2026-10-04) — 예전 시트에는 머리글만 덧붙인다
 const MAX_GRAPH_BYTES = 2 * 1024 * 1024;   // 그래프 작은 사본 한 장 한도
+// 잠금(차례): 시트에 쓰는 동안 한 사람씩. 못 받으면 쓰지 않는다
+const LOCK_WAIT_SUBMIT = 60000;   // 제출 — 실패로 돌려주면 학생 화면이 자동으로 다시 보낸다
+const LOCK_WAIT = 20000;          // 선생님 쪽(점수·보정 등)
+const BUSY = '사람이 몰려 저장하지 못했어요. 잠시 뒤 다시 해 주세요.';
+const VERSION = '2026-11-07-lock';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
 
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'neis') return neis_(p);
   if (p.action === 'teacher') return teacherPage_(p.key);
-  return json_({ ok: true, service: 'msi-api', time: new Date().toISOString() });
+  return json_({ ok: true, service: 'msi-api', version: VERSION, time: new Date().toISOString() });
 }
 
 function doPost(e) {
@@ -108,7 +113,10 @@ function submit_(b) {
   }
 
   const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
+  if (!lock.tryLock(LOCK_WAIT_SUBMIT)) {   // 다시 보낼 때 파일이 겹치지 않게 휴지통으로
+    try { file.setTrashed(true); Object.keys(graphIds).forEach((u) => DriveApp.getFileById(graphIds[u]).setTrashed(true)); } catch (err) { /* 파일 정리가 실패해도 제출 실패로 알리는 것이 먼저 */ }
+    return json_({ ok: false, error: BUSY });
+  }
   try {
     sheet_(root).appendRow([
       new Date(), lesson, clean_(b.title || '', 80),
@@ -400,7 +408,7 @@ function teacherScore(key, lesson, skey, unit, score, info) {
   const c = head.indexOf(unit);
   if (c < 0) throw new Error(sh.getName() + ' 탭에 "' + unit + '" 칸이 없어요');
   const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
     const keys = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().map((r) => String(r[0])) : [];
     let r = keys.indexOf(String(skey)) + 2;
@@ -425,7 +433,7 @@ function teacherAdjust(key, n, x, y) {
   const a = { n: toNum(n, 0) || 0, x: toNum(x, ''), y: toNum(y, '') };
   if ((a.x !== '' && isNaN(a.x)) || (a.y !== '' && isNaN(a.y)) || isNaN(a.n)) throw new Error('숫자로 적어 주세요');
   const lock = LockService.getScriptLock();
-  lock.tryLock(20000);
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
     PropertiesService.getScriptProperties().setProperty('ADJUST', JSON.stringify(a));
     const ss = book_();
