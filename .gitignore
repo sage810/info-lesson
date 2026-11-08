@@ -42,16 +42,13 @@ lessons/data-analysis/09/*.docx
 lessons/data-analysis/09/*.pdf
 lessons/data-analysis/10/answers.json
 
-# 인공지능 논술형 수행평가 A형·B형(2026-11-04) — 시험 날 폴더 줄(exam-a/ · exam-b/)만 지운다. 정답·채점 기준(answers.json·rubric.md)은 계속 안 올림.
-lessons/ai/exam-a/
+# 인공지능 논술형 수행평가 A형·B형(2026-11-04) — 2026-11-08 공개(폴더 줄 지움). 정답·채점 기준(answers.json·rubric.md)은 계속 안 올림.
 lessons/ai/exam-a/answers.json
 lessons/ai/exam-a/rubric.md
-lessons/ai/exam-b/
 lessons/ai/exam-b/answers.json
 lessons/ai/exam-b/rubric.md
 
-# 인공지능 엔트리 수행평가(2026-11-07) — 시험 날 폴더 줄(exam-entry/)만 지운다. 정답·채점 기준은 계속 안 올림.
-lessons/ai/exam-entry/
+# 인공지능 엔트리 수행평가(2026-11-07) — 2026-11-08 공개(폴더 줄 지움). 정답·채점 기준은 계속 안 올림.
 lessons/ai/exam-entry/answers.json
 lessons/ai/exam-entry/rubric.md
 

@@ -1,0 +1,11 @@
+{
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "exam-entry",
+  "title": "인공지능 수행평가 (엔트리)",
+  "shell": "standalone",
+  "status": "live",
+  "submit": true,
+  "apiUrl": "https://script.google.com/macros/s/AKfycbxp_h38adIiGt9xX50S1LvcpDXAySTay5gQOXzJzkeDW4fSDSF4TXeFHdfEWKHs2egZ/exec",
+  "teacherKeyFile": "apps-script-ai-entry/teacher.local.json"
+}

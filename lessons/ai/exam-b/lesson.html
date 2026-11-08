@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인공지능 수행평가 B형</title>
+<!-- 수행평가(논술형 시험지). 원자료: 인공지능_수행평가_B형.docx(2026-11-04, 선생님이 A형·B형으로 나눔) · 기획: spec.md
+     이 파일에는 어떤 답도, 채점 기준도 넣지 않는다(채점 표시 없음). 동작: shared/partials/exam.js -->
+<style>
+@font-face{font-family:'GangwonEdu';font-style:normal;font-weight:400;font-display:swap;src:url(msi-asset:shared/fonts/GangwonEdu-400.woff2) format('woff2');}
+@font-face{font-family:'CookieRun';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/CookieRun-700.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:300;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-300.woff2) format('woff2');}
+@font-face{font-family:'Maplestory';font-style:normal;font-weight:700;font-display:swap;src:url(msi-asset:shared/fonts/Maplestory-700.woff2) format('woff2');}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F;src:url(msi-asset:shared/fonts/Silkscreen-400.woff2) format('woff2');}
+
+/* 차분한 스티커 톤 — design-sticker/tokens.json 값(크림 종이 + 점무늬 · 갈색 잉크 · 아래로 번지는 그림자 · 둥근 모서리 22/18/14/12/8)에
+   카드 머리만 스티커 파스텔을 한 단계 옅게. 캐릭터 그림·움직임 없음, 이모지 최소. 고른 답은 잉크 반전으로만(맞음/틀림 색 없음).
+   글자는 모두 16px 이상(design.md §2.2). 이 시험지만 쓰는 옅은 색은 여기 :root 한 곳에만 둔다. */
+:root{
+  --ink:#4A3B32; --paper:#FFFDF8; --page:#FAF2E1; --grid:#E8D9C0;            /* 스티커 토큰 그대로 */
+  --muted:#857062; --muted-2:#6B5B51; --line:#C9ADA1; --field:#FFFCF6;
+  --focus:#E56A8E;                                                            /* 스티커 포커스 고리(pink-edge) */
+  --head-topic:#FBE3E8; --head-info:#FBF3D2; --head-q1:#E8E3F4; --head-q2:#DDEFE7; --head-q3:#DEEBF3;   /* 스티커 카드 머리를 옅게 */
+  --wg-line:#E2BFAE; --data-bg:#FBF6EC; --tint:#F6EEDF; --tbl-line:#E3D5BD; --cond-bg:#FFF9E6; --ok-bg:#F3FAF6; --fail-bg:#FDF0F2;
+  --sh-window:0 14px 34px rgba(74,59,50,.14); --sh-card:0 8px 20px rgba(74,59,50,.10); --sh-btn:0 4px 10px rgba(74,59,50,.16); --sh-chip:0 3px 8px rgba(74,59,50,.12);
+  --r:'CookieRun','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;font-weight:300;font-size:17px;line-height:1.75;
+  background-color:var(--page);background-image:radial-gradient(var(--grid) 1.4px,transparent 1.6px);background-size:22px 22px}
+.page{max-width:920px;margin:auto;padding:28px 20px 70px}
+.window{background:var(--paper);border:3px solid var(--ink);border-radius:22px;box-shadow:var(--sh-window);overflow:hidden}
+.titlebar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-bottom:3px solid var(--ink);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 10px,rgba(255,255,255,0) 10px 20px) var(--head-topic);font-family:var(--r);font-weight:700;font-size:18px}
+.win-btns{display:flex;gap:7px}
+.win-btns i{width:18px;height:18px;border:2.5px solid var(--ink);border-radius:50%;background:#FBEFB4}
+.win-btns i:nth-child(2){background:#BFE6D6} .win-btns i:nth-child(3){background:#F8CFC4}
+.content{padding:22px 22px 26px;display:grid;gap:20px}
+
+.card{border:2.5px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:var(--sh-card)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 16px;border-bottom:2.5px solid var(--ink);font-family:'Silkscreen',monospace;font-size:16px;letter-spacing:.04em}
+.bar .r{opacity:.75}
+.topic .bar{background:var(--head-topic)}
+.topic .body{padding:18px 20px 20px;background:var(--field);text-align:center;display:grid;gap:8px;justify-items:center}
+.unit-pill{font-family:var(--r);font-weight:700;font-size:16px;padding:2px 14px;border:2px solid var(--ink);border-radius:999px;background:#FBEFB4}
+.topic h1{margin:0;font-family:'GangwonEdu',var(--r);font-weight:400;font-size:32px;line-height:1.3}
+.info .bar{background:var(--head-info)}
+.info .body{padding:14px 16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.info label{display:grid;gap:4px;font-family:var(--r);font-weight:700;font-size:16px}
+
+.part.p1 .bar{background:var(--head-q1)} .part.p2 .bar{background:var(--head-q2)} .part.p3 .bar{background:var(--head-q3)}
+.part-head{padding:16px 22px 4px}
+.part-head p{margin:0;font-family:var(--r);font-weight:700;font-size:18px;word-break:keep-all}
+.qs{padding:0 22px 8px}
+
+/* 제시 자료 — 따뜻한 옅은 상자 + 표 */
+.data{margin:12px 22px 4px;padding:14px 16px 16px;border:2px solid var(--ink);border-radius:14px;background:var(--data-bg);display:grid;gap:10px}
+.data-k{margin:0;font-family:var(--r);font-weight:700;font-size:17px}
+.tbl-scroll{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:16px;line-height:1.6;background:#fff}
+.tbl th,.tbl td{border:1.5px solid var(--tbl-line);padding:8px 10px;vertical-align:top;text-align:left;word-break:keep-all}
+.tbl thead th{background:var(--tint);font-family:var(--r);font-weight:700;text-align:center}
+.tbl tbody th{background:var(--tint);font-family:var(--r);font-weight:700;white-space:nowrap;text-align:center;vertical-align:middle}
+.tbl .c{text-align:center;white-space:nowrap}
+.tbl-even{table-layout:fixed}   /* (가)·(나) 두 열을 같은 너비로(선생님 피드백 2026-11-04) */
+.tbl-even th.k{width:7em}
+@media (max-width:640px){.tbl-even{min-width:560px}}   /* 폰: 표만 가로로 밀어 보기 */
+.check{margin:0;padding:0;list-style:none;display:grid;gap:6px;background:#fff;border:1.5px solid var(--tbl-line);border-radius:12px;padding:10px 14px}
+.check li{display:flex;gap:8px;align-items:flex-start;word-break:keep-all}
+.check li::before{content:'✓';flex:none;display:flex;align-items:center;justify-content:center;width:22px;height:22px;margin-top:3px;border:2px solid var(--ink);border-radius:6px;background:var(--ink);color:var(--paper);font-family:var(--r);font-weight:700;font-size:16px;line-height:1}   /* 체크된 상자(선생님 피드백 2026-11-04) */
+
+/* 문항 — 상자 대신 점선으로 나눠 차분하게 */
+.q{padding:18px 0 20px;display:grid;gap:12px}
+.q+.q{border-top:2px dashed rgba(74,59,50,.16)}
+.q-head{display:flex;gap:10px;align-items:flex-start}
+.q-no{flex:none;min-width:58px;text-align:center;margin-top:2px;padding:1px 10px;border:2px solid var(--ink);border-radius:999px;background:var(--head-q1);font-family:var(--r);font-weight:700;font-size:16px;line-height:1.55;white-space:nowrap}
+.p2 .q-no{background:var(--head-q2)} .p3 .q-no{background:var(--head-q3)}
+.q-text{margin:0;font-size:17px;line-height:1.75;word-break:keep-all}
+.q-text .tag{font-family:var(--r);font-weight:700}
+.note-u{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}   /* 발문 괄호 안 밑줄(선생님 지시 2026-11-04) */
+.pt{white-space:nowrap;font-family:var(--r);font-weight:700;font-size:16px;color:var(--muted-2);margin-left:4px}
+.q-body{display:grid;gap:12px;padding-left:68px}
+.how{margin:0;font-size:16px;color:var(--muted-2)}
+
+/* 조건 상자 */
+.cond{border:2px dashed var(--line);border-radius:14px;background:var(--cond-bg);padding:10px 14px}
+.cond-k{margin:0 0 4px;font-family:var(--r);font-weight:700;font-size:16px;color:var(--muted-2)}
+.cond ul{margin:0;padding-left:20px;display:grid;gap:3px;word-break:keep-all}
+
+
+#pdfBtn:focus-visible,.link-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* 글자 칸 · 논술 칸 */
+.blank{display:block;width:100%;min-height:44px;padding:9px 12px;border:2px solid var(--ink);border-radius:12px;background:var(--field);color:var(--ink);font:inherit;font-size:17px;line-height:1.75;resize:none;overflow:hidden;white-space:pre-wrap;overflow-wrap:break-word}
+.blank:focus{outline:0;border-color:var(--focus);background:#fff;box-shadow:0 0 0 3px rgba(229,106,142,.18)}
+.blank::placeholder{color:var(--muted)}
+/* 원고지 칸(shared/partials/wongoji.js) — 한 칸에 한 글자, 한 줄 8~20칸(넓이에 맞춤), 칸은 정사각형.
+   선은 옅은 갈색 원고지 선, 줄 사이에 얇은 띠. 글자는 칸 가운데. 입력은 위에 겹친 투명 textarea 가 받는다(선생님 결정 2026-11-04) */
+.wg{position:relative;border:2px solid var(--ink);border-radius:12px;background:var(--field);padding:6px;overflow:hidden}
+.wg.is-focus{border-color:var(--focus);background:#fff;box-shadow:0 0 0 3px rgba(229,106,142,.18)}
+.wg-grid{display:grid;gap:5px}
+.wg-row{display:grid;grid-template-columns:repeat(var(--wg-cols,20),1fr);border:1.5px solid var(--wg-line)}
+.wg-c{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--wg-line);font-size:18px;line-height:1;color:var(--ink);overflow:hidden;white-space:pre}
+.wg-c:last-child{border-right:0}
+.wg-c.is-sel{background:rgba(229,106,142,.22)}
+.wg textarea.wongoji{position:absolute;inset:0;width:100%;height:100%!important;min-height:0;margin:0;padding:0;border:0;border-radius:12px;opacity:0;resize:none;overflow:hidden;cursor:text;box-shadow:none;caret-color:transparent}
+.wg-caret{position:absolute;display:none;width:2px;background:var(--ink);pointer-events:none}
+.wg-caret.blink{animation:wg-blink 1s step-end infinite}
+@keyframes wg-blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.wg-caret.blink{animation:none}}
+.essay-one{display:grid;gap:4px}
+.cnt{justify-self:end;font-size:16px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.part-field{display:grid;gap:4px}
+.part-field+.part-field{margin-top:8px}
+.part-k{font-family:var(--r);font-weight:700;font-size:16px}
+
+
+.save-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding-top:4px}
+#pdfBtn{cursor:pointer;min-height:52px;padding:10px 26px;border:3px solid var(--ink);border-radius:999px;background:var(--head-topic);color:var(--ink);font-family:var(--r);font-weight:700;font-size:18px;
+  box-shadow:var(--sh-btn);outline:2px dashed rgba(74,59,50,.35);outline-offset:-7px;transition:transform .15s}
+#pdfBtn:hover{transform:translateY(-2px)}
+#pdfBtn:active{transform:translateY(1px)}
+#pdfBtn[aria-busy="true"]{opacity:.6;pointer-events:none}
+.save-guide{flex-basis:100%;margin:0;text-align:center;font-size:16px}
+.save-status{flex-basis:100%;margin:0;font-size:16px}
+.save-status:empty{display:none}
+.save-status.ok{padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--ok-bg)}
+.save-status.fail{padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--fail-bg)}
+.link-btn{cursor:pointer;margin:0 6px;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--r);font-weight:700;font-size:16px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:calc(100vw - 32px);padding:10px 16px;border:2.5px solid var(--ink);border-radius:14px;background:#fff;box-shadow:var(--sh-btn);font-family:var(--r);font-weight:700;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+@media (max-width:640px){
+  .page{padding:10px 8px 80px}
+  .content{padding:14px 11px 18px}
+  .info .body{grid-template-columns:1fr 1fr}
+  .topic h1{font-size:27px}
+  .qs,.part-head{padding-left:13px;padding-right:13px}
+  .data{margin-left:13px;margin-right:13px;padding:12px}
+  .q-body{padding-left:0}
+  .q-head{flex-direction:column;gap:6px}
+}
+@media (prefers-reduced-motion:reduce){.toast,#pdfBtn{transition:none}#pdfBtn:hover,#pdfBtn:active{transform:none}}
+@media print{
+  body{background:#fff}
+  .page{padding:0}
+  .window{border:0;box-shadow:none}
+  .titlebar,.no-pdf,.toast{display:none!important}
+  .card{box-shadow:none;break-inside:auto}
+  .q{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main class="page"><article class="window">
+<header class="titlebar"><span>신현중학교 정보</span><span class="win-btns" aria-hidden="true"><i></i><i></i><i></i></span></header>
+<section class="content" id="sheetPrintArea">
+
+<section class="card topic"><header class="bar"><span>PERFORMANCE_TEST</span><span class="r">AI · ESSAY · B</span></header>
+  <div class="body"><span class="unit-pill">인공지능</span><h1>인공지능 수행평가 B형</h1></div></section>
+
+<section class="card info"><header class="bar"><span>MY_INFO</span></header><div class="body">
+  <label>학년<textarea class="blank" rows="1" aria-label="학년" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>반<textarea class="blank" rows="1" aria-label="반" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>번호<textarea class="blank" rows="1" aria-label="번호" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>이름<textarea class="blank" rows="1" aria-label="이름" placeholder="이름을 적어요" autocomplete="off" spellcheck="false"></textarea></label>
+</div></section>
+
+<!-- ============ 문항 1 ============ -->
+<section class="card part p1"><header class="bar"><span>QUESTION_1</span><span class="r">3 ITEMS</span></header>
+  <div class="part-head"><p>문항 1. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="data">
+    <p class="data-k">[제시 자료] MBTI 테스트</p>
+    <div class="tbl-scroll"><table class="tbl tbl-even">
+      <thead><tr><th class="k"></th><th>(가) 인터넷 사이트의 MBTI 테스트</th><th>(나) 수업 시간에 만든 MBTI T/F 모델</th></tr></thead>
+      <tbody>
+        <tr><th>입력 방식</th><td>“친구가 시험을 망쳤다면?” 같은 질문에 ①~⑤ 중 하나를 고른다</td><td>“나 시험 망쳤어”에 대한 내 대답을 자유롭게 문장으로 쓴다</td></tr>
+        <tr><th>만든 방법</th><td>만든 사람이 「①·②를 고르면 F에 2점, ④·⑤를 고르면 T에 2점」처럼 점수 공식을 정해 두었다</td><td>T와 F 클래스에 선생님이 준 문장 파일을 올리고 「학습하기」를 눌렀다</td></tr>
+        <tr><th>결과</th><td>점수를 더해 T·F 중 높은 쪽을 알려 준다</td><td>내 문장을 보고 T·F 중 결과를 알려 준다</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="qs">
+
+    <div class="q" id="q1-1">
+      <div class="q-head"><span class="q-no">1-1</span><p class="q-text">인공지능이 무엇인지 인공지능의 개념에 대해 논술하시오. <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="essay-one" data-essay data-unit="1-1" aria-label="1-1 답">
+        <textarea class="blank wongoji" rows="4" aria-label="1-1 답" autocomplete="off" spellcheck="false"></textarea>
+      </div></div>
+    </div>
+
+    <div class="q" id="q1-2">
+      <div class="q-head"><span class="q-no">1-2</span><p class="q-text">[제시 자료]의 (가)와 (나)는 같은 일을 하는데 하나는 인공지능 소프트웨어, 하나는 일반 소프트웨어이다. 어느 쪽이 인공지능 소프트웨어이고, 어느 쪽이 일반 소프트웨어인지 쓰시오. <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="essay-one" data-essay data-unit="1-2" aria-label="1-2 답">
+        <textarea class="blank wongoji" rows="3" aria-label="1-2 답" autocomplete="off" spellcheck="false"></textarea>
+      </div></div>
+    </div>
+
+    <div class="q" id="q1-3">
+      <div class="q-head"><span class="q-no">1-3</span><p class="q-text">인공지능 소프트웨어와 일반 소프트웨어의 관점에서, (가)와 (나)의 차이점을 논술하시오. <span class="pt">[1점]</span></p></div>
+      <div class="q-body"><div class="essay-one" data-essay data-unit="1-3" aria-label="1-3 답">
+        <textarea class="blank wongoji" rows="5" aria-label="1-3 답" autocomplete="off" spellcheck="false"></textarea>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 문항 2 ============ -->
+<section class="card part p2"><header class="bar"><span>QUESTION_2</span><span class="r">1 ITEM</span></header>
+  <div class="part-head"><p>문항 2. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="data">
+    <p class="data-k">[제시 자료] 생활 속 소프트웨어</p>
+    <div class="tbl-scroll"><table class="tbl">
+      <thead><tr><th>기호</th><th>소프트웨어</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td class="c">(A)</td><td>스마트폰 키보드의 단어 추천</td><td>처음엔 흔한 단어를 추천하다가, 쓸수록 내가 자주 쓰는 말투에 맞는 다음 단어를 추천한다</td></tr>
+        <tr><td class="c">(B)</td><td>디데이 앱</td><td>사귄 날짜를 넣으면 100일·200일을 계산해 준다</td></tr>
+        <tr><td class="c">(C)</td><td>1/N 더치페이 정산 기능</td><td>놀러 가서 쓴 돈을 사람 수로 똑같이 나눠 준다</td></tr>
+        <tr><td class="c">(D)</td><td>흥얼거리는 노래 소리를 듣고 노래 찾기</td><td>내가 흥얼거린 음을 듣고, 많은 노래의 선율 데이터에서 배운 패턴으로 비슷한 노래를 찾아 준다</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="qs">
+
+    <div class="q" id="q2">
+      <div class="q-head"><span class="q-no">2</span><p class="q-text">제시 자료의 소프트웨어 4개를 ‘인공지능 소프트웨어’와 ‘일반 소프트웨어’로 구별하고, 각각 그렇게 판단한 근거를 쓰시오. <span class="pt">[4점]</span></p></div>
+      <div class="q-body"><div class="essay-one" data-essay data-unit="2" aria-label="2번 답">
+        <textarea class="blank wongoji" rows="6" aria-label="2번 답" autocomplete="off" spellcheck="false"></textarea>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 문항 3 ============ -->
+<section class="card part p3"><header class="bar"><span>QUESTION_3</span><span class="r">3 ITEMS</span></header>
+  <div class="part-head"><p>문항 3. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="data">
+    <p class="data-k">[제시 자료 1] AI 해결사의 체크리스트</p>
+    <ul class="check">
+      <li>사진/소리/글을 보거나 듣거나 읽어서 판단해야 하나요?</li>
+      <li>사람이 다 하기엔 너무 많거나 끝없이 반복되나요?</li>
+    </ul>
+    <p class="data-k">[제시 자료 2] 어느 학생의 문제 후보 (가상 자료)</p>
+    <div class="tbl-scroll"><table class="tbl">
+      <thead><tr><th>문제 후보</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="c">(A)</td><td>한 학기에 한 번 자리를 바꿀 때 번호 뽑기가 번거롭다. '자리 바꾸기' 앱을 만들고 싶다.</td></tr>
+        <tr><td class="c">(B)</td><td>게임 채팅창에 욕설을 조금씩 바꿔 쓰는 사람이 많아서, 금지어 목록으로는 다 막지 못한다.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="qs">
+
+    <div class="q" id="q3-1">
+      <div class="q-head"><span class="q-no">3-1</span><p class="q-text">[제시 자료 2]의 문제 후보 (A)와 (B)가 인공지능으로 해결하기에 적합한지 적합하지 않은지, 각각 이유와 함께 [제시 자료 1]의 체크리스트를 바탕으로 판단하여 논술하시오. <span class="pt">[2점]</span></p></div>
+      <div class="q-body"><div class="essay-one" data-essay data-unit="3-1" aria-label="3-1 답">
+        <textarea class="blank wongoji" rows="5" aria-label="3-1 답" autocomplete="off" spellcheck="false"></textarea>
+      </div></div>
+    </div>
+
+    <div class="q" id="q3-2">
+      <div class="q-head"><span class="q-no">3-2</span><p class="q-text">학교 생활이나 일상 생활 등 우리 주변에서 인공지능으로 해결할 수 있는 문제를 찾아 문제 정의서를 쓰시오. (<u class="note-u">단, 수업 중 들었던 예시는 제외한다. 예를 들어 유튜브 알고리즘, 게임 핵 탐지 인공지능 등</u>) <span class="pt">[3점]</span></p></div>
+      <div class="q-body">
+        <div class="cond"><p class="cond-k">&lt;조건&gt;</p><ul>
+          <li>누가 어떤 어려움을 겪는지 쓸 것.</li>
+          <li>인공지능이 무엇을 보거나, 듣거나, 읽어서 판단하는지 쓸 것.</li>
+          <li>사람이나 일반 프로그램으로 하기 어려운 이유도 밝힐 것.</li>
+        </ul></div>
+        <div data-essay data-unit="3-2" aria-label="3-2 문제 정의서">
+          <label class="part-field"><span class="part-k">① 누가 어떤 어려움을 겪나요?</span><textarea class="blank wongoji" rows="3" aria-label="3-2 누가 어떤 어려움" data-part="누가 어떤 어려움" autocomplete="off" spellcheck="false"></textarea></label>
+          <label class="part-field"><span class="part-k">② 인공지능이 무엇을 보거나, 듣거나, 읽어서 판단하나요?</span><textarea class="blank wongoji" rows="3" aria-label="3-2 무엇을 보고 듣고 읽어 판단" data-part="무엇을 보고·듣고·읽어 판단" autocomplete="off" spellcheck="false"></textarea></label>
+          <label class="part-field"><span class="part-k">③ 사람이나 일반 프로그램으로 하기 어려운 이유는?</span><textarea class="blank wongoji" rows="3" aria-label="3-2 어려운 이유" data-part="사람·일반 프로그램으로 어려운 이유" autocomplete="off" spellcheck="false"></textarea></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q" id="q3-3">
+      <div class="q-head"><span class="q-no">3-3</span><p class="q-text">질문 2에서 내가 찾은 문제를 인공지능 시스템 4단계로 나누어서 각 단계마다 1문장 이상 쓰시오. (<u class="note-u">단, 수업 중 들었던 예시는 제외한다. 예를 들어 유튜브 알고리즘, 게임 핵 탐지 인공지능 등</u>) <span class="pt">[4점]</span></p></div>
+      <div class="q-body">
+        <div class="cond"><p class="cond-k">&lt;조건&gt;</p><ul>
+          <li>[1단계] 데이터 입력: 내 인공지능은 어떤 데이터를 모을 것인지 작성</li>
+          <li>[2단계] 학습: 내 인공지능은 데이터에서 어떤 패턴을 찾게 할 것인지 작성</li>
+          <li>[3단계] 예측: 내 인공지능이 새 데이터를 보고 무엇을 판단하게 할 것인지 작성</li>
+          <li>[4단계] 결과 활용: 내 인공지능이 학습 후 판단 결과로 어떻게 문제를 해결하는지 작성</li>
+        </ul></div>
+        <div data-essay data-unit="3-3" aria-label="3-3 인공지능 시스템 4단계">
+          <label class="part-field"><span class="part-k">[1단계] 데이터 입력</span><textarea class="blank wongoji" rows="3" aria-label="3-3 1단계 데이터 입력" data-part="1단계 데이터 입력" autocomplete="off" spellcheck="false"></textarea></label>
+          <label class="part-field"><span class="part-k">[2단계] 학습</span><textarea class="blank wongoji" rows="3" aria-label="3-3 2단계 학습" data-part="2단계 학습" autocomplete="off" spellcheck="false"></textarea></label>
+          <label class="part-field"><span class="part-k">[3단계] 예측</span><textarea class="blank wongoji" rows="3" aria-label="3-3 3단계 예측" data-part="3단계 예측" autocomplete="off" spellcheck="false"></textarea></label>
+          <label class="part-field"><span class="part-k">[4단계] 결과 활용</span><textarea class="blank wongoji" rows="3" aria-label="3-3 4단계 결과 활용" data-part="4단계 결과 활용" autocomplete="off" spellcheck="false"></textarea></label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="save-row no-pdf">
+  <p class="save-guide">문항을 모두 푼 뒤 PDF로 저장해 선생님이 안내한 곳에 제출해요.</p>
+  <button type="button" id="pdfBtn">PDF로 저장하기</button>
+  <p id="saveStatus" class="save-status" role="status" aria-live="polite"></p>
+  <p id="submitStatus" class="save-status" role="status" aria-live="polite"></p>
+</div>
+
+</section></article></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script data-msi-src="shared/vendor/html2canvas.min.js"></script>
+<script data-msi-src="shared/vendor/jspdf.umd.min.js"></script>
+<script data-msi-src="shared/partials/autogrow.js"></script>
+<script data-msi-src="shared/partials/wongoji.js"></script>
+<script>window.MSI_EXAM = { lesson: 'ai/exam-b', key: 'msi-exam:ai/exam-b', fileTitle: '인공지능 수행평가 B형' };</script>
+<script data-msi-src="shared/partials/exam.js"></script>
+</body>
+</html>

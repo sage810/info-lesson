@@ -40,6 +40,9 @@
 | `ai/02` | 이미지 분류 인공지능 모델 만들기 | portal (4탭) | `answers.json` (빈칸·하나 고르기·O/X·핵심 정리 이름표, 정답지 PDF 가능) |
 | `ai/03` | 글자를 읽는 인공지능 모델 만들기 | portal (4탭) | `answers.json` (동기유발 T·F 이름표 4칸 — 대답·붙여넣기 칸은 정답 없음) |
 | `ai/04` | AI는 어떻게 문제를 풀까? — 인공지능 시스템 해부하기 | portal (4탭) | `answers.json` |
+| `ai/exam-a` | 인공지능 수행평가 A형 (논술·원고지) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-exam/` |
+| `ai/exam-b` | 인공지능 수행평가 B형 (논술·원고지) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-exam/` |
+| `ai/exam-entry` | 인공지능 수행평가 (엔트리) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-entry/` |
 
 ## 처음 한 번 (Windows)
 

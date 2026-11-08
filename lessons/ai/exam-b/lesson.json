@@ -1,0 +1,11 @@
+{
+  "unit": "ai",
+  "unitTitle": "인공지능",
+  "no": "exam-b",
+  "title": "인공지능 수행평가 B형",
+  "shell": "standalone",
+  "status": "live",
+  "submit": true,
+  "apiUrl": "https://script.google.com/macros/s/AKfycbwBWns9fUvTxv6jiqFceMXklJsasyY2PJZZD9-GKi6ivy2NSVV1aBb5jyGsUpQiC2m9/exec",
+  "teacherKeyFile": "apps-script-ai-exam/teacher.local.json"
+}

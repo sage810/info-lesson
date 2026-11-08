@@ -120,7 +120,7 @@
 
 ## 8. 선생님 체크리스트
 
-자세한 클릭 순서는 `apps-script/README.md` "수행평가 자동 제출·채점".
+자세한 클릭 순서는 `apps-script/README.md` "수행평가 자동 제출·채점". 시험 보기 전 순서대로 할 일(체크 상자)은 [`docs/exam-checklist.md`](../exam-checklist.md).
 
 - **시험 전**: (Code.gs 를 바꿨으면) 새 버전 배포 · 스크립트 속성 `TEACHER_KEY` · `teacher.local.json` · `npm run exam-key -- <차시>` 로 배점 합계 확인 → `--send` ·
   선생님이 학생처럼 한 번 제출해 리허설.
