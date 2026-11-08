@@ -80,20 +80,33 @@
     var key = st.cols + '|' + st.ta.value;
     if (key !== st.last) {
       st.last = key;
-      var rows = layout(st), cols = st.cols, html = [], map = {};
-      st.cells.forEach(function (x) { map[x.r * cols + x.c] = x; });
-      for (var r = 0; r < rows; r++) {
-        html.push('<div class="wg-row">');
-        for (var c = 0; c < cols; c++) {
-          var x = map[r * cols + c];
-          html.push('<span class="wg-c"' + (x ? ' data-i="' + x.i + '"' : '') + '>' + (x && x.ch !== ' ' ? esc(x.ch) : '') + '</span>');
-        }
-        html.push('</div>');
-      }
-      st.grid.innerHTML = html.join('');
+      var rows = layout(st);
+      st.grid.innerHTML = gridHtml(st, rows);
       st.rows = rows;
     }
     paintSel(st);
+  }
+  function gridHtml(st, rows) {
+    var cols = st.cols, html = [], map = {};
+    st.cells.forEach(function (x) { map[x.r * cols + x.c] = x; });
+    for (var r = 0; r < rows; r++) {
+      html.push('<div class="wg-row">');
+      for (var c = 0; c < cols; c++) {
+        var x = map[r * cols + c];
+        html.push('<span class="wg-c"' + (x ? ' data-i="' + x.i + '"' : '') + '>' + (x && x.ch !== ' ' ? esc(x.ch) : '') + '</span>');
+      }
+      html.push('</div>');
+    }
+    return html.join('');
+  }
+  // PDF 복제본의 원고지를 칸 수 cols 로 다시 그린다 — 폰·좁은 화면에서 저장해도 PDF 는 20칸(검수 2026-11-08)
+  function paintCopy(wrap, ta, cols) {
+    var grid = wrap && wrap.querySelector('.wg-grid');
+    if (!grid || !ta) return;
+    var tmp = { ta: { value: ta.value }, cols: cols || MAX_COLS, minRows: ta._wg ? ta._wg.minRows : 3 };
+    var rows = layout(tmp);
+    wrap.style.setProperty('--wg-cols', tmp.cols);
+    grid.innerHTML = gridHtml(tmp, rows);
   }
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
@@ -115,11 +128,19 @@
     st.caret.style.top = (row.offsetTop + cell.offsetTop + Math.round(cell.offsetHeight * 0.18)) + 'px';
     st.caret.style.height = Math.round(cell.offsetHeight * 0.64) + 'px';
     st.caret.classList.remove('blink'); void st.caret.offsetWidth; st.caret.classList.add('blink');
+    // 긴 글을 쓰다 커서가 화면 밖으로 나가면 페이지를 따라 내린다(투명 textarea 는 스스로 스크롤하지 않음, 검수 2026-11-08)
+    var cr = st.caret.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight, m = 48;
+    if (cr.bottom > vh - m) window.scrollBy(0, cr.bottom - vh + m * 2);
+    else if (cr.top < m) window.scrollBy(0, cr.top - m * 2);
   }
 
   // 화면의 점 → 글자 자리(그 줄에서 누른 칸보다 앞이거나 같은 마지막 자리)
   function indexFromCell(st, r, c) {
     var pos = st.pos, best = -1;
+    if (c >= st.cols) {   // 줄 끝(End·마지막 칸 오른쪽) — 꽉 찬 줄이면 마지막 글자 「뒤」(다음 줄 첫 칸 자리, 검수 2026-11-08)
+      var full = (st.cells || []).filter(function (x) { return x.r === r && x.c === st.cols - 1; })[0];
+      if (full) return full.i + full.ch.length;
+    }
     for (var i = 0; i < pos.length; i++) {
       var p = pos[i]; if (!p) continue;
       if (p.r === r && p.c <= c) best = i;
@@ -161,7 +182,7 @@
   }
 
   function refresh() { boxes.forEach(function (st) { st.last = null; render(st); }); }
-  window.MSI_WONGOJI = { refresh: refresh };
+  window.MSI_WONGOJI = { refresh: refresh, paintCopy: paintCopy };
 
   Array.prototype.forEach.call(document.querySelectorAll('textarea.wongoji'), make);
   var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () { boxes.forEach(function (st) { if (fit(st)) render(st); }); }, 80); });

@@ -219,7 +219,8 @@
 
   // 나가기 전 경고 — 답이 있고, 마지막으로 바꾼 뒤 PDF 로 저장하지 않았으면
   var sending = false;   // 선생님께 보내는 중
-  window.addEventListener('beforeunload', function (e) { if ((anything() && !savedSinceChange) || sending) { e.preventDefault(); e.returnValue = ''; } });
+  var sendFailed = false;   // 마지막 제출이 실패 — 나가면 「다시 보내기」가 사라지므로 경고(검수 2026-11-08)
+  window.addEventListener('beforeunload', function (e) { if ((anything() && !savedSinceChange) || sending || sendFailed) { e.preventDefault(); e.returnValue = ''; } });
 
   // ── 채점용 답 기록 — 자동 제출(msi-hook, A)과 PDF 속 숨은 데이터(B)가 같은 기록을 쓴다(exam.md §4) ──
   //    칸마다 data-unit 이름으로 답 하나: 고르기는 data-v(여러 개는 쉼표), 순서는 a,b,c,d, 글자는 그대로, 그래프는 넣었으면 '그래프',
@@ -255,6 +256,7 @@
     onResult: function (state, retry) {
       var st = document.getElementById('submitStatus');
       sending = state === 'sending';
+      if (state !== 'sending') sendFailed = state === 'fail';
       st.textContent = '';
       st.className = 'save-status' + (state === 'ok' ? ' ok' : state === 'fail' ? ' fail' : '');
       if (state === 'sending') st.textContent = '⏳ 선생님께 보내는 중이에요… 창을 닫지 마세요.';
@@ -321,6 +323,11 @@
     var clone = root.cloneNode(true);
     $$('.no-pdf', clone).forEach(function (el) { el.parentNode.removeChild(el); });
     // 글자 칸 → 글 상자(html2canvas 는 textarea 의 여러 줄을 못 그림). 모양은 화면 칸의 계산 스타일 그대로
+    // 원고지는 PDF 에서 늘 20칸 — 폰·좁은 화면에서 저장해도 쪽 수가 늘지 않게(shared/partials/wongoji.js, 검수 2026-11-08)
+    if (window.MSI_WONGOJI && window.MSI_WONGOJI.paintCopy) {
+      var liveWg = $$('.wg', root);
+      $$('.wg', clone).forEach(function (w, i) { if (liveWg[i]) window.MSI_WONGOJI.paintCopy(w, liveWg[i].querySelector('textarea.wongoji'), 20); });
+    }
     var live = $$('textarea.blank'), copies = $$('textarea.blank', clone), boxes = [];
     copies.forEach(function (ta, i) {
       if (ta.closest('.wg')) { ta.parentNode.removeChild(ta); return; }   // 원고지 칸은 그려 둔 칸(.wg-grid)을 그대로 찍는다
