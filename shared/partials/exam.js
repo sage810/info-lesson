@@ -130,6 +130,25 @@
   }, true);
   document.addEventListener('drop', function (e) { if (isAnswerField(e.target)) { e.preventDefault(); toast('답 칸에는 끌어다 놓을 수 없어요. 직접 입력해 주세요.'); } }, true);
 
+  // ── 학년·반·번호·이름은 한 줄 — Enter 로 칸이 두 줄로 늘지 않게(검수 2026-11-10) ──
+  var ONE_LINE = { '학년': 1, '반': 1, '번호': 1, '이름': 1 };
+  document.addEventListener('beforeinput', function (e) {
+    var t = e.target;
+    if (/^insert(LineBreak|Paragraph)$/.test(e.inputType || '') && t && t.getAttribute && ONE_LINE[t.getAttribute('aria-label')]) e.preventDefault();
+  }, true);
+
+  // ── 한글 조합 끝날 때 튀어 오르기 막기 — 마지막 글자가 조합 중일 때 스크롤해 내려가 다른 칸·버튼을 누르면,
+  //    크롬·엣지가 조합을 끝내며 「이전 칸의 커서」가 보이게 페이지를 끌어올린다(누른 곳도 엉뚱해짐). 학생이 이미 떠난 칸이면 되돌린다(2026-11-10) ──
+  var userY = window.scrollY;
+  window.addEventListener('scroll', function () { userY = window.scrollY; }, { passive: true });
+  document.addEventListener('compositionend', function (e) {
+    var t = e.target, y = window.scrollY, back = userY;
+    if (Math.abs(y - back) < 2 || !t || !t.getBoundingClientRect || t._wg) return;   // 원고지 칸은 wongoji.js 가 되돌림
+    // 끌려가기 전 화면에서 그 칸이 다 보이지 않았을 때만(다 보였으면 브라우저도 움직이지 않음 — 쓰는 중 커서 따라가기는 그대로)
+    var r = t.getBoundingClientRect(), top = r.top + y - back, bottom = r.bottom + y - back;
+    if (top < 0 || bottom > (window.innerHeight || document.documentElement.clientHeight)) window.scrollTo(window.scrollX, back);
+  }, true);
+
   // ── 칸 종류와 답 ──
   var units = $$('[data-unit]');
   function unitKind(u) {
@@ -347,16 +366,20 @@
     holder.appendChild(clone); document.body.appendChild(holder);
     boxes.forEach(function (b) { b.style.height = 'auto'; var h = b.scrollHeight; if (h > 0) b.style.height = (h + 4) + 'px'; });
 
-    // 쪽 나눔은 문항·카드 사이에서 — 한 문항이 두 쪽으로 잘리지 않게.
-    // 한 쪽보다 긴 논술 답은 글 줄 사이에서도 나눌 수 있게 줄 경계를 후보로 더한다(글자가 반으로 잘리지 않게, 2026-11-04)
+    // 쪽 나눔은 문항·카드 사이에서 — 한 문항이 두 쪽으로 잘리지 않게(cuts). 소문항 칸(.part-field) 위도 문항 경계로 본다.
+    // 한 쪽보다 긴 논술 답만 글 줄·원고지 줄 사이에서 나눈다(fine) — 그 쪽 범위에 문항 경계가 하나도 없을 때만 쓴다
+    // (전에는 둘을 섞어 가장 늦은 자리를 골라, 5줄 원고지가 문항 경계를 두고도 잘리고 이름표만 앞 쪽 끝에 남았다 — 검수 2026-11-10)
     var top0 = clone.getBoundingClientRect().top;
+    var topOf = function (el) { return el.getBoundingClientRect().top - top0; };
     // .no-cut 문항 위에서는 나누지 않는다 — 카드 머리 바로 아래 첫 문항에 붙이면 머리가 앞 쪽 끝에 홀로 남지 않는다(ai/exam-entry)
-    var cuts = $$('.q:not(.no-cut), .subq, .card, .part-head, .row-cut, .wg-row', clone).map(function (el) { return el.getBoundingClientRect().top - top0; });
+    // .part-head(카드 머리띠 바로 아래 문항 머리말) 위도 나누지 않는다 — 머리띠만 앞 쪽 끝에 남았다(2026-11-10)
+    var cuts = $$('.q:not(.no-cut), .subq, .card, .row-cut, .part-field', clone).map(topOf);
+    var fine = $$('.wg-row:not(:first-child)', clone).map(topOf);   // 원고지 첫 줄 위는 빼서 칸 이름표·발문만 남지 않게
     boxes.forEach(function (b) {
       var cs = getComputedStyle(b), lh = parseFloat(cs.lineHeight), r = b.getBoundingClientRect();
       if (!(lh > 0) || r.height < lh * 3) return;
       var y0 = r.top - top0 + parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop);
-      for (var y = y0 + lh; y < r.bottom - top0 - lh / 2; y += lh) cuts.push(y);
+      for (var y = y0 + lh; y < r.bottom - top0 - lh / 2; y += lh) fine.push(y);
     });
 
     var done = function () { if (holder.parentNode) holder.parentNode.removeChild(holder); btn.textContent = label; btn.removeAttribute('aria-busy'); };
@@ -368,12 +391,15 @@
         var pdf = new JSPDF('p', 'pt', 'a4');
         var pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight();
         var k = canvas.width / clone.offsetWidth;
-        var breaks = cuts.map(function (y) { return Math.round(y * k); }).filter(function (y) { return y > 0; }).sort(function (a, b) { return a - b; });
+        var px = function (list) { return list.map(function (y) { return Math.round(y * k); }).filter(function (y) { return y > 0; }).sort(function (a, b) { return a - b; }); };
+        var breaks = px(cuts), fineBreaks = px(fine);
         var pageH = Math.floor(canvas.width * ph / pw), y = 0, page = 0;
+        var inPage = function (b) { return b > y + pageH * 0.35 && b <= end; };
         while (y < canvas.height - 1) {
           var end = Math.min(y + pageH, canvas.height);
           if (end < canvas.height) {
-            var ok = breaks.filter(function (b) { return b > y + pageH * 0.35 && b <= end; });
+            var ok = breaks.filter(inPage);
+            if (!ok.length) ok = fineBreaks.filter(inPage);
             if (ok.length) end = ok[ok.length - 1];
           }
           var part = document.createElement('canvas'); part.width = canvas.width; part.height = end - y;

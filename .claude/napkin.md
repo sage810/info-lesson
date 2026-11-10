@@ -62,8 +62,13 @@
    Do instead: 장이 많으면 `npm run ppt` 로 만들고 받는 링크(아티팩트, 같은 URL 갱신)에서 선생님이 받아 캔바에 올림 → 그 디자인에서 새 장만 `merge-designs` 로 원본에 넣는다. 쪽 번호는 PowerPoint 자동 번호라 최종 순서 그대로 전체 덱을 만들어야 맞는다.
 4. **[2026-10-18] `read-design` 은 여러 쪽 design_content 를 100,000자에서 자름 · 캔바 화면의 글자 숫자는 API `fontSize`(px) × 0.75(화면 45 = API 60)**
    Do instead: 쪽을 나눠 읽거나 `transaction_id` + `element_ids` 로 골라 읽는다. 선생님이 말한 캔바 숫자 n → `font_size` = n ÷ 0.75. `edit-design` 은 쪽(page_index)마다 한 번씩, 저장(commit)은 미리보기를 보여 드리고 허락받은 뒤.
+5. **[2026-10-18] 'GangwonEdu' 글꼴 파일(design/fonts·shared/fonts 의 GangwonEdu-400.woff2)의 실제 글꼴은 강원교육튼튼(GangwonEduPower) ExtraBold** — DESIGN.md 의 "강원교육모두"와 다름
+   Do instead: PPT·캔바처럼 웹 밖에서 큰 제목을 같은 모양으로 내려면 글꼴 이름 `GangwonEduPower`(강원교육튼튼, 이 PC 설치됨)를 쓴다. 쿠키런은 굵기마다 이름이 따로라 `CookieRun Bold` + 굵게 끔.
 
 ## Domain Behavior Guardrails
+0. **[2026-11-10] 한글 입력 버그는 Playwright `keyboard.type` 으로 안 드러남(조합이 없음) — 크롬·엣지는 조합을 끝낼 때 그 칸 커서로 페이지를 끌어올리고, 뒤늦은 selectionchange 도 옴**
+   Do instead: CDP `Input.imeSetComposition({text:'가',selectionStart:1,selectionEnd:1})` 로 조합을 만들고 ① 그냥 다른 곳 클릭 ② `Input.insertText` 로 먼저 확정 후 클릭 둘 다 시험. 스크롤 따라가기는 selectionchange·focus 에 걸지 말고 커서가 움직인 input·키에만.
+   투명 textarea 위에 가짜 커서를 그리는 칸(원고지)은 브라우저가 **안 보이는 진짜 커서**로 페이지를 옮김(input 뒤에 실행) → 그 이동은 rAF 에서 되돌리고 가짜 커서만 따라간다(`docs/rules/exam.md` §3 스크롤 튐).
 1. **[2026-09-24] x-dc 는 화면에 안 보이는 원본 템플릿 복제본을 남김 → 전역 querySelector 가 엉뚱한 요소를 잡음**
    Do instead: `document` 위임 IIFE + 이벤트 대상 기준 `closest()`·형제 탐색.
 2. **[2026-09-24] lesson.html 의 표식(`<script data-msi-src>`, `msi-asset:`, NEIS 스냅샷)을 지우면 빌드가 깨짐**
@@ -86,8 +91,6 @@
    Do instead: 틀(`_templates/order`)의 자동 보관(`this._keep…`, 메모리 + localStorage 3시간, PDF 저장하면 지움)을 쓴다. 리허설은 "적기 → 다른 탭 → 돌아오기 → 새로고침" 까지.
 9. **[2026-10-16] 색은 역할 토큰으로만 — 07·틀은 색 글자 대신 `var(--msi-role-…)` (흰 PDF 바탕·canvas fillStyle 만 예외)**
    Do instead: 값은 `design/tokens.json` role → `node design/build.mjs`(표식 있는 lesson.html 블록 자동 갱신). 공용 글꼴을 바꾸거나 새 데이터를 넣으면 `python scripts/font-subset.py` 다시(원본 design/fonts).
-10. **[2026-10-18] 'GangwonEdu' 글꼴 파일(design/fonts·shared/fonts 의 GangwonEdu-400.woff2)의 실제 글꼴은 강원교육튼튼(GangwonEduPower) ExtraBold** — DESIGN.md 의 "강원교육모두"와 다름
-   Do instead: PPT·캔바처럼 웹 밖에서 큰 제목을 같은 모양으로 내려면 글꼴 이름 `GangwonEduPower`(강원교육튼튼, 이 PC 설치됨)를 쓴다. 쿠키런은 굵기마다 이름이 따로라 `CookieRun Bold` + 굵게 끔.
 
 ## 모션그래픽 (scripts/motion · docs/rules/motion.md)
 1. **[2026-10-18] WebCodecs(VideoEncoder)는 보안 문맥에서만 — about:blank·file:// 에선 `undefined`**

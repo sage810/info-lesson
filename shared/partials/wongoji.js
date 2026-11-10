@@ -11,6 +11,10 @@
   'use strict';
   var MAX_COLS = 20, MIN_COLS = 8, CELL_MIN = 34;
   var boxes = [];
+  // 스크롤 — 브라우저는 투명 textarea 의 (안 보이는) 커서를 보이려고 페이지를 옮긴다. 그 커서는 원고지 커서보다 한참 위(한 줄에 글자가 2배쯤)라
+  // 긴 글에서 위로 끌려 올라가고, 한글 조합을 끝낼 때(다른 칸 클릭)도 끌려 올라간다 → 원고지 칸에서는 그 이동을 되돌리고, 원고지 커서만 따라간다(2026-11-10)
+  var lastY = window.scrollY;   // 학생이 보던 자리(스크롤 이벤트 · 우리가 따라 내린 뒤)
+  window.addEventListener('scroll', function () { lastY = window.scrollY; }, { passive: true });
 
   function make(ta) {
     var wrap = document.createElement('div'); wrap.className = 'wg';
@@ -21,19 +25,23 @@
     var st = { ta: ta, wrap: wrap, grid: grid, caret: caret, cols: MAX_COLS, minRows: Math.max(1, parseInt(ta.getAttribute('rows'), 10) || 3), pos: [], last: null, down: false, anchor: 0 };
     ta._wg = st;
     ta.setAttribute('wrap', 'soft');
-    ta.addEventListener('input', function () { render(st); });
-    ['focus', 'blur', 'keyup', 'select', 'click'].forEach(function (ev) { ta.addEventListener(ev, function () { paintSel(st); }); });
-    ta.addEventListener('keydown', function (e) { keys(st, e); });
+    ta.addEventListener('input', function () { render(st, true); });
+    ta.addEventListener('keyup', function (e) { keyUp(st, e); });
+    ['focus', 'blur', 'select', 'click'].forEach(function (ev) { ta.addEventListener(ev, function () { paintSel(st); }); });
+    ta.addEventListener('keydown', function (e) { st.y0 = window.scrollY; keys(st, e); });   // y0 — 브라우저가 옮기기 전 자리
+    ta.addEventListener('beforeinput', function () { st.y0 = window.scrollY; });
+    ta.addEventListener('blur', function () { st.y0 = null; });   // Tab 으로 떠난 keydown 의 자리가 남지 않게
+    ta.addEventListener('compositionend', function () { if (Math.abs(window.scrollY - lastY) >= 2) window.scrollTo(window.scrollX, lastY); });
     ta.addEventListener('pointerdown', function (e) {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
-      e.preventDefault(); ta.focus();
+      e.preventDefault(); ta.focus({ preventScroll: true });   // 위가 잘린 칸을 누를 때 브라우저가 칸 위쪽으로 끌어올리면 누른 자리가 어긋남(검수 2026-11-10)
       var i = indexAt(st, e.clientX, e.clientY);
       if (e.shiftKey) setSel(st, st.anchor, i); else { st.anchor = i; ta.setSelectionRange(i, i); }
-      st.down = true; paintSel(st);
+      st.down = true; st.at = null; paintSel(st);   // 클릭한 자리를 따라가기 기준으로
     });
     ta.addEventListener('click', function (e) {   // 손가락(터치)으로 누른 자리
       if (st.down || e.detail === 0) return;
-      var i = indexAt(st, e.clientX, e.clientY); st.anchor = i; ta.setSelectionRange(i, i); paintSel(st);
+      var i = indexAt(st, e.clientX, e.clientY); st.anchor = i; ta.setSelectionRange(i, i); st.at = null; paintSel(st);
     });
     boxes.push(st);
     fit(st); render(st);
@@ -75,7 +83,7 @@
     return Math.max(st.minRows, r + 1);
   }
 
-  function render(st) {
+  function render(st, follow) {
     fit(st);
     var key = st.cols + '|' + st.ta.value;
     if (key !== st.last) {
@@ -84,7 +92,7 @@
       st.grid.innerHTML = gridHtml(st, rows);
       st.rows = rows;
     }
-    paintSel(st);
+    paintSel(st, follow);
   }
   function gridHtml(st, rows) {
     var cols = st.cols, html = [], map = {};
@@ -110,8 +118,8 @@
   }
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
-  // 커서(깜박이는 세로 막대)와 고른 칸
-  function paintSel(st) {
+  // 커서(깜박이는 세로 막대)와 고른 칸. follow — 글을 쓰거나 키로 옮긴 때(input·keyup·↑↓Home/End)만 true
+  function paintSel(st, follow) {
     var ta = st.ta, on = document.activeElement === ta;
     var a = ta.selectionStart, b = ta.selectionEnd;
     st.wrap.classList.toggle('is-focus', on);
@@ -119,19 +127,41 @@
     if (on && a !== b) {
       Array.prototype.forEach.call(st.grid.querySelectorAll('.wg-c[data-i]'), function (el) { var i = +el.getAttribute('data-i'); if (i >= a && i < b) el.classList.add('is-sel'); });
     }
-    var p = st.pos[ta.selectionDirection === 'backward' ? a : b] || { r: 0, c: 0 };
+    var at = ta.selectionDirection === 'backward' ? a : b;
+    var p = st.pos[at] || { r: 0, c: 0 };
     var row = st.grid.children[p.r];
-    if (!on || a !== b || !row) { st.caret.style.display = 'none'; return; }
+    if (!on || a !== b || !row) { st.caret.style.display = 'none'; st.at = null; return; }
+    var moved = st.at != null && st.at !== at;   // st.at — 마지막으로 따라가기를 따진(또는 클릭한) 커서 자리. selectionchange 로는 바꾸지 않음(←→ 는 keyup 전에 옴)
+    if (follow || st.at == null) st.at = at;
     var cell = row.children[Math.min(p.c, st.cols - 1)];
     st.caret.style.display = 'block';
-    st.caret.style.left = (cell.offsetLeft + row.offsetLeft + 4) + 'px';
-    st.caret.style.top = (row.offsetTop + cell.offsetTop + Math.round(cell.offsetHeight * 0.18)) + 'px';
+    // 칸의 offsetParent 는 보통 .wg(줄은 position 없음) — 그때 줄 자리를 또 더하면 r번째 줄 커서가 약 2r번째 줄에 그려졌다(검수 2026-11-10)
+    var ox = cell.offsetLeft, oy = cell.offsetTop;
+    if (cell.offsetParent !== st.wrap) { ox += row.offsetLeft; oy += row.offsetTop; }
+    st.caret.style.left = (ox + 4) + 'px';
+    st.caret.style.top = (oy + Math.round(cell.offsetHeight * 0.18)) + 'px';
     st.caret.style.height = Math.round(cell.offsetHeight * 0.64) + 'px';
     st.caret.classList.remove('blink'); void st.caret.offsetWidth; st.caret.classList.add('blink');
     // 긴 글을 쓰다 커서가 화면 밖으로 나가면 페이지를 따라 내린다(투명 textarea 는 스스로 스크롤하지 않음, 검수 2026-11-08)
-    var cr = st.caret.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight, m = 48;
-    if (cr.bottom > vh - m) window.scrollBy(0, cr.bottom - vh + m * 2);
-    else if (cr.top < m) window.scrollBy(0, cr.top - m * 2);
+    // 커서가 실제로 움직였을 때만 — 스크롤해 떠난 뒤 한글 조합 확정·selectionchange 로 다시 그릴 때 이전 칸으로 끌려 올라가던 것(2026-11-10)
+    if (follow) later(st, moved);
+  }
+  // 그리기 직전(브라우저가 투명 textarea 커서로 옮긴 뒤)에: 그 이동을 되돌리고 → 커서가 움직였으면 원고지 커서를 따라간다
+  function later(st, moved) {
+    st.mv = st.mv || moved;
+    if (st.raf) return;
+    st.raf = requestAnimationFrame(function () {
+      var mv = st.mv; st.raf = 0; st.mv = false;
+      if (document.activeElement !== st.ta) { st.y0 = null; return; }
+      if (st.y0 != null && Math.abs(window.scrollY - st.y0) >= 2) window.scrollTo(window.scrollX, st.y0);
+      st.y0 = null;
+      if (mv && st.caret.style.display === 'block') {
+        var cr = st.caret.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight, m = 48;
+        if (cr.bottom > vh - m) window.scrollBy(0, cr.bottom - vh + m * 2);
+        else if (cr.top < m) window.scrollBy(0, cr.top - m * 2);
+      }
+      lastY = window.scrollY;
+    });
   }
 
   // 화면의 점 → 글자 자리(그 줄에서 누른 칸보다 앞이거나 같은 마지막 자리)
@@ -164,21 +194,32 @@
   }
 
   // ↑↓ · Home/End 는 원고지 줄 기준(투명 textarea 의 줄과 다르므로)
+  var NAV = { ArrowUp: 1, ArrowDown: 1, Home: 1, End: 1 };
+  function selOf(ta) { return { s: ta.selectionStart, e: ta.selectionEnd, back: ta.selectionDirection === 'backward' }; }
   function keys(st, e) {
-    if (e.isComposing || e.keyCode === 229) return;
-    var k = e.key; if (k !== 'ArrowUp' && k !== 'ArrowDown' && k !== 'Home' && k !== 'End') return;
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-    var ta = st.ta, back = ta.selectionDirection === 'backward';
-    var anchor = e.shiftKey ? (back ? ta.selectionEnd : ta.selectionStart) : null;
-    var from = e.shiftKey ? (back ? ta.selectionStart : ta.selectionEnd) : (k === 'ArrowUp' || k === 'Home' ? ta.selectionStart : ta.selectionEnd);
+    // 한글 조합 중에는 브라우저가 투명 textarea 줄 기준으로 옮긴다 → 누르기 전 자리를 기억했다가 키를 뗄 때 원고지 줄 기준으로 다시 옮긴다(검수 2026-11-10)
+    if (e.isComposing || e.keyCode === 229) { st.comp = selOf(st.ta); return; }
+    st.comp = null;
+    var k = e.key; if (!NAV[k] || e.ctrlKey || e.metaKey || e.altKey) return;
+    e.preventDefault();
+    move(st, k, e.shiftKey, selOf(st.ta));
+  }
+  function keyUp(st, e) {
+    var c = st.comp; st.comp = null;
+    if (c && NAV[e.key] && !e.ctrlKey && !e.metaKey && !e.altKey) move(st, e.key, e.shiftKey, c);
+    else paintSel(st, true);
+  }
+  function move(st, k, shift, sel) {
+    var ta = st.ta;
+    var anchor = shift ? (sel.back ? sel.e : sel.s) : null;
+    var from = shift ? (sel.back ? sel.s : sel.e) : (k === 'ArrowUp' || k === 'Home' ? sel.s : sel.e);
     var p = st.pos[from] || { r: 0, c: 0 }, to;
     if (k === 'ArrowUp') to = p.r === 0 ? 0 : indexFromCell(st, p.r - 1, p.c);
     else if (k === 'ArrowDown') { var lastR = st.pos[st.pos.length - 1].r; to = p.r >= lastR ? ta.value.length : indexFromCell(st, p.r + 1, p.c); }
     else if (k === 'Home') to = indexFromCell(st, p.r, 0);
     else to = indexFromCell(st, p.r, st.cols);
-    e.preventDefault();
     if (anchor === null) ta.setSelectionRange(to, to); else setSel(st, anchor, to);
-    paintSel(st);
+    paintSel(st, true);
   }
 
   function refresh() { boxes.forEach(function (st) { st.last = null; render(st); }); }

@@ -21,6 +21,8 @@
   --focus:#E56A8E;                                                            /* 스티커 포커스 고리(pink-edge) */
   --head-topic:#FBE3E8; --head-info:#FBF3D2; --head-q1:#E8E3F4; --head-q2:#DDEFE7; --head-q3:#DEEBF3;   /* 스티커 카드 머리를 옅게 */
   --wg-line:#E2BFAE; --data-bg:#FBF6EC; --tint:#F6EEDF; --tbl-line:#E3D5BD; --cond-bg:#FFF9E6; --ok-bg:#F3FAF6; --fail-bg:#FDF0F2;
+  --butter:#FBEFB4; --mint:#BFE6D6; --peach:#F8CFC4; --white:#fff;            /* 창 단추·과목 알약 · 흰 칸 */
+  --focus-ring:rgba(229,106,142,.18); --sel:rgba(229,106,142,.22); --ink-a16:rgba(74,59,50,.16); --ink-a35:rgba(74,59,50,.35); --white-a45:rgba(255,255,255,.45);
   --sh-window:0 14px 34px rgba(74,59,50,.14); --sh-card:0 8px 20px rgba(74,59,50,.10); --sh-btn:0 4px 10px rgba(74,59,50,.16); --sh-chip:0 3px 8px rgba(74,59,50,.12);
   --r:'CookieRun','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
 }
@@ -30,18 +32,18 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 .page{max-width:920px;margin:auto;padding:28px 20px 70px}
 .window{background:var(--paper);border:3px solid var(--ink);border-radius:22px;box-shadow:var(--sh-window);overflow:hidden}
 .titlebar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-bottom:3px solid var(--ink);
-  background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 10px,rgba(255,255,255,0) 10px 20px) var(--head-topic);font-family:var(--r);font-weight:700;font-size:18px}
+  background:repeating-linear-gradient(90deg,var(--white-a45) 0 10px,transparent 10px 20px) var(--head-topic);font-family:var(--r);font-weight:700;font-size:18px}
 .win-btns{display:flex;gap:7px}
-.win-btns i{width:18px;height:18px;border:2.5px solid var(--ink);border-radius:50%;background:#FBEFB4}
-.win-btns i:nth-child(2){background:#BFE6D6} .win-btns i:nth-child(3){background:#F8CFC4}
+.win-btns i{width:18px;height:18px;border:2.5px solid var(--ink);border-radius:50%;background:var(--butter)}
+.win-btns i:nth-child(2){background:var(--mint)} .win-btns i:nth-child(3){background:var(--peach)}
 .content{padding:22px 22px 26px;display:grid;gap:20px}
 
 .card{border:2.5px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:var(--sh-card)}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 16px;border-bottom:2.5px solid var(--ink);font-family:'Silkscreen',monospace;font-size:16px;letter-spacing:.04em}
-.bar .r{opacity:.75}
+.bar .r{color:var(--muted-2)}
 .topic .bar{background:var(--head-topic)}
 .topic .body{padding:18px 20px 20px;background:var(--field);text-align:center;display:grid;gap:8px;justify-items:center}
-.unit-pill{font-family:var(--r);font-weight:700;font-size:16px;padding:2px 14px;border:2px solid var(--ink);border-radius:999px;background:#FBEFB4}
+.unit-pill{font-family:var(--r);font-weight:700;font-size:16px;padding:2px 14px;border:2px solid var(--ink);border-radius:999px;background:var(--butter)}
 .topic h1{margin:0;font-family:'GangwonEdu',var(--r);font-weight:400;font-size:32px;line-height:1.3}
 .info .bar{background:var(--head-info)}
 .info .body{padding:14px 16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -49,28 +51,29 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 
 .part.p1 .bar{background:var(--head-q1)} .part.p2 .bar{background:var(--head-q2)} .part.p3 .bar{background:var(--head-q3)}
 .part-head{padding:16px 22px 4px}
-.part-head p{margin:0;font-family:var(--r);font-weight:700;font-size:18px;word-break:keep-all}
+.part-head h2{margin:0;line-height:1.75;font-family:var(--r);font-weight:700;font-size:18px;word-break:keep-all}
 .qs{padding:0 22px 8px}
 
 /* 제시 자료 — 따뜻한 옅은 상자 + 표 */
 .data{margin:12px 22px 4px;padding:14px 16px 16px;border:2px solid var(--ink);border-radius:14px;background:var(--data-bg);display:grid;gap:10px}
 .data-k{margin:0;font-family:var(--r);font-weight:700;font-size:17px}
 .tbl-scroll{overflow-x:auto}
-.tbl{width:100%;border-collapse:collapse;font-size:16px;line-height:1.6;background:#fff}
+.tbl{width:100%;border-collapse:collapse;font-size:16px;line-height:1.6;background:var(--white)}
 .tbl th,.tbl td{border:1.5px solid var(--tbl-line);padding:8px 10px;vertical-align:top;text-align:left;word-break:keep-all}
 .tbl thead th{background:var(--tint);font-family:var(--r);font-weight:700;text-align:center}
 .tbl tbody th{background:var(--tint);font-family:var(--r);font-weight:700;white-space:nowrap;text-align:center;vertical-align:middle}
 .tbl .c{text-align:center;white-space:nowrap}
 .tbl-even{table-layout:fixed}   /* (가)·(나) 두 열을 같은 너비로(선생님 피드백 2026-11-04) */
-.tbl-even th.k{width:7em}
+.tbl-even .k{width:7em}
+.tbl thead td{background:var(--tint)}
 @media (max-width:640px){.tbl-even{min-width:560px}}   /* 폰: 표만 가로로 밀어 보기 */
-.check{margin:0;padding:0;list-style:none;display:grid;gap:6px;background:#fff;border:1.5px solid var(--tbl-line);border-radius:12px;padding:10px 14px}
+.check{margin:0;padding:0;list-style:none;display:grid;gap:6px;background:var(--white);border:1.5px solid var(--tbl-line);border-radius:12px;padding:10px 14px}
 .check li{display:flex;gap:8px;align-items:flex-start;word-break:keep-all}
 .check li::before{content:'✓';flex:none;display:flex;align-items:center;justify-content:center;width:22px;height:22px;margin-top:3px;border:2px solid var(--ink);border-radius:6px;background:var(--ink);color:var(--paper);font-family:var(--r);font-weight:700;font-size:16px;line-height:1}   /* 체크된 상자(선생님 피드백 2026-11-04) */
 
 /* 문항 — 상자 대신 점선으로 나눠 차분하게 */
 .q{padding:18px 0 20px;display:grid;gap:12px}
-.q+.q{border-top:2px dashed rgba(74,59,50,.16)}
+.q+.q{border-top:2px dashed var(--ink-a16)}
 .q-head{display:flex;gap:10px;align-items:flex-start}
 .q-no{flex:none;min-width:58px;text-align:center;margin-top:2px;padding:1px 10px;border:2px solid var(--ink);border-radius:999px;background:var(--head-q1);font-family:var(--r);font-weight:700;font-size:16px;line-height:1.55;white-space:nowrap}
 .p2 .q-no{background:var(--head-q2)} .p3 .q-no{background:var(--head-q3)}
@@ -80,6 +83,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 .pt{white-space:nowrap;font-family:var(--r);font-weight:700;font-size:16px;color:var(--muted-2);margin-left:4px}
 .q-body{display:grid;gap:12px;padding-left:68px}
 .how{margin:0;font-size:16px;color:var(--muted-2)}
+.how-top{text-align:center;word-break:keep-all}
 
 /* 조건 상자 */
 .cond{border:2px dashed var(--line);border-radius:14px;background:var(--cond-bg);padding:10px 14px}
@@ -91,22 +95,28 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 
 /* 글자 칸 · 논술 칸 */
 .blank{display:block;width:100%;min-height:44px;padding:9px 12px;border:2px solid var(--ink);border-radius:12px;background:var(--field);color:var(--ink);font:inherit;font-size:17px;line-height:1.75;resize:none;overflow:hidden;white-space:pre-wrap;overflow-wrap:break-word}
-.blank:focus{outline:0;border-color:var(--focus);background:#fff;box-shadow:0 0 0 3px rgba(229,106,142,.18)}
+.blank:focus{outline:0;border-color:var(--focus);background:var(--white);box-shadow:0 0 0 3px var(--focus-ring)}
 .blank::placeholder{color:var(--muted)}
 /* 원고지 칸(shared/partials/wongoji.js) — 한 칸에 한 글자, 한 줄 8~20칸(넓이에 맞춤), 칸은 정사각형.
    선은 옅은 갈색 원고지 선, 줄 사이에 얇은 띠. 글자는 칸 가운데. 입력은 위에 겹친 투명 textarea 가 받는다(선생님 결정 2026-11-04) */
 .wg{position:relative;border:2px solid var(--ink);border-radius:12px;background:var(--field);padding:6px;overflow:hidden}
-.wg.is-focus{border-color:var(--focus);background:#fff;box-shadow:0 0 0 3px rgba(229,106,142,.18)}
+.wg.is-focus{border-color:var(--focus);background:var(--white);box-shadow:0 0 0 3px var(--focus-ring)}
 .wg-grid{display:grid;gap:5px}
 .wg-row{display:grid;grid-template-columns:repeat(var(--wg-cols,20),1fr);border:1.5px solid var(--wg-line)}
 .wg-c{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--wg-line);font-size:18px;line-height:1;color:var(--ink);overflow:hidden;white-space:pre}
 .wg-c:last-child{border-right:0}
-.wg-c.is-sel{background:rgba(229,106,142,.22)}
+.wg-c.is-sel{background:var(--sel)}
 .wg textarea.wongoji{position:absolute;inset:0;width:100%;height:100%!important;min-height:0;margin:0;padding:0;border:0;border-radius:12px;opacity:0;resize:none;overflow:hidden;cursor:text;box-shadow:none;caret-color:transparent}
 .wg-caret{position:absolute;display:none;width:2px;background:var(--ink);pointer-events:none}
 .wg-caret.blink{animation:wg-blink 1s step-end infinite}
 @keyframes wg-blink{50%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.wg-caret.blink{animation:none}}
+/* Windows 고대비(강제 색) — 테두리 색·그림자가 지워져 포커스와 원고지 커서가 안 보이던 것(검수 2026-11-10) */
+@media (forced-colors:active){
+  .blank:focus,.wg.is-focus{outline:3px solid Highlight;outline-offset:2px}
+  .wg-caret{forced-color-adjust:none;background:CanvasText}
+  .wg-c.is-sel{forced-color-adjust:none;background:Highlight;color:HighlightText}
+}
 .essay-one{display:grid;gap:4px}
 .cnt{justify-self:end;font-size:16px;color:var(--muted-2);font-variant-numeric:tabular-nums}
 .part-field{display:grid;gap:4px}
@@ -116,7 +126,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 
 .save-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding-top:4px}
 #pdfBtn{cursor:pointer;min-height:52px;padding:10px 26px;border:3px solid var(--ink);border-radius:999px;background:var(--head-topic);color:var(--ink);font-family:var(--r);font-weight:700;font-size:18px;
-  box-shadow:var(--sh-btn);outline:2px dashed rgba(74,59,50,.35);outline-offset:-7px;transition:transform .15s}
+  box-shadow:var(--sh-btn);outline:2px dashed var(--ink-a35);outline-offset:-7px;transition:transform .15s}
 #pdfBtn:hover{transform:translateY(-2px)}
 #pdfBtn:active{transform:translateY(1px)}
 #pdfBtn[aria-busy="true"]{opacity:.6;pointer-events:none}
@@ -125,9 +135,9 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 .save-status:empty{display:none}
 .save-status.ok{padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--ok-bg)}
 .save-status.fail{padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--fail-bg)}
-.link-btn{cursor:pointer;margin:0 6px;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--r);font-weight:700;font-size:16px}
+.link-btn{cursor:pointer;min-height:44px;margin:0 6px;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--r);font-weight:700;font-size:16px}
 
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:calc(100vw - 32px);padding:10px 16px;border:2.5px solid var(--ink);border-radius:14px;background:#fff;box-shadow:var(--sh-btn);font-family:var(--r);font-weight:700;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:calc(100vw - 32px);padding:10px 16px;border:2.5px solid var(--ink);border-radius:14px;background:var(--white);box-shadow:var(--sh-btn);font-family:var(--r);font-weight:700;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.show{opacity:1}
 
 @media (max-width:640px){
@@ -142,7 +152,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 }
 @media (prefers-reduced-motion:reduce){.toast,#pdfBtn{transition:none}#pdfBtn:hover,#pdfBtn:active{transform:none}}
 @media print{
-  body{background:#fff}
+  body{background:var(--white)}
   .page{padding:0}
   .window{border:0;box-shadow:none}
   .titlebar,.no-pdf,.toast{display:none!important}
@@ -160,19 +170,20 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
   <div class="body"><span class="unit-pill">인공지능</span><h1>인공지능 수행평가 A형</h1></div></section>
 
 <section class="card info"><header class="bar"><span>MY_INFO</span></header><div class="body">
-  <label>학년<textarea class="blank" rows="1" aria-label="학년" autocomplete="off" spellcheck="false"></textarea></label>
-  <label>반<textarea class="blank" rows="1" aria-label="반" autocomplete="off" spellcheck="false"></textarea></label>
-  <label>번호<textarea class="blank" rows="1" aria-label="번호" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>학년<textarea class="blank" rows="1" aria-label="학년" inputmode="numeric" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>반<textarea class="blank" rows="1" aria-label="반" inputmode="numeric" autocomplete="off" spellcheck="false"></textarea></label>
+  <label>번호<textarea class="blank" rows="1" aria-label="번호" inputmode="numeric" autocomplete="off" spellcheck="false"></textarea></label>
   <label>이름<textarea class="blank" rows="1" aria-label="이름" placeholder="이름을 적어요" autocomplete="off" spellcheck="false"></textarea></label>
 </div></section>
+<p class="how how-top no-pdf">답 칸은 원고지예요. 한 칸에 한 글자씩(띄어쓰기도 한 칸) 쓰고, 줄을 바꾸려면 Enter를 눌러요. 칸이 모자라면 줄이 저절로 늘어나요(글자 수 제한 없음). 답 칸에는 붙여넣기를 할 수 없어요.</p>
 
 <!-- ============ 문항 1 ============ -->
 <section class="card part p1"><header class="bar"><span>QUESTION_1</span><span class="r">3 ITEMS</span></header>
-  <div class="part-head"><p>문항 1. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="part-head"><h2>문항 1. 다음 제시 자료를 보고, 물음에 답하시오.</h2></div>
   <div class="data">
     <p class="data-k">[제시 자료] MBTI 테스트</p>
     <div class="tbl-scroll"><table class="tbl tbl-even">
-      <thead><tr><th class="k"></th><th>(가) 인터넷 사이트의 MBTI 테스트</th><th>(나) 수업 시간에 만든 MBTI T/F 모델</th></tr></thead>
+      <thead><tr><td class="k"></td><th>(가) 인터넷 사이트의 MBTI 테스트</th><th>(나) 수업 시간에 만든 MBTI T/F 모델</th></tr></thead>
       <tbody>
         <tr><th>입력 방식</th><td>“친구가 시험을 망쳤다면?” 같은 질문에 ①~⑤ 중 하나를 고른다</td><td>“나 시험 망쳤어”에 대한 내 대답을 자유롭게 문장으로 쓴다</td></tr>
         <tr><th>만든 방법</th><td>만든 사람이 「①·②를 고르면 F에 2점, ④·⑤를 고르면 T에 2점」처럼 점수 공식을 정해 두었다</td><td>T와 F 클래스에 선생님이 준 문장 파일을 올리고 「학습하기」를 눌렀다</td></tr>
@@ -208,7 +219,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 
 <!-- ============ 문항 2 ============ -->
 <section class="card part p2"><header class="bar"><span>QUESTION_2</span><span class="r">1 ITEM</span></header>
-  <div class="part-head"><p>문항 2. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="part-head"><h2>문항 2. 다음 제시 자료를 보고, 물음에 답하시오.</h2></div>
   <div class="data">
     <p class="data-k">[제시 자료] 생활 속 소프트웨어</p>
     <div class="tbl-scroll"><table class="tbl">
@@ -224,7 +235,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
   <div class="qs">
 
     <div class="q" id="q2">
-      <div class="q-head"><span class="q-no">2</span><p class="q-text">제시 자료의 소프트웨어 4개를 ‘인공지능 소프트웨어’와 ‘일반 소프트웨어’로 구별하고, 각각 그렇게 판단한 근거를 쓰시오. <span class="pt">[4점]</span></p></div>
+      <div class="q-head"><span class="q-no">2</span><p class="q-text">제시 자료의 소프트웨어 4개를 ‘인공지능 소프트웨어’와 ‘일반 소프트웨어’로 구별하고, 각각 그렇게 판단한 근거를 쓰시오. (<u class="note-u">단, 소프트웨어마다 (A)~(D) 기호를 붙여 쓴다.</u>) <span class="pt">[4점]</span></p></div>
       <div class="q-body"><div class="essay-one" data-essay data-unit="2" aria-label="2번 답">
         <textarea class="blank wongoji" rows="6" aria-label="2번 답" autocomplete="off" spellcheck="false"></textarea>
       </div></div>
@@ -235,7 +246,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 
 <!-- ============ 문항 3 ============ -->
 <section class="card part p3"><header class="bar"><span>QUESTION_3</span><span class="r">3 ITEMS</span></header>
-  <div class="part-head"><p>문항 3. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</p></div>
+  <div class="part-head"><h2>문항 3. 다음 제시 자료와 조건을 보고, 물음에 답하시오.</h2></div>
   <div class="data">
     <p class="data-k">[제시 자료 1] AI 해결사의 체크리스트</p>
     <ul class="check">
@@ -298,7 +309,7 @@ body{margin:0;color:var(--ink);font-family:'Maplestory','Apple SD Gothic Neo','M
 </section>
 
 <div class="save-row no-pdf">
-  <p class="save-guide">문항을 모두 푼 뒤 PDF로 저장해 선생님이 안내한 곳에 제출해요.</p>
+  <p class="save-guide">문항을 모두 푼 뒤 PDF로 저장하면 선생님께 자동으로 제출돼요. ‘✔ 선생님께 제출됐어요.’가 나올 때까지 창을 닫지 마세요.</p>
   <button type="button" id="pdfBtn">PDF로 저장하기</button>
   <p id="saveStatus" class="save-status" role="status" aria-live="polite"></p>
   <p id="submitStatus" class="save-status" role="status" aria-live="polite"></p>
