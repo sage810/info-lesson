@@ -30,6 +30,8 @@
    메뉴 탭·창 단추·PDF 버튼은 인라인 style(`tabChip()` 등)·`!important` 규칙이라 theme.css 선택자에도 `!important`. 유리·오로라는 `--msi-glass-*: none`·`aurora-*-aNN: rgba(0,0,0,0)` 로 끔. SVG data URI 배경(말풍선 동전)은 PDF 에도 나옴(sticker, 2026-10-21).
 
 ## Shell & Command Reliability
+0. **[2026-11-10] 수행평가 채점 시트·Apps Script 는 학교 계정(goedu.kr)에만 있음 — Claude 의 구글 시트·드라이브 커넥터(gmail 계정)로는 안 보이고, gws 는 로그인 안 됨. clasp 는 학교 계정으로 로그인돼 있음**
+   Do instead: 시트를 바꿔야 하면 Code.gs 에 기능(+ 선생님 열쇠 `?action=…`)을 넣고 가짜 시트 vm 시험 → scratchpad 에 `clasp clone` → clone 이 저장소 Code.gs 와 같은지 비교 → `clasp push` → `clasp create-version` → `clasp update-deployment <apiUrl 의 배포 ID> -V n`(주소 그대로) → 주소의 `version` 확인 → 열쇠로 호출(열쇠는 출력 금지). 라이브 시험 주소라 선생님 허락 먼저.
 0. **[2026-11-07] Bash 에 `gh` 가 없음(command not found) · 비공개 저장소는 GitHub API 가 404**
    Do instead: 공개 저장소는 Node `fetch` 로 api.github.com 을 읽고, 비공개는 `git clone --no-checkout` 뒤 `git show HEAD:<파일>`(git 자격 증명은 있음).
 0. **[2026-11-07] 한글·따옴표가 많은 긴 스크립트를 Bash heredoc 으로 넘기면 「unexpected EOF while looking for matching」으로 통째로 실패(인용 heredoc 이어도)**
@@ -38,8 +40,6 @@
    Do instead: 주석에는 「script 닫는 태그」처럼 말로 쓴다. 공용 파일을 고치면 쓰는 차시마다 `window.MSI_SUBMIT` 이 살아 있는지(pageerror 0) 본다.
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**
    Do instead: 개편 전 원본도 똑같이 뜨는 기존 경고 — 무시(`npm run check` 도 걸러냄).
-2. **[2026-09-24] 헤드리스 브라우저로 PDF 버튼을 누르면 받은 파일 이름이 `download` 로 나옴**
-   Do instead: 원본도 같음. 파일 이름 검증은 실제 브라우저로 하고, 스크립트에선 `saveAs(경로)` 로 이름을 정한다.
 3. **[2026-09-24] 이 환경은 Windows PowerShell — 한글 파일을 PowerShell 로 읽고 쓰면 인코딩이 깨지기 쉬움**
    Do instead: 파일 가공은 Node 스크립트(`scripts/`)로 한다. NEIS 받기(`fetch-neis.ps1`)만 pwsh 7.
 4. **[2026-09-30] Read 도구로 PDF 가 안 열림(pdftoppm 없음), Python 도 없음**

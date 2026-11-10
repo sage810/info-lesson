@@ -4,15 +4,17 @@
  * 기존 apps-script/(정보수업 API — 09 데이터분석 수행평가·NEIS)와 **따로 쓰는 새 프로젝트·새 시트**다.
  * 시트에는 **수식을 쓰지 않는다** — 점수·총점·보정 총점을 이 코드가 숫자로 써 넣고, PDF 는 링크 글자로 넣는다.
  *
- * 시트 「인공지능 수행평가 채점」 — 탭 5개
+ * 시트 「인공지능 수행평가 채점」 — 탭 6개
  *   제출       : 학생이 낸 기록 원본(한 번 낼 때마다 한 줄)
  *   채점 A형   : 학생 한 줄(같은 학생은 한 줄) · 학년 반 번호 이름 · 총점 · 보정 총점 · 칸별 점수 · 저장 시각 · 출처 · PDF · 확인
  *   채점 B형   : 위와 같음
  *   결과       : 두 형을 모은 학년 반 번호 이름 · 총점 · 보정 총점(학년→반→번호 순, 점수가 바뀔 때마다 코드가 다시 씀 — 손으로 고치지 않음)
+ *   생기부 참고 : 두 형을 모은 학생 한 줄 · 3-2·3-3 점수와 학생 글(가장 늦게 낸 것) · 메모(선생님이 씀 — 코드가 다시 써도 지킴) · PDF (2026-11-10)
  *   설정       : 보정 값(n·x·y — 채점 도우미에서 바꿈) · 형별 칸·배점·채점 기준(이 PC 의 npm run exam-key 가 보냄)
  *
  *   GET  ?action=ping 또는 주소만        → 살아 있는지 확인
  *   GET  ?action=teacher&key=…           → 채점 도우미(형·반 고르기 → 학생 글 보며 점수 누르기 · 보정 값 적용)
+ *   GET  ?action=record&key=…            → 「생기부 참고」 탭을 통째로 다시 쓰기(편집기에서 함수 생기부참고만들기 ▶ 와 같음)
  *   POST {"action":"submit", …}          → 시험지의 "PDF로 저장하기"(자동 제출) · npm run exam-pdf --send
  *   POST {"action":"setKey", key, lesson, rows} → 설정 탭에 그 형의 칸·배점·채점 기준 쓰기(npm run exam-key --send). 정답은 이 코드에 없다
  *
@@ -34,7 +36,11 @@ const MAX_PDF_BYTES = 20 * 1024 * 1024;
 const LOCK_WAIT_SUBMIT = 60000;   // 제출 — 한 명 저장에 몇 초 걸려 수업 끝에 몰리면 오래 기다려야 한다
 const LOCK_WAIT = 20000;          // 선생님 쪽(점수·보정 등)
 const BUSY = '사람이 몰려 저장하지 못했어요. 잠시 뒤 다시 해 주세요.';
-const VERSION = '2026-11-07-lock';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
+const VERSION = '2026-11-10-record';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
+// 생기부 참고 탭(선생님 결정 2026-11-10) — 3-2·3-3 은 문항별 한 칸(소문항은 「[이름] 글」 줄). 학생 키 = 형|학년|반|번호|이름(숨김)
+const TAB_REC = '생기부 참고';
+const REC_UNITS = ['3-2', '3-3'];
+const REC_HEAD = ['학년', '반', '번호', '이름', '형', '3-2 점수', '3-3 점수', '3-2 문제 정의서', '3-3 인공지능 시스템 4단계', '메모', 'PDF', '학생 키'];
 
 function tabGrade_(f) { return '채점 ' + f + '형'; }
 function formOf_(lesson) { return FORMS[String(lesson || '')] || ''; }
@@ -42,6 +48,10 @@ function formOf_(lesson) { return FORMS[String(lesson || '')] || ''; }
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'teacher') return teacherPage_(p.key);
+  if (p.action === 'record') {
+    if (!teacherOk_(p.key)) return json_({ ok: false, error: '선생님 열쇠(TEACHER_KEY)가 맞지 않아요' });
+    try { return json_({ ok: true, tab: TAB_REC, rows: recordNow_() }); } catch (err) { return json_({ ok: false, error: String(err && err.message || err) }); }
+  }
   return json_({ ok: true, service: 'ai-exam', version: VERSION, time: new Date().toISOString() });
 }
 
@@ -82,7 +92,10 @@ function submit_(b) {
     const sh = ss.getSheetByName(TAB_SUB);
     sh.appendRow([new Date(), form, s.grade, s.cls, s.no, s.name, s.savedAt, s.source, 'PDF', filename, JSON.stringify(b.answers || {}).slice(0, 45000)]);
     sh.getRange(sh.getLastRow(), 9).setRichTextValue(link_('PDF', s.pdf));
-    upsertGrade_(ss, form, s);
+    if (upsertGrade_(ss, form, s)) {
+      // 생기부 참고는 그 학생 한 줄만 — 여기서 문제가 나도 제출은 성공으로(채점 도우미를 열면 통째로 다시 씀)
+      try { upsertRecord_(ss, form, s, b.answers || {}); } catch (err) { console.error('생기부 참고 쓰기 실패: ' + (err && err.message || err)); }
+    }
   } finally { lock.releaseLock(); }
   return json_({ ok: true, file: file.getName() });
 }
@@ -170,7 +183,7 @@ function upsertGrade_(ss, form, s) {
     r = sh.getLastRow();
   } else {
     const old = String(sh.getRange(r, col('저장 시각')).getValue());
-    if ((Date.parse(s.savedAt) || 0) < (Date.parse(old) || 0)) return;   // 더 예전 기록이면 그대로(같은 PDF 를 또 보낸 경우 등)
+    if ((Date.parse(s.savedAt) || 0) < (Date.parse(old) || 0)) return false;   // 더 예전 기록이면 그대로(같은 PDF 를 또 보낸 경우 등)
     const scored = units_(head).some((u) => sh.getRange(r, col(u)).getValue() !== '');
     if (scored && s.savedAt !== old) flags.push('다시 냄 — 점수 확인');
     sh.getRange(r, col('저장 시각'), 1, 2).setValues([[s.savedAt, s.source]]);
@@ -180,6 +193,7 @@ function upsertGrade_(ss, form, s) {
   recalcRow_(sh, head, r, readAdjust_(ss));
   sortGrade_(sh);
   rebuildResult_(ss);
+  return true;   // 이 기록이 그 학생의 가장 늦은 기록 — 생기부 참고도 이 글로
 }
 
 function units_(head) { return head.slice(FIX.length, head.indexOf(TAIL[0])); }
@@ -235,6 +249,108 @@ function rebuildResult_(ss) {
   if (rows.length) sh.getRange(2, 1, rows.length, FIX.length).setValues(rows);
 }
 
+// ---------------------------------------------------------------- 생기부 참고 탭(3-2·3-3 학생 글, 선생님 결정 2026-11-10)
+//  학생 한 줄 · 두 형을 모아 학년→반→번호 순 · 글은 그 학생이 가장 늦게 낸 것(채점 도우미와 같음) · 점수는 채점 탭 값
+//  「메모」 칸은 선생님이 쓰는 곳 — 코드가 다시 써도 학생 키로 찾아 지킨다(채점 탭에서 사라진 학생도 메모가 있으면 줄을 남김)
+//  제출 때는 그 학생 한 줄만 고친다(수업 끝에 몰릴 때 잠금 시간을 늘리지 않게). 통째로 다시 쓰기는 채점 도우미를 열 때 · ?action=record · 생기부참고만들기 ▶
+function recTab_(ss) {
+  let sh = ss.getSheetByName(TAB_REC);
+  if (sh) return sh;
+  sh = insertBefore_(ss, TAB_REC, [TAB_SET]);   // 결과 탭 다음, 설정 탭 앞
+  sh.getRange(1, 1, 1, REC_HEAD.length).setNumberFormat('@').setValues([REC_HEAD]).setFontWeight('bold');
+  sh.setFrozenRows(1); sh.setFrozenColumns(4);
+  const c = (n) => REC_HEAD.indexOf(n) + 1;
+  sh.setColumnWidth(c('3-2 문제 정의서'), 420); sh.setColumnWidth(c('3-3 인공지능 시스템 4단계'), 420); sh.setColumnWidth(c('메모'), 320);
+  sh.getRange(1, c('3-2 문제 정의서'), sh.getMaxRows(), 3).setWrap(true);
+  sh.getRange(1, 1, sh.getMaxRows(), REC_HEAD.length).setVerticalAlignment('top');
+  sh.hideColumns(c('학생 키'));
+  return sh;
+}
+function recKey_(form, s) { return form + '|' + studentKey_(s); }
+/** 시트가 「=」「+」「-」「@」로 시작하는 글을 수식으로 읽지 않게(글자가 아닌 값 — 메모에 쓴 날짜·숫자 — 은 그대로) */
+function plain_(v) { if (v == null) return ''; if (typeof v !== 'string') return v; return /^[=+\-@]/.test(v) ? "'" + v : v; }
+function recRow_(form, s, scores, answers, memo, key) {
+  return [s.grade, s.cls, s.no, s.name, form + '형', scores[0], scores[1], plain_(answers['3-2']), plain_(answers['3-3']), plain_(memo), 'PDF', key];
+}
+function sortRec_(sh) {
+  const last = sh.getLastRow();
+  if (last > 2) sh.getRange(2, 1, last - 1, REC_HEAD.length).sort([{ column: 1, ascending: true }, { column: 2, ascending: true }, { column: 3, ascending: true }, { column: 4, ascending: true }]);
+}
+
+/** 제출 하나 → 그 학생 한 줄(메모는 그대로). submit_ 의 잠금 안에서, 그 학생의 가장 늦은 기록일 때만 부른다 */
+function upsertRecord_(ss, form, s, answers) {
+  const sh = recTab_(ss), key = recKey_(form, s), ci = (n) => REC_HEAD.indexOf(n) + 1;
+  const g = ss.getSheetByName(tabGrade_(form)), gh = headOf_(g), gr = rowOfKey_(g, gh, studentKey_(s));
+  const scores = REC_UNITS.map((u) => { const c = gh.indexOf(u) + 1; return gr > 0 && c > 0 ? g.getRange(gr, c).getValue() : ''; });
+  const r0 = rowOfKey_(sh, REC_HEAD, key);
+  const memo = r0 > 0 ? sh.getRange(r0, ci('메모')).getValue() : '';
+  const r = r0 > 0 ? r0 : Math.max(sh.getLastRow(), 1) + 1;
+  sh.getRange(r, 1, 1, REC_HEAD.length).setValues([recRow_(form, s, scores, answers, memo, key)]);
+  sh.getRange(r, ci('PDF')).setRichTextValue(link_('PDF', s.pdf));
+  sortRec_(sh);
+}
+
+/** 채점 도우미에서 3-2·3-3 점수를 누르면 그 칸만 따라 바꿈(줄이 없으면 건너뜀 — 통째로 다시 쓸 때 채워짐) */
+function recScore_(ss, form, skey, unit, score) {
+  const sh = ss.getSheetByName(TAB_REC);
+  if (!sh || REC_UNITS.indexOf(unit) < 0) return;
+  const r = rowOfKey_(sh, REC_HEAD, form + '|' + skey);
+  if (r > 0) sh.getRange(r, REC_HEAD.indexOf(unit + ' 점수') + 1).setValue(score === '' || score == null ? '' : Number(score));
+}
+
+/** 통째로 다시 쓰기 — 학생 목록은 채점 A형·B형 탭, 글은 제출 탭의 가장 늦은 기록, 메모는 지금 탭에서 학생 키로 */
+function rebuildRecord_(ss) {
+  const sh = recTab_(ss), ci = (n) => REC_HEAD.indexOf(n), last = sh.getLastRow();
+  const old = last >= 2 ? sh.getRange(2, 1, last - 1, REC_HEAD.length).getValues() : [];
+  const memo = {}, oldRow = {};
+  old.forEach((r) => { const k = String(r[ci('학생 키')] || ''); if (k) { memo[k] = r[ci('메모')]; oldRow[k] = r; } });
+  const latest = {}, sub = ss.getSheetByName(TAB_SUB), sl = sub ? sub.getLastRow() : 0;
+  if (sl >= 2) sub.getRange(2, 1, sl - 1, SUB_HEAD.length).getValues().forEach((r) => {
+    const k = recKey_(String(r[1]), { grade: r[2], cls: r[3], no: r[4], name: r[5] }), t = Date.parse(r[6]) || 0;
+    if (!latest[k] || t >= latest[k].t) latest[k] = { t: t, a: r[10] };
+  });
+  const out = [], seen = {};
+  ['A', 'B'].forEach((f) => {
+    const g = ss.getSheetByName(tabGrade_(f)), gl = g ? g.getLastRow() : 0;
+    if (gl < 2) return;
+    const gh = headOf_(g), gc = (n) => gh.indexOf(n);
+    const vals = g.getRange(2, 1, gl - 1, gh.length).getValues();
+    const pdfs = gc('PDF') >= 0 ? g.getRange(2, gc('PDF') + 1, gl - 1, 1).getRichTextValues() : [];
+    vals.forEach((r, i) => {
+      const s = { grade: r[gc('학년')], cls: r[gc('반')], no: r[gc('번호')], name: r[gc('이름')] };
+      if (!String(s.name || '').trim() && !r[gc('학생 키')]) return;   // 손으로 비운 줄
+      const k = f + '|' + (String(r[gc('학생 키')] || '') || studentKey_(s));   // 낼 때 정한 학생 키(이름을 손으로 고쳐도 글을 찾게)
+      let a = {};
+      try { a = latest[k] ? JSON.parse(latest[k].a || '{}') : {}; } catch (e) { a = {}; }
+      const link = pdfs[i] && pdfs[i][0];
+      out.push({ row: recRow_(f, s, REC_UNITS.map((u) => (gc(u) >= 0 ? r[gc(u)] : '')), a, memo[k], k), url: link ? link.getLinkUrl() || '' : '' });
+      seen[k] = true;
+    });
+  });
+  Object.keys(oldRow).forEach((k) => {   // 채점 탭에 없는 학생 — 메모가 있으면 그 줄을 그대로 둔다
+    if (seen[k] || !String(memo[k] || '').trim()) return;
+    const r = oldRow[k].map((v, j) => ([ci('3-2 문제 정의서'), ci('3-3 인공지능 시스템 4단계'), ci('메모')].indexOf(j) >= 0 ? plain_(v) : v));
+    r[ci('PDF')] = '';
+    out.push({ row: r, url: '' });
+  });
+  const n = (v) => (digits_(v) ? Number(digits_(v)) : Infinity);
+  out.sort((p, q) => n(p.row[0]) - n(q.row[0]) || n(p.row[1]) - n(q.row[1]) || n(p.row[2]) - n(q.row[2]) || String(p.row[3]).localeCompare(String(q.row[3]), 'ko'));
+  if (last >= 2) sh.getRange(2, 1, last - 1, REC_HEAD.length).clearContent();
+  if (out.length) {
+    sh.getRange(2, 1, out.length, REC_HEAD.length).setValues(out.map((o) => o.row));
+    sh.getRange(2, ci('PDF') + 1, out.length, 1).setRichTextValues(out.map((o) => [o.url ? link_('PDF', o.url) : SpreadsheetApp.newRichTextValue().setText('').build()]));
+  }
+  return out.length;
+}
+/** 잠금을 받고 통째로 다시 쓰기 → 줄 수 */
+function recordNow_() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
+  try { return rebuildRecord_(book_()); } finally { lock.releaseLock(); }
+}
+/** 편집기에서 ▶ 실행: 「생기부 참고」 탭을 지금 제출된 답으로 다시 채운다 */
+function 생기부참고만들기() { Logger.log('생기부 참고: ' + recordNow_() + '줄'); }
+
 // ---------------------------------------------------------------- 채점 도우미(google.script.run — 모두 열쇠 확인)
 function teacherOk_(key) { const k = prop_('TEACHER_KEY'); return !!k && String(key || '') === k; }
 function guard_(key) { if (!teacherOk_(key)) throw new Error('선생님 열쇠가 맞지 않아요'); }
@@ -248,7 +364,12 @@ function teacherInit(key) {
   guard_(key);
   const ss = book_();
   const lock = LockService.getScriptLock();   // 결과 탭이 없던 시트(예전 배포)도 도우미를 열면 생긴다
-  if (lock.tryLock(LOCK_WAIT)) { try { rebuildResult_(ss); } finally { lock.releaseLock(); } }
+  if (lock.tryLock(LOCK_WAIT)) {
+    try {
+      rebuildResult_(ss);
+      try { rebuildRecord_(ss); } catch (err) { console.error('생기부 참고 다시 쓰기 실패: ' + (err && err.message || err)); }   // 손으로 고친 점수도 여기서 따라옴
+    } finally { lock.releaseLock(); }
+  }
   return { forms: ['A', 'B'], adjust: readAdjust_(ss), url: ss.getUrl() };
 }
 
@@ -300,6 +421,7 @@ function teacherScore(key, form, skey, unit, score) {
     sh.getRange(r, c).setValue(score === '' || score == null ? '' : Number(score));
     const out = recalcRow_(sh, head, r, readAdjust_(ss));
     rebuildResult_(ss);
+    try { recScore_(ss, form, skey, unit, score); } catch (err) { console.error('생기부 참고 점수 실패: ' + (err && err.message || err)); }
     return out;
   } finally { lock.releaseLock(); }
 }
@@ -429,7 +551,7 @@ function rootFolder_() {
 }
 function subFolder_(parent, name) { const it = parent.getFoldersByName(name); return it.hasNext() ? it.next() : parent.createFolder(name); }
 
-/** 채점 시트 — 없으면 만들고 탭 5개(제출 · 채점 A형 · 채점 B형 · 결과 · 설정)를 갖춘다 */
+/** 채점 시트 — 없으면 만들고 탭 5개(제출 · 채점 A형 · 채점 B형 · 결과 · 설정)를 갖춘다. 생기부 참고 탭은 처음 쓸 때 recTab_ 이 만든다 */
 function book_() {
   const id = prop_('SHEET_ID');
   let ss;

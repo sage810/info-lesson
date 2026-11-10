@@ -112,7 +112,7 @@
 | `scripts/exam-key.mjs` | `npm run exam-key -- <차시> [--send]` 정답 표 확인·보내기(선생님 열쇠 필요) |
 | `scripts/exam-pdf.mjs` | `npm run exam-pdf -- <폴더> [--send]` USB PDF 의 숨은 답 확인·보내기 |
 | `apps-script/teacher.local.json` | `{"teacherKey":"…"}` — 이 PC 에만(gitignore) |
-| `apps-script-ai-exam/` | 인공지능 수행평가 전용 Apps Script(제출·채점 도우미·보정, 수식 없는 5탭 시트) · `teacher.local.json`(gitignore) |
+| `apps-script-ai-exam/` | 인공지능 수행평가 전용 Apps Script(제출·채점 도우미·보정, 수식 없는 6탭 시트 — 2026-11-10 「생기부 참고」 더함) · `teacher.local.json`(gitignore) |
 | `apps-script-ai-entry/` | 엔트리 수행평가(`ai/exam-entry`) 전용 Apps Script(고르기 자동 채점 + 글자 칸·결과 화면 직접 채점, 도우미에 결과 화면 캡처, 수식 없는 4탭 시트) · `teacher.local.json`(gitignore) |
 
 ## 7. 채점 (시트)
@@ -122,7 +122,7 @@
 - 채점 탭: **학년·반·번호 순**, **총점은 이름 옆 E열**, 칸마다 `○ 값`/`✕ 값`, 자동 점수, 그래프 칸은 그래프 점수 탭을 읽는 수식. **반·번호 없음**·**같은 이름**은 노란 줄.
 - 다시 "채점하기"를 눌러도 그래프 점수는 남는다(따로 탭).
 - **F열 「보정 총점」·「결과」 탭**(2026-11-04, 예전 시트): F열 = 총점 + n 을 x~y 로 자른 **숫자**(수식 아님, 코드가 채점하기·점수·보정 때 다시 씀). n·x·y 는 채점 도우미 「기본 점수 보정」 칸(모든 차시 공통, 스크립트 속성 ADJUST). 「결과」 탭 = 09·10 채점 탭의 학년 반 번호 이름 총점 보정 총점을 학년→반→번호 순으로 모음(Code.gs 의 RESULT_LESSONS).
-- **인공지능 수행평가(ai/exam-a·b)는 따로**(2026-11-04): 새 Apps Script `apps-script-ai-exam/`·새 시트 「인공지능 수행평가 채점」 — 탭 5개(제출 · 채점 A형 · 채점 B형 · 결과 — 두 형을 학년→반→번호 순으로 모음 · 설정), **수식 없음**(점수·총점·보정 총점을 코드가 숫자로). 보정 총점 = 총점 + n 을 x~y 로 자름, n·x·y 는 채점 도우미에서. 차시 `lesson.json` 의 `"apiUrl"`·`"teacherKeyFile"` 로 그 차시만 새 주소를 쓴다(`"apiUrl": ""` 이면 제출 꺼짐). 올리는 법 `apps-script-ai-exam/README.md`.
+- **인공지능 수행평가(ai/exam-a·b)는 따로**(2026-11-04): 새 Apps Script `apps-script-ai-exam/`·새 시트 「인공지능 수행평가 채점」 — 탭 6개(제출 · 채점 A형 · 채점 B형 · 결과 — 두 형을 학년→반→번호 순으로 모음 · 생기부 참고 — 3-2·3-3 학생 글·점수·메모, 2026-11-10 · 설정), **수식 없음**(점수·총점·보정 총점을 코드가 숫자로). 보정 총점 = 총점 + n 을 x~y 로 자름, n·x·y 는 채점 도우미에서. 차시 `lesson.json` 의 `"apiUrl"`·`"teacherKeyFile"` 로 그 차시만 새 주소를 쓴다(`"apiUrl": ""` 이면 제출 꺼짐). 올리는 법 `apps-script-ai-exam/README.md`.
 - **엔트리 수행평가(ai/exam-entry)도 따로**(2026-11-07, 선생님 결정 — A·B형에 영향 없게): 새 Apps Script `apps-script-ai-entry/`·새 시트 「인공지능 엔트리 수행평가 채점」 — 탭 4개(제출 · 채점 · 결과 · 설정), 수식 없음. **고르기 칸(one)은 제출할 때 자동 채점**, 글자 칸(essay)·결과 화면(graph)은 도우미에서 직접(0·1·2점), 배점 0 칸은 채점 열 없음. 시트에 쓸 차례(잠금)를 못 받으면 쓰지 않고 실패로 돌려준다(제출 60초까지 기다림, 학생 화면이 자동으로 다시 보냄). 그래프 칸도 `_채점_기준` 이 있으면 `exam-key` 가 시트로 보내 도우미에 보인다. **5번 엔트리 과제 제출 2점**은 시험지에 답 칸이 없어 `_채점_추가칸`(kind `check`)으로 채점 열을 만들고, 선생님이 엔트리 학급에서 확인해 도우미에서 0·1·2점을 누른다(총 12점, 자동 4 + 직접 8). 정답을 나중에 보내거나 고쳐도 `setKey` 가 제출 탭의 가장 늦은 답으로 다시 채점한다. 올리는 법 `apps-script-ai-entry/README.md`.
 - 채점 규칙은 `Code.gs` 의 순수 함수(`scoreUnit_`·`pickLatest_`·`buildGrade_`) — 고치면 Node `vm` 으로 불러 가짜 정답·가짜 학생으로 시험한다.
 
