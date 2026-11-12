@@ -43,7 +43,7 @@
 | `ai/exam-a` | 인공지능 수행평가 A형 (논술·원고지) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-exam/` |
 | `ai/exam-b` | 인공지능 수행평가 B형 (논술·원고지) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-exam/` |
 | `ai/exam-entry` | 인공지능 수행평가 (엔트리) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-entry/` |
-| `digital-culture/01` | 디지털 문화 수행평가 — 슬라이드 제작 | portal (4탭) | 없음 (읽기만 하는 안내 화면 — 순서·주제·꼭 들어갈 내용과 배점) |
+| `digital-culture/01` | 디지털 문화 수행평가 — 슬라이드 제작 | portal (4탭) | 없음 (읽기만 하는 안내 화면 — 순서·주제·꼭 들어갈 내용과 배점 · 수업용 슬라이드는 본보기 「AI 얼굴 인식」 7장) |
 
 ## 처음 한 번 (Windows)
 
