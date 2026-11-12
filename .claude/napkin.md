@@ -28,14 +28,21 @@
 10. **[2026-10-21] 차시 테마를 `design/tokens.json` 에 넣으면 안 됨 — `node design/build.mjs` 가 표식 있는 차시(틀·ai/01·07·present.html)를 모두 바꿈**
    Do instead: 테마는 `design/themes/<이름>/theme.css` + 차시 `lesson.json` 의 `"theme"`(빌드가 `</body>` 앞에 넣음, `docs/rules/theme.md`). 틀을 고칠 땐 숫자 대신 `--msi-shape-*` 변수. 바꾼 뒤 「전후 계산 스타일 같음」 확인은 getComputedStyle 비교(4탭·폰·올림·누름·포커스).
    메뉴 탭·창 단추·PDF 버튼은 인라인 style(`tabChip()` 등)·`!important` 규칙이라 theme.css 선택자에도 `!important`. 유리·오로라는 `--msi-glass-*: none`·`aurora-*-aNN: rgba(0,0,0,0)` 로 끔. SVG data URI 배경(말풍선 동전)은 PDF 에도 나옴(sticker, 2026-10-21).
+11. **[2026-11-11] 「A4 PDF 로 만들어줘」 — 활동지 탭을 Playwright `page.pdf` 로 찍으면 바깥 창 테두리·그림자·쪽 나눔이 엉망 + `pdf-pages.mjs` 는 PDF 안 그림만 뽑아 글자 PDF 미리보기가 안 됨**
+   Do instead: `body.print-sheet-only` + 인쇄 CSS 주입(`body #appPage .win-glass` 테두리·그림자·모서리 없앰 — 스티커 theme.css 가 `!important` 라 선택자를 더 세게 · `#appPage > div > div:not(.win-glass)` 숨김 · `.m-card{overflow:visible; box-decoration-break:clone}` · 쪽 나눌 소제목에 `break-before:page`), `format:'A4', scale:1`(글자 16px = 12pt). 미리보기는 브라우저 안 pdf.js(`page.route` 로 pdfjs-dist 를 내주고 canvas 에 그림)로(digital-culture/01).
+12. **[2026-11-11] 표 칸(td) 안에 넣은 `glass-chip`(inline-flex) 버튼은 PDF(html2canvas)에서 글자가 통째로 빠짐 — 화면·check 캡처로는 안 드러남**
+   Do instead: `.msi-pdf-clone <표> .glass-chip { display: inline-block !important; line-height: 30px; }` 를 더하고, 새 부품을 넣으면 serve 주소로 PDF 를 실제로 받아 `pdf-pages.mjs` 로 쪽 그림을 열어 본다(digital-culture/01 점검표).
 
 ## Shell & Command Reliability
+0. **[2026-11-11] 선생님이 「구글 드라이브 …docx」로 양식을 주면 — 커넥터 `download_file_content` 는 base64 덩어리라 파일로 옮기기 어려움**
+   Do instead: `search_files`(title contains) → `read_file_content` 로 글을 바로 읽는다(표·목록이 마크다운으로 옴, docx-read.mjs 불필요). 지운 칸(도입·정리 등)이 있는지 「✍️ 여기부터 작성」~「📎 참고」 사이를 꼭 본다.
 0. **[2026-11-10] 수행평가 채점 시트·Apps Script 는 학교 계정(goedu.kr)에만 있음 — Claude 의 구글 시트·드라이브 커넥터(gmail 계정)로는 안 보이고, gws 는 로그인 안 됨. clasp 는 학교 계정으로 로그인돼 있음**
    Do instead: 시트를 바꿔야 하면 Code.gs 에 기능(+ 선생님 열쇠 `?action=…`)을 넣고 가짜 시트 vm 시험 → scratchpad 에 `clasp clone` → clone 이 저장소 Code.gs 와 같은지 비교 → `clasp push` → `clasp create-version` → `clasp update-deployment <apiUrl 의 배포 ID> -V n`(주소 그대로) → 주소의 `version` 확인 → 열쇠로 호출(열쇠는 출력 금지). 라이브 시험 주소라 선생님 허락 먼저.
 0. **[2026-11-07] Bash 에 `gh` 가 없음(command not found) · 비공개 저장소는 GitHub API 가 404**
    Do instead: 공개 저장소는 Node `fetch` 로 api.github.com 을 읽고, 비공개는 `git clone --no-checkout` 뒤 `git show HEAD:<파일>`(git 자격 증명은 있음).
 0. **[2026-11-07] 한글·따옴표가 많은 긴 스크립트를 Bash heredoc 으로 넘기면 「unexpected EOF while looking for matching」으로 통째로 실패(인용 heredoc 이어도)**
    Do instead: Write 도구로 scratchpad 에 .mjs 로 저장한 뒤 `node <파일> "$PWD"` 로 돌린다.
+   `node -e "…"` 도 같음 — 큰따옴표 안 백틱(마크다운 코드 표시)은 Bash 가 명령으로 실행해 글자가 사라짐(2026-11-11 spec.md). 백틱이 든 글은 Edit/Write 로.
 0. **[2026-11-04] `shared/partials/*.js` 주석·글에 `</script>` 를 쓰면 빌드가 그 파일을 `<script>` 안에 넣을 때 거기서 끊겨 「Invalid or unexpected token」**
    Do instead: 주석에는 「script 닫는 태그」처럼 말로 쓴다. 공용 파일을 고치면 쓰는 차시마다 `window.MSI_SUBMIT` 이 살아 있는지(pageerror 0) 본다.
 1. **[2026-09-24] file:// 로 연 활동지에서 `fetch at 'file:…'` CORS 콘솔 오류가 뜸**
