@@ -828,6 +828,29 @@
     .dc-req { grid-template-columns: 24px minmax(0,1fr) auto; row-gap: 2px; }
     .dc-req .dc-d { grid-column: 2 / -1; grid-row: 2; }
   }
+  /* 4. 예시 = 본보기 발표 8장(그림) 넘겨 보기 — ◀ ▶ · ← → · 밀기 · 점(선생님 결정 2026-11-13). 지금 장은 state.exIdx */
+  .dc-ex__view { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: var(--msi-shape-bw3) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r12);
+    background: var(--msi-role-base-white); box-shadow: var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.14); touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; }
+  .dc-ex__view:focus-visible { outline: 3px solid var(--msi-role-base-night-sky-ink); outline-offset: 3px; }
+  .dc-ex__track { display: flex; height: 100%; transition: transform .45s var(--msi-motion-ease-out); }
+  .dc-ex__slide { flex: 0 0 100%; height: 100%; }
+  .dc-ex__slide img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+  .dc-ex__nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
+  .dc-ex { container-type: inline-size; }
+  .dc-ex__btn { font-size: 16px; white-space: nowrap; }
+  .dc-ex__count { min-width: 4.2em; text-align: center; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .dc-ex__dots { display: flex; justify-content: center; margin-top: 2px; }   /* 좁으면 점 칸이 함께 줄어 한 줄 유지 */
+  .dc-ex__dot { display: inline-flex; align-items: center; justify-content: center; flex: 0 1 36px; min-width: 18px; height: var(--msi-size-touch-min); padding: 0; border: 0; background: none; cursor: pointer; }
+  .dc-ex__dot span { width: 12px; height: 12px; box-sizing: border-box; border: var(--msi-shape-bw2) solid var(--msi-role-base-night-sky-ink); border-radius: 50%; background: var(--msi-role-base-white);
+    transition: width .2s var(--msi-motion-ease-out), height .2s var(--msi-motion-ease-out); }
+  .dc-ex__dot:hover span { box-shadow: var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.25); }
+  .dc-ex__dot[aria-current="step"] span { width: 18px; height: 18px; border-width: var(--msi-shape-bw3); background: var(--msi-role-base-lavender); }
+  .dc-ex__dot:focus-visible { outline: 3px solid var(--msi-role-base-night-sky-ink); outline-offset: -4px; border-radius: var(--msi-shape-r-pill); }
+  @container (max-width: 340px) { .dc-ex__nav { gap: 6px; } .dc-ex__btn { padding: 0 12px; } .dc-ex__count { min-width: 3.4em; } }
+  @container (max-width: 250px) { .dc-ex__bt { display: none; } .dc-ex__btn { min-width: var(--msi-size-touch-min); padding: 0 10px; } }   /* 아주 좁으면 ◀ ▶ 만(이름은 aria-label) */
+  @media (prefers-reduced-motion: reduce) { .dc-ex__track, .dc-ex__dot span { transition: none; } }
+  .msi-pdf-clone .dc-ex__btn, .msi-pdf-clone .dc-ex__dots { display: none !important; }
+  @media print { .dc-ex__btn, .dc-ex__dots { display: none !important; } }
   .glass-chip:focus-visible, .ca-chip:focus-visible, .seq-chip:focus-visible { outline: 3px solid var(--msi-role-base-night-sky-ink); outline-offset: 3px; }
   .ai-fb { padding: 9px 12px; border: var(--msi-shape-bw3) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r10); font-size: 13.5px; line-height: 1.7; word-break: keep-all; }
   .ai-fb[data-s="ok"] { background: var(--msi-role-ui-feedback-ok-bg); }
@@ -1515,6 +1538,33 @@
                   <button type="button" class="dc-line dc-req" aria-pressed="{{ rq6P }}" onClick="{{ rq6T }}"><span class="dc-cb" aria-hidden="true">{{ rq6M }}</span><span class="dc-k">캠페인 문구</span><span class="dc-d">주제와 관련된 해결을 위해 캠페인 문구 한 줄 만들기</span><span class="dc-pt">2점</span></button>
                   <button type="button" class="dc-line dc-req" aria-pressed="{{ rq7P }}" onClick="{{ rq7T }}"><span class="dc-cb" aria-hidden="true">{{ rq7M }}</span><span class="dc-k">이미지와 글</span><span class="dc-d">이미지와 글이 적절하게 들어갔는지</span><span class="dc-pt">2점</span></button>
                 </div>
+
+                <!-- 4. 예시 — 선생님이 만든 본보기 발표(「AI 얼굴 인식 발표 (clean 템플릿).pptx」 8장)를 그림으로. ◀ ▶ · ← → · 밀기 · 점(선생님 결정 2026-11-13) -->
+                <div class="m-hd2">4. 예시</div>
+                <div class="dc-ex" role="region" aria-roledescription="슬라이드 모음" aria-label="예시 발표 「AI 얼굴 인식」 8장">
+                  <div class="dc-ex__view" tabindex="0" aria-label="예시 슬라이드 — 왼쪽·오른쪽 방향키나 손가락으로 밀어서 넘겨요">
+                    <div class="dc-ex__track" style="{{ exTrackStyle }}">
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 8" aria-hidden="{{ ex0H }}"><img src="msi-asset:./assets/ex-01.png" alt="표지: 정보 - 디지털 문화 수행평가, AI 얼굴 인식, 21212 한OO" draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 8" aria-hidden="{{ ex1H }}"><img src="msi-asset:./assets/ex-02.jpg" alt="목차: 01 실제 예시, 02 좋은 점, 03 나쁜 점, 04 해결 방안, 05 내 생각, 06 캠페인 문구" draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 8" aria-hidden="{{ ex2H }}"><img src="msi-asset:./assets/ex-03.jpg" alt="실제 예시 — AI가 엉뚱한 사람을 범인으로 골랐다. 언제: 2020년 1월. 어디서: 미국 미시간주 디트로이트. 무슨 일: 경찰이 시계 가게 CCTV 속 도둑을 AI 얼굴 인식으로 찾았는데, AI가 전혀 다른 사람(로버트 윌리엄스)을 골랐다. 경찰은 그 결과를 믿고 아내와 어린 두 딸 앞에서 그를 체포했고, 그는 30시간 동안 갇혀 있었다. 결과: 2024년 6월, 시는 윌리엄스 씨에게 30만 달러(약 4억 원)를 주기로 했다. 경찰은 「얼굴 인식 결과만으로는 체포하지 않는다」는 규칙을 새로 만들었다. 출처: AP 통신 기사(2024.6.28). 왼쪽에 CCTV 카메라 사진." draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="4 / 8" aria-hidden="{{ ex3H }}"><img src="msi-asset:./assets/ex-04.jpg" alt="좋은 점 — 빠르고 편리하게 사람을 찾고 확인한다. 실종된 사람의 가족 · 경찰: CCTV 영상 속 얼굴을 AI가 빠르게 찾아 주어, 길을 잃은 아이나 치매 어르신을 더 빨리 찾을 수 있다. 공항 이용객: 인천공항 「스마트패스」처럼 얼굴을 미리 등록하면, 출국장과 탑승구를 얼굴만으로 통과해 줄이 짧아진다. 오른쪽에 공항 탑승구의 얼굴 인식 기계 그림." draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="5 / 8" aria-hidden="{{ ex4H }}"><img src="msi-asset:./assets/ex-05.jpg" alt="나쁜 점 — AI가 틀리면, 죄 없는 사람이 피해를 본다. 누가 피해: AI가 잘못 알아본 사람. 어떤 문제: 닮은 사람을 범인으로 고르면 죄 없는 사람이 체포될 수 있다. 미국 정부 연구소(NIST)의 2019년 조사에서도 흑인·아시아인 얼굴을 더 자주 헷갈렸다. 어떤 갈등: 안전 vs 사생활. 왜? 거리 CCTV가 얼굴을 알아보면 내가 간 곳이 모두 기록될 수 있어, 「범죄를 막자」와 「사생활을 지키자」가 부딪힌다. 출처: 미국 국립표준기술연구소 NISTIR 8280(2019.12). 왼쪽에 기둥에 달린 CCTV 여러 대 사진." draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="6 / 8" aria-hidden="{{ ex5H }}"><img src="msi-asset:./assets/ex-06.jpg" alt="해결 방안 — 세 가지 측면에서 해결한다. 법적 측면: 얼굴 인식 결과만으로는 체포하거나 처벌할 수 없도록 법으로 정한다. 사회적 측면: 얼굴 인식 CCTV가 있는 곳에는 안내판을 붙이고, 시민과 전문가가 사용 기록을 함께 점검한다. 윤리적 측면: 만드는 회사는 여러 피부색·나이·성별의 얼굴로 골고루 학습시키고, 쓰는 사람은 AI 결과를 꼭 다시 확인한다. 칸마다 법봉, 둘러앉은 사람들, 모은 손 그림." draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="7 / 8" aria-hidden="{{ ex6H }}"><img src="msi-asset:./assets/ex-07.jpg" alt="내 생각 — AI는 돕고, 판단은 사람이. 내 생각: 나는 AI 얼굴 인식을 무조건 금지하기보다 조심해서 써야 한다고 생각한다. 이유: 실종된 아이를 빨리 찾는 것처럼 사람을 지키는 데 큰 도움이 되기 때문이다. 하지만: 윌리엄스 씨 사건처럼 AI는 틀릴 수 있고, 그 피해는 죄 없는 사람이 받는다. 그래서: AI의 결과는 참고로만 쓰고, 마지막 판단은 사람이 증거를 확인해서 내려야 한다." draggable="false" decoding="async"></div>
+                      <div class="dc-ex__slide" role="group" aria-roledescription="슬라이드" aria-label="8 / 8" aria-hidden="{{ ex7H }}"><img src="msi-asset:./assets/ex-08.png" alt="캠페인 문구 — AI 얼굴 인식, 믿기 전에 한 번 더 확인하자" draggable="false" decoding="async"></div>
+                    </div>
+                  </div>
+                  <div class="dc-ex__nav">
+                    <button type="button" class="glass-pill dc-ex__btn" data-ex="prev" aria-label="이전 장" aria-disabled="{{ exFirst }}" onClick="{{ exPrev }}">◀<span class="dc-ex__bt"> 이전</span></button>
+                    <span class="dc-ex__count" aria-live="polite">{{ exCount }}</span>
+                    <button type="button" class="glass-pill dc-ex__btn" data-ex="next" aria-label="다음 장" aria-disabled="{{ exLast }}" onClick="{{ exNext }}"><span class="dc-ex__bt">다음 </span>▶</button>
+                  </div>
+                  <div class="dc-ex__dots" role="group" aria-label="장으로 바로 가기">
+                    <sc-for list="{{ exDots }}" as="d" hint-placeholder-count="8">
+                      <button type="button" class="dc-ex__dot" aria-label="{{ d.label }}" aria-current="{{ d.cur }}" onClick="{{ d.go }}"><span aria-hidden="true"></span></button>
+                    </sc-for>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1680,7 +1730,7 @@ class Component extends DCLogic {
     tab: 'rules', timeView: 'day', mealView: 'day',
     grade: 3, cls: 2, dayIdx: 2,
     fGrade: '', fClass: '', fNum: '', fName: '',
-    fq: [], topic: '', reqChk: [false, false, false, false, false, false, false, false],
+    fq: [], topic: '', reqChk: [false, false, false, false, false, false, false, false], exIdx: 0,
     q1Pick: '', prog2: '', a3: [null, null, null], ox: [], oxChecked: false, oxMsg: '', reflect: '', checks: [false, false, false, false],
     saved: false, savedName: '', sheetTick: 0,
     tt: {}, ttLoadedKey: '', meal: {}, mealLoadedMonth: '', mealDay: '', mealWeek: '', mealMonth: '', neisErr: ''
@@ -2361,6 +2411,16 @@ class Component extends DCLogic {
       reqRows['rq' + i + 'P'] = String(on); reqRows['rq' + i + 'M'] = on ? '✓' : '';
       reqRows['rq' + i + 'T'] = () => this.setState((st) => { const a = (st.reqChk || []).slice(); a[i] = !a[i]; return { reqChk: a }; });
     }
+    // ── [digital-culture/01] 4. 예시 슬라이드 8장 — 지금 장(exIdx)은 화면에만, 탭을 오가도 그대로 ──
+    const EX_N = 8, exI = Math.max(0, Math.min(EX_N - 1, s.exIdx || 0));
+    const exGo = (i) => () => this.setState({ exIdx: Math.max(0, Math.min(EX_N - 1, i)) });
+    const exRows = {   // ex{i}H = 지금 장이 아닌 슬라이드는 aria-hidden
+      exTrackStyle: 'transform:translateX(' + (-100 * exI) + '%)',
+      exCount: (exI + 1) + ' / ' + EX_N, exFirst: String(exI === 0), exLast: String(exI === EX_N - 1),
+      exPrev: exGo(exI - 1), exNext: exGo(exI + 1),
+      exDots: Array.from({ length: EX_N }, (_, i) => ({ label: (i + 1) + '장으로', cur: i === exI ? 'step' : 'false', go: exGo(i) }))
+    };
+    for (let i = 0; i < EX_N; i++) exRows['ex' + i + 'H'] = String(i !== exI);
     void s.sheetTick;   // DOM 활동(빈칸·붙여넣기) 변화 시 _watchSheetActivities 가 sheetTick 을 올려 리렌더
     const _p = this._progressParts();
     const sheetDone = _p.done;
@@ -2418,7 +2478,7 @@ class Component extends DCLogic {
       setFGrade: set('fGrade'), setFClass: set('fClass'), setFNum: set('fNum'), setFName: set('fName'),
       setReflect: set('reflect'),
       q1, q1Feedback, q1FeedbackStyle,
-      a3Items, topicItems, ...reqRows,
+      a3Items, topicItems, ...reqRows, ...exRows,
       prog2: s.prog2, setProg2: set('prog2'),
       steps, saved: s.saved, savedName: s.savedName || '이름 없는 친구',
       savePdf: () => {
@@ -2634,6 +2694,29 @@ class Component extends DCLogic {
   ["play", "pause"].forEach(function (ev) { document.addEventListener(ev, function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) label(t.closest(".ai-vid")); }, true); });   // 영상 자체 조작줄로 멈춰도 버튼 글이 맞게
   document.addEventListener("keydown", function (e) { var t = e.target; if (!t || !t.classList || !t.classList.contains("ai-vid__img")) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); play(t.closest(".ai-vid")); } });
   document.addEventListener("ended", function (e) { var t = e.target; if (t && t.classList && t.classList.contains("ai-vid__v")) { var b = t.closest(".ai-vid"); if (b) { b.classList.remove("is-playing"); label(b); } } }, true);
+})();
+</script>
+<script>
+/* [digital-culture/01] 4. 예시 슬라이드 — ← → 키 · 손가락(마우스)으로 밀기. 활동지 탭은 다시 그려지므로 document 위임.
+   넘기기는 ◀ ▶ 버튼을 눌러 x-dc 상태(exIdx)로 — 끝 장에선 버튼이 aria-disabled 라 멈춘다 */
+(function () {
+  function go(box, dir) { var b = box && box.querySelector('.dc-ex__btn[data-ex="' + dir + '"]'); if (b && b.getAttribute('aria-disabled') !== 'true') b.click(); }
+  document.addEventListener('keydown', function (e) {
+    if ((e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    var t = e.target, box = t && t.closest && t.closest('.dc-ex'); if (!box) return;
+    e.preventDefault(); go(box, e.key === 'ArrowLeft' ? 'prev' : 'next');
+  });
+  var sx = null, sy = 0, sid = null, sbox = null;
+  document.addEventListener('pointerdown', function (e) {
+    var t = e.target, v = t && t.closest && t.closest('.dc-ex__view'); if (!v || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    sx = e.clientX; sy = e.clientY; sid = e.pointerId; sbox = v.closest('.dc-ex');
+  });
+  document.addEventListener('pointerup', function (e) {
+    if (sx == null || e.pointerId !== sid) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy, box = sbox; sx = null; sbox = null;
+    if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) go(box, dx < 0 ? 'next' : 'prev');   // 왼쪽으로 밀면 다음 장
+  });
+  document.addEventListener('pointercancel', function (e) { if (e.pointerId === sid) { sx = null; sbox = null; } });
 })();
 </script>
 </body>

@@ -57,6 +57,8 @@
 6. **[2026-10-18] .pptx 미리보기에 쓸 LibreOffice 가 없음(pptx 스킬의 soffice·validate.py 도 못 씀 — python 은 스토어 껍데기)**
    Do instead: `npm run ppt -- <단원>/<차시> --check` — `scripts/ppt/render.ps1`(PowerPoint COM 으로 장마다 PNG + `TextRange.BoundWidth/BoundHeight` 넘침 검사, 켜 둔 PowerPoint 는 안 끔). 규칙 `docs/rules/ppt.md`.
    장이 많을 때(70장+) 「Call was rejected by callee(RPC_E_CALL_REJECTED)」로 중간에 멈추면 PowerPoint 가 잠깐 바빴던 것 — 남은 POWERPNT 가 없는지 보고 다시 돌린다.
+   **[2026-11-13] 선생님이 준 pptx(캔바·구글 슬라이드 내보내기)를 그림으로 뽑으면 한글이 굴림·바탕으로 섞여 나옴** — 글꼴이 Arimo·Montserrat(한글 없음)라 대체 글꼴이 PC마다 다름.
+   scratchpad 복사본에서 `<a:ea typeface>` 를 모두 `Pretendard` 로 바꾸고(「프리텐다드」 이름도 Pretendard 로) Pretendard OTF(`cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/`)·Montserrat 를 AddFontResourceW 로 잠깐 불러 Export → System.Drawing 으로 1600×900(사진 장 JPG·글 장 PNG 중 작은 것). 원본 파일은 안 고침.
 7. **[2026-10-18] PPT 표에 큰 글(정답)을 넣으면 PowerPoint 가 줄을 스스로 늘려 아래 글과 붙음(줄 높이는 최소값이라 넘침 검사에 안 잡힘) · pptxgenjs 표 칸 `margin` 은 첫 값이 1 이상이면 pt, 1 미만이면 인치**
    Do instead: 칸 위아래 여백 1pt(`margin: [1, 9, 1, 9]`) — 이 글꼴들의 한 줄 높이는 글자 크기 × 1.36 정도. 표 아래 글은 render PNG 로 눈 확인.
 
