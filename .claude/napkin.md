@@ -100,6 +100,8 @@
    Do instead: 틀(`_templates/order`)의 자동 보관(`this._keep…`, 메모리 + localStorage 3시간, PDF 저장하면 지움)을 쓴다. 리허설은 "적기 → 다른 탭 → 돌아오기 → 새로고침" 까지.
 9. **[2026-10-16] 색은 역할 토큰으로만 — 07·틀은 색 글자 대신 `var(--msi-role-…)` (흰 PDF 바탕·canvas fillStyle 만 예외)**
    Do instead: 값은 `design/tokens.json` role → `node design/build.mjs`(표식 있는 lesson.html 블록 자동 갱신). 공용 글꼴을 바꾸거나 새 데이터를 넣으면 `python scripts/font-subset.py` 다시(원본 design/fonts).
+10. **[2026-11-14] 본문(메이플스토리 300) 안 그냥 `<b>` 는 400 으로만 바뀌어 굵게 안 보임**
+   Do instead: 「굵게」 요청엔 그 상자에 `… b { font-weight: 700; }` 를 두거나 이미 있는 강조 클래스(예 `.dc-em`)를 쓰고, 캡처에서 굵기를 눈으로 확인한다.
 
 ## 모션그래픽 (scripts/motion · docs/rules/motion.md)
 1. **[2026-10-18] WebCodecs(VideoEncoder)는 보안 문맥에서만 — about:blank·file:// 에선 `undefined`**

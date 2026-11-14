@@ -369,3 +369,8 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 넘기기: ◀ 이전 · 다음 ▶(`glass-pill`, 끝 장 aria-disabled) + 「n / 8」 + 장 번호 점 + ← → 키 + 손가락·마우스로 밀기. 지금 장은 x-dc 상태 `exIdx`(화면에만), 가로 띠 `translateX`. 키·밀기는 맨 아래 document 위임 스크립트가 ◀ ▶ 버튼을 누르는 방식(다시 그려도 동작).
 - 그림 만들기: PowerPoint COM 으로 장마다 PNG → 1600×900(JPG/PNG 중 작은 것) → `assets/ex-01…08`. 원본 글꼴에 한글이 없어 복사본에서 한글만 Pretendard 로 지정(napkin).
 - 반복되면 이 부품(`.dc-ex`)을 틀(`lessons/_templates/order`)의 「그림 슬라이드」 부품으로 옮길 수 있다.
+
+## 첫 화면 단원 바꾸기 · 활동지 바깥 링크 버튼 — digital-culture/01 · 첫 화면 — 2026-11-14
+- 첫 화면 세 번째 단원 카드를 정보 윤리 → 디지털 문화로(`lessons/units.json` 의 줄만 바꿈, 예정 차시 수 없음 = 만든 차시만). 단원 카드 순서·이름은 늘 이 파일 한 곳.
+- 첫 화면 번호 칸: 수행평가 폴더(`exam-a`·`exam-b`·`exam-entry` …)는 「평가」로(`scripts/lib/index-page.mjs` 의 `numLabel`), 제목은 낱말 사이에서만 줄바꿈.
+- 활동지 「1. 순서」 줄에 바깥 사이트 버튼: `<a class="glass-pill" href=… target="_blank" rel="noopener">↗ …</a>`(sticker 는 하늘색 알약). 클래스룸은 `https://classroom.google.com/` 하나로 — 로그인 안 됐으면 구글 로그인 창이 먼저 뜨고 끝나면 클래스룸. 폰에서는 글 아래 줄로(`flex-wrap`).

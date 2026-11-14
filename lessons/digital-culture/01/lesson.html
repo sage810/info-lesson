@@ -798,6 +798,7 @@
   .msi-pdf-clone .glass-chip[data-s="on"] { background: var(--msi-role-base-lavender) !important; }
   /* ── [digital-culture/01] 수행평가 안내 — 순서·주제·꼭 들어갈 내용을 각각 한 카드(.dc-box) 안 줄(.dc-line)로(선생님 피드백 2026-11-11) ── */
   .dc-ul { margin: 0; padding-left: 1.3em; }
+  .dc-ul b { font-weight: 700; }
   .dc-box { border: var(--msi-shape-bw3) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r12); background: var(--msi-role-base-cream-paper);
     box-shadow: var(--msi-shape-sh3) rgba(var(--msi-rgb-ink),.14); padding: 4px 16px; font-size: 16px; line-height: 1.7; word-break: keep-all; }
   .dc-line { display: flex; gap: 10px; align-items: center; margin: 0; padding: 10px 0; }
@@ -823,10 +824,13 @@
   .dc-em { font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
   .dc-req .dc-k { font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; }
   .dc-req .dc-pt { text-align: right; white-space: nowrap; font-family: 'CookieRun', Apple SD Gothic Neo, Malgun Gothic, Noto Sans KR, sans-serif; font-weight: 700; }
+  .dc-line > .glass-pill { flex: none; white-space: nowrap; }
   @media (max-width: 560px) {   /* 폰: 항목·배점 한 줄, 설명은 그 아래 */
     .dc-box { padding: 2px 12px; }
     .dc-req { grid-template-columns: 24px minmax(0,1fr) auto; row-gap: 2px; }
     .dc-req .dc-d { grid-column: 2 / -1; grid-row: 2; }
+    .dc-line:has(> .glass-pill) { flex-wrap: wrap; row-gap: 6px; }
+    .dc-line > .glass-pill { margin-left: 38px; flex: 1 1 auto; white-space: normal; word-break: keep-all; text-wrap: balance; text-align: center; padding: 6px 14px; }   /* 순서 1 「로그인하고 클래스룸 열기」: 글 아래 줄, 글과 같은 왼쪽, 좁으면 두 줄 */
   }
   /* 4. 예시 = 본보기 발표 8장(그림) 넘겨 보기 — ◀ ▶ · ← → · 밀기 · 점(선생님 결정 2026-11-13). 지금 장은 state.exIdx */
   .dc-ex__view { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: var(--msi-shape-bw3) solid var(--msi-role-base-night-sky-ink); border-radius: var(--msi-shape-r12);
@@ -1504,17 +1508,18 @@
                   <ul class="dc-ul">
                     <li>수행평가 (30점)</li>
                     <li>이번 시간, 다음 시간에만 제작 가능 (정보 시간에만 제작하세요)</li>
-                    <li>이미지와 글이 적절하게 들어가야 함</li>
+                    <li><b>이미지와 글</b>이 적절하게 들어가야 함</li>
                   </ul>
                 </div>
 
                 <div class="m-hd2">1. 순서</div>
                 <div class="dc-box">
-                  <div class="dc-line"><span class="num-coin">1</span><span>제시된 주제 중 자신이 하고 싶은 주제 선택 <span class="dc-note">(제시되지 않은 주제 선택 가능, 대신 선생님한테 주제에 대해 미리 손들고 확인받기)</span></span></div>
-                  <div class="dc-line"><span class="num-coin">2</span><span>선생님이 준 QR코드 찍고 슬라이드 들어가기</span></div>
-                  <div class="dc-line"><span class="num-coin">3</span><span>주제와 관련된 내용을 찾아보기</span></div>
-                  <div class="dc-line"><span class="num-coin">4</span><span>슬라이드 제작하기 <span class="dc-note">(이미지, 글이 적절하게 들어가도록)</span></span></div>
-                  <div class="dc-line"><span class="num-coin">5</span><span>이번 시간, 다음 시간 이어서 제작하고 끝내기</span></div>
+                  <div class="dc-line"><span class="num-coin">1</span><span>구글 계정 로그인하기</span><a class="glass-pill" href="https://classroom.google.com/" target="_blank" rel="noopener">↗ 로그인하고 클래스룸 열기</a></div>
+                  <div class="dc-line"><span class="num-coin">2</span><span>클래스룸 들어가기</span></div>
+                  <div class="dc-line"><span class="num-coin">3</span><span>제시된 주제 중 자신이 하고 싶은 주제 선택 <span class="dc-note">(제시되지 않은 주제 선택 가능, 대신 선생님한테 주제에 대해 미리 손들고 확인받기)</span></span></div>
+                  <div class="dc-line"><span class="num-coin">4</span><span>주제와 관련된 내용을 찾아보기</span></div>
+                  <div class="dc-line"><span class="num-coin">5</span><span>슬라이드 제작하기 <span class="dc-note">(이미지, 글이 적절하게 들어가도록)</span></span></div>
+                  <div class="dc-line"><span class="num-coin">6</span><span>이번 시간, 다음 시간 이어서 제작하고 끝내기</span></div>
                 </div>
 
                 <div class="m-hd2">2. 주제</div>

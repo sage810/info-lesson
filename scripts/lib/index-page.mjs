@@ -18,9 +18,11 @@ export function renderIndex(lessons, units = [], materials = []) {
   }
   // 차시 한 줄 — 줄 전체가 학생용 링크(제목 링크를 줄 크기로 늘림), 아래 작은 줄에 학생용 · 교사용 링크
   // 차시 폴더에 present.html 이 있으면 교사용 다음에 「수업용 슬라이드」(선생님 지시 2026-10-20, docs/rules/present.md)
+  // 번호 칸 — 수행평가 폴더(exam-a·exam-b·exam-entry …)는 폴더 이름 대신 「평가」(선생님 결정 2026-11-14)
+  const numLabel = (no) => (/^exam(-|$)/.test(no) ? '평가' : no);
   const lessonRow = (l) => `
           <li class="row live">
-            <span class="num">${esc(l.no)}</span>
+            <span class="num">${esc(numLabel(l.no))}</span>
             <div class="txt">
               <a class="name" href="${esc(l.unit)}/${esc(l.no)}/">${esc(l.meta.title)}</a>${l.meta.status === 'draft' ? ' <span class="draft">준비 중</span>' : ''}
               <div class="subs"><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/">학생용</a><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/teacher.html">교사용</a>${fs.existsSync(path.join(l.dir, 'present.html')) ? `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/present.html">수업용 슬라이드</a>` : ''}</div>
@@ -108,9 +110,9 @@ export function renderIndex(lessons, units = [], materials = []) {
   .rows{list-style:none;margin:0;padding:0}
   .row{position:relative;display:flex;gap:14px;align-items:flex-start;min-height:90px;padding:13px 16px}
   .row + .row{border-top:2px dashed rgba(75,59,107,.16)}
-  .num{flex:none;width:22px;padding-top:2px;font-family:'CookieRun',sans-serif;font-weight:700;font-size:14px;color:var(--muted-2)}
+  .num{flex:none;width:28px;white-space:nowrap;padding-top:2px;font-family:'CookieRun',sans-serif;font-weight:700;font-size:14px;color:var(--muted-2)}
   .txt{min-width:0}
-  .row .name{font-weight:700;font-size:15px;line-height:1.45;color:var(--ink);text-decoration:none}
+  .row .name{font-weight:700;font-size:15px;line-height:1.45;color:var(--ink);text-decoration:none;word-break:keep-all}
   .row.live .name::after{content:'';position:absolute;inset:0}
   .row.live:hover{background:rgba(251,230,162,.32)}
   .subs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
