@@ -18,6 +18,7 @@ export function renderIndex(lessons, units = [], materials = []) {
   }
   // 차시 한 줄 — 줄 전체가 학생용 링크(제목 링크를 줄 크기로 늘림), 아래 작은 줄에 학생용 · 교사용 링크
   // 차시 폴더에 present.html 이 있으면 교사용 다음에 「수업용 슬라이드」(선생님 지시 2026-10-20, docs/rules/present.md)
+  // lesson.json "teacherLink": false → 교사용 버튼 숨김 · "links": [{label, file}] → 차시 폴더 파일(영상 등)을 새 탭으로 여는 버튼(빌드가 복사, 선생님 지시 2026-11-15)
   // 번호 칸 — 수행평가 폴더(exam-a·exam-b·exam-entry …)는 폴더 이름 대신 「평가」(선생님 결정 2026-11-14)
   const numLabel = (no) => (/^exam(-|$)/.test(no) ? '평가' : no);
   const lessonRow = (l) => `
@@ -25,7 +26,7 @@ export function renderIndex(lessons, units = [], materials = []) {
             <span class="num">${esc(numLabel(l.no))}</span>
             <div class="txt">
               <a class="name" href="${esc(l.unit)}/${esc(l.no)}/">${esc(l.meta.title)}</a>${l.meta.status === 'draft' ? ' <span class="draft">준비 중</span>' : ''}
-              <div class="subs"><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/">학생용</a><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/teacher.html">교사용</a>${fs.existsSync(path.join(l.dir, 'present.html')) ? `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/present.html">수업용 슬라이드</a>` : ''}</div>
+              <div class="subs"><a class="chip" href="${esc(l.unit)}/${esc(l.no)}/">학생용</a>${l.meta.teacherLink === false ? '' : `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/teacher.html">교사용</a>`}${(l.meta.links || []).map((x) => `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/${esc(x.file)}" target="_blank" rel="noopener">${esc(x.label)}</a>`).join('')}${fs.existsSync(path.join(l.dir, 'present.html')) ? `<a class="chip" href="${esc(l.unit)}/${esc(l.no)}/present.html">수업용 슬라이드</a>` : ''}</div>
             </div>
           </li>`;
   const soonRow = (no) => `

@@ -47,6 +47,15 @@ export function build(args = []) {
         }
         out[teacher ? 'pagesTeacher' : 'pages'] = { file: rel(f), kb: Math.round(Buffer.byteLength(html) / 1024) };
       }
+      // lesson.json "links" 의 파일(영상 등) — 첫 화면 차시 줄 버튼이 가리키는 곳으로 복사(index-page.mjs)
+      for (const x of l.meta.links || []) {
+        if (!x.file) continue;
+        const src = path.join(l.dir, ...x.file.split('/'));
+        if (!fs.existsSync(src)) throw new Error(`${l.id}: lesson.json links 파일이 없어요 — ${x.file}`);
+        const to = path.join(DIST_DIR, 'pages', l.unit, l.no, ...x.file.split('/'));
+        fs.mkdirSync(path.dirname(to), { recursive: true });
+        fs.copyFileSync(src, to);
+      }
       // 수업용 화면(선생님이 띄워 정답을 하나씩 공개) — 차시 폴더에 present.html 이 있으면 같은 자리에. 첫 화면엔 교사용 다음 「수업용 슬라이드」 버튼(index-page.mjs)
       const present = path.join(l.dir, 'present.html');
       if (fs.existsSync(present)) {

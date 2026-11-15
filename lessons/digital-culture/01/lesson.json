@@ -6,5 +6,7 @@
   "shell": "portal",
   "theme": "sticker",
   "status": "live",
+  "teacherLink": false,
+  "links": [{ "label": "모션 그래픽 예시", "file": "assets/ai-face-shorts.mp4" }],
   "copiedFrom": "_templates/order"
 }

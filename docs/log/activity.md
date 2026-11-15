@@ -374,3 +374,8 @@ guide 7문서 기준으로 점검·보강한 세션 기록.
 - 첫 화면 세 번째 단원 카드를 정보 윤리 → 디지털 문화로(`lessons/units.json` 의 줄만 바꿈, 예정 차시 수 없음 = 만든 차시만). 단원 카드 순서·이름은 늘 이 파일 한 곳.
 - 첫 화면 번호 칸: 수행평가 폴더(`exam-a`·`exam-b`·`exam-entry` …)는 「평가」로(`scripts/lib/index-page.mjs` 의 `numLabel`), 제목은 낱말 사이에서만 줄바꿈.
 - 활동지 「1. 순서」 줄에 바깥 사이트 버튼: `<a class="glass-pill" href=… target="_blank" rel="noopener">↗ …</a>`(sticker 는 하늘색 알약). 클래스룸은 `https://classroom.google.com/` 하나로 — 로그인 안 됐으면 구글 로그인 창이 먼저 뜨고 끝나면 클래스룸. 폰에서는 글 아래 줄로(`flex-wrap`).
+
+## 첫 화면 차시 줄 버튼 고르기 — `lesson.json` `teacherLink`·`links` — digital-culture/01 — 2026-11-15
+- 정답 칸 없는 차시는 교사용 버튼을 숨길 수 있다: `"teacherLink": false`(teacher.html 은 그대로 빌드 — 검사가 씀).
+- 차시 폴더 파일(영상·PDF 등)을 첫 화면 버튼으로: `"links": [{ "label": "모션 그래픽 예시", "file": "assets/ai-face-shorts.mp4" }]` → 빌드가 `dist/pages/<단원>/<차시>/<file>` 로 복사, 버튼은 새 탭. 파일이 없으면 빌드가 멈춘다.
+- 첫 사례: 디지털 문화 1차시 — 선생님이 만든 본보기 쇼츠(59.8초 MP4)를 교사용 자리에.
