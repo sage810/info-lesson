@@ -20,6 +20,15 @@
         ],
         "createdAt": "2026-11-12T10:20:58.664Z",
         "reason": "Claude triage: present.html window frame (#stage) holding cards is the shared classroom-slide pattern of ai/01-04 present.html (docs/rules/present.md); inner .tag pills are labels, not cards"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "lessons/digital-culture/02/present.html"
+        ],
+        "createdAt": "2026-11-17T06:26:25.369Z",
+        "reason": "Claude triage 2026-11-17 (user asked to check and tidy): all 8 hits are the shared present.html window(#stage)→card pattern — slides 1 goals, 2/11 ws-mock, 5 tp-card, 9 three .ccard — same as ai/01 and digital-culture/01 ignores; slide 4 figure frame not flagged. Bisected by removing slides one at a time."
       }
     ]
   }

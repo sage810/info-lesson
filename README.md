@@ -44,6 +44,7 @@
 | `ai/exam-b` | 인공지능 수행평가 B형 (논술·원고지) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-exam/` |
 | `ai/exam-entry` | 인공지능 수행평가 (엔트리) | standalone (한 화면) | `answers.json`·`rubric.md` — 이 PC 에만(git 에 안 올림) · 제출 `apps-script-ai-entry/` |
 | `digital-culture/01` | 디지털 문화 수행평가 — 슬라이드 제작 | portal (4탭) | 없음 (읽기만 하는 안내 화면 — 순서·주제·꼭 들어갈 내용과 배점 · 수업용 슬라이드는 본보기 「AI 얼굴 인식」 7장) |
+| `digital-culture/02` | 사이버 범죄와 AI 윤리 | portal (4탭) | `answers.json` (범죄 이름·예방 수칙·원칙 이름·활동 3 받아 적기 빈칸, 정답지 PDF 가능 · 수업용 슬라이드 12장) |
 
 ## 처음 한 번 (Windows)
 
