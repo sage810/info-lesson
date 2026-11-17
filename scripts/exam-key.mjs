@@ -10,6 +10,7 @@
 // answers.json 에서 쓰는 것: fill · click(정답지와 같음) · _채점_허용답 {"<칸 aria-label>": [...]} · _채점_배점 {"기본": 1, "<칸>": 점수}
 //   · _채점_기준 {"<논술 칸>": "채점 기준 글"} — 논술(essay)·그래프는 선생님이 직접 채점, 시트의 "정답" 칸에 이 기준이 들어간다(채점 도우미에 보임)
 //   · _채점_추가칸 [{"unit":"5","kind":"check","label":"…"}] — 시험지에 답 칸이 없는 칸. 선생님이 직접 확인, 배점은 _채점_배점(check 를 아는 Apps Script 에서만: apps-script-ai-entry)
+// 칸마다 example(채운 답 = 예시 답)·question(시험지의 〈자료〉·문제·〈조건〉 글)도 보낸다 — 시트의 Claude 자동 채점이 쓴다(2026-11-17)
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -42,6 +43,20 @@ try {
   if (!(await page.evaluate(() => !!(window.MSI_SUBMIT && window.MSI_SUBMIT.describe)))) {
     throw new Error('이 차시에는 채점용 답 기록(window.MSI_SUBMIT)이 없어요. 수행평가 시험지(09 처럼)만 쓸 수 있어요.');
   }
+  // 답을 채우기 전에 문제 글을 읽는다(원고지 칸에 그려진 답 글자가 섞이지 않게)
+  const questions = await page.evaluate(() => {
+    const out = {}, txt = (el) => (el ? el.innerText.replace(/\n{3,}/g, '\n\n').trim() : '');
+    document.querySelectorAll('[data-unit]').forEach((el) => {
+      const u = el.getAttribute('data-unit');
+      if (out[u] != null) return;
+      const q = el.closest('.q'), sec = el.closest('section.card');
+      let t;
+      if (q) t = [sec && sec.querySelector('.data'), q.querySelector('.q-text'), q.querySelector('.cond')].map(txt).filter(Boolean).join('\n\n');
+      else t = txt(sec && (sec.querySelector('.card-body') || sec));
+      out[u] = t.slice(0, 6000);
+    });
+    return out;
+  });
   for (const [label, value] of Object.entries(ans.fill || {})) await page.locator(`textarea[aria-label="${label}"]`).first().fill(String(value));
   for (const c of ans.click || []) {
     if (typeof c !== 'string') throw new Error('click 에는 선택자(문자열)만 쓸 수 있어요: ' + JSON.stringify(c));
@@ -53,9 +68,11 @@ try {
     answer: MANUAL.includes(u.kind) ? String(rubric[u.unit] || '') : got.answers[u.unit] || '',
     accept: accept[u.label] || [],
     points: points[u.unit] != null ? points[u.unit] : points.기본 != null ? points.기본 : 1,
+    example: MANUAL.includes(u.kind) && typeof got.answers[u.unit] === 'string' && !got.answers[u.unit].startsWith('data:') ? got.answers[u.unit].slice(0, 6000) : '',
+    question: questions[u.unit] || u.label || '',
   }));
   for (const x of ans._채점_추가칸 || []) {
-    rows.push({ unit: String(x.unit), kind: x.kind, label: x.label || '', answer: String(rubric[x.unit] || ''), accept: [], points: points[x.unit] != null ? points[x.unit] : points.기본 != null ? points.기본 : 1 });
+    rows.push({ unit: String(x.unit), kind: x.kind, label: x.label || '', answer: String(rubric[x.unit] || ''), accept: [], points: points[x.unit] != null ? points[x.unit] : points.기본 != null ? points.기본 : 1, example: '', question: x.label || '' });
   }
 } finally {
   await browser.close();
@@ -70,6 +87,7 @@ for (const r of rows) {
 const total = rows.reduce((t, r) => t + Number(r.points), 0);
 const auto = rows.filter((r) => !MANUAL.includes(r.kind)).reduce((t, r) => t + Number(r.points), 0);
 console.log(`  합계 ${total}점 (자동 ${auto} + 직접 ${total - auto})`);
+if (args.includes('--show-ai')) for (const r of rows.filter((x) => MANUAL.includes(x.kind))) console.log(`\n── ${r.unit} 자동 채점에 보내는 문제 글 ──\n${r.question}\n── 예시 답 ──\n${r.example || '(없음)'}`);
 const empty = rows.filter((r) => !MANUAL.includes(r.kind) && !r.answer);
 if (empty.length) { console.error(`✖ 정답이 비어 있는 칸: ${empty.map((r) => r.unit).join(', ')} — answers.json 의 fill/click 을 확인하세요.`); process.exit(1); }
 

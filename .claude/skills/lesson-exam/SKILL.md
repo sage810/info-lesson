@@ -57,4 +57,6 @@ description: >
 - 시험 자료를 실제 Apps Script 로 보내며 시험하지 않는다(선생님 드라이브에 쌓임). 보내기는 선생님이 `--send` 로.
 - 결정이 필요한 것은 묻는다. 문항 문구·보기 문장은 선생님 글 그대로(띄어쓰기·사실 오류는 알리고 고칠지 묻는다).
 - 고칠 때마다 `npm run check` + 정답 노출 검사. 정답이 바뀌면 `answers.json` → `exam-key`(합계) → `teacher` 까지.
+- **채점 시트(Apps Script)는 꼭 자동 채점되게 만든다**(선생님 지시 2026-11-17). 모든 칸을 채점한다. 고르기·글자는 정답 비교로, 논술·캡처는 Claude API 로 채점해 **흐린 점수**로 넣는다. 선생님이 도우미에서 눌러야 확정된다. 규칙과 본보기는 `docs/rules/exam.md` §7 「자동 채점」. API 키는 스크립트 속성 `CLAUDE_API_KEY` 에만 둔다(저장소·채팅 금지).
+- **채점 시트(Apps Script)를 만들거나 복사할 땐 「평균」 탭을 꼭 넣는다**(선생님 지시 2026-11-17) — 반마다 응시 인원·평균 총점·평균 보정 총점 + 전체 줄. 본보기 `apps-script-digital-exam/Code.gs` 의 `avgRows_`·`writeAverage_`, 규칙 `docs/rules/exam.md` §7.
 - 새로 배운 요령은 `docs/rules/exam.md` 에 적고(이 파일은 순서만), 반복 실수는 `.claude/napkin.md`.

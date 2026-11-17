@@ -52,6 +52,15 @@ lessons/ai/exam-b/rubric.md
 lessons/ai/exam-entry/answers.json
 lessons/ai/exam-entry/rubric.md
 
+# 디지털 문화 수행평가 A형(2026-11-17) — 시험 날 공개할 때 첫 줄(폴더)만 지운다. 정답·채점 기준·채운 양식은 계속 안 올림.
+lessons/digital-culture/exam-a/
+lessons/digital-culture/exam-a/answers.json
+lessons/digital-culture/exam-a/rubric.md
+lessons/digital-culture/exam-b/
+lessons/digital-culture/exam-b/answers.json
+lessons/digital-culture/exam-b/rubric.md
+input/수행평가 양식_디지털문화.docx
+
 
 # 피드백 모드(메모 📤 보내기)로 쌓이는 수정 요청 — 시험지 내용이 섞일 수 있어 올리지 않는다.
 .claude/feedback.md
@@ -60,6 +69,7 @@ lessons/ai/exam-entry/rubric.md
 apps-script/teacher.local.json
 apps-script-ai-exam/teacher.local.json
 apps-script-ai-entry/teacher.local.json
+apps-script-digital-exam/teacher.local.json
 
 # 07 로블록스 — 미션별 그래프 해석 예시(교사용). 학생이 미리 보지 않게 이 PC 에만 둔다(2026-10-12).
 lessons/data-analysis/07/interpretation/

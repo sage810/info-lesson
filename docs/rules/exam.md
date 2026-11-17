@@ -67,6 +67,7 @@
   여러 줄 묶음은 `.row-cut` 경계에서도 나눈다.
   **원고지 칸**: `textarea.blank` 에 `wongoji` 클래스 + `shared/partials/wongoji.js`(exam.js **앞**에) — 투명 textarea 위에 원고지 칸을 그려 한 칸에 한 글자,
   커서·클릭·↑↓·Home/End 는 원고지 줄 기준, PDF 는 원고지를 그대로 찍고 원고지 줄 사이에서 쪽을 나눈다(ai/exam-a·b, 2026-11-04). 칸 CSS 는 ai/exam-a `lesson.html` 의 `.wg` 묶음.
+  짧은 답 칸은 textarea 에 `data-wg-cols="7"` 처럼 **한 줄 칸 수를 못 박는다**(화면·PDF 모두 그 칸 수, 2026-11-17 digital-culture/exam-a (가)~(라)) — 칸 너비는 차시 CSS 로(`.part-inline .wg{flex:0 0 264px}` = 7칸).
   **스크롤 튐 막기**(2026-11-10): 크롬·엣지는 한글 조합을 끝낼 때(다른 칸 클릭)와 글을 쓸 때 **투명 textarea 의 안 보이는 커서**로 페이지를 옮긴다 —
   그 커서는 한 줄에 글자가 2배쯤 들어가 원고지 커서보다 한참 위라, 이전 칸·위쪽으로 끌려 올라간다. 그래서 wongoji.js 는 그 이동을 되돌리고(`compositionend` 즉시, 입력·키는 다음 그리기 직전)
   원고지 커서만 따라간다(커서가 **움직였을 때만** — selectionchange·focus 로 다시 그릴 땐 안 함). 일반 칸(이름 등)은 exam.js 가 「학생이 떠난 칸」일 때 되돌린다.
@@ -112,8 +113,9 @@
 | `scripts/exam-key.mjs` | `npm run exam-key -- <차시> [--send]` 정답 표 확인·보내기(선생님 열쇠 필요) |
 | `scripts/exam-pdf.mjs` | `npm run exam-pdf -- <폴더> [--send]` USB PDF 의 숨은 답 확인·보내기 |
 | `apps-script/teacher.local.json` | `{"teacherKey":"…"}` — 이 PC 에만(gitignore) |
-| `apps-script-ai-exam/` | 인공지능 수행평가 전용 Apps Script(제출·채점 도우미·보정, 수식 없는 6탭 시트 — 2026-11-10 「생기부 참고」 더함) · `teacher.local.json`(gitignore) |
-| `apps-script-ai-entry/` | 엔트리 수행평가(`ai/exam-entry`) 전용 Apps Script(고르기 자동 채점 + 글자 칸·결과 화면 직접 채점, 도우미에 결과 화면 캡처, 수식 없는 4탭 시트) · `teacher.local.json`(gitignore) |
+| `apps-script-ai-exam/` | 인공지능 수행평가 전용 Apps Script(제출·채점 도우미·보정, 수식 없는 7탭 시트 — 2026-11-10 「생기부 참고」, 2026-11-17 「평균」·자동 채점 더함) · `teacher.local.json`(gitignore) |
+| `apps-script-digital-exam/` | 디지털 문화 수행평가(`digital-culture/exam-a`) 전용 Apps Script — `apps-script-ai-exam/` 복사본(형 목록 `FORMS` 한 줄 · 「생기부 참고」 = 2·3번, 2026-11-17) · `teacher.local.json`(gitignore) |
+| `apps-script-ai-entry/` | 엔트리 수행평가(`ai/exam-entry`) 전용 Apps Script(고르기 자동 채점 + 글자 칸·결과 화면 Claude 자동 채점 → 직접 확정, 도우미에 결과 화면 캡처, 수식 없는 5탭 시트 — 2026-11-17 「평균」 더함) · `teacher.local.json`(gitignore) |
 
 ## 7. 채점 (시트)
 
@@ -125,12 +127,27 @@
 - **인공지능 수행평가(ai/exam-a·b)는 따로**(2026-11-04): 새 Apps Script `apps-script-ai-exam/`·새 시트 「인공지능 수행평가 채점」 — 탭 6개(제출 · 채점 A형 · 채점 B형 · 결과 — 두 형을 학년→반→번호 순으로 모음 · 생기부 참고 — 3-2·3-3 학생 글·점수·메모, 2026-11-10 · 설정), **수식 없음**(점수·총점·보정 총점을 코드가 숫자로). 보정 총점 = 총점 + n 을 x~y 로 자름, n·x·y 는 채점 도우미에서. 차시 `lesson.json` 의 `"apiUrl"`·`"teacherKeyFile"` 로 그 차시만 새 주소를 쓴다(`"apiUrl": ""` 이면 제출 꺼짐). 올리는 법 `apps-script-ai-exam/README.md`.
 - **엔트리 수행평가(ai/exam-entry)도 따로**(2026-11-07, 선생님 결정 — A·B형에 영향 없게): 새 Apps Script `apps-script-ai-entry/`·새 시트 「인공지능 엔트리 수행평가 채점」 — 탭 4개(제출 · 채점 · 결과 · 설정), 수식 없음. **고르기 칸(one)은 제출할 때 자동 채점**, 글자 칸(essay)·결과 화면(graph)은 도우미에서 직접(0·1·2점), 배점 0 칸은 채점 열 없음. 시트에 쓸 차례(잠금)를 못 받으면 쓰지 않고 실패로 돌려준다(제출 60초까지 기다림, 학생 화면이 자동으로 다시 보냄). 그래프 칸도 `_채점_기준` 이 있으면 `exam-key` 가 시트로 보내 도우미에 보인다. **5번 엔트리 과제 제출 2점**은 시험지에 답 칸이 없어 `_채점_추가칸`(kind `check`)으로 채점 열을 만들고, 선생님이 엔트리 학급에서 확인해 도우미에서 0·1·2점을 누른다(총 12점, 자동 4 + 직접 8). 정답을 나중에 보내거나 고쳐도 `setKey` 가 제출 탭의 가장 늦은 답으로 다시 채점한다. 올리는 법 `apps-script-ai-entry/README.md`.
 - 채점 규칙은 `Code.gs` 의 순수 함수(`scoreUnit_`·`pickLatest_`·`buildGrade_`) — 고치면 Node `vm` 으로 불러 가짜 정답·가짜 학생으로 시험한다.
+- **채점 시트는 꼭 자동 채점되게 만든다**(선생님 지시 2026-11-17 — 앞으로 만드는 모든 채점 시트).
+  - 학생이 내면 **모든 칸**을 자동 채점한다. 고르기·글자 정답 칸은 제출할 때 정답과 비교한다. 논술·서술(essay)과 결과 화면 캡처(graph)는 **Claude API**(스크립트 속성 `CLAUDE_API_KEY`)가 1분 트리거 `자동채점` 으로 채점한다.
+  - 학생 답이 없는 칸(check)과 캡처 사본이 없는 graph 는 직접 채점한다.
+  - Claude 점수는 **흐린 점수**다: 시트는 회색 글자, 도우미는 흐린 버튼과 「🤖 자동 채점 n점 — 이유」. 총점·결과·평균에는 **더한다**. 「확인」 칸에 `자동 n칸 미확인` 이 뜬다.
+  - 선생님이 도우미에서 점수를 **눌러야 확정**된다(진하게). 확정한 칸은 다시 내도 안 바꾼다. 확정 안 된 칸만 새 답으로 다시 채점한다.
+  - 상태는 채점 탭 끝 숨은 열 「자동 채점」(JSON)에 둔다. 설정 탭에는 「예시 답」·「문제(자동 채점용)」 열을 둔다. 둘 다 `exam-key --send` 가 보낸다(`question`·`example`).
+  - Claude 에는 문제·기준·예시 답·학생 답만 보낸다(**이름·학번 금지**). 학생 글은 `<student_answer>` 안의 데이터로만 다룬다(지시 끼워넣기 막기). 꺾쇠는 바꿔 넣는다.
+  - 모델은 `claude-opus-5-5`(`CLAUDE_MODEL`), effort 는 `low`(`CLAUDE_EFFORT`)다. JSON 형식 출력, `fallbacks: 'default'`.
+  - 같은 제출이 3번 실패하면 「자동 채점 실패」가 뜬다.
+  - 본보기: `apps-script-digital-exam/Code.gs` 「자동 채점」 절(형이 여럿인 시트), `apps-script-ai-entry/Code.gs`(탭 하나·캡처 그림).
+  - 새 시트는 이 절을 통째로 가져간다. 그리고 `gradeTab_` 에 `autoCol_`, `submit_`·`setKey_` 에 `AUTO_DIRTY`, `teacherScore` 에 `confirmAuto_`, `teacherData` 에 `auto`·`autoState`, `setup` 에 `ensureAutoTrigger_` 를 넣는다.
+  - 기존 함수와 **이름이 겹치지 않는지** 확인한다. 엔트리에 `writeAuto_` 가 있어 `writeClaude_` 로 씀.
+  - 시험은 가짜 UrlFetchApp·가짜 시트로 Node vm 에서 한다(실제 API·시트로 시험하지 않음).
+- **채점 시트에는 「평균」 탭을 꼭 만든다**(선생님 지시 2026-11-17 — 앞으로 만드는 모든 채점 시트). 학년·반마다 **응시 인원**(형이 여럿이면 형별로도) · **평균 총점 · 평균 보정 총점**, 맨 아래 「전체」 줄. 결과 탭을 다시 쓸 때마다 같이 다시 쓴다(수식 없이 숫자로).
+  본보기: `apps-script-digital-exam/Code.gs` 의 `avgRows_`(순수 함수 — vm 으로 가짜 학생 시험) · `writeAverage_` · `rebuildResult_` 안의 호출. 새 Apps Script 를 복사해 만들면 이 셋을 같이 가져가고, README 탭 표에도 적는다.
 
 ## 8. 선생님 체크리스트
 
 자세한 클릭 순서는 `apps-script/README.md` "수행평가 자동 제출·채점". 시험 보기 전 순서대로 할 일(체크 상자)은 [`docs/exam-checklist.md`](../exam-checklist.md).
 
-- **시험 전**: (Code.gs 를 바꿨으면) 새 버전 배포 · 스크립트 속성 `TEACHER_KEY` · `teacher.local.json` · `npm run exam-key -- <차시>` 로 배점 합계 확인 → `--send` ·
+- **시험 전**: (Code.gs 를 바꿨으면) 새 버전 배포 · 스크립트 속성 `TEACHER_KEY` · `CLAUDE_API_KEY`(자동 채점) + `setup` ▶ 다시(트리거·권한) · `teacher.local.json` · `npm run exam-key -- <차시>` 로 배점 합계 확인 → `--send` ·
   선생님이 학생처럼 한 번 제출해 리허설.
 - **시험 뒤**: 채점 도우미(`웹앱주소?action=teacher&key=…`) → 채점하기 → 반별 그래프 점수 · 실패 학생 PDF 는 `npm run exam-pdf -- <폴더> --send`.
 
@@ -152,4 +169,4 @@
 - 45분 보관은 "열 때" 지운다. 시크릿 창이나 다른 브라우저로 열면 보관한 답이 안 보인다.
 - 숨은 기록은 이론상 고칠 수 있다(중학생 시험에선 낮은 위험) — 의심되면 PDF 화면과 대조.
 
-이력: 09 만들기(2026-10-02) · 피드백·검수 반영과 45분 보관(10-03) · 채점 설계 결정과 A+B 구현(10-04) · 논술 칸(essay)·공용 exam.js·직접 점수 탭·채점 기준(ai/exam, 11-04) · 실습 + 문항·자동+직접 채점 전용 시트(ai/exam-entry, 11-07).
+이력: 09 만들기(2026-10-02) · 피드백·검수 반영과 45분 보관(10-03) · 채점 설계 결정과 A+B 구현(10-04) · 논술 칸(essay)·공용 exam.js·직접 점수 탭·채점 기준(ai/exam, 11-04) · 실습 + 문항·자동+직접 채점 전용 시트(ai/exam-entry, 11-07) · 디지털 문화 논술형 A형·전용 시트(digital-culture/exam-a, 11-17 — 채운 양식을 `input/` 에 둘 땐 그 파일 줄을 `.gitignore` 에: `input/` 은 git 에 올라가는 폴더) · 평균 탭 · Claude 자동 채점(흐린 점수 → 눌러 확정, 디지털·인공지능 A/B·엔트리 시트, 11-17).

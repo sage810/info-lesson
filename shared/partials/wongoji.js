@@ -59,7 +59,7 @@
   function fit(st) {
     var w = st.wrap.clientWidth || st.wrap.getBoundingClientRect().width;
     if (!w) return false;
-    var cols = Math.max(MIN_COLS, Math.min(MAX_COLS, Math.floor(w / CELL_MIN)));
+    var cols = fixedCols(st.ta) || Math.max(MIN_COLS, Math.min(MAX_COLS, Math.floor(w / CELL_MIN)));
     if (cols === st.cols && st.grid.childNodes.length) return false;
     st.cols = cols; st.wrap.style.setProperty('--wg-cols', cols); st.last = null;
     return true;
@@ -107,11 +107,13 @@
     }
     return html.join('');
   }
+  // 칸마다 한 줄 칸 수를 못 박기 — textarea 에 data-wg-cols="7"(짧은 답 칸, digital-culture/exam-a 2026-11-17). 없으면 넓이에 맞춤
+  function fixedCols(ta) { var n = parseInt(ta && ta.getAttribute && ta.getAttribute('data-wg-cols'), 10); return n > 0 ? Math.min(MAX_COLS, n) : 0; }
   // PDF 복제본의 원고지를 칸 수 cols 로 다시 그린다 — 폰·좁은 화면에서 저장해도 PDF 는 20칸(검수 2026-11-08)
   function paintCopy(wrap, ta, cols) {
     var grid = wrap && wrap.querySelector('.wg-grid');
     if (!grid || !ta) return;
-    var tmp = { ta: { value: ta.value }, cols: cols || MAX_COLS, minRows: ta._wg ? ta._wg.minRows : 3 };
+    var tmp = { ta: { value: ta.value }, cols: fixedCols(ta) || cols || MAX_COLS, minRows: ta._wg ? ta._wg.minRows : 3 };
     var rows = layout(tmp);
     wrap.style.setProperty('--wg-cols', tmp.cols);
     grid.innerHTML = gridHtml(tmp, rows);

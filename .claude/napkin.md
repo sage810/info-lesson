@@ -33,6 +33,9 @@
 12. **[2026-11-11] 표 칸(td) 안에 넣은 `glass-chip`(inline-flex) 버튼은 PDF(html2canvas)에서 글자가 통째로 빠짐 — 화면·check 캡처로는 안 드러남**
    Do instead: `.msi-pdf-clone <표> .glass-chip { display: inline-block !important; line-height: 30px; }` 를 더하고, 새 부품을 넣으면 serve 주소로 PDF 를 실제로 받아 `pdf-pages.mjs` 로 쪽 그림을 열어 본다(digital-culture/01 점검표).
 
+13. **[2026-11-17] `input/` 은 git 에 올라가는 폴더(추적 중) — 정답이 든 수행평가 양식을 거기 두면 커밋에 섞임 · 선생님이 빈 양식 `docs/templates/수행평가 양식.docx` 를 직접 채워 저장하기도 함**
+   Do instead: 채운 양식은 복사한 뒤 바로 `.gitignore` 에 그 파일 줄 + `git check-ignore` 확인. 커밋 전에 `docs/templates/수행평가 양식.docx` 가 바뀌었으면 내용(문항)이 들었는지 보고 커밋에서 뺀다.
+
 ## Shell & Command Reliability
 0. **[2026-11-11] 선생님이 「구글 드라이브 …docx」로 양식을 주면 — 커넥터 `download_file_content` 는 base64 덩어리라 파일로 옮기기 어려움**
    Do instead: `search_files`(title contains) → `read_file_content` 로 글을 바로 읽는다(표·목록이 마크다운으로 옴, docx-read.mjs 불필요). 지운 칸(도입·정리 등)이 있는지 「✍️ 여기부터 작성」~「📎 참고」 사이를 꼭 본다.
