@@ -37,7 +37,7 @@ const AUTO_KINDS = ['one'];                                               // 제
 const AI_KINDS = ['essay', 'graph'];                                      // Claude 가 채점하는 칸(글 · 결과 화면 캡처). 5번(check)은 학생 답이 없어 선생님이 직접
 const AUTO_COL = '자동 채점';                 // 채점 탭 맨 끝(숨김) — {"_at": 채점한 저장 시각, "<칸>": {"s": 점수, "why": 이유}} · 확정 전 칸만 남음
 const AUTO_FONT = '#A39A92';                  // 시트의 확정 전 자동 점수 글자색(흐리게)
-const AUTO_TIME_MS = 270000;                  // 트리거 한 번에 쓰는 시간(6분 제한 안)
+const AUTO_TIME_MS = 150000;                  // 트리거 한 번에 새 학생을 시작하는 시간 — 마지막 Claude 호출(재시도 포함)까지 6분 제한 안에 끝나게
 const AUTO_MAX_ERR = 3;                       // 같은 제출을 이만큼 실패하면 멈추고 「자동 채점 실패」
 const CLAUDE_URL = 'https://api.anthropic.com/v1/messages';
 const CLAUDE_MODEL_DEFAULT = 'claude-opus-5-5';   // 스크립트 속성 CLAUDE_MODEL 로 바꿀 수 있음
@@ -50,7 +50,7 @@ const MAX_CAPTURE_BYTES = 2 * 1024 * 1024;                                // 캡
 const LOCK_WAIT_SUBMIT = 60000;                                           // 제출 — 한 명 저장에 몇 초 걸려 수업 끝에 몰리면 오래 기다려야 한다
 const LOCK_WAIT = 20000;                                                  // 선생님 쪽(점수·보정·정답 보내기)
 const BUSY = '사람이 몰려 저장하지 못했어요. 잠시 뒤 다시 해 주세요.';
-const VERSION = '2026-11-17-entry-auto-avg';                                        // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
+const VERSION = '2026-11-18-entry-auto-5';                                        // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
 
 function doGet(e) {
   const p = (e && e.parameter) || {};
@@ -380,7 +380,7 @@ function teacherData(key, cls) {
     list.push({ key: k, grade: r[col('학년')], cls: r[col('반')], no: r[col('번호')], name: r[col('이름')],
       total: r[col('총점')], adjusted: r[col('보정 총점')], flag: r[col('확인')], scores: scores,
       texts: rec.answers || {}, captureId: rec.captureId || '', pdf: link ? link.getLinkUrl() || '' : '',
-      auto: autoOf_(r[col(AUTO_COL)]), autoState: autoState_(r[col(AUTO_COL)], r[col('저장 시각')]) });
+      auto: autoOf_(r[col(AUTO_COL)]), autoState: autoState_(r[col(AUTO_COL)], r[col('저장 시각')]), autoMsg: autoRaw_(r[col(AUTO_COL)])._msg || '' });
   });
   list.sort((a, b) => (Number(digits_(a.no)) || 999) - (Number(digits_(b.no)) || 999) || String(a.name).localeCompare(String(b.name), 'ko'));
   return { units: units, classes: classes, cls: want, students: list, adjust: readAdjust_(ss), url: ss.getUrl() + '#gid=' + sh.getSheetId(),
@@ -480,7 +480,7 @@ $('autoBtn').onclick = function () {
   busy(true); say('🤖 자동 채점 중… 학생 수에 따라 몇 분 걸려요. 창을 닫아도 1분마다 이어서 채점해요.');
   run('teacherAutoGrade', [], function (r) {
     busy(false);
-    var m = r.error ? '⚠ ' + r.error + ' ' : '✔ 자동 채점 ' + r.done + '명' + (r.left ? ' · 남은 ' + r.left + '명은 1분마다 이어서 채점' : '') + (r.fails ? ' · 실패 ' + r.fails + '명(다음에 다시)' : '') + '. ';
+    var m = r.error ? '⚠ ' + r.error + ' ' : '✔ 자동 채점 ' + r.done + '명' + (r.left ? ' · 남은 ' + r.left + '명은 1분마다 이어서 채점' : '') + (r.fails ? ' · 실패 ' + r.fails + '명 — 이유: ' + String(r.lastError || '').slice(0, 200) : '') + '. ';
     load($('cls').value, m);
   });
 };
@@ -504,7 +504,7 @@ function card(d, s) {
   var c = document.createElement('div'); c.className = 'card';
   var h = document.createElement('h3'); var nm = document.createElement('span'); nm.textContent = (s.cls || '?') + '반 ' + (s.no || '?') + '번 ' + s.name;
   if (s.flag) { var fl = document.createElement('span'); fl.className = 'flag'; fl.textContent = s.flag; nm.appendChild(fl); }
-  if (d.autoReady && d.autoUnits && s.autoState) { var fw = document.createElement('span'); fw.className = 'flag wait'; fw.textContent = s.autoState === 'failed' ? '자동 채점 실패' : '🤖 자동 채점 대기'; nm.appendChild(fw); }
+  if (d.autoReady && d.autoUnits && s.autoState) { var fw = document.createElement('span'); fw.className = 'flag wait'; fw.textContent = (s.autoState === 'failed' ? '자동 채점 실패' : '🤖 자동 채점 대기') + (s.autoMsg ? ' — ' + (s.autoState === 'failed' ? '' : '지난번 실패: ') + s.autoMsg.slice(0, 120) : ''); if (s.autoMsg) fw.title = s.autoMsg; nm.appendChild(fw); }
   h.appendChild(nm);
   if (s.pdf) { var a = document.createElement('a'); a.href = s.pdf; a.target = '_blank'; a.textContent = 'PDF'; var sm = document.createElement('small'); sm.appendChild(a); h.appendChild(sm); }
   c.appendChild(h);
@@ -606,13 +606,13 @@ function confirmAuto_(sh, head, r, unit) {
   if (fc > 0) sh.getRange(r, fc).setValue(autoFlag_(sh.getRange(r, fc).getValue(), a, atOf_(sh.getRange(r, head.indexOf('저장 시각') + 1).getValue())));
 }
 /** 순수 함수 — 채점할 학생과 칸: 이 제출을 아직 안 했고(또는 다시 냄), 빈 칸이거나 확정 안 된 자동 점수 칸 */
-function autoJobsOf_(head, rows, units) {
+function autoJobsOf_(head, rows, units, force) {   // force: 실패해 멈춘 학생도(도우미 버튼)
   const col = (n) => head.indexOf(n), out = [];
   rows.forEach((r) => {
     const key = String(r[col('학생 키')] || '');
     if (!key) return;
     const at = atOf_(r[col('저장 시각')]), a = autoRaw_(r[col(AUTO_COL)]);
-    if (a._at === at || (a._errAt === at && (a._err || 0) >= AUTO_MAX_ERR)) return;
+    if (a._at === at || (!force && a._errAt === at && (a._err || 0) >= AUTO_MAX_ERR)) return;
     out.push({ key: key, at: at, todo: units.filter((u) => col(u.unit) >= 0 && (r[col(u.unit)] === '' || a[u.unit])) });
   });
   return out;
@@ -669,6 +669,8 @@ function claudeCall_(apiKey, body) {
     if (code !== 429 && code < 500) break;   // 400·401·403 은 다시 해도 같다
     Utilities.sleep(3000 * (i + 1));
   }
+  // 401 이면 넣은 키를 콘솔 목록과 맞춰 볼 수 있게 앞부분·끝 4글자·길이만(2026-11-18)
+  if (/^401 /.test(last)) last = '401 키가 틀림 — 시트에 넣은 키: ' + apiKey.slice(0, 13) + '…' + apiKey.slice(-4) + ' (' + apiKey.length + '자) · ' + last.slice(4);
   throw new Error('Claude API ' + last);
 }
 /** 캡처 사본 → {media, data}. 없거나 못 읽으면 null */
@@ -706,6 +708,7 @@ function writeClaude_(ss, key, at, res) {
     const ac = col(AUTO_COL), a = autoRaw_(sh.getRange(r, ac).getValue());
     if (res.error) {
       if (a._errAt !== at) { a._errAt = at; a._err = 0; }
+      a._msg = String(res.error || '').slice(0, 200);   // 도우미에 보일 실패 이유(2026-11-18)
       a._err++;
     } else {
       res.scores.forEach((x) => {
@@ -715,7 +718,7 @@ function writeClaude_(ss, key, at, res) {
         sh.getRange(r, c).setValue(x.score).setFontColor(AUTO_FONT);
         a[x.unit] = { s: x.score, why: x.reason };
       });
-      a._at = at; delete a._err; delete a._errAt;
+      a._at = at; delete a._err; delete a._errAt; delete a._msg;
     }
     sh.getRange(r, ac).setValue(JSON.stringify(a));
     sh.getRange(r, col('확인')).setValue(autoFlag_(sh.getRange(r, col('확인')).getValue(), a, at));
@@ -726,20 +729,21 @@ function writeClaude_(ss, key, at, res) {
 }
 /** 채점할 학생을 시간 안에서 차례로 */
 function autoGradeRun_(limitMs, force) {
-  const props = PropertiesService.getScriptProperties(), apiKey = prop_('CLAUDE_API_KEY');
+  const props = PropertiesService.getScriptProperties(), apiKey = apiKey_();
   if (!apiKey) return { done: 0, left: 0, fails: 0, error: '자동 채점이 꺼져 있어요(스크립트 속성 CLAUDE_API_KEY 없음).' };
-  if (!force && props.getProperty('AUTO_DIRTY') !== '1') return { done: 0, left: 0, fails: 0 };   // 새 제출이 없으면 시트를 읽지 않고 끝
+  if (!/^sk-ant-/.test(apiKey)) return { done: 0, left: 0, fails: 0, error: 'CLAUDE_API_KEY 모양이 이상해요 — console.anthropic.com 의 API Keys 에서 만든 「sk-ant-」 로 시작하는 키를 그대로 넣어 주세요.' };
+  if (!force && (props.getProperty('AUTO_DIRTY') || '0') === '0') return { done: 0, left: 0, fails: 0 };   // 새 제출이 없으면 시트를 읽지 않고 끝
   const cache = CacheService.getScriptCache();
   if (cache.get('autoRun')) return { done: 0, left: 0, fails: 0, error: '자동 채점이 이미 돌고 있어요. 잠시 뒤 다시 눌러 주세요.' };
   cache.put('autoRun', '1', 400);
-  props.setProperty('AUTO_DIRTY', '0');
-  const t0 = Date.now(), out = { done: 0, left: 0, fails: 0 };
+  const t0 = Date.now(), out = { done: 0, left: 0, fails: 0 }, mark = 'run:' + t0;
+  props.setProperty('AUTO_DIRTY', mark);   // '0' 으로 지우지 않는다 — 6분 제한에 끊겨도 다음 트리거가 이어서(2026-11-17)
   try {
     const ss = book_();
     const units = scoredUnits_(ss).filter((u) => AI_KINDS.indexOf(u.kind) >= 0);
     if (!units.length) return out;
     const sh = gradeTab_(ss), head = headOf_(sh), last = sh.getLastRow();
-    const jobs = last >= 2 ? autoJobsOf_(head, sh.getRange(2, 1, last - 1, head.length).getValues(), units) : [];
+    const jobs = last >= 2 ? autoJobsOf_(head, sh.getRange(2, 1, last - 1, head.length).getValues(), units, force) : [];
     if (!jobs.length) return out;
     const subs = latestSubs_(ss);
     jobs.forEach((j) => {
@@ -747,11 +751,11 @@ function autoGradeRun_(limitMs, force) {
       let res;
       try { res = { scores: gradeOne_(apiKey, j.todo, subs[j.key]) }; } catch (err) { res = { error: String(err && err.message || err) }; console.error('자동 채점 실패 ' + j.key + ': ' + res.error); }
       if (!writeClaude_(ss, j.key, j.at, res)) out.left++;
-      else if (res.error) out.fails++;
+      else if (res.error) { out.fails++; out.lastError = res.error; }
       else out.done++;
     });
   } finally {
-    if (out.left || out.fails) props.setProperty('AUTO_DIRTY', '1');   // 남은 학생은 다음 트리거에
+    if (!out.left && !out.fails && props.getProperty('AUTO_DIRTY') === mark) props.setProperty('AUTO_DIRTY', '0');   // 다 했고 그 사이 새 제출이 없을 때만 끔(남은 학생은 다음 트리거에)
     cache.remove('autoRun');
   }
   return out;
@@ -767,7 +771,7 @@ function ensureAutoTrigger_() {
 function teacherAutoGrade(key) {
   guard_(key);
   try { ensureAutoTrigger_(); } catch (err) { console.error('트리거 만들기 실패: ' + (err && err.message || err)); }
-  return autoGradeRun_(240000, true);
+  return autoGradeRun_(150000, true);
 }
 
 // ---------------------------------------------------------------- 처음 한 번 실행
@@ -835,7 +839,9 @@ function insertBefore_(ss, name, names) {
   for (let i = 0; i < names.length; i++) { const t = ss.getSheetByName(names[i]); if (t) return ss.insertSheet(name, t.getIndex() - 1); }
   return ss.insertSheet(name);
 }
-function prop_(k) { return PropertiesService.getScriptProperties().getProperty(k) || ''; }
+function prop_(k) { return String(PropertiesService.getScriptProperties().getProperty(k) || '').trim(); }
+/** Claude API 키 — 붙여넣을 때 섞인 빈칸·줄바꿈·따옴표·안 보이는 글자, 「CLAUDE_API_KEY=」 앞부분을 지움(2026-11-18) */
+function apiKey_() { return prop_('CLAUDE_API_KEY').replace(/^[A-Z_]+\s*=\s*/, '').replace(/[\s\u200b-\u200d\ufeff"'`]/g, ''); }
 function clean_(s, n) { return String(s).replace(/[\u0000-\u001f\\/:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n); }
 function digits_(s) { return String(s == null ? '' : s).replace(/[^0-9]/g, ''); }
 function num_(v) { const d = digits_(v); return d ? Number(d) : ''; }
