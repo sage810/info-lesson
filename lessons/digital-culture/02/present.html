@@ -687,6 +687,18 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
 .dc-abil .qb{min-height:84px;padding:4px 24px;font-size:44px}
 .dc-crime td:first-child{text-align:center;vertical-align:middle}
 .dc-crime td{line-height:1.55}
+.dc-case{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:40px}   /* 활동 1 「3. 사례」 4장 — 사례 글 + 누르면 열리는 빈칸(2026-11-17, 피드백 19:40) */
+.dc-case .qcard{padding:26px 34px;font-size:32px;line-height:1.65}
+.dc-ans{margin:0;display:flex;justify-content:center;align-items:center;gap:20px;font:700 34px/1 var(--round)}
+.dc-ans .qb{min-width:320px;min-height:84px;padding:4px 28px;font-size:42px}
+.dc-qtag{flex:none;display:inline-flex;align-items:center;padding:4px 24px;border:var(--msi-shape-bw3) solid var(--ink);border-radius:var(--msi-shape-r-pill);background:var(--head);font:700 32px/1.2 var(--round);box-shadow:var(--msi-shape-sh2) rgba(var(--msi-rgb-ink),.22)}   /* 「질문」 알약 태그(피드백 2026-11-17 19:56) */
+.dc-view{gap:26px}   /* 활동 2 〈보기〉 장(2026-11-17) */
+.dc-view .qcard{padding:22px 32px;font-size:30px;background:var(--msi-role-base-cream-paper)}
+.dc-view-lbl{display:block;margin-bottom:6px;text-align:center;font:700 30px/1.3 var(--round)}
+.dc-q{margin:0;font:300 30px/1.55 var(--body);word-break:keep-all}
+.dc-q b{font-family:var(--round)}
+.dc-view .ss{font-size:27px;line-height:1.55}
+.h .dc-cn{margin-left:14px;font-size:.8em;color:var(--msi-role-base-muted-violet)}
 </style>
 </head>
 <body>
@@ -783,9 +795,41 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
         </tbody>
       </table>
     </section>
+    <!-- ══ 5-1 · 활동 1 — 2. 사례 1(택배 문자) 빈칸(선생님 요청 2026-11-17, 피드백 19:40) ══ -->
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="2. 사례 1 — 택배 문자">
+      <h2 class="h"><span class="n">2</span>어떤 사이버 범죄일까? <span class="dc-cn">사례 1</span></h2>
+      <div class="dc-case">
+        <p class="qcard">학원을 마치고 나오는데 문자가 왔다.<br>“[Web발신] [OO택배] 주소지 불일치로 배송이 보류되었습니다. 주소 확인 ▶ <span style="white-space:nowrap">http://oo-tb.kr/a1b2”</span></p>
+        <p class="dc-ans">범죄 유형 <button type="button" class="qb"><span class="qb-a">스미싱</span></button></p>
+      </div>
+    </section>
+    <!-- ══ 5-2 · 활동 1 — 2. 사례 2(인스타그램 DM) 빈칸(선생님 요청 2026-11-17, 피드백 19:40) ══ -->
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="2. 사례 2 — 인스타그램 DM">
+      <h2 class="h"><span class="n">2</span>어떤 사이버 범죄일까? <span class="dc-cn">사례 2</span></h2>
+      <div class="dc-case">
+        <p class="qcard">재현이가 자신의 그림을 올리는 인스타그램 계정으로 DM이 왔다.<br>“Instagram 고객센터입니다. 회원님의 게시물이 저작권 침해로 신고되어 24시간 안에 계정이 정지됩니다. 아래 링크에서 아이디와 비밀번호를 입력해 본인 확인을 해 주세요.”</p>
+        <p class="dc-ans">범죄 유형 <button type="button" class="qb"><span class="qb-a">피싱</span></button></p>
+      </div>
+    </section>
+    <!-- ══ 5-3 · 활동 1 — 2. 사례 3(미라이 악성 코드) 빈칸(선생님 요청 2026-11-17, 피드백 19:40) ══ -->
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="2. 사례 3 — 미라이 악성 코드">
+      <h2 class="h"><span class="n">2</span>어떤 사이버 범죄일까? <span class="dc-cn">사례 3</span></h2>
+      <div class="dc-case">
+        <p class="qcard">미국의 대학생 또래 세 명이 경쟁 관계인 마인크래프트 서버를 마비시키려고 ‘미라이’라는 악성 코드를 만들었다. 이 악성 코드는 보안이 허술한 가정용 카메라, TV 같은 기기를 감염시켜 수많은 기기를 한꺼번에 조종했고, 이 기기들을 이용한 공격으로 여러 웹사이트가 접속되지 않는 일이 벌어졌다.</p>
+        <p class="dc-ans">범죄 유형 <button type="button" class="qb"><span class="qb-a">디도스 (DDoS)</span></button></p>
+      </div>
+    </section>
+    <!-- ══ 5-4 · 활동 1 — 2. 사례 4(웹툰 뷰어 파일) 빈칸(선생님 요청 2026-11-17, 피드백 19:40) ══ -->
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="2. 사례 4 — 웹툰 뷰어 파일">
+      <h2 class="h"><span class="n">2</span>어떤 사이버 범죄일까? <span class="dc-cn">사례 4</span></h2>
+      <div class="dc-case">
+        <p class="qcard">성호는 불법 무료 웹툰 사이트에서 ‘고화질 뷰어 설치’ 파일을 내려받아 실행했다. 잠시 뒤 노트북에 저장된 사진 파일이 하나도 열리지 않았고, 화면에는 “24시간 안에 돈을 보내지 않으면 파일을 모두 지우겠다.”는 메시지가 떴다.</p>
+        <p class="dc-ans">범죄 유형 <button type="button" class="qb"><span class="qb-a">랜섬웨어</span></button></p>
+      </div>
+    </section>
     <!-- ══ 5 · 활동 1 — 예방 수칙(1번 「모르는 링크와 첨부파일」 · 3번 줄 전체 = 빈칸) ══ -->
-    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="2. 사이버 범죄 예방 수칙">
-      <h2 class="h"><span class="n">2</span>사이버 범죄 예방 수칙</h2>
+    <section class="slide" data-role="act1" data-phase="전개" data-code="ACTIVITY_1" data-badge="🧠" data-title="다양한 사이버 범죄 유형들과 예방법" data-name="3. 사이버 범죄 예방 수칙">
+      <h2 class="h"><span class="n">3</span>사이버 범죄 예방 수칙</h2>
       <div class="mid">
         <ol class="steps steps--big">
           <li><span class="n">1</span><span><button type="button" class="qb"><span class="qb-a">모르는 링크와 첨부파일</span></button> 누르지 않기<small>(문자, DM, 이메일 모두 포함)</small></span></li>
@@ -812,6 +856,15 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
           <div class="ccard"><div class="ic" aria-hidden="true">🤝</div><div class="t"><button type="button" class="qb"><span class="qb-a">사회의 공공선</span></button></div><p>가능한 많은 사람들의 이익과 행복을 추구하면서, 사회적 약자와 취약 계층이 디지털 사회에서 소외되지 않도록 배려할 수 있어야 한다.</p></div>
           <div class="ccard"><div class="ic" aria-hidden="true">🎯</div><div class="t"><button type="button" class="qb"><span class="qb-a">기술의 합목적성</span></button></div><p>인간에게 도움이 되는 목적에 맞도록 개발과 활용이 되어야 한다.</p></div>
         </div>
+      </div>
+    </section>
+    <!-- ══ 7-1 · 활동 2 — 〈보기〉 가상의 상황(선생님 요청 2026-11-17, 예시 답은 Claude 초안) ══ -->
+    <section class="slide" data-role="act2" data-phase="전개" data-code="ACTIVITY_2" data-badge="🤖" data-title="인공지능 윤리 3원칙" data-name="〈보기〉 어떤 원칙에 어긋날까?">
+      <h2 class="h"><span class="dc-qtag">질문</span>다음은 가상의 상황입니다</h2>
+      <div class="mid dc-view">
+        <div class="qcard"><b class="dc-view-lbl">&lt;보기&gt;</b>신현이는 AI 영상 편집 앱으로 같은 반 친구의 얼굴을 합성해, 친구가 하지 않은 말을 하는 웃긴 쇼츠를 만들어 올렸다. 유튜브의 추천 AI는 조회 수가 빠르게 오른다는 이유로 이 영상을 더 많은 사람에게 추천했고, 영상은 하루 만에 조회 수 1만 회를 넘겼다. 합성된 친구는 학교에 오기 힘들 만큼 괴로워했다.</div>
+        <p class="dc-q"><b>[질문]</b> 이 상황에서 AI가 쓰인 방식이 인공지능 윤리 3대 기본 원칙 중 어떤 원칙에 어긋나는지 이유와 함께 써보세요.</p>
+        <div class="ss-row"><button type="button" class="ss"><span class="ss-a">예) <b>인간의 존엄성</b> — 친구 얼굴을 허락 없이 합성해 하지 않은 말을 하게 만들어 친구의 정신적 건강에 해를 끼쳤어요. 조회 수만 보고 이 영상을 퍼뜨린 추천 AI는 <b>사회의 공공선</b>, 사람을 해치는 데 AI를 쓴 것은 <b>기술의 합목적성</b>에도 어긋나요.</span></button></div>
       </div>
     </section>
     <!-- ══ 8 · 활동 3 — 질문 ══ -->
@@ -982,7 +1035,7 @@ kbd{display:inline-grid;place-items:center;min-width:46px;height:44px;padding:0 
     if (on) el.removeAttribute('aria-label'); else el.setAttribute('aria-label', '빈칸 — 눌러서 정답 보기');
     if (el._alt) el._alt.classList.toggle('is-on', on);
     if (el.classList.contains('ss')) {   // 순서 칸이 열리면 왼쪽의 같은 카드가 흐려짐
-      var card = el.closest('.seqv').querySelector('.sc[data-k="' + el.dataset.k + '"]');
+      var sv = el.closest('.seqv'), card = sv && sv.querySelector('.sc[data-k="' + el.dataset.k + '"]');   // 순서 배열 밖 긴 답 칸(〈보기〉 예시 답)도 쓰므로
       if (card) card.classList.toggle('is-used', on);
     }
   }
