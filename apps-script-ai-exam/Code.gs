@@ -46,7 +46,7 @@ const MAX_PDF_BYTES = 20 * 1024 * 1024;
 const LOCK_WAIT_SUBMIT = 60000;   // 제출 — 한 명 저장에 몇 초 걸려 수업 끝에 몰리면 오래 기다려야 한다
 const LOCK_WAIT = 20000;          // 선생님 쪽(점수·보정 등)
 const BUSY = '사람이 몰려 저장하지 못했어요. 잠시 뒤 다시 해 주세요.';
-const VERSION = '2026-11-18-ai-auto-5';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
+const VERSION = '2026-11-18-ai-score-6';   // 새 버전 배포를 주소로 확인하는 값(연결 확인 응답에 보임)
 // 생기부 참고 탭(선생님 결정 2026-11-10) — 3-2·3-3 은 문항별 한 칸(소문항은 「[이름] 글」 줄). 학생 키 = 형|학년|반|번호|이름(숨김)
 const TAB_REC = '생기부 참고';
 const REC_UNITS = ['3-2', '3-3'];
@@ -437,13 +437,13 @@ function teacherData(key, form, cls) {
   const classes = Array.from(new Set(rows.map((r) => digits_(r[col('반')]) || '?'))).sort((a, b) => (Number(a) || 999) - (Number(b) || 999));
   const want = String(cls || classes[0] || '');
   const texts = latestTexts_(ss, form);   // 학생 글: 제출 탭에서 이 형의 학생마다 저장 시각이 가장 늦은 것
-  const pdfCol = col('PDF') + 1;
+  const links = rows.length && col('PDF') >= 0 ? sh.getRange(2, col('PDF') + 1, rows.length, 1).getRichTextValues() : [];   // 한 번에(줄마다 읽으면 느리고 그 사이 정렬되면 어긋남)
   const list = [];
   rows.forEach((r, i) => {
     if ((digits_(r[col('반')]) || '?') !== want) return;
     const k = String(r[col('학생 키')]), scores = {};
     units.forEach((u) => { const c = col(u.unit); if (c >= 0 && r[c] !== '') scores[u.unit] = r[c]; });
-    const link = sh.getRange(i + 2, pdfCol).getRichTextValue();
+    const link = links[i] && links[i][0];
     list.push({ key: k, grade: r[col('학년')], cls: r[col('반')], no: r[col('번호')], name: r[col('이름')],
       total: r[col('총점')], adjusted: r[col('보정 총점')], flag: r[col('확인')], scores: scores,
       texts: texts[k] || {}, pdf: link ? link.getLinkUrl() || '' : '', auto: autoOf_(r[col(AUTO_COL)]), autoState: autoState_(r[col(AUTO_COL)], r[col('저장 시각')]), autoMsg: autoRaw_(r[col(AUTO_COL)])._msg || '' });
@@ -452,22 +452,48 @@ function teacherData(key, form, cls) {
   return { form: form, units: units, classes: classes, cls: want, students: list, adjust: readAdjust_(ss), url: ss.getUrl() + '#gid=' + sh.getSheetId(), autoReady: !!prop_('CLAUDE_API_KEY'), autoUnits: units.filter((u) => AUTO_KINDS.indexOf(u.kind) >= 0).length };
 }
 
-/** 점수 하나 쓰기(score '' 이면 지움) → 그 줄 총점·보정 총점 다시 계산 */
+/** 점수 하나 쓰기(score '' 이면 지움) — 예전 화면(이미 열려 있던 도우미)용. 새 화면은 teacherScores 로 묶어 보낸다 */
 function teacherScore(key, form, skey, unit, score) {
+  const r = teacherScores(key, form, [{ skey: skey, unit: unit, score: score }]);
+  if (r.errors.length) throw new Error(r.errors[0].error);
+  return r.rows[String(skey)];
+}
+
+/** 점수 여러 칸을 잠금 한 번에 쓰기(2026-11-18 — 한 칸씩 따로 보내면 잠금 차례를 20초 넘게 기다리다 저장이 빠졌다)
+ *  items = [{skey, unit, score}] (score '' 이면 지움, 같은 칸은 뒤의 값) → { rows: {학생 키: {total, adjusted}}, errors: [{skey, unit, error}] }
+ *  칸 하나가 틀려도 나머지는 저장한다. 잠금을 못 받으면 BUSY 를 던지고 아무것도 쓰지 않는다(화면이 다시 보낸다). */
+function teacherScores(key, form, items) {
   guard_(key);
+  items = Array.isArray(items) ? items : [];
+  const over = items.slice(200).map((it) => ({ skey: String(it && it.skey), unit: String(it && it.unit), error: '한 번에 너무 많이 보냈어요' }));
+  items = items.slice(0, 200);   // 화면은 200칸씩 나눠 보낸다
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(LOCK_WAIT)) throw new Error(BUSY);
   try {
-    const ss = book_(), sh = gradeTab_(ss, form), head = headOf_(sh);
-    const r = rowOfKey_(sh, head, skey), c = head.indexOf(unit) + 1;
-    if (r < 0) throw new Error('채점 탭에서 학생을 찾지 못했어요');
-    if (c < 1) throw new Error('채점 탭에 "' + unit + '" 칸이 없어요');
-    sh.getRange(r, c).setValue(score === '' || score == null ? '' : Number(score));
-    confirmAuto_(sh, head, r, unit);   // 자동 점수였으면 확정(흐린 표시 없앰)
-    const out = recalcRow_(sh, head, r, readAdjust_(ss));
-    rebuildResult_(ss);
-    try { recScore_(ss, form, skey, unit, score); } catch (err) { console.error('생기부 참고 점수 실패: ' + (err && err.message || err)); }
-    return out;
+    const ss = book_(), sh = gradeTab_(ss, form), head = headOf_(sh), last = sh.getLastRow();
+    const units = readUnits_(ss, form), kc = head.indexOf('학생 키') + 1;
+    const keys = last >= 2 && kc > 0 ? sh.getRange(2, kc, last - 1, 1).getValues().map((x) => String(x[0])) : [];
+    const rowsDone = {}, errors = over, recs = [];
+    const one = (it) => {
+      const skey = String(it && it.skey), unit = String(it && it.unit), score = it ? it.score : '';
+      const err = (m) => errors.push({ skey: skey, unit: unit, error: m });
+      const i = keys.indexOf(skey), r = i < 0 ? -1 : i + 2, c = head.indexOf(unit) + 1;
+      if (r < 0) return err('채점 탭에서 학생을 찾지 못했어요');
+      if (c < 1) return err('채점 탭에 "' + unit + '" 칸이 없어요');
+      const u = units.filter((x) => x.unit === unit)[0];
+      const v = score === '' || score == null ? '' : Number(score);
+      if (v !== '' && (isNaN(v) || v < 0 || (u && v > u.points))) return err('"' + unit + '" 칸 점수는 0~' + (u ? u.points : '배점') + '점이에요');
+      sh.getRange(r, c).setValue(v);
+      rowsDone[skey] = r;
+      recs.push([skey, unit, v]);
+      confirmAuto_(sh, head, r, unit);   // 자동 점수였으면 확정(흐린 표시 없앰)
+    };
+    items.forEach((it) => { try { one(it); } catch (e) { errors.push({ skey: String(it && it.skey), unit: String(it && it.unit), error: String(e && e.message || e) }); } });   // 한 칸이 터져도 나머지는 저장
+    const adj = readAdjust_(ss), rows = {};
+    Object.keys(rowsDone).forEach((k) => { rows[k] = recalcRow_(sh, head, rowsDone[k], adj); });
+    if (Object.keys(rows).length) rebuildResult_(ss);   // 묶음마다 한 번
+    recs.forEach((x) => { try { recScore_(ss, form, x[0], x[1], x[2]); } catch (err) { console.error('생기부 참고 점수 실패: ' + (err && err.message || err)); } });
+    return { rows: rows, errors: errors };
   } finally { lock.releaseLock(); }
 }
 
@@ -506,6 +532,8 @@ input{width:70px} .adj{padding:8px 12px;border:2px dashed #C9ADA1;border-radius:
 .sc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px} .sc button{min-width:44px;padding:4px 10px} .sc button.on{background:#4A3B32;color:#fff}
 .sc button.auto{background:#4A3B32;color:#fff;opacity:.35} .ai{margin-top:4px;padding:4px 8px;border-radius:6px;background:#F3EFEA;color:#6B5B51;font-size:13px} .flag.wait{background:#E8E3F4}
 .sum{margin-top:10px;padding-top:8px;border-top:1px dashed #C9ADA1;font-weight:700} a{color:#B04A6C}
+#save{position:sticky;top:0;z-index:2;margin:0 0 12px;padding:8px 12px;border:2px solid #4A3B32;border-radius:10px;background:#FFF9E6;font-weight:700} #save:empty{display:none} #save.bad{background:#FBE3E8}
+.st{margin-left:6px;font-size:13px;font-weight:400;color:#857062} .st.bad{color:#B0283C;font-weight:700}
 </style></head><body>
 <h1>인공지능 수행평가 채점 도우미</h1>
 <div class="bar"><label>형 <select id="form"><option value="A">A형</option><option value="B">B형</option></select></label>
@@ -515,11 +543,21 @@ input{width:70px} .adj{padding:8px 12px;border:2px dashed #C9ADA1;border-radius:
 <label>최저 x <input id="ax" type="number" step="1"></label>
 <label>최고 y <input id="ay" type="number" step="1"></label>
 <button id="adjBtn">적용</button> <small>보정 총점 = 총점 + n, x 이하는 x · y 이상은 y (x·y 를 비우면 제한 없음)</small></div>
-<p id="msg"></p><div class="grid" id="grid"></div>
+<p id="save" role="status"></p><p id="msg"></p><div class="grid" id="grid"></div>
 <script>
 var KEY = __KEY__, $ = function (id) { return document.getElementById(id); };
 function run(fn, args, ok) {
   var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function (e) { say('⚠ ' + (e && e.message || e)); busy(false); });
+  r[fn].apply(r, [KEY].concat(args));
+}
+/** run 과 같지만 「사람이 몰려」(잠금 차례) 실패면 몇 초 뒤 저절로 다시(최대 4번) */
+function runRetry(fn, args, ok, n) {
+  n = n || 0;
+  var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function (e) {
+    var m = String(e && e.message || e);
+    if (m.indexOf('사람이 몰려') >= 0 && n < 4) { say('⏳ 사람이 몰려 ' + (n + 2) * 2 + '초 뒤 다시 보내요…'); setTimeout(function () { runRetry(fn, args, ok, n + 1); }, (n + 2) * 2000); return; }
+    say('⚠ ' + m); busy(false);
+  });
   r[fn].apply(r, [KEY].concat(args));
 }
 function say(t) { $('msg').textContent = t; }
@@ -529,20 +567,84 @@ function opt(sel, list, cur) { sel.innerHTML = ''; list.forEach(function (v) { v
 run('teacherInit', [], function (d) { setAdj(d.adjust); $('sheet').href = d.url; load(''); });
 $('form').onchange = function () { load(''); };
 $('loadBtn').onclick = function () { load($('cls').value); };
+// ---- 점수 저장 줄(2026-11-18): 누른 점수를 한 줄로 세워 한 번에 하나씩(묶어서) 보낸다.
+// 같은 칸은 마지막 값만 · 실패(사람 몰림·연결)하면 저장될 때까지 다시 보냄 · 적용·불러오기·자동 채점은 다 저장한 뒤에.
+var Q = {}, sending = null, timer = null, tries = 0, waiters = [], sums = {}, fails = {};
+function pendingCount() { return Object.keys(Q).length + (sending ? Object.keys(sending).length : 0); }
+function idle() { return !pendingCount() && !timer; }
+function saveSay(t, bad) { $('save').textContent = t; $('save').className = bad ? 'bad' : ''; }
+function saveStatus(extra) {
+  var n = pendingCount(), f = Object.keys(fails).length;
+  if (extra) saveSay(extra, true);
+  else if (n) saveSay('💾 점수 ' + n + '칸 저장 중… 창을 닫지 마세요.');
+  else if (f) saveSay('⚠ 저장하지 못한 칸 ' + f + '개 — 카드의 빨간 표시를 보고 다시 눌러 주세요.', true);
+  else saveSay('');
+}
+function queueScore(form, skey, unit, score, mark) {
+  var k = form + '#' + skey + '#' + unit;
+  Q[k] = { form: form, skey: skey, unit: unit, score: score, mark: mark };
+  delete fails[k]; mark('wait');
+  saveStatus(); kick(0);
+}
+function kick(ms) { if (sending || timer) return; timer = setTimeout(function () { timer = null; send(); }, ms); }
+function send() {
+  var ks = Object.keys(Q);
+  if (!ks.length) { saveStatus(); var w = waiters; waiters = []; w.forEach(function (f) { f(); }); return; }
+  var form = Q[ks[0]].form;   // 한 묶음은 한 형만(형을 바꿔 가며 눌렀으면 다음 묶음에)
+  ks = ks.filter(function (k) { return Q[k].form === form; }).slice(0, 200);   // 한 번에 200칸까지(서버 한도)
+  sending = {}; ks.forEach(function (k) { sending[k] = Q[k]; delete Q[k]; });
+  var items = ks.map(function (k) { var x = sending[k]; return { skey: x.skey, unit: x.unit, score: x.score }; });
+  saveStatus();
+  google.script.run.withSuccessHandler(function (r) {
+    var sent = sending; sending = null; tries = 0;
+    var errs = {}; (r.errors || []).forEach(function (e) { errs[form + '#' + e.skey + '#' + e.unit] = e.error; });
+    Object.keys(sent).forEach(function (k) {
+      if (Q[k]) return;   // 그 사이 같은 칸을 또 눌렀다 — 다음 묶음이 저장
+      if (errs[k]) { fails[k] = errs[k]; sent[k].mark('bad', errs[k]); } else sent[k].mark('ok');
+    });
+    Object.keys(r.rows || {}).forEach(function (sk) { var f = sums[form + '#' + sk]; if (f) f(r.rows[sk].total, r.rows[sk].adjusted); });
+    send();
+  }).withFailureHandler(function (e) {
+    var sent = sending, m = String(e && e.message || e); sending = null; tries++;
+    // 잠깐 그런 실패(사람 몰림·연결·서버 바쁨)는 10번까지, 그 밖(열쇠·권한 등)은 2번까지 다시 — 그래도 안 되면 그 칸을 「저장 못 함」으로 두고 멈추지 않는다
+    var passing = /사람이 몰려|network|네트워크|연결|time ?out|시간|too many|simultaneous|server error|서버|try again|다시 시도/i.test(m);
+    if (tries >= (passing ? 10 : 2)) {
+      tries = 0;
+      Object.keys(sent).forEach(function (k) { if (Q[k]) return; fails[k] = m.slice(0, 120); sent[k].mark('bad', fails[k]); });
+      send();   // 그 사이 새로 누른 칸이 있으면 보내고, 없으면 기다리던 적용·불러오기를 이어서
+      return;
+    }
+    Object.keys(sent).forEach(function (k) { if (!Q[k]) Q[k] = sent[k]; });   // 다시 보낼 줄에 되돌림(더 새로 누른 값이 있으면 그 값)
+    var wait = Math.min(15000, 2000 * tries);
+    saveStatus('⚠ 점수 ' + pendingCount() + '칸을 아직 저장하지 못했어요 — ' + m.slice(0, 120) + ' · ' + Math.round(wait / 1000) + '초 뒤 저절로 다시 보내요. 창을 닫지 마세요.');
+    kick(wait);
+  }).teacherScores(KEY, form, items);
+}
+/** 저장할 점수가 남았으면 다 보낸 뒤에 fn */
+function afterSaved(fn) { if (idle()) { fn(); return; } waiters.push(fn); say('누른 점수를 먼저 저장하는 중…'); }
+window.addEventListener('beforeunload', function (e) { if (!idle()) { e.preventDefault(); e.returnValue = ''; } });
 $('autoBtn').onclick = function () {
-  busy(true); say('🤖 자동 채점 중… 학생 수에 따라 몇 분 걸려요. 창을 닫아도 1분마다 이어서 채점해요.');
-  run('teacherAutoGrade', [], function (r) {
-    busy(false);
-    var m = r.error ? '⚠ ' + r.error + ' ' : '✔ 자동 채점 ' + r.done + '명' + (r.left ? ' · 남은 ' + r.left + '명은 1분마다 이어서 채점' : '') + (r.fails ? ' · 실패 ' + r.fails + '명 — 이유: ' + String(r.lastError || '').slice(0, 200) : '') + '. ';
-    load($('cls').value, m);
+  busy(true);
+  afterSaved(function () {
+    say('🤖 자동 채점 중… 학생 수에 따라 몇 분 걸려요. 창을 닫아도 1분마다 이어서 채점해요.');
+    run('teacherAutoGrade', [], function (r) {
+      busy(false);
+      var m = r.error ? '⚠ ' + r.error + ' ' : '✔ 자동 채점 ' + r.done + '명' + (r.left ? ' · 남은 ' + r.left + '명은 1분마다 이어서 채점' : '') + (r.fails ? ' · 실패 ' + r.fails + '명 — 이유: ' + String(r.lastError || '').slice(0, 200) : '') + '. ';
+      load($('cls').value, m);
+    });
   });
 };
 $('adjBtn').onclick = function () {
-  busy(true); say('보정 총점을 다시 계산하는 중…');
-  run('teacherAdjust', [$('an').value, $('ax').value, $('ay').value], function (a) { setAdj(a); busy(false); load($('cls').value, '✔ 보정 값을 적용했어요(A형·B형 모두). '); });
+  busy(true);
+  afterSaved(function () {
+    say('보정 총점을 다시 계산하는 중…');
+    runRetry('teacherAdjust', [$('an').value, $('ax').value, $('ay').value], function (a) { setAdj(a); busy(false); load($('cls').value, '✔ 보정 값을 적용했어요(A형·B형 모두). '); });
+  });
 };
-function load(cls, pre) {
-  busy(true); $('grid').innerHTML = '';
+/** 카드 다시 그리기 — 언제나 누른 점수를 다 저장한 뒤에(적용·자동 채점이 도는 동안 누른 점수도 포함) */
+function load(cls, pre) { busy(true); afterSaved(function () { loadNow(cls, pre); }); }
+function loadNow(cls, pre) {
+  busy(true); $('grid').innerHTML = ''; sums = {};
   run('teacherData', [$('form').value, cls], function (d) {
     busy(false); opt($('cls'), d.classes, d.cls); $('sheet').href = d.url;
     if (!d.units.length) { say((pre || '') + d.form + '형 칸·배점이 아직 없어요. 이 PC 에서 npm run exam-key -- ai/exam-' + d.form.toLowerCase() + ' --send 를 먼저 해 주세요.'); return; }
@@ -563,24 +665,36 @@ function card(d, s) {
   c.appendChild(h);
   var sum = document.createElement('div'); sum.className = 'sum';
   function showSum(t, adj) { sum.textContent = '총점 ' + (t === '' ? 0 : t) + '점 · 보정 총점 ' + (adj === '' ? '-' : adj) + '점'; }
+  sums[d.form + '#' + s.key] = showSum;
   d.units.forEach(function (u) {
     var g = document.createElement('div'); g.className = 'g';
     var b = document.createElement('b'); b.textContent = u.unit + ' (' + u.points + '점)'; g.appendChild(b);
+    var st = document.createElement('span'); st.className = 'st'; b.appendChild(st);
+    function mark(state, why) {   // 칸 옆 저장 표시: wait 저장 중 · ok 저장됨 · bad 저장 못 함
+      st.className = 'st' + (state === 'bad' ? ' bad' : '');
+      st.textContent = state === 'wait' ? '저장 중…' : state === 'ok' ? '✔ 저장됨' : '⚠ 저장 못 함 — ' + (why || '');
+      if (state === 'bad' && sc) Array.prototype.forEach.call(sc.children, function (x) { if (x.className === 'on') x.className = ''; });   // 저장 안 된 점수를 눌린 것처럼 두지 않음(다시 누르면 지우기가 되지 않게)
+    }
+    var fk = d.form + '#' + s.key + '#' + u.unit;
+    if (fails[fk]) mark('bad', fails[fk]);
     if (u.rubric) { var rb = document.createElement('details'); rb.className = 'rub'; var su = document.createElement('summary'); su.textContent = '채점 기준';
       var rd = document.createElement('div'); rd.textContent = u.rubric; rb.appendChild(su); rb.appendChild(rd); g.appendChild(rb); }
     var tx = document.createElement('div'), t = (s.texts || {})[u.unit] || '';
     tx.className = 'essay' + (t ? '' : ' empty'); tx.textContent = t || '(안 씀)'; g.appendChild(tx);
     var au = (s.auto || {})[u.unit], ai = null;
     if (au) { ai = document.createElement('div'); ai.className = 'ai'; ai.textContent = '🤖 자동 채점 ' + au.s + '점 — ' + (au.why || '') + ' (점수를 눌러 확정)'; g.appendChild(ai); }
-    var sc = document.createElement('div'); sc.className = 'sc';
+    var sc = document.createElement('div'), lastBt = null, lastAt = 0; sc.className = 'sc';
     for (var p = 0; p <= u.points; p++) (function (p) {
       var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = p + '점';
       if (String(s.scores[u.unit]) === String(p)) bt.className = au ? 'auto' : 'on';   // 자동 점수는 흐리게 — 누르면 확정
       bt.onclick = function () {
+        var now = Date.now();
+        if (bt === lastBt && now - lastAt < 400) return;   // 두 번 눌림(더블클릭)은 한 번으로 — 두 번째가 「지우기」가 되지 않게
+        lastBt = bt; lastAt = now;
         var clear = bt.className === 'on';
         Array.prototype.forEach.call(sc.children, function (x) { x.className = ''; }); if (!clear) bt.className = 'on';
         if (ai) { ai.parentNode.removeChild(ai); ai = null; } au = null;
-        run('teacherScore', [d.form, s.key, u.unit, clear ? '' : p], function (r) { showSum(r.total, r.adjusted); });
+        queueScore(d.form, s.key, u.unit, clear ? '' : p, mark);
       };
       sc.appendChild(bt);
     })(p);
